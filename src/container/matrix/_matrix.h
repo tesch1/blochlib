@@ -135,9 +135,10 @@ template<class nt2> class _matrixExprConst;
 template<class T, class INstructure>
 class _matrix : protected MemChunkRef<T>{
 	private:
+                using MemChunkRef<T>::data_;
 		INstructure thetype;
 		void structureError(std::string oo)  {
-			std::string mess="Error in matrix assignment \n"+
+                  std::string mess=std::string("Error in matrix assignment \n")+
 			" The left hand side matrix is of type \""+MatName(type())+"\"\n"+
 			" But the right is of 'greater' type \""+oo+"\"\n"+
 			" cannot do <"+MatName(type())+"> = <"+oo+">\n"+
@@ -148,22 +149,22 @@ class _matrix : protected MemChunkRef<T>{
 			BLEXCEPTION(" column desired does not exsists...")
 		}
 
-		const void RowErr() const {
+		void RowErr() const {
 			BLEXCEPTION(" row desired does not exsists...")
 		}
 
-		const void AssErr() const {
+		void AssErr() const {
 			BLEXCEPTION(" Matrix assignment not possible...mis match in sizes")
 		}
 
 
 		//matrix_& operator=(_matrix<nt1, st1> mat){}
 	public:
-		const void MulErr() const {
+		void MulErr() const {
 			BLEXCEPTION(" size mismatch  m1.rows()==m2.cols()")
 		}
 
-		const void PropErr() const {
+		void PropErr() const {
 			BLEXCEPTION(" size mismatch  m1.rows()==m1.cols()")
 		}
 
@@ -261,7 +262,7 @@ class _matrix : protected MemChunkRef<T>{
 		//meant really for coping the data array
 		//from one array to the next (useful for MPI passing)
 		// three policies are inplace,
-		//-matrix::newcopy--means
+		//-matrix::newCopy--means
 		//it will copy te data and you will need to delete it
 		//-matrix::point--means the data will point to the
 		// input data, and the matrix subclass 'memchunk' will
@@ -270,7 +271,7 @@ class _matrix : protected MemChunkRef<T>{
 		//  to the data and NOT delete it
 		enum matCopyOps{newCopy, point, pointNoDelete};
 
-		_matrix(int rows, int cols, T *in, matCopyOps mops=newcopy):
+		_matrix(int rows, int cols, T *in, matCopyOps mops=newCopy):
 		  thetype(rows, cols)
 		{
 			if(mops==point){
@@ -294,7 +295,7 @@ class _matrix : protected MemChunkRef<T>{
 		{
 			this->resize(in.rows(), in.cols());
 			if(!empty())
-				std::memcpy(&data()[0], &in.data()[0], thetype.numelements() * sizeof(T));
+				memcpy(&data()[0], &in.data()[0], thetype.numelements() * sizeof(T));
 
 		}
 //aplies a 'function' across an entire vector
@@ -778,7 +779,7 @@ class _matrix : protected MemChunkRef<T>{
 		}
 
 		void identity(int n, int c){
-			resize(r,c);
+			resize(n,c);
 			typename structure::iterator iter(rows(), cols());
 			while(iter){
 				if(iter.row()==iter.col()){	put(iter.row(), iter.col(),OneType<T>::one());}
@@ -951,7 +952,7 @@ class _matrix : protected MemChunkRef<T>{
 			if(type()==Mfull || type()==Mgeneral){
 				out=new T[cols()];
 				for(int i=0;i<rows();++i){
-					out[i]=&data_[position(i, thecol)];
+					out[i]=&data_[position(i, therow)];
 				}
 				return out;
 			}else{
@@ -1178,7 +1179,7 @@ class _matrixExpr {
 		INexpr expr_;
 
 	public:
-		const void MulErr() const {
+		void MulErr() const {
 			BLEXCEPTION(" size mismatch  m1.rows()==m2.cols()")
 		}
 		typedef INexpr expr;
@@ -1264,7 +1265,7 @@ class _matrixExprBinOpMUL{
 		INexpr1 expr1_;
 		INexpr2 expr2_;
 
-		const void lenerr()const{
+		void lenerr() const{
 			BLEXCEPTION(" m1 cols() ==Must be== m2 rows()")
 		}
 	public:
@@ -1440,7 +1441,7 @@ bool operator==(const _matrixExpr<expr> &lhs, const _matrix<nt2, st2> &rhs)
 	if(lhs.rows(0)!=rhs.rows()) return false;
 	if(lhs.cols(0)!=rhs.cols()) return false;
 
-	typename _matrixExpr<expr>::structure::iterator i(rows(0), cols(0));
+	typename _matrixExpr<expr>::structure::iterator i(lhs.rows(0), lhs.cols(0));
 	while(i){
 		if(lhs(i.row(), i.col()) != rhs(i.row(),i.col()) )	return false;
 		++i;
@@ -1934,45 +1935,45 @@ operator OP (const  _matrix<nt1, st1>& m1,  T1 m2){	\
 	\
 
 
-MatBUILTINop(*, ApMultiply, complex);
-MatBUILTINop(+, ApAdd, complex);
-MatBUILTINop(-, ApSubtract, complex);
-MatBUILTINopDiv(/, ApDivide, complex);
+MatBUILTINop(*, ApMultiply, complex)
+MatBUILTINop(+, ApAdd, complex)
+MatBUILTINop(-, ApSubtract, complex)
+MatBUILTINopDiv(/, ApDivide, complex)
 
-MatBUILTINop(*, ApMultiply, double);
-MatBUILTINop(+, ApAdd, double);
-MatBUILTINop(-, ApSubtract, double);
-MatBUILTINopDiv(/, ApDivide, double);
+MatBUILTINop(*, ApMultiply, double)
+MatBUILTINop(+, ApAdd, double)
+MatBUILTINop(-, ApSubtract, double)
+MatBUILTINopDiv(/, ApDivide, double)
 
-MatBUILTINop(*, ApMultiply, float);
-MatBUILTINop(+, ApAdd, float);
-MatBUILTINop(-, ApSubtract, float);
-MatBUILTINopDiv(/, ApDivide, float);
+MatBUILTINop(*, ApMultiply, float)
+MatBUILTINop(+, ApAdd, float)
+MatBUILTINop(-, ApSubtract, float)
+MatBUILTINopDiv(/, ApDivide, float)
 
-MatBUILTINop(*, ApMultiply, int);
-MatBUILTINop(+, ApAdd, int);
-MatBUILTINop(-, ApSubtract, int);
-MatBUILTINopDiv(/, ApDivide, int);
+MatBUILTINop(*, ApMultiply, int)
+MatBUILTINop(+, ApAdd, int)
+MatBUILTINop(-, ApSubtract, int)
+MatBUILTINopDiv(/, ApDivide, int)
 
-MatBUILTINop(*, ApMultiply, long);
-MatBUILTINop(+, ApAdd, long);
-MatBUILTINop(-, ApSubtract, long);
-MatBUILTINopDiv(/, ApDivide, long);
+MatBUILTINop(*, ApMultiply, long)
+MatBUILTINop(+, ApAdd, long)
+MatBUILTINop(-, ApSubtract, long)
+MatBUILTINopDiv(/, ApDivide, long)
 
-MatBUILTINop(*, ApMultiply, short);
-MatBUILTINop(+, ApAdd, short);
-MatBUILTINop(-, ApSubtract, short);
-MatBUILTINopDiv(/, ApDivide, short);
+MatBUILTINop(*, ApMultiply, short)
+MatBUILTINop(+, ApAdd, short)
+MatBUILTINop(-, ApSubtract, short)
+MatBUILTINopDiv(/, ApDivide, short)
 
-MatBUILTINop(*, ApMultiply, char);
-MatBUILTINop(+, ApAdd, char);
-MatBUILTINop(-, ApSubtract, char);
-MatBUILTINopDiv(/, ApDivide, char);
+MatBUILTINop(*, ApMultiply, char)
+MatBUILTINop(+, ApAdd, char)
+MatBUILTINop(-, ApSubtract, char)
+MatBUILTINopDiv(/, ApDivide, char)
 
-MatBUILTINop(*, ApMultiply, bool);
-MatBUILTINop(+, ApAdd, bool);
-MatBUILTINop(-, ApSubtract, bool);
-MatBUILTINopDiv(/, ApDivide, bool);
+MatBUILTINop(*, ApMultiply, bool)
+MatBUILTINop(+, ApAdd, bool)
+MatBUILTINop(-, ApSubtract, bool)
+MatBUILTINopDiv(/, ApDivide, bool)
 
 
 
@@ -2002,36 +2003,36 @@ MatBUILTINopDiv(/, ApDivide, bool);
 		return _matrixExpr<expr>(expr(m1));													\
 	}																					\
 
-MatMakeUnary(abs, ApAbs);
-MatMakeUnary(sqrt, ApSqrt);
-MatMakeUnary(exp, ApExp);
-MatMakeUnary(log, ApLog);
-MatMakeUnary(log10, ApLog10);
-MatMakeUnary(neg, ApNeg);
-MatMakeUnary(Re, ApRe);
-MatMakeUnary(Im, ApIm);
-MatMakeUnary(real, ApRe);
-MatMakeUnary(imag, ApIm);
-MatMakeUnary(conj, ApConj);
-MatMakeUnary(chop, ApChop);
-MatMakeUnary(sin, ApSin);
-MatMakeUnary(cos, ApCos);
-MatMakeUnary(tan, ApTan);
-MatMakeUnary(sinh, ApSin);
-MatMakeUnary(cosh, ApCos);
-MatMakeUnary(tanh, ApTan);
-MatMakeUnary(atan, ApAtan);
-MatMakeUnary(acos, ApAcos);
-MatMakeUnary(asin, ApAsin);
-MatMakeUnary(asinh, ApAsinh);
-MatMakeUnary(acosh, ApAcosh);
-MatMakeUnary(atanh, ApAtanh);
-MatMakeUnary(floor, ApFloor);
-MatMakeUnary(ceil, ApCiel);
+MatMakeUnary(abs, ApAbs)
+MatMakeUnary(sqrt, ApSqrt)
+MatMakeUnary(exp, ApExp)
+MatMakeUnary(log, ApLog)
+MatMakeUnary(log10, ApLog10)
+MatMakeUnary(neg, ApNeg)
+MatMakeUnary(Re, ApRe)
+MatMakeUnary(Im, ApIm)
+MatMakeUnary(real, ApRe)
+MatMakeUnary(imag, ApIm)
+MatMakeUnary(conj, ApConj)
+MatMakeUnary(chop, ApChop)
+MatMakeUnary(sin, ApSin)
+MatMakeUnary(cos, ApCos)
+MatMakeUnary(tan, ApTan)
+MatMakeUnary(sinh, ApSin)
+MatMakeUnary(cosh, ApCos)
+MatMakeUnary(tanh, ApTan)
+MatMakeUnary(atan, ApAtan)
+MatMakeUnary(acos, ApAcos)
+MatMakeUnary(asin, ApAsin)
+MatMakeUnary(asinh, ApAsinh)
+MatMakeUnary(acosh, ApAcosh)
+MatMakeUnary(atanh, ApAtanh)
+MatMakeUnary(floor, ApFloor)
+MatMakeUnary(ceil, ApCiel)
 #ifdef HAVE_FINITE
-MatMakeUnary(isnan, ApNan);
+MatMakeUnary(isnan, ApNan)
 #elif HAVE_ISNAN
-MatMakeUnary(isnan, ApNan);
+MatMakeUnary(isnan, ApNan)
 #endif
 
 
@@ -2223,7 +2224,7 @@ std::ostream &operator<<(std::ostream &otr, _matrix<T, structure> oo){
 	for(i=0;i<oo.rows();i++){
 		otr<<"[ ";
 		for(j=0;j<oo.cols();j++){
-			otr<<setw(13)<<oo(i,j)<<" ";
+                  otr<<std::setw(13)<<oo(i,j)<<" ";
 		}
 		otr<<" ]"<<std::endl;
 	}
@@ -2259,7 +2260,7 @@ std::ostream &operator<<(std::ostream &otr, _matrixExpr<T> oo){
 	for(i=0;i<oo.rows(1);i++){
 		otr<<"[ ";
 		for(j=0;j<oo.cols(1);j++){
-			otr<<setw(13)<<oo(i,j)<<" ";
+			otr<<std::setw(13)<<oo(i,j)<<" ";
 		}
 		otr<<" ]"<<std::endl;
 	}

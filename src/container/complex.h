@@ -64,63 +64,63 @@ END_BL_NAMESPACE
 
 namespace std{
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::sqrt(const BlochLib::Complex<Ctype_T> & z);
+inline BlochLib::Complex<Ctype_T> sqrt(const BlochLib::Complex<Ctype_T> & z);
 
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::exp(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> exp(const BlochLib::Complex<Ctype_T>& z);
 
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::log(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> log(const BlochLib::Complex<Ctype_T>& z);
 
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::log10(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> log10(const BlochLib::Complex<Ctype_T>& z);
 
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::pow(const BlochLib::Complex<Ctype_T>& z, const BlochLib::Complex<Ctype_T>& z1);  //z^z1
+inline BlochLib::Complex<Ctype_T> pow(const BlochLib::Complex<Ctype_T>& z, const BlochLib::Complex<Ctype_T>& z1);  //z^z1
 
 template<class Ctype_T, class T2>
-inline BlochLib::Complex<Ctype_T> std::pow(const BlochLib::Complex<Ctype_T>& z, const T2& z1);  //z^z1
+inline BlochLib::Complex<Ctype_T> pow(const BlochLib::Complex<Ctype_T>& z, const T2& z1);  //z^z1
 
 //triggggsss
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::sin(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> sin(const BlochLib::Complex<Ctype_T>& z);
 
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::cos(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> cos(const BlochLib::Complex<Ctype_T>& z);
 
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::tan(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> tan(const BlochLib::Complex<Ctype_T>& z);
 
 //'a' triggggssss
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::asin(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> asin(const BlochLib::Complex<Ctype_T>& z);
 
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::acos(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> acos(const BlochLib::Complex<Ctype_T>& z);
 
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::atan(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> atan(const BlochLib::Complex<Ctype_T>& z);
 
 //'h' triggggssss
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::sinh(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> sinh(const BlochLib::Complex<Ctype_T>& z);
 
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::cosh(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> cosh(const BlochLib::Complex<Ctype_T>& z);
 
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::tanh(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> tanh(const BlochLib::Complex<Ctype_T>& z);
 
 //'a''h' trigggssssss
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::asinh(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> asinh(const BlochLib::Complex<Ctype_T>& z);
 
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::acosh(const BlochLib::Complex<Ctype_T>& z);
+inline BlochLib::Complex<Ctype_T> acosh(const BlochLib::Complex<Ctype_T>& z);
 
 template<class Ctype_T>
-inline BlochLib::Complex<Ctype_T> std::atanh(const BlochLib::Complex<Ctype_T>& z);
-};
+inline BlochLib::Complex<Ctype_T> atanh(const BlochLib::Complex<Ctype_T>& z);
+}
 
 BEGIN_BL_NAMESPACE
 
@@ -177,11 +177,11 @@ inline TYPE chop(const TYPE &z, double eps=1.e-12){	return TYPE(std::fabs(double
 
 
 
-compatCom(double);
-compatCom(float);
-compatCom(int);
-compatCom(long);
-compatCom(char);
+compatCom(double)
+compatCom(float)
+compatCom(int)
+compatCom(long)
+compatCom(char)
 
 //this is a strange function i know, but it keeps certain 'matrix<string>' functions
 // from barfing in Borland C++ Builder
@@ -227,18 +227,18 @@ class Complex{
 //constructors
 		inline Complex<Ctype_T>(){};
 		inline Complex<Ctype_T>(Ctype_T r, Ctype_T i=0.0):
-		  REALNAME(r), IMAGNAME(i){};
+		  REALNAME(r), IMAGNAME(i){}
 
 		template<class T1, class T2>
 		inline Complex<Ctype_T>(T1 r, T2 i=0.0):
-		  REALNAME(r), IMAGNAME(i){};
+		  REALNAME(r), IMAGNAME(i){}
 
 		inline Complex<Ctype_T>(const Complex<Ctype_T>& z):
-		  REALNAME(z.REALNAME), IMAGNAME(z.IMAGNAME){};
+		  REALNAME(z.REALNAME), IMAGNAME(z.IMAGNAME){}
 
 		template<class T2>
 		inline Complex<Ctype_T>(const Complex<T2>& z):
-		  REALNAME(z.REALNAME), IMAGNAME(z.IMAGNAME){};
+		  REALNAME(z.REALNAME), IMAGNAME(z.IMAGNAME){}
 
 //assignments
 
@@ -371,7 +371,7 @@ class Complex{
 		inline Ctype_T &Re(){	return REALNAME;	}
 		inline Ctype_T &Im(){ return IMAGNAME;	}
 		template<class T1>
-		inline void Re(T1 r){ REALNAME=r; };
+		inline void Re(T1 r){ REALNAME=r; }
 		template<class T1>
 		inline void Im(T1 r){ IMAGNAME=r; }
 
@@ -1025,7 +1025,7 @@ END_BL_NAMESPACE
 namespace std{
 
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::sqrt(const BL_NAMESPACE::Complex<Ctype_T>& z1)
+inline BL_NAMESPACE::Complex<Ctype_T> sqrt(const BL_NAMESPACE::Complex<Ctype_T>& z1)
 {
 	 BL_NAMESPACE::Complex<Ctype_T> z;
 	  Ctype_T r = BL_NAMESPACE::norm(z1);
@@ -1044,7 +1044,7 @@ inline BL_NAMESPACE::Complex<Ctype_T> std::sqrt(const BL_NAMESPACE::Complex<Ctyp
 
 
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::exp(const BL_NAMESPACE::Complex<Ctype_T>& z1){
+inline BL_NAMESPACE::Complex<Ctype_T> exp(const BL_NAMESPACE::Complex<Ctype_T>& z1){
 	BL_NAMESPACE::Complex<Ctype_T> z;
 	Ctype_T e = std::exp(z1.REALNAME);
 	z.REALNAME = e * std::cos(z1.IMAGNAME);
@@ -1055,24 +1055,24 @@ inline BL_NAMESPACE::Complex<Ctype_T> std::exp(const BL_NAMESPACE::Complex<Ctype
 
 
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::log(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> log(const BL_NAMESPACE::Complex<Ctype_T>& z)
 {
 	return BL_NAMESPACE::Complex<Ctype_T>(std::log(norm(z)), BL_NAMESPACE::phase(z));
 }
 
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::log10(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> log10(const BL_NAMESPACE::Complex<Ctype_T>& z)
 {
 	return BL_NAMESPACE::Complex<Ctype_T>(std::log10(norm(z)), BL_NAMESPACE::phase(z));
 }
 
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::pow(const BL_NAMESPACE::Complex<Ctype_T>& z, const BL_NAMESPACE::Complex<Ctype_T>& z1){
+inline BL_NAMESPACE::Complex<Ctype_T> pow(const BL_NAMESPACE::Complex<Ctype_T>& z, const BL_NAMESPACE::Complex<Ctype_T>& z1){
 	return BL_NAMESPACE::Complex<Ctype_T>(std::exp(z1 * log(z)));
 }
 
 template<class T2, class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::pow(const BL_NAMESPACE::Complex<Ctype_T>& z, const T2& z1)
+inline BL_NAMESPACE::Complex<Ctype_T> pow(const BL_NAMESPACE::Complex<Ctype_T>& z, const T2& z1)
 {
 	return BL_NAMESPACE::Complex<Ctype_T>( std::pow(z.Re(), z1), std::pow(z.Im(), z1));
 }
@@ -1080,7 +1080,7 @@ inline BL_NAMESPACE::Complex<Ctype_T> std::pow(const BL_NAMESPACE::Complex<Ctype
 
 //TRIGGGGSSSS**************************************************
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::sin(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> sin(const BL_NAMESPACE::Complex<Ctype_T>& z)
 {
 	Ctype_T a = std::exp(z.IMAGNAME);
 	Ctype_T b = 1/a;
@@ -1088,7 +1088,7 @@ inline BL_NAMESPACE::Complex<Ctype_T> std::sin(const BL_NAMESPACE::Complex<Ctype
 }
 
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::cos(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> cos(const BL_NAMESPACE::Complex<Ctype_T>& z)
 {
 	Ctype_T a = std::exp( z.IMAGNAME );
 	Ctype_T b = 1/a;
@@ -1096,7 +1096,7 @@ inline BL_NAMESPACE::Complex<Ctype_T> std::cos(const BL_NAMESPACE::Complex<Ctype
 }
 
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::tan(const BL_NAMESPACE::Complex<Ctype_T>& z )
+inline BL_NAMESPACE::Complex<Ctype_T> tan(const BL_NAMESPACE::Complex<Ctype_T>& z )
 {
 	Ctype_T a = std::exp(2 * z.IMAGNAME );
 	Ctype_T b = 1/a;
@@ -1107,15 +1107,15 @@ inline BL_NAMESPACE::Complex<Ctype_T> std::tan(const BL_NAMESPACE::Complex<Ctype
 
 //'h' TRIGGGGGSSSS*********************************************
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::sinh(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> sinh(const BL_NAMESPACE::Complex<Ctype_T>& z)
 { return BL_NAMESPACE::Complex<Ctype_T>( std::sinh(z.REALNAME)*std::cos(z.IMAGNAME),std::cosh(z.REALNAME)*std::sin(z.IMAGNAME) ); }
 
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::cosh(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> cosh(const BL_NAMESPACE::Complex<Ctype_T>& z)
 { return BL_NAMESPACE::Complex<Ctype_T>( std::cosh(z.REALNAME)*std::cos(z.IMAGNAME),std::sinh(z.REALNAME)*std::sin(z.IMAGNAME) ); }
 
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::tanh(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> tanh(const BL_NAMESPACE::Complex<Ctype_T>& z)
 {
   Ctype_T tmp = std::cos(2*z.REALNAME) + std::cosh(2*z.IMAGNAME);
   return BL_NAMESPACE::Complex<Ctype_T>( std::sin(2*z.REALNAME)/tmp, std::sinh(2*z.IMAGNAME)/tmp );
@@ -1123,27 +1123,27 @@ inline BL_NAMESPACE::Complex<Ctype_T> std::tanh(const BL_NAMESPACE::Complex<Ctyp
 
 // 'a' TRIGGGGGSSSS***********************************************
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::asin(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> asin(const BL_NAMESPACE::Complex<Ctype_T>& z)
 { return - BL_NAMESPACE::complexi*std::log(BL_NAMESPACE::complexi*z + sqrt (1-z*z)); }
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::acos(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> acos(const BL_NAMESPACE::Complex<Ctype_T>& z)
 { return BL_NAMESPACE::Complex<Ctype_T>(0,-1)*std::log(z + sqrt (z*z-1)); }
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::atan(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> atan(const BL_NAMESPACE::Complex<Ctype_T>& z)
 { return BL_NAMESPACE::Complex<Ctype_T>(0,-0.5)*std::log((1+BL_NAMESPACE::complexi*z)/(1-BL_NAMESPACE::complexi*z)); }
 
 // 'a''h' TRIGGGGGSSSS***********************************************
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::asinh(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> asinh(const BL_NAMESPACE::Complex<Ctype_T>& z)
 { return std::log(z + std::sqrt(z*z + 1)); }
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::acosh(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> acosh(const BL_NAMESPACE::Complex<Ctype_T>& z)
 { return std::log(z + std::sqrt(z*z - 1)); }
 template<class Ctype_T>
-inline BL_NAMESPACE::Complex<Ctype_T> std::atanh(const BL_NAMESPACE::Complex<Ctype_T>& z)
+inline BL_NAMESPACE::Complex<Ctype_T> atanh(const BL_NAMESPACE::Complex<Ctype_T>& z)
 { return std::log((1+z)/(1-z))/2; }
 
-};
+}
 
 BEGIN_BL_NAMESPACE
 

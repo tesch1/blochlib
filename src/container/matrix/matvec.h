@@ -141,7 +141,7 @@ SumType(OutType(T,T2)) _mul_mat_vec_(const _matrixReference<T, TriDiagonalMatrix
  		mat_ expr1_;
  		vec_ expr2_;
 
- 		const void lenerr()const{
+ 		void lenerr()const{
  			BLEXCEPTION(" matrix.cols() ==Must be== vector.length()")
  		}
 
@@ -275,7 +275,7 @@ template<class T, class INstructure, class T2, int N>
  		mat_ expr1_;
  		Vector<coord<T, N> >  expr2_;
 
- 		const void lenerr()const{
+ 		void lenerr()const{
  			BLEXCEPTION(" matrix.cols() ==Must be== N*vector.length()")
  		}
 
@@ -408,7 +408,7 @@ operator*(const _matrix<T,INstructure> & m1,
  		mat_ expr2_;
  		vec_ expr1_;
 
- 		const void lenerr()const{
+ 		void lenerr()const{
  			BLEXCEPTION(" matrix.rows() ==Must be== vector.length()")
  		}
  	public:

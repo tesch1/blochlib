@@ -74,7 +74,7 @@ class HermitianMatrix : public GeneralMatrix {
 		typedef HermitianMatrix structure;
 		typedef FullMatrix invers_structure;
 
-		const void HermErr() const
+		void HermErr() const
 		{
 			BLEXCEPTION(std::string(" Hermitian Matrix Diagonal Elements contains IMAGINARY...") +
 					std::string(" Components...this is strictly unallowed..change matrix type to 'Full'..."))

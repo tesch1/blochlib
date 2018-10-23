@@ -28,6 +28,7 @@
 
 //Functions specific to a particular Vector Type (i.e. initiats an instance of Vector<T>
 #include "container/Vector/Vector.h"
+#include "utils/utils.h"
 
 //Need to see if FFTW is obtained...
 #ifndef ON_WINDOWS

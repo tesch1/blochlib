@@ -54,7 +54,7 @@
 /* do you have MPI library */
 #undef HAVE_MPI
 
-/* using an aux illiary BLAS lib for dgemm */
+/* using an auxilliary BLAS lib for dgemm */
 #undef AUX_BLAS_LIB
 
 /* do we have the max(thing) function */

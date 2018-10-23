@@ -130,24 +130,24 @@ template<class INtype>
 class _matrixExprConst;
 
 
-MatObj(GeneralMatrix, 1000);
-MatObj(FullMatrix, 800);
-MatObj(HermitianMatrix, 700);
-MatObj(SymmetricMatrix, 600);
-MatObj(TriDiagonalMatrix, 500);
-MatObj(DiagonalMatrix, 400);
-MatObj(IdentityMatrix, 100);
-MatObjNum(bool, 0);
-MatObjNum(char, 1);
-MatObjNum(short, 2);
-MatObjNum(unsigned int, 3);
-MatObjNum(int, 4);
-MatObjNum(long int, 5);
-MatObjNum(float, 6);
-MatObjNum(double, 7);
+MatObj(GeneralMatrix, 1000)
+MatObj(FullMatrix, 800)
+MatObj(HermitianMatrix, 700)
+MatObj(SymmetricMatrix, 600)
+MatObj(TriDiagonalMatrix, 500)
+MatObj(DiagonalMatrix, 400)
+MatObj(IdentityMatrix, 100)
+MatObjNum(bool, 0)
+MatObjNum(char, 1)
+MatObjNum(short, 2)
+MatObjNum(unsigned int, 3)
+MatObjNum(int, 4)
+MatObjNum(long int, 5)
+MatObjNum(float, 6)
+MatObjNum(double, 7)
 //MatObjNum(long double, 8);
-MatObjNum(Complex<float>, 9);
-MatObjNum(Complex<double>, 10);
+MatObjNum(Complex<float>, 9)
+MatObjNum(Complex<double>, 10)
 
 template<class T, class INstructure>
 struct MatPromoteObj<_matrix<T, INstructure> >{

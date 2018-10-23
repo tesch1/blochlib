@@ -82,9 +82,10 @@ template<class T>	class VExprConst;
 template<class T1, class T2, class Op> class VBinExprOp;
 
 template<class T>
-class Vector : MemChunkRef<T>{
+class Vector : public MemChunkRef<T>{
 
 private:
+  using MemChunkRef<T>::data_;
     int length_;
     void lenError(int i)const throw()
     {
@@ -105,7 +106,7 @@ private:
 		}
 	}
 
-	const void RowErr() const {
+        void RowErr() const {
 		BLEXCEPTION(" request for non exsistant element....")
 	}
 
@@ -753,8 +754,8 @@ class VIterConst {
 		inline int end(int ge) const {return length_; }
 		inline int begin(int gb) const { 	return 0; }
 
-		void operator++() const {
-			if(cur<length_) cur_++;
+		void operator++() {
+			if(cur_<length_) cur_++;
 		}
 		operator bool() const {
 			return cur_>(length-1);
