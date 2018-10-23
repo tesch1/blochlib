@@ -211,7 +211,7 @@ int main(int argc, char *argv[]){
 ok=yes, ok=no, ok=yes)
 if test "$ok" = "yes"; then
 	AC_DEFINE(BEGIN_BL_NAMESPACE, namespace BL_NAMESPACE {)
-	AC_DEFINE(END_BL_NAMESPACE, };)
+	AC_DEFINE(END_BL_NAMESPACE, })
 fi
 if test "$ok" = "no"; then
 	AC_DEFINE(BEGIN_BL_NAMESPACE, )
