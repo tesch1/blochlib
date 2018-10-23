@@ -1,0 +1,30 @@
+
+
+var wr=1000
+var wrs=5000
+var npts=2048
+var samples=5
+var theta=45
+var phi=45
+var wo=20
+var wq=2
+var J=100
+var eta=0
+var phio=0
+var dt=5000e-9
+var fbase="ggl"
+
+var i=0
+var j=0
+var exe=""
+for(wr=1000;wr<55000;wr=wr+wrs){
+	var j=0
+	
+	exe="./a.exe "+wr+" "+npts+" "+samples+" "+theta+" "+phi+" "+wq+" "+wo+" "+J+" 0 0 "+dt+" 0 "+fbase+i
+	print(exe+"\n")
+	system(exe)
+	i=i+1
+}
+	
+	
+	

@@ -1,0 +1,320 @@
+BlochLib README
+
+author:: Bo Blanton
+last modified:: December 9 2002
+
+THE MASSIVE DOCUMENTATION IS (for now) ONLY IN HTML
+go to {source-root}/doc/html/index.html
+
+for the most current version of the documentation go to
+http://waugh.cchem.berkeley.edu/blochlib/
+
+you must have a frame enabled browser otherwise you can view
+the 'non-framed' version here
+http://waugh.cchem.berkeley.edu/blochlib/single.php
+
+The Most important Doc so far is the 'Matrix' it has some peculiar rules
+and implementations...so READ IT
+
+->For installation options see "INSTALL"
+
+---version 1.1
+
+  A little bug with configuring on OS X 10.2 
+  should now be fixed.  
+  
+  PLEASE SEE README.OSX for info ON HOW TO GET THINGS 
+  WORKING FOR OS X and the 'isnan' problem
+  
+  the `Imi(SpinSys, int)' and `Ip(SpinSys, int)' 
+  function produced identity matrices, the wrong type, 
+  they now function properly and the same as SpinSys::Ip(int), 
+  and SpinSys::Im(int).
+
+  A small problem was brought to my attention when one 
+  tried to compile the source without using ATLAS (not recommended, 
+  but it may be nessesary)...this should now be fixed as of 11.25.02
+
+  Matrix cross product had a bit of a bug when trying to calculate
+  crosses between Symmetric and Hermitian types, this is now fixed
+
+  the 'setSpinParam' of SolidSys would probably mess up if you 
+  tried to set a Dipole parameters, this is also fixed
+
+
+  XWINNMR--> reads the parameters and FIDs from an XWINNMR 
+  directory structure (both 1and 2Ds), 
+  SpinSight--> reads the parameters and FIDs from a SpinSight 
+  directory structure (both 1 and 2Ds), 
+  wavestream --> reads and writes .WAV audio files 
+  from many data types.
+
+  The Full matrix--matrix multiplication C*=A has been 
+  improved by ~30% IT CALCULATES A DYSON TIME ORDERED product...
+  i.e. C=A*C (not the usual C=C*A) but is ~30% 
+  (depending on the matrix size) faster then the explicit \'C=A*C\' as we can avoid a temporary copy.
+
+  the Complex Numbers now can have float or double sub 
+  precision (i.e Complex<float> and Complex<double>) the 
+  old \'complex\' is still valid and is only a typedef of Complex<double>
+
+  The matrix has a new \'reshape\' function that functions 
+  exactly as the matlab version (e.g. takes a 2x5 matrix to 1x10, etc)
+
+  a faster \'copy\' and \'assignment\' (operator=) for the matrix 
+  of the SAME TYPE and STRUCTURE (uses the \'memcpy\' 
+  function which is quite speedy)
+
+
+----version 1.0 ---- yippie.... 8.22.02 
+  Several new things have been updated/fixed since the 0.9 version 
+  (as the list below can atest to)
+    1) NAMESPACES The advent of making everything gcc 3.1 compatable
+    required me to do some place the library into a namespace, 
+    thus in every source file you use "blochlib.h", you will need 
+    to include "using namespace BlochLib;" in the file as well.
+
+    2) should compile on both gcc 2.95 and gcc 3.1 (DO NOT USE GCC 3.0 
+    it is WAY too slow)
+
+    3) ModulatedDemagField class fixed.
+
+    4) Documentation (over 1000 pages) should be complete aside 
+    from typos (which i am sure there are plenty).
+
+
+---update 8.2.02
+  The documentation drudges along...many a minor bug fixed...
+
+    1) fixed a minor problem with the rotations class when 
+    the rotor speed was set to 0 and when the rotor angle was 
+    not set to 0 (which thus effected some of the hamiltonians)
+
+    2) several enhancements and fixes to the matrix class 
+    involving resizing and other \'alteration\' functions 
+    (getting rows, columns, etc) have been repaired. Under 
+    odd conditions they would not perform correctly, and this is now fixed.
+
+    3) the Relaxation Bloch Interaction has seen many improvement 
+    including the ability to relax off the (0,0,1) axis
+
+    4) The VNMR class has a \'ProcPar\' class reader and 
+    the ability to open a \'directory\' (the standard place 
+    where VNMR puts the procpar and the fid).
+
+    5) exceptions are now implemented over the old 
+    \'exit()\' routines so you too can try and catch things.
+
+    6) a math \'Parser\' class has been added which will parse 
+    an input string with the usual mathematical functions 
+    (like 2*(5+2)^(2)) that allows for global and local varaible...
+    the current implementation does not allow for complex numbers 
+    or multi input functions (you cannot do something like \'moo(9,0)\'
+    only \'moo(9)\' will work. 
+
+    7) a basic script interpretor (\'ScriptParse\') that parses 
+    variables assignments (A=B), loops and if/elseif/else statements. 
+    It was created with the ability to let you create your own 
+    scripting interface by simply creating a new class with function that decides (called \'decide\') what to do if it hits one of your own functions....
+
+    8) with those above new classes and the various bug fixes throughout 
+    the library, the Solid example/program has been DRAMATICALLY altered 
+    (current version...solid-2.0). It does away with the \'scripto\' interface 
+    and incorporates its own mild scripting capabilities with dramatically
+    altered syntax. (solid-1.6 and solid-2.0 files ARE NOT compatible at all). 
+    Currently it is a stripped down version of the old program (solid-1.6). 
+    The scripting interface now allows for dynamic sections, and arbitrary 
+    2D spectra of any type...you can simply change a parameter and recollect
+    the spectrum and it will be added to a 2D master list which will be 
+    saved as a matlab file. Mutli Spin systems can also be used so you 
+    can change the entire interaction set at any time (this usually needs 
+    to be performed for liquid-crystal DAS experiments). Point-To-Point 
+    3D experiments are now possible (these really create a 2D data set). 
+    The same capability of pseudo phase cycling is still present. The input 
+    syntax is so much simpler and useful that it is a pitty these things 
+    were not done sooner. It does not, however, perform the \'hamil\' or 
+    \'fit\' types of abilities the old version had before. BUT there is a 
+    stable \'hamil\' program in the examples anyway which performs better 
+    anyway, and the fitting was so unreliable in the first place, it really 
+    did not need to be there. The \'bspec\', \'opdet\', and \'sym\' options 
+    are no longer needed, as you can simply use the basic scripting interface
+    to perform these anyway. The \'jump\' type has also removed because 
+    of its complete lack of generality (thus making it not very useful)
+
+
+--version 0.9...The end is near...
+
+	--- ALL the main data drivers, containers, and functionality has been included and implemented...now it is bug testing time and finalization of 'loose ends'
+	---What remains...
+		1) Documentation...hopefully as all the code design is done, the documentation can be written..
+		2) Diffusion? i am still debating to included diffusion in the Bloch_Interactions...it may be a bit too difficult, and slow for the current version of the lib...a thing to keep in mind for version 2 perhaps as the grid class would need to be rewritten.
+		3) Examples need to be documented better (the code need some comments as well as updating from the older version of the lib)
+		4) General bug fishing and testing 
+	---updates::
+		1) another speed upgrade for the 'prop(matrix, matrix)' function improved by ~30%
+		2) a full MPI controller class (instead of the C functions, we have an object now) with both BLOCKING and NON-BLOCKING commands
+		3) the 'biot' class has been parallelized for optimum performance
+		4) the 'solid' program (included in the examples) has been heavily updated and optimized for parallel running as well a ton of other speed enhancements and minor bug fixes. 
+
+
+--version 0.8...
+	1) SPPPEEEDDD --> 
+	---Now allows the Fastest Fourier Transform in the West (FFTW) 
+	    http://www.fftw.org
+	   library to be used as the main driver for Fourier Transforms 
+	   of Vectors and Matrices...A very fast implementation for FFTs...
+	   i highly recommend using this library...simply type 
+	   "--enable-fftw=<path to libs>" (like /usr/local/)
+	   in the configure path, and everything will be properly set.
+
+	
+	---the matrix Multiply code (for full matricies) has been 
+	    DRASTICALLY altered there is currently 2 setups possible...
+	    as we all know, the machine specific BLAS as ALWAYS 
+	    much faster then anything a simple one man shows can create, 
+	    sooo i tries to create some 'okay' optimize code (meaning that
+	    if you do not have a machine specific BLAS package, everything
+	    still works, and with okay speed...ie.. it is still faster
+	    then the basic netlib matrix multiply and many other packages,
+	    but compared to what the vendors can give you , 
+	    it will be ~2-3 times slower)...so if you want to use a vendor
+	    BLAS package, you will need to 2 things
+
+		a) use the '--with-blas=<mylib>' option in the configure 
+
+		b) Edit the top of 'container/matrix/matmatmul.h" to 
+		   reference the correct function within the lib
+
+	INTEL (LINUX)::***just so you know, the current set up in 
+		'matmatmul.h' is for Intel's MKL library and ATLAS libs.
+		and will work on both CYGWIN and LINUX environments
+
+		***NOTE***--->I have found that the ATLAS tuned libraries 
+		can be FASTER than the MKL libs on some Intel machines, 
+		i invite you to try testing them versus each other. 
+		Read the Windows.Readme for more info on how to configure 
+		and use ATLAS for this library.
+		get ATLAS here
+		  http://math-atlas.sourceforge.net/
+
+		http://developer.intel.com/software/products/mkl
+		specific for Pentiums (and it is quite speedy, in fact 
+		i think it is a fast as can one can get) DO NOT use the 
+		'lapack' lib or any Shared libs (i.e. no *.so) here, 
+		use either the 'libmkl_p3.a' (for pentium 3's) or 
+		'libmkl_def.a' for everything else
+
+		It requires the "pthread lib" on linux so do "--enable-pthread" in the configure line..... 
+
+		you will need to set "OMP_NUM_THREADS" in your environment 
+		if you have an SMP machine (careful, not setting this 
+		can cause mass havoc if you also use MPI)	
+	
+	INTEL (CYGWIN/PC)::Read the "Windows.Readme" on how to make the 
+	        best BLAS lib and incorporate it into the library.
+	        You will need 1) cygwin, 2) ATLAS...please read my 
+	        directions inside the windows readme file when 
+	        configuring ATLAS...
+
+	SGI:: go here for the lib optimized lib 
+	     http://www.sgi.com/software/scsl.html 
+	     (this has not yet been implemented in the library yet)
+
+
+	SUN:: go here for the lib optimized lib 
+	   http://docs.sun.com/htmlcoll/coll.118.3/iso-8859-1/PERFLIBUG/plug_bookTOC.html 
+	   (this has not yet been implemented in the library yet, 
+	   but SUN's library should come with the OS)
+	    
+	 1a) Lots of other speed improvements have been made 
+	     throughout the code making the Quantum Mechanical
+	     type simulation go ~5-10 times faster....(nice eh?)
+	 2) The rotation class has had 'Cartesian' or 'spherical' or
+	    'both' types of rotations are not handeled in an optimized
+	    way
+	 3) a bug fix for the second order Quadrupole interaction
+
+--version 0.7...
+	1) The beginning of the parallel world...
+	   some VERY BASIC MPI functions to allow one to compile code 
+	   with or without the MPI library present...
+	-- In the works simple "get" and "put" methods for each container type 
+	   (matrix, vectors, coords, etc) are being written...
+	-- NOTE:: this MPI implementation is not really designed for 
+	   massively parallel systems (i.e. systems of 128 processors) 
+	   but more the 2-10 processors range where distributing 
+	   loops is advantageous, the normal container operations 
+	   (things like "vector + vector") will not be parallel unless 
+	   you create a specific function to do so 
+	   (which should be simple once the main interface is complete)
+	   look to the ‘MPI’ section of the documentation for more details and examples, 
+	   and look to the ‘INSTALL’ section for the new configure options for MPI
+	2) a VNMR class called 'VNMRstream' that will read and write 
+	   the binary formats (both 1D and 2D) from the VNMR (Varian) 
+	   spectrometer system 
+	3) The general solid-state simulation application 'Solid' is now included
+	   as a glorified example in the 'examples' directory
+	4) The very nice minimization package "MINUIT" from has now been
+	   included in the library using a heavily debugged and reworked
+	   'C-MINUIT(http://c-minuit.sourceforge.net/)' to allow inclusion
+	   into the shared lib as well as C++ apps
+	   
+
+--version 0.6
+	1) large shift in the way the blochparameters are treated
+	2) able to have 3-vector offsets and off zaxis interactions
+	3) general magnetic field calculator integrated with
+	   the offset characterization of a parameter space
+	4) a "Parameters" class that make inputting of data config files 
+	   very simple...
+
+--version 0.5
+	1) Basic Quantum Mechanical backbone laid downs
+	2) Spin and Spatial Tensors 
+	3) Spin Systems
+	4) Optimized Solid state interaction classes
+	5) Power Average generator angle generator
+	6) Solid System (an extension to the Spin System)
+	7) Gamma-Compute algorithm for spinning FIDs
+	8) a simple one-D FID generator (spinning, or not)
+	
+
+--version 0.4
+	1) more documentation added....however, more classes and features added too..so it 
+	   seems i am still in the same place as before...needing technical writer. any takers?
+	2) Stencils::vector stencils and there creation have been very easily implemented 
+	   and finished...Stencils on Grid and associated data have been MOSTLY finished
+	   still lots of minor fixing and pieces to create, but the hard part is finished
+	3) spin tensors and spin systems (the standard Quantum Mechanical Types) have been 
+	   added as auxiliary classes...(it beefs up the spin dynamics a bit)
+	4) Dipole-Dipole and Demagnitizing Field interactions have been added
+	5) Numerous fixes and improvements to main numerical engines...especially the
+	   BlochSolver...improved error checking and improved I/O control for multiple
+	   pulse sections/fid collection, etc
+	6) SHAPES have been mildly recast into expression template forms of '&&' and '||' 
+	   (and/or) allowing precise control over multiple 'odd' shaped objects
+	   (i.e. you can incorperate slice plane, cylinders and cubes in a simple 'plane && cylinder || cube' expression)
+	7) Edge detection created for shapes...to be used mostly for the Stencils 
+	   (functional, but not refined) and Boundary conditions (main classes begun, 
+	   not finished...need to create the Neumann BCs and a few other highly common
+	   BCs)..BC NOT integrated into anything yet...
+	8) more and more examples...from simple class tests to complex spin dynamical 
+	   simulations...
+	   
+	9) HOLLY CHROME! it compiles on macs, linux, sgi's, and windows...this is too weird..
+	   lets hear it for gcc!
+	   
+
+--version 0.2
+	1) started the large process of documentation
+	2) added 2 interactions to the "Interactions" 
+	Bulk Susceptibility and Radiation Damping
+	3) allows for 'Dimensionless' Units for the magnetization
+	when solving the diff eqs (all spins Magnetization will Add to 1)
+
+
+--version 0.1
+	1)basic data structures and algorithms lay out
+	Matrix, vectors, grids, coords, diffeq solvers, BlochParameters
+
+

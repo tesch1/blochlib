@@ -1,0 +1,20 @@
+.subHeads {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 16px; color: #330066; font-weight: bold}
+.ImportantText {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: #B81B1F}
+.normalText {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: #111111; font-weight: normal; font-variant: normal; text-transform: none}
+a {  font-family: Verdana, Arial, Helvetica, sans-serif; color: #000099}
+.normalText2 {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none}
+.truetyText {  font-family: "Courier New", Courier, mono; font-size: 14px; color: #000000; font-weight: bold}
+.subhead2 {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: #0000CC}
+.menulinks {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; font-variant: small-caps; color: #660000}
+.importantText2 {  font-weight: bold; font-variant: small-caps; color: #660000}
+.rowaltcolor {  background-color: #000033}
+.sidemenu {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-style: normal; line-height: normal; font-weight: normal; font-variant: small-caps; text-transform: none; color: #000066; text-decoration: none}
+.exampleCode {  font-family: "Courier New", Courier, mono; font-size: 12px; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; color: #000000; text-decoration: none}
+a {  }
+.codecomment {  font-family: "Courier New", Courier, mono; font-size: 11px; color: #2B8400; font-weight: normal}
+.borderTD {  font-size: 3px; background-color: #440000;  color: #660000}
+.head {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; color: #FFFFFF; background-color: #666666; font-weight: bold; font-variant: small-caps}
+.smalltext {   font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; color: #666666}
+body {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; background-color: #eeeeee}
+
+.titleSubs { background-color: #666666; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: #B81B1F}

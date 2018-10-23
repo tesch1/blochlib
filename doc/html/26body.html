@@ -1,0 +1,402 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("26menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("26menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("26menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("26title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("26");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class ShapeEng_t&gt;<br />
+class RotatingGrid :<br />
+	public ShapeEng_t<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Like the Gradient Grid, this is an extention to the Grid class, to allow for rotation of grids about one axis.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsRotatingGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+RotatingGrid()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Default constructor.  Set the default values <br />
+rate=0<br />
+axis=(0,0,1)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+RotatingGrid&lt;XYZshape&lt;&gt; &gt; grid;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsRotatingGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+RotatingGrid(const RotatingGrid &cp);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp--&gt; a RotatingGrid to copy<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The copy constructor copies one Rotating Grid to the next. The ShapeEng_t must be the same for BOTH the copy and the copier.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+RotatingGrid&lt;XYZshape&lt;&gt; &gt; grid;<br />
+RotatingGrid&lt;XYZshape&lt;&gt; &gt; grid2(grid);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsRotatingGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+RotatingGrid(const ShapeEng_t &mygrid, const coord&lt;&gt; &axis=coord&lt;&gt;(0,0,0), const double &rate=0.0, bool continous=false ):<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+mygrid--&gt; an XYZshape of some kind<br />
+axis--&gt; the axis of grid rotation<br />
+rate--&gt; the spinning rate<br />
+continous--&gt; is the grid time dependant or is this a static rotation?<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The main constructor.  Sets the grid to the mygrid, the axis of rotation to 'axis' and the spinning rate to 'rate.' It also sets the 'continous' flag which if set to FALSE the grid will be rotated to the 'axis' but NOT be time dependant (i.e. not spinning); if it is set to TRUE then the grid assumes the grid points spin in time.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims); <font color='#006600'>//the basic grid</font><br />
+XYZfull tester; <font color='#006600'>//the basic shape</font><br />
+XYZshape&lt;XYZfull&gt; jja(gg, tester); <font color='#006600'>//the XYZshape</font><br />
+RotatingGrid&lt;XYZshape&lt;XYZfull&gt; &gt; jj(jja, myAxis, rate); <font color='#006600'>//The Rotating grid</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsRotatingGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+RotatingGrid(const coord&lt;&gt; &mins, const coord&lt;&gt; &maxs, const coord&lt;int&gt; &dims, const coord&lt;&gt; &axis=coord&lt;&gt;(0,0,0), const double &rate=0.0, bool continous=false ):<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+mins--&gt; the minima for the ShapeEng_t<br />
+maxs--&gt; the maxima for the ShapeEng_t<br />
+dims--&gt; the dimensions for ShapeEng_t<br />
+axis--&gt; the axis of grid rotation<br />
+rate--&gt; the spinning rate<br />
+continous--&gt; is the grid time dependant or is this a static rotation?<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A main constructor, that allows you to set the grid parameters on the fly. Sets the axis of rotation to 'axis' and the spinning rate to 'rate.' It also sets the 'continous' flag which if set to FALSE the grid will be rotated to the 'axis' but NOT be time dependant (i.e. not spinning); if it is set to TRUE then the grid assumes the grid points spin in time.  For use primarily with ShapeEng_t='XYZshape&lt;XYZfull&gt;'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+RotatingGrid&lt;XYZshape&lt;XYZfull&gt;  &gt; jj(mins, maxs, dims, myAxis, rate); <font color='#006600'>//The Rotating grid</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractionaxis'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; axis();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Retrieve the axis of rotation.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims); <font color='#006600'>//the basic grid</font><br />
+XYZfull tester; <font color='#006600'>//the basic shape</font><br />
+XYZshape&lt;XYZfull&gt; jja(gg, tester); <font color='#006600'>//the XYZshape</font><br />
+RotatingGrid&lt;XYZshape&lt;XYZfull&gt; &gt; jj(jja, myAxis, rate); <font color='#006600'>//The Rotating grid</font><br />
+jj.axis(coord&lt;&gt;(1,1,1));<br />
+coord&lt;&gt; ax=jj.axis(); <font color='#006600'>//will be [1/sqrt(3), 1/sqrt(3), 1/sqrt(3)]</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionoperator(i,t)'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; operator()(int i, double t);<br />
+coord&lt;&gt; operator()(double t); --&gt; FOR ITERATORS<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the grid point index<br />
+t--&gt; a time<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Retrieves the grid point at index i as a function of time t.<br />
+if 'continous' is false, this will return the rotated grid obtained upon construction.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims); <font color='#006600'>//the basic grid</font><br />
+XYZfull tester; <font color='#006600'>//the basic shape</font><br />
+XYZshape&lt;XYZfull&gt; jja(gg, tester); <font color='#006600'>//the XYZshape</font><br />
+RotatingGrid&lt;XYZshape&lt;XYZfull&gt; &gt; jj(jja, myAxis, rate); <font color='#006600'>//The Rotating grid</font><br />
+jj.axis(coord&lt;&gt;(1,1,1));<br />
+coord&lt;&gt; myPt=jj(4, 0.0); <font color='#006600'>//get the grid point 4 at t=0</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractionPoint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; Point(int i, double t);<br />
+coord&lt;&gt; Point( double t); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the grid point index<br />
+t--&gt; a time<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Retrieves the grid point at index i as a function of time t.<br />
+if 'continous' is false, this will return the rotated grid obtained upon construction.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims); <font color='#006600'>//the basic grid</font><br />
+XYZfull tester; <font color='#006600'>//the basic shape</font><br />
+XYZshape&lt;XYZfull&gt; jja(gg, tester); <font color='#006600'>//the XYZshape</font><br />
+RotatingGrid&lt;XYZshape&lt;XYZfull&gt; &gt; jj(jja, myAxis, rate); <font color='#006600'>//The Rotating grid</font><br />
+jj.axis(coord&lt;&gt;(1,1,1));<br />
+coord&lt;&gt; myPt=jj.Point(4, 0.0); <font color='#006600'>//get the grid point 4 at t=0</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionrate'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double rate()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the spinning rate.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims); <font color='#006600'>//the basic grid</font><br />
+XYZfull tester; <font color='#006600'>//the basic shape</font><br />
+XYZshape&lt;XYZfull&gt; jja(gg, tester); <font color='#006600'>//the XYZshape</font><br />
+RotatingGrid&lt;XYZshape&lt;XYZfull&gt; &gt; jj(jja, myAxis, rate); <font color='#006600'>//The Rotating grid</font><br />
+jj.rate(5600*PI2);<br />
+double rt=jj.rate(); <font color='#006600'>//5600*PI2</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void operator=(const RotatingGrid &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; another RotatingGrid<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigment operator.  The ShapeEng_t for both the opy and the copier must be the same.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims); <font color='#006600'>//the basic grid</font><br />
+XYZfull tester; <font color='#006600'>//the basic shape</font><br />
+XYZshape&lt;XYZfull&gt; jja(gg, tester); <font color='#006600'>//the XYZshape</font><br />
+RotatingGrid&lt;XYZshape&lt;XYZfull&gt; &gt; jj(jja, myAxis, rate); <font color='#006600'>//The Rotating grid</font><br />
+RotatingGrid&lt;XYZshape&lt;XYZfull&gt; &gt; jj2;<br />
+jj2=jj;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetAxis, axis'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setAxis(const coord&lt;&gt; &ax);<br />
+void axis(const coord&lt;&gt; &ax);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+ax--&gt; a valid axis. <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the rotation axis. The axis vector will be Normalized.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims); <font color='#006600'>//the basic grid</font><br />
+XYZfull tester; <font color='#006600'>//the basic shape</font><br />
+XYZshape&lt;XYZfull&gt; jja(gg, tester); <font color='#006600'>//the XYZshape</font><br />
+RotatingGrid&lt;XYZshape&lt;XYZfull&gt; &gt; jj(jja, myAxis, rate); <font color='#006600'>//The Rotating grid</font><br />
+jj.axis(coord&lt;&gt;(1,1,1));<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetRate, rate'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setRate(const double &rt);<br />
+void rate(const double &rt)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rt--&gt; a rate in Rads/Sec<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the Spinning rate. This should be in RADIANS/s.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims); <font color='#006600'>//the basic grid</font><br />
+XYZfull tester; <font color='#006600'>//the basic shape</font><br />
+XYZshape&lt;XYZfull&gt; jja(gg, tester); <font color='#006600'>//the XYZshape</font><br />
+RotatingGrid&lt;XYZshape&lt;XYZfull&gt; &gt; jj(jja, myAxis, rate); <font color='#006600'>//The Rotating grid</font><br />
+jj.rate(500.0*PI2);<br />
+<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

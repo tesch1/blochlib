@@ -1,0 +1,1106 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("7menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("7menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("7menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("7title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("7");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Type=double, int N=3&gt;<br />
+class coord{ ...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<li><B>Accepted Template Params </B>
+<li><TT>Type</TT> --> another class...typically a number type...but can be anything (default=double)</li>
+<li><TT>N</TT></span> --> the number of dimensions...typically 3 (x,y,z)...Optimizations have been made for N=2, 3, 4 (default=3)</li>
+          </li>
+           <li>Notes:: This is simply a fixed size vector..most mathematical operations are ELEMENT BY ELEMENT except for a few like 'norm,' 'dot,' 'max,' and 'min.' It adds some nice coord transforms also. </li>
+          <li >All the functions valid to 'Vector' 
+            are also valid here...the functions created here are optimized for 
+            the small size of the coord. </li>
+      </blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='Constructorscoord'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord(const coord&lt;T1, N&gt; &in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The copied coord and the new coord must have the same N<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; another coord<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+copy constructor<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; moo;<br />
+coord&lt;&gt; loo(moo);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Constructorscoord'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord(const Vector&lt;T1&gt; &in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The copied vector should be as long as the new coord<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a vector OF LENGTH N<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+create a coord from a vector<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector moo(3,0);<br />
+coord&lt;&gt; loo(moo);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Constructorscoord'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;T, 2&gt;(T in1, T in2);<br />
+coord&lt;T, 3&gt;(T in1, T in2, T in3);<br />
+coord&lt;T, 4&gt;(T in1, T in2, T in3, T in4);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in1..in4--&gt; a 'T' object to fill the coord with in the appropriate position<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+create initialize and initialize a coord with input values<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; moo(3,4,5); <font color='#006600'>//moo=[3,4,5]</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Constructorscoord'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;T, N&gt;(T in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a 'T' object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates and fills the entire coord up to N with the value 'in'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; moo(5); <font color='#006600'>//moo=[5,5,5]</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Constructorscoord'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;T, N&gt;(T *data)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The length of the pointer list should be AT LEAST N (it can be larger, but the data will not be copied).<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+data--&gt; a pointer to a T object list<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates and fills a coord from a data pointer.  It COPIES the memory  (not reference).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double data[]={2,3,4};<br />
+coord&lt;&gt; moo(data); <font color='#006600'>//moo=[2,3,4]</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractionoperator()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type operator(int);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NO BOUNDS error checking is performed for SPEED<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+an int from 0--N<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Extracts an element from the coord<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double firstelement=oldC(0);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionoperator(char)'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type operator(char)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+this is slower then the Above methods for element extraction<br />
+NO BOUNDS error checking is performed for SPEED <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+a character 'x','y','z','t' <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Extracts an element given 'x'==0, 'y'==1, 'z'==2, 't'==3<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double myX=oldC('x');<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionoperator[]'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type operator[int]<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NO BOUNDS error checking is performed for SPEED<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Extracts an element from the coord<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double secondele=oldC[1];<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionx(),y(),z()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type &x() or Type &r()<br />
+Type &y() or Type &theta()<br />
+Type &z() or Type &phi()<br />
+Type &t() <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Assignments of the elements can also be made with is operator <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+x()-&gt;returns the 1st element of the coord<br />
+y()-&gt;returns the 2nd element of the coord<br />
+z()-&gt;returns the 3rd element of the coord<br />
+t()-&gt;returns the 4th element of the coord<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double xele=oldC.x();<font color='#006600'>//extraction</font><br />
+oldC.x()=8;<font color='#006600'>//assignment </font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='Assignmentsoperator(1,2,..)'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void operator(T x, T y)<br />
+void operator(T x, T y, T z) <br />
+void operator(T x, T y, T z, T t) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NO Bounds checking performed for sake of speed <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+x--&gt;a number of type T to go in the first element<br />
+y --&gt; a number of type T to go in the second element<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+(T x, T y)-&gt;Sets the first 2 elements of a coord...will attempt a type conversion <br />
+(T x, T y, T z) -&gt;Sets the first 3 elements of a coord...will attempt a type conversion <br />
+(T x, T y, T z, T t)-&gt;Sets the first 4 elements of a coord...will attempt a type conversion<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+oldC(2,3); <font color='#006600'>//the first 2 elements of oldC are now 2 and 3</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type, N&gt; operator=(const coord&lt;T, N&gt; &rhs) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;a coord object OF THE SAME LENGTH as left-hand-side(can be of different type) <br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assignment operator...there is NO 'N' conversions assigment...does do Type conversions<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=oldC;<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type, N&gt; operator=(const Vector&lt;T&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;a Vector object OF THE SAME LENGTH as N (can be of different type) <br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assignment operator...does do Type conversions<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;int&gt; tmpVec(3, 2);<br />
+oldC=tmpVec; <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsx(t),y(t),z(t)'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void x(T in) or void r(T in)<br />
+void y(T in) or void theta(T in)<br />
+void z(T in) or void phi(T in)<br />
+void t(T in) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; A number of type T(int, double, etc...or another object) <br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+x(T)-&gt;sets the 1st element of the coord with inx (doing type conversions to type 'Type')<br />
+y(T)-&gt;sets the 2nd element of the coord with inx (doing type conversions to type 'Type')<br />
+z(T)-&gt;sets the 3rd element of the coord with inx (doing type conversions to type 'Type')<br />
+t(T)-&gt;sets the 4th element of the coord with inx (doing type conversions to type 'Type')<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+oldC.y(45);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Math'></a>Math</font>
+</td></tr></table>
+<tr><td>
+<a name='Math +=, -=, /=, *='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type, N&gt; operator+=(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; operator+=(Vector&lt;T&gt; &rhs)<br />
+coord&lt;Type, N&gt; operator+=(T &rhs)<br />
+<br />
+coord&lt;Type, N&gt; operator-=(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; operator-=(Vector&lt;T&gt; &rhs)<br />
+coord&lt;Type, N&gt; operator-=(T &rhs)<br />
+<br />
+coord&lt;Type, N&gt; operator/=(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; operator/=(Vector&lt;T&gt; &rhs)<br />
+coord&lt;Type, N&gt; operator/=(T &rhs)<br />
+<br />
+coord&lt;Type, N&gt; operator*=(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; operator*=(Vector&lt;T&gt; &rhs)<br />
+coord&lt;Type, N&gt; operator*=(T &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs-&gt;a coord, Vector or scaler (number)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+self addition(+=), subtraction(-=), division(/=), or mulitplication(*=) operator with another coord, Vector, or constant.  <br />
+-For a coord with N=3...<br />
+a+=b--&gt; a[0]+=b[0]; a[1]+=b[1]; a[2]+=b[2];<br />
+-For a Vector of size N=3...<br />
+a+=b--&gt; a[0]+=b[0]; a[1]+=b[1]; a[2]+=b[2];<br />
+-For a Vector of size N=3...<br />
+a+=4--&gt; a[0]+=4; a[1]+=4; a[2]+=4;<br />
+<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+oldC+=newC*2+4;<br />
+oldC+=tmVec*2+4;<br />
+oldC+=4;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Math+, -, /, *'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type,N&gt; operator+(const coord&lt;T1,N&gt; &lhs, const coord&lt;T2,N&gt; &rhs)<br />
+coord&lt;Type,N&gt; operator+(const coord&lt;T1, N&gt; &rhs, const Vector&lt;T2&gt; &lhs)<br />
+coord&lt;Type,N&gt; operator+(const coord&lt;T1, N&gt; &rhs, const Vector&lt;T2&gt; &lhs)<br />
+coord&lt;Type,N&gt; operator+(const coord&lt;T1,N&gt; &lhs, const T2 rhs)<br />
+(similar for -, /, and *)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+lhs--&gt; A coord of length N (the left hand side)<br />
+rhs--&gt;A coord, Vector, or Number of type 'T' (the right hand side)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Adds, Subtracts, Divides, or Multiplies the Number 'rhs' ELEMENT BY ELEMENT to the 'lhs'<br />
+Will convert to the 'highest' type between T1 and T2 (i.e. int+double--&gt;double)<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; c1(4);<br />
+coord&lt;&gt; c2;<br />
+Vector&lt;int&gt; v2(3, 2);<br />
+c2=c1+v2; <font color='#006600'>// the result is now a double coord with elements 6</font><br />
+c2=v2+c1; <font color='#006600'>// also valid with elements as 6</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Math==, !=, >, >=, <, <='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool operator==(coord&lt;Type, N&gt; &rhs)<br />
+bool operator!=(coord&lt;Type, N&gt; &rhs)<br />
+bool operator&gt;=(coord&lt;Type, N&gt; &rhs)<br />
+...similar from other operators<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+coord&lt;Type, N&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+the comparison operators....<br />
+performs the initial comparison element by element and if any of the elements if false it will return false, if non of the elements are false it will return true<br />
+<br />
+if a=(1,2,2) and b=(3,1,3)..then b&gt;a will be FALSE<br />
+if a=(1,2,2) and b=(3,3,3)..then b&gt;a will be TRUE<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+bool test= oldC!=newC;<br />
+bool test= oldC&gt;newC;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathasin, acos, atan'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type, N&gt; asin(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; acos(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; atan(coord&lt;Type, N&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+coord&lt;Type, N&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+performs an element-by-element evalutation of the inverse trig functions asin, acos, atan<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=acos(oldC*Pi/180)<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathasinh, acosh, atanh'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type, N&gt; asinh(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; acosh(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; atanh(coord&lt;Type, N&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+coord&lt;Type, N&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+performs an element-by-element evalutation of the inverse hyperbolic trig functions asinh, acosh, atanh<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=atanh(oldC*Pi/180)<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathcart2cyl'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type,N&gt; cart2cyl()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+valid for N=3 only<br />
+returns the coordinate in cylindrical coords from assuming an exsisting carteisan coord<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=oldC.cart2cyl();<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathcart2sph'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type,N&gt; cart2sph()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+valid for N=3 only<br />
+returns the coordinate in carteisan coords from assuming an exsisting spherical coord<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=oldC.cart2sph();<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathciel, floor, abs'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type, N&gt; ceil(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; floor(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; abs(coord&lt;Type, N&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+coord&lt;Type, N&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+element-by-element of 'ceil' (if n=4.9, ciel(n)=5), 'floor' (if n=4.6 floor(n)=4), and 'abs' (if n=-9, abs(n)=9)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=floor(oldC)<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathcyl2cart'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type,N&gt; cyl2cart() <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+valid for N=3 only<br />
+returns the coordinate in carteisan coords from assuming an exsisting cylindrical coord<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=oldC.cyl2cart();<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathexp, log'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type, N&gt; exp(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; log(coord&lt;Type, N&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+coord&lt;Type, N&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+element-by-element evaluation of exponential and natrual logorithm<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=exp(oldC)<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathmin, max'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type min(coord&lt;Type, N&gt; &rhs)<br />
+Type max(coord&lt;Type, N&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+coord&lt;Type, N&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+finds the max (or min) value inside the coord<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double mymin=min(oldC)<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathmin, max'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type min(coord&lt;T1, N&gt; &rhs, T2 num)<br />
+Type max(coord&lt;T1, N&gt; &rhs, T2 num)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;A coord of the Type T1 <br />
+num--&gt; a number of type T2<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+eturns the min (or max) entry in the list in rhs and then the smallest (or largest) between 'num' and that number <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; c1(6);<br />
+double mymin=min(c1, 0.2); <font color='#006600'>//the result here is 0.2</font><br />
+double mymin=min(0.2, c1/100); <font color='#006600'>//this is also valid with the result of 0.06</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathnorm, dot'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type dot(coord&lt;Type, N&gt; &c1 coord&lt;Type2, N&gt; &c2)<br />
+Type norm(coord&lt;Type, N&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;Another coord of the SAME Type<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+norm returns (if N=3) (x*x + y*y+ z*z)^(1/2)<br />
+dot returns (x1*x2+y1*y2+z1*z2)^(1/2)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double mynorm=norm(oldC);<br />
+double dd=dot(oldC, newC);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathsin, cos, tan'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type, N&gt; sin(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; cos(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; tan(coord&lt;Type, N&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+coord&lt;Type, N&gt; <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+performs an element-by-element evalutation of the trig functions sin, cos, tan<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=cos(oldC*Pi/180);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathsinh, cosh, tanh'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type, N&gt; sinh(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; cosh(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; tanh(coord&lt;Type, N&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+coord&lt;Type, N&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+performs an element-by-element evalutation of the hyperbolic trig functions sinh, cosh, tanh<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=tanh(oldC*Pi/180)<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathsph2cart'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type,N&gt; sph2cart()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+valid for N=3 only<br />
+returns the coordinate in carteisan coords from assuming an exsisting spherical coord<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=oldC.sph2cart();<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathsqrt, sqr'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;Type, N&gt; sqrt(coord&lt;Type, N&gt; &rhs)<br />
+coord&lt;Type, N&gt; sqr(coord&lt;Type, N&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+coord&lt;Type, N&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+element-by-element square and square root<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=sqr(oldC)<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='MathToCyl'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void ToCyl()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+valid for N=3 only<br />
+alters the coordinate (any type) into carteisan coords from an assumed cartesian coord<br />
+this is a destructive conversion....it is faster then the above converstions, but you loose the other information<br />
+r=(sqrt(x*x+y*y));<br />
+<br />
+theta=(fmod(atan(y/x), PI2));<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+oldC.ToCart();<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='MathToSphere'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void ToSphere() <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+valid for N=3 only<br />
+alters the coordinate (any type) into spherical coords from assuming a cartiesian...this is a destructive conversion....it is faster then the above converstions, but you loose the other information<br />
+<br />
+r=(sqrt(x*x+y*y+z*z));<br />
+phi(asin(z/r()));<br />
+theta(acos(x/(r()*cos(phi() ) ) ) );<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+oldC.ToSphere();<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionsrotate'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void rotate(double theta, const coord&lt;&gt; &axis)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+WORKS ONLY FOR N=3 (a 3-vector)<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+theta --&gt; the rotation angle in RADIANS<br />
+axis --&gt; the rotaion axis about which the coord will be rotated (IT MUST BE NORMALIZED)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Rotates a 3 VECTOR by an angle theta (in radians) around the axis (axis).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; moo(3,2,4);<br />
+<br />
+moo.rotate(34*DEG2RAD, coord&lt;&gt;(0,0,1);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsRotate2D'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Rotate2D(double theta, double phi=0) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+theta--&gt;an angle in radians (rotation about 'z-axis')<br />
+phi --&gt; an angle in radians (x-yplane rotation) (default=0)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Performs a 2D rotation on the current coord through angles (theta, phi) (in radians)... will transform the first 2 elements leaves all other untouched <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+oldC.Rotate2D(45*Pi/180, 70*Pi/180);<br />
+oldC.Rotate2D(45*Pi/180); <font color='#006600'>//uses phi=0 default</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionsRotate3D'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Rotate3D(double theta, double phi=0, double psi=0)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+theta--&gt;an angle in radians (angle from z-axis rotation)<br />
+ phi --&gt; an angle in radians (x-yplane rotation) (default=0)<br />
+ psi --&gt; an angle in radians (z phase rotation) (default=0) <br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Performs a 3D rotation on the current coord through angles (theta, phi, psi) (in radians)... will transform the first 3 elements leaves all other untouched <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+oldC.Rotate3D(45*Pi/180, 70*Pi/180, 90*Pi/180);<br />
+oldC.Rotate3D(45*Pi/180, 70*Pi/180); <font color='#006600'>//uses default for psi</font><br />
+oldC.Rotate3D(45*Pi/180); <font color='#006600'>//uses default for phi and psi </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsVect'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;Type&gt; Vect()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the Vector equvilent of the coord...will be of length N... <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; newV=oldC.Vect();<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

@@ -1,0 +1,212 @@
+
+##########################
+##  
+##  Bloch Lib Installation
+## 
+##   author Bo Blanton::magneto@dirac.cchem.berkeley.edu
+##   last update:: 04.11.02
+##########################
+
+
+Platform Notes::
+	--It should compile an most any system with gcc installed on it
+	--to compile on windows machines you either need 'Cygwin'(gcc) or
+	  codewarrior 6.0 (see {source-top}/ide/blochlib.mcp)...
+	--NOTE::the codewarrior IDE may lag behind the gcc config files
+	  they are updated slower
+	--I have only tried to compile this on Mac osX (and it works fine)
+	  i do not know about os 9.1 or lower
+
+Performance Notes::
+
+	--Compilation times for the fully optimized code can take a 
+	  VERY long time (~10-15 min for a single file)...Why? becuase of the 
+	  nature of the expression templates and the LARGE quantity of files
+	  that require massive 'expressing' to function...
+	  you can turn the optimizations off with the compilation commands 
+	  
+	  '{source-top}/blcc -g blaa.cc' --> for the installed library (done with 'make install')
+	  '{source-top}/blcc -n blaa.cc' --> for the local version (i.e. the place where it was untared)
+	  
+	  
+	  which will greatly speed up compilation times 
+	  (and it quite helpful when debugging code...so you
+	  do not have to sit and wait for years to debug things)
+	  
+	  It is recommended that the final programs be fully optimized as you will see
+	  ~5-10 fold increase in speed using the commands
+	  
+	  '{source-top}/blcc blaa.cc' --> for the installed library (down with 'make install')
+	  '{source-top}/blcc -nf blaa.cc' --> for the local version (i.e. the place where it was untared)
+	 
+	 (for Codewarrior compilation there is an example 
+	 project in {source-top}/ide/blochlib_test.mcp...note
+	 this is VERY out of date!!!! and does not work...)
+	 
+**USEING THE LIBRARY (the 'blcc' shell script)
+	
+	-- Because there can be oodles of different linked libraries
+	and include paths simply from the options you have chosen
+	from the library compilation, the compile command can be VERY long.
+	To get everything fully optimized and linked properly you'll need
+	to type in something like
+	
+	c++ -O3 -fomit-frame-pointer -W -Wcast-qual -Wpointer-arith 
+	-Wcast-align -pedantic -fstrict-aliasing -funroll-loops 
+	-finline-functions -ftemplate-depth-40 -mcpu=pentiumpro 
+	-I/home/magneto/code/blochlib-0.8/src/ 
+	-I/home/magneto/include -I./ 
+	-L/home/magneto/code/blochlib-0.8/src/.libs 
+	-L/home/magneto/lib <file>.cc -lbloch -lfftw 
+	/var2/atlas/lib/libcblas.a /var2/atlas/lib/libatlas.a 
+	-lg2c -lm
+	
+	(NASTY!!) SOOOO there is a little Shell script that does 
+	'typing' for you...thus that compile command is reduced to
+	  "blcc -nf <file>.cc"
+	  
+	*the Moral is to USE 'BLCC' !! otherwise your fingers will ache
+	*to see all the scripts options type
+		'blcc --help'
+		
+
+**To install...
+
+1)go to {source-top} (something like "blochlib-0.8/")
+2) run the config script with the an optimization options
+	
+	"--enable-profile" 
+		-->turns on profiling and debugging. disables the big optimization flags
+		--> this will disable the rest of the optimization options
+	"--with-gcc"
+		--> uses gcc as the compiler
+	"--with-gcc3"
+		--> uses gcc3 as the compiler
+	"--enable-debug"
+		--> tuns on only debugging (snaps off the rest of the optimizations)
+	"--with-mpi=<mpi directory>"
+		--> tuns on compilation of library using MPI 
+		--> <mpi directory> will be something like
+		    "/usr/local"
+		    if the libs and includes are in /usr/local/include/
+	"--disable--minuit"
+		--> ths will TURN OFF including MINUIT with the lib
+		(you only really need to do this if you do not have a fortran
+		compiler)
+	"--with-blas=<total path to library>"
+		-->Enables you to use your own platform specific BLAS library
+		  which will be MUCH faster then the built in algos for this
+		  lib (although the algorithms here have been optimized)
+		  For now only the Matrix*Matrix algo is used
+		  (I recommend going to ATLAS (http://math-atlas.sourceforge.net/)
+		  and following my ATLAS directions in the "Windows.Readme" file)
+		--><total path to library> will be something like
+		  "/usr/local/lib/libcblas.a"
+		  
+	"--with-atlas=<atlas directory>"
+		-->Enables you to use your own platform specific BLAS library
+		  which will be MUCH faster then the built in algos for this
+		  lib (although the algorithms here have been optimized)
+		  For now only the Matrix*Matrix algo is used
+		  (I recommend going to ATLAS (http://math-atlas.sourceforge.net/)
+		  and following my ATLAS directions in the "Windows.Readme" file)
+		-->used to save typing from the '--with-blas' command
+		--><atlas directory> will be something like
+		  "/usr/local/atlas/lib" 
+		  if the "libcblas.a" & "libatlas.a" are in that directory
+	   
+	"--with-fftw=<total path to library>"
+		-->Enables you to use the Fastest Fourier Transform in 
+		the West (FFTW) libraries (http://www.fftw.org) to perform
+		FFTs on Vectors and Matrices		
+	"--enable-pthread"
+		-->If any of the 'extra' libs you use require the pthread lib
+		this will turn it on (on LINUX with the INTEL, MKL specific BLAS
+		this is necessary)
+	
+  example::
+  	./configure --enable-profile
+  	./configure --with-gcc --enable-debug
+	./configure --prefix=/usr/local/blochlib --with-mpi=/usr/local
+	
+**This is how i configure MY personal copy (this is **
+**the best config possible...it uses the optimized ATLAS **
+**libs, MPI, and FFTW for true computational zoom **
+	
+	./configure --with-atlas=/home/magneto/atlas/lib --with-fftw=/home/magneto/fftw --with-mpi=/usr/local --prefix=/home/magneto
+
+3) 'make'
+4) 'make install'
+
+**************************************************************
+* Unless you have not already done so, you should first      *
+* make the Profile library, the Debug library, and           *
+* LASTLY make the fully optimized library.  So here          *
+* would the correct ordering for the correct building        *
+*                                                            *
+*  ****To use MPI*****                                       *
+*    --with-mpi=<path to libs and includes>                  *
+*                                                            *
+*  ****To DISABLE MINUIT (for those folks with no fortran)   *
+*    --disable-minuit                                        *
+*                                                            *
+*  ****To Use your optimized/platform specific BLAS Library  *
+*    --with-blas=<total path to library>                     *
+*    --enable-pthread (necessary on LINUX with INTELs MKL)   *
+*    --with-atlas=<path to ATLAS libs>                       *
+*                                                            *
+*  ****To Use the FFTW Fast Fourier Transform Libs           *
+*    --with-fftw=<total path to library>                     *
+*                                                            *
+*   ./configure --enable-profile --prefix=<your install dir> *
+*   make                                                     *
+*   make install                                             *
+*                                                            *
+*   ./configure --enable-debug --prefix=<your install dir>   *
+*   make clean                                               *
+*   make                                                     *
+*   make install                                             *
+*                                                            *
+*   ./configure  --prefix=<your install dir>                 *
+*   make clean                                               *
+*   make                                                     *
+*   make install                                             *
+*                                                            *
+* This will ensure you have all the tools you need to write  *
+* and TEST your programs for speed and give you the best     *
+* speed when you have finished your profiling or debugging   *
+*                                                            *
+* There is a script file called 'blcc' that takes care of    *
+* linking the correct library and including the correct      *
+* include paths...(i.e. it uses the profile lib, the debug   *
+* lib, or the optimized lib)                                 *
+* this file can be found in this directory.....              *
+**************************************************************
+
+The lib is stored in the "src/.libs/" directory 
+the master header file "src/blochlib.h" if
+you did not run 'make install'
+
+
+--right now the build process is quite basic...
+
+--the generated library "libbloch.a" should be linked like so
+  
+  g++ -I{path to 'blochlib.h'} -O3 {other optimization flags} <Your file.cc> -L{path to libbloch.a} -lbloch
+  
+--To compile the examples in the "examples/" directory do this
+--NOTE: you MUST include the flag "-ftemplate-depth-40" or the compilation will barf
+
+	g++ -O3 -finline-functions -funroll-loops -ftemplate-depth-40 -I../src/ <example.cc> -L{source-top}/src/.lib/ -lbloch -o <prog name>
+
+or use the inhouse sript
+
+	cd {source-top}/examples/
+	{source-top}/blcc -nf <example.cc>
+ 
+ OR if you have installed the library with 'make install'
+  	
+  	{source-top}/blcc <example.cc>
+
+
+

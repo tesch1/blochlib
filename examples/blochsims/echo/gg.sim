@@ -1,0 +1,50 @@
+
+
+#parameter file for 2 pulse sequences
+
+dim 1,1,2
+min -0.5,-0.5,-0.5
+max 0.5, 0.5, 0.5
+
+#fid pieces
+npts 2048
+tf 0.5
+
+#the pulse bits (angle, phase, amplitude)
+pulse1 90,0,80000
+pulse2 90,0,80000
+delay1 0.082
+
+#The gradient strength coord
+#gradent str for pulses and delay
+grad1 0,0,0.5
+
+#grad str for FID collection
+grad2 0,0,0.5
+
+#basic spin parametesr
+Bo 7
+temperature 300
+offset 50
+T2 0.1
+T1 1.0
+spintype 1H
+moles 0.1
+
+#initial condition (AllUp, AllDown, RandomUpDown, Random)
+initcond AllUp
+
+#the extra interactions parts
+scalef 0
+raddamp 0
+bulksus 0
+demag 0
+
+#calculate lypuvnovs[1] or not[0]
+lyps 0
+lypout lyps
+
+#file output names for the data
+fidout data
+magout mag
+#trajectories trag

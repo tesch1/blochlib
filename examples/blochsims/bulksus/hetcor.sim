@@ -1,0 +1,43 @@
+#parameter file for looping through 
+# several BulkSus parameters
+
+dim 1,1,2
+min -0.5,-0.5,-0.5
+max 0.5, 0.5, 0.5
+
+#fid pieces
+npts 512
+tf 8
+
+#the pulse bits
+pulse1 90,90,80000
+pulse2 90,-90,80000
+
+#the t2 delay
+delay 0.000125
+npts2D 64
+
+#basic spin parameters
+spintype1 1H
+spintype2 31P
+detect 31P
+
+Bo 4.7
+temperature 300
+moles .104
+
+offset1 -722
+offset2 -4.9
+
+T2_1 0.002
+T1_1 0
+T2_2 0.5
+T1_2 0
+
+
+#for the Bulk Suseptibility
+D 1
+
+
+#file output names for the data
+fidout data

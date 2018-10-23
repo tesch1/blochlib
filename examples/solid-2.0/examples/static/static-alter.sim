@@ -1,0 +1,75 @@
+
+#
+# a simple static spectra using that loops
+# through a bunch of dipole couplings and places them in a 2D set
+
+spins{
+	
+	#the global options
+	numspin 2
+	T 1H 0
+	T 1H 1
+	#csa <iso> <del> <eta> <spin>
+	C 5000  2134 0 0
+	C -5000 2789 0.5 1
+	D 1254 0 1
+	
+}
+
+
+parameters{	
+
+	powder1{
+		aveType ../../../../crystals/rep678
+		thetaStep 233
+		phiStep 144
+		gammaStep 0
+	}		
+
+#the intergrator step size	
+	maxtstep=1e-6
+
+#number of 1D fid points	
+	npts1D=256	
+
+#sweepwidth
+	sw=50000
+
+#the eq matrix
+	roeq=Ix
+}
+
+
+pulses{
+
+#our 2D points
+	fidpts=128
+	2D()
+
+#set the spinning	
+	wr=0
+
+#set the rotor
+
+	rotor=0
+#the dpole step
+	dipStep=100
+	dip=100
+
+#set the detection matrix
+	detect(Ip)
+
+	loop(i=0:fidpts-1)	
+		ro(Ix) #reset the desity matrix
+		
+	#change the dipole copling
+		alterSys(D01, dip)
+		dip=dip+dipStep
+
+	#collect the fid 
+		fid(i)
+	end
+	savefidmatlab(2dalter) #save as a matlab file
+}
+
+	

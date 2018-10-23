@@ -1,0 +1,1295 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("44menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("44menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("44menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("44title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("44");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class BiotCoil<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+ 
+<ul>
+  <li>This class is simply a container to hold and generate Coils for use in the 
+    Magnetic Field calculator. The coils can be represented as either a 'function' 
+    (i.e. we know the form for a circular coil) or as an input file. The coils 
+    are defined in Cartesian space. <br>
+  </li>
+  <li>It is heavily parameter based, meaning it takes a <TT>Parameters</tt> object 
+    to extract all of the relevant parameters. There are several built-in functional 
+    shapes. Below you will find the relevant shape, and the input required for 
+    that shape to function from a Parameter object. <br>
+    <br>
+  </li>
+  <li> ----------------- CONSTANT FIELDS—<br>
+    <ul>
+      <li><TT># the type is a constant field<br>
+        type constant <br>
+        # this is a Magnetic Field Strength in Gauss!<br>
+        # along each axis {x,y,z}<br>
+        constField 1.0,1.0,1.0 <br>
+        <br>
+        </TT></li>
+    </ul>
+  </li>
+  <li>----------------- FILES—<br>
+    <ul>
+      <li><TT>#the type is a file<br>
+        type file <br>
+        <br>
+        #the file name of the shape<br>
+        # the file should either be of the form<br>
+        # ------<br>
+        # xpt1 ypt1 zpt1<br>
+        # xpt2 ypt2 zpt2<br>
+        # …..<br>
+        # -----<br>
+        # the file can have an 'amps'and a 'loops'specified like so<br>
+        #-----<br>
+        # amps 4<br>
+        # loops 5<br>
+        # xpt1 ypt1 zpt1<br>
+        # xpt2 ypt2 zpt2<br>
+        # …..<br>
+        # if no amps or loops are define they default to 1 each<br>
+        #<br>
+        # the file can also be a saved file from a previous<br>
+        # BiotCoil (or Biot, or MultiBiot) class<br>
+        # such that multiply shapes can be saved and read<br>
+        <br>
+        filename shape1.biot<br>
+        <br>
+        </TT></li>
+    </ul>
+  </li>
+  <li>----------------- THE LINE--- 
+    <ul>
+      <li><TT>#the type of shape<br>
+        type line <br>
+        # the number of wraps for the line<br>
+        loops 1000 <br>
+        #the current through the shape (in Amps)<br>
+        amps 2 <br>
+        # number of points to chop up the shape for calculations<br>
+        numpts 4000 <br>
+        #the {x,y,z} beginning of the line in cm<br>
+        begin 10, -150, -10 <br>
+        #the {x,y,z} End of the line in cm<br>
+        end 10, 150, -10 <br>
+        #the translate value…it will move every point<br>
+        # by the value below<br>
+        center 0,0,0 <br>
+        <br>
+        </TT></li>
+    </ul>
+  </li>
+  <li> ----------------- THE CIRCLE---<br>
+    <ul>
+      <li><TT>#the type of shape<br>
+        type circle <br>
+        <br>
+        # the number of wraps for the line<br>
+        loops 10 <br>
+        <br>
+        #the current through the shape (in Amps)<br>
+        amps 2 <br>
+        <br>
+        # number of points to chop up the shape for calculations<br>
+        numpts 5000 <br>
+        <br>
+        #the radius (in cm) of the circle<br>
+        R 5 <br>
+        <br>
+        #the translate value…it will move every point<br>
+        # by the value below<br>
+        center 0,0,0 <br>
+        <br>
+        #the axis about which the coil will be generated AROUND<br>
+        # either ‘x’, ‘y’, or ‘z’<br>
+        axis x <br>
+        <br>
+        </TT> </li>
+    </ul>
+  </li>
+  <li>----------------- THE SPIRAL--- 
+    <ul>
+      <li><TT>#the type of shape<br>
+        # will create a spiral in a around the ‘axis’<br>
+        type spiral <br>
+        <br>
+        # the number of wraps for the line<br>
+        loops 10 <br>
+        <br>
+        #the current through the shape (in Amps)<br>
+        amps 2 <br>
+        <br>
+        # number of points to chop up the shape for calculations<br>
+        numpts 5000 <br>
+        <br>
+        #the Outer Radius (the starting radius) (in cm) of the spiral<br>
+        R1 5 <br>
+        <br>
+        #the Inner Radius (the ending radius) (in cm) of the spiral<br>
+        R2 5 <br>
+        <br>
+        #the number of turns between R1 and R2<br>
+        turns 10 <br>
+        <br>
+        #the translate value…it will move every point<br>
+        # by the value below<br>
+        center 0,0,0 <br>
+        <br>
+        #the axis about which the coil will be generated AROUND<br>
+        # either ‘x’, ‘y’, or ‘z’<br>
+        axis x <br>
+        <br>
+        </TT></li>
+    </ul>
+  </li>
+  <li>----------------- THE HELIX--- 
+    <ul>
+      <li><TT>#the type of shape<br>
+        type helix <br>
+        <br>
+        # the number of wraps for the line<br>
+        loops 10 <br>
+        <br>
+        #the current through the shape (in Amps)<br>
+        amps 2 <br>
+        <br>
+        # number of points to chop up the shape for calculations<br>
+        numpts 5000 <br>
+        <br>
+        #the radius (in cm) of the helix<br>
+        R 5 <br>
+        <br>
+        #the length of the helix in cm<br>
+        # if no ‘center’ is specified it will move from <br>
+        # -1.5 to +1.5 cm about the ‘axis’ defined below<br>
+        Z 3 <br>
+        <br>
+        #the number of turns of the helix<br>
+        # there will be 5 turns from -1.5 to 1.5<br>
+        turns 5 <br>
+        <br>
+        #the translate value…it will move every point<br>
+        # by the value below<br>
+        center 0,0,0 <br>
+        <br>
+        #the axis about which the coil will be generated AROUND<br>
+        # either ‘x’, ‘y’, or ‘z’<br>
+        axis z <br>
+        <br>
+        </TT> </li>
+    </ul>
+  </li>
+  <li>----------------- THE HELMHOLTZ--- 
+    <ul>
+      <li><TT>#the type of shape<br>
+        # generates an IDEAL (no width, no height) <br>
+        # helmholtz pair of circles<br>
+        type helmholtz <br>
+        <br>
+        # the number of wraps for the line<br>
+        loops 10 <br>
+        <br>
+        #the current through the shape (in Amps)<br>
+        amps 2 <br>
+        <br>
+        # number of points to chop up the shape for calculations<br>
+        numpts 5000 <br>
+        <br>
+        #the radius (in cm) of the helix<br>
+        R 5 <br>
+        <br>
+        #the length (in cm) the two circles are apart<br>
+        # if no ‘center’ is specified it one circle will be at<br>
+        # -1.5 the other will be at +1.5 about the ‘axis’<br>
+        length 3 <br>
+        <br>
+        #the translate value…it will move every point<br>
+        # by the value below<br>
+        center 0,0,0 <br>
+        <br>
+        #the axis about which the coil will be generated AROUND<br>
+        # either ‘x’, ‘y’, or ‘z’<br>
+        axis z <br>
+        <br>
+        </TT> </li>
+    </ul>
+  </li>
+  <li>----------------- THE TRUE HELMHOLTZ---<br>
+    <ul>
+      <li><TT>#the type of shape<br>
+        # generates an REAL helmholtz pair of <br>
+        # spirals having depth, width, height, and wraps<br>
+        type truehelmholtz <br>
+        <br>
+        # the number of wraps for the helmholtz<br>
+        # this should be 1, as the number of wraps<br>
+        # will be calculated as real points<br>
+        loops 1 <br>
+        <br>
+        #the current through the shape (in Amps)<br>
+        amps 2 <br>
+        <br>
+        # number of points to chop up the shape for calculations<br>
+        numpts 5000 <br>
+        <br>
+        #the radius (in cm) of the helix<br>
+        R 5 <br>
+        <br>
+        #the length (in cm) the two circles are apart<br>
+        # if no ‘center’ is specified it one circle will be at<br>
+        # -1.5 the other will be at +1.5 about the ‘axis’<br>
+        length 3 <br>
+        <br>
+        #width between 2 helix layers (in cm) <br>
+        layerwidth 0.161 <br>
+        <br>
+        #height between 2 turns (in cm) in a helix layer <br>
+        # if not present will default to layerwidth<br>
+        layerheight 0.161<br>
+        <br>
+        #number of helix turns per Layer<br>
+        turns 3 <br>
+        <br>
+        #number of helix layers<br>
+        numlayers 1<br>
+        <br>
+        #the translate value…it will move every point<br>
+        # by the value below<br>
+        center 0,0,0 <br>
+        <br>
+        #the axis about which the coil will be generated AROUND<br>
+        # either ‘x’, ‘y’, or ‘z’<br>
+        axis z <br>
+        <br>
+        </TT> </li>
+    </ul>
+  </li>
+  <li>Creating Your Own Shapes...<br>
+    <ul>
+      <li>These are the basic shapes available to you, however, should you wish 
+        to create you own shape, there is a way to write a function, then have 
+        BiotCoil coil recognize it from a ‘type’ argument in a Parameter set using 
+        the ‘Function Registration’ method. <br>
+      </li>
+      <li>To register a function you simply need to write a function that is of 
+        the form <br>
+        <br>
+        <TT> void MyNiftyCoil(Parameters &pset, Vector&lt; Vector&lt; coord&lt;&gt; 
+        &gt; &gt;&Coil); <br>
+        </TT> <br>
+      </li>
+      <li>where the parameter set ‘pset’ contains the necessary input parameters 
+        as the above shapes do, and the <tt>Vector&lt; Vector&lt; coord&lt;&gt; 
+        &gt; &gt;</tt> is the place where the points of the shape will be inputted 
+        via your calculation. <br>
+      </li>
+      <li>In <TT>main(int argc, char **argc)</tt> (or some other function that 
+        gets called before you use this new coil) you will then need to register 
+        this new function by giving it a ‘type’ name. <br>
+        <br>
+        <TT>BiotFunctions.insert(&quot;MyTypeName&quot;, MyNiftyCoil);. </tt><br>
+        <br>
+        Once you have called this function, and Parameter set with the ‘<TT>type 
+        MyTypeName</tt>’ will look to this function to calculate the points of 
+        the coil. <br>
+      </li>
+      <li>Your function should add ONE Vector &lt;coord&lt;&gt; &gt; to ‘Coil’ 
+        object. This is so that you can save this coil as a file with perhaps 
+        other coils in it to create a large master coil. Below is a pseudo code 
+        example of the desired properties <br>
+        <br>
+        <TT>void MyNiftyCoil (Parameters &pset, Vector&lt; Vector&lt; coord&lt;&gt; 
+        &gt; &gt; &Coil)<br>
+        {<br>
+        //get the oodles of parameters like this<br>
+        double mypar1=pset.getParamD(“mypar”);<br>
+        int numpts=pset.getParamI(“numpts”); <br>
+        //Now create a new Vector&lt;coord&lt;&gt; &gt; of points<br>
+        Vecotor&lt;coord&lt;&gt; &gt; tmV(numpts, 0); <br>
+        //now fill it up...<br>
+        for(int i=0;i&lt; numpts;++i){<br> //filll me up...<br>
+        }<br>
+        <br>
+        //then add this new coil to the end of the master list<br>
+        Coil.push_back(tmV);<br>
+        } </tt><br>
+        <br>
+        ----------------------------------------------<br>
+        As stated before, this class simply acts a coil point interface; the Magnetic 
+        fields are calculated in the <TT>Biot</tt> and <TT>MultiBiot </tt>classes.<br>
+      </li>
+    </ul>
+  </li>
+</ul>
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Public Vars'></a>Public Vars</font>
+</td></tr></table>
+<tr><td>
+<a name='Public Varsamps'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double amps<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the current running through the coil (in amps).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BiotCoil myCoil;<br />
+myCoil.amps=5.0; <font color='#006600'>//5 amps in the coil</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Public VarsCoil'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;Vector&lt;coord&lt;&gt; &gt; &gt; Coil;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This container holds the coil points.  It can have multiple sub coils (the Vector of Vector&lt;coord&lt;&gt; &gt;).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BiotCoil myCoil;<br />
+myCoil.amps=5.0; <font color='#006600'>//5 amps in the coil</font><br />
+Vector&lt;Vector&lt;coord&lt;&gt; &gt; &gt; pts;<br />
+for(int j=-1;j&lt;3;++j){<br />
+pts.push_back(Vector&lt;coord&lt;&gt; &gt;(0,0));<br />
+for(int i=0;i&lt;1;i+=0.02){<br />
+pts[j].push_back(coord&lt;&gt;(i,j,i*i));<br />
+}<br />
+myCoil.Coil=pts; <font color='#006600'>//set the coil points</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Public Varsnloops'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int nloops<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The number of fictitious wraps the coil makes. The effective current through an area would then be 'amps*nloops.'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BiotCoil myCoil;<br />
+myCoil.amps=5.0; <font color='#006600'>//5 amps in the coil</font><br />
+myCoil.nloops=8; <font color='#006600'>//8 loops in the coil</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsBiotCoil'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BiotCoil()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The empty constructor that sets the default values<br />
+<br />
+npts=0<br />
+type=&quot;&quot;<br />
+min=0<br />
+max=0<br />
+amps=0<br />
+nloops=0<br />
+Coli=empty<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BiotCoil myCoil;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsBiotCoil'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BiotCoil(std::string infile, std::string sec=&quot;coil&quot;);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+infile--&gt; the name of the file to read<br />
+sec--&gt; the parameter section to obtain the coil info from (default=&quot;coil&quot;). Setting sec=&quot;&quot; will make the program read the global variables.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads a Coil from the file 'infile' that contains a valid Parameter set with the section name 'sec.'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>//  type line</font><br />
+<font color='#006600'>// numpts 4000</font><br />
+<font color='#006600'>//  begin -1,-1,-1</font><br />
+<font color='#006600'>//  end 1,1,1</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>//  loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+BiotCoil myCoil(myfile, &quot;mycoil&quot;);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsBiotCoil'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BiotCoil(Parameters &pset, std::string sec=&quot;coil&quot;);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pset--&gt; a Paremeter set<br />
+sec--&gt; the section in the parameter object to read from (default=&quot;coil&quot;)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creats a BiotCoil object from a previously declared parameter set, and reads the info from the section 'sec.'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type circle</font><br />
+<font color='#006600'>// numpts 4000</font><br />
+<font color='#006600'>// center -1,-1,-1</font><br />
+<font color='#006600'>// R 3</font><br />
+<font color='#006600'>// axis x</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>// loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+Parameters pset(myfile);<br />
+BiotCoil myCoil(pset, &quot;mycoil&quot;);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsBiotCoil'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BiotCoil(const Vector&lt;std::string&gt; &pars, std::string sec=&quot;coil&quot;);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pars--&gt; a vector of strings<br />
+sec--&gt; the section in the parameter object to read from (default=&quot;coil&quot;)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creats a BiotCoil object from a set of strings, and reads the info from the section 'sec.'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type circle</font><br />
+<font color='#006600'>// center -1,-1,-1</font><br />
+<font color='#006600'>// R 3</font><br />
+<font color='#006600'>// axis x</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>// loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+Parameters pset(myfile);<br />
+BiotCoil myCoil(pset.section(&quot;mycoil&quot;), &quot;&quot;);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsBiotCoil'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BiotCoil(std::string intype, int pts, double loops=1000, double inamps=2.5):<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+More then likely THIS WILL FAIL to create anything, becuase more parameters are typcially needed to  calculate the shape.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+intype--&gt; the 'type' of shape (line, circle, etc)<br />
+pts--&gt; the number of points that define the coil<br />
+loops--&gt; the fictisious number of wraps for the coil<br />
+inamps--&gt; the current passed through the coil (in amps)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a coil from the input (without the need for a parameter set). <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//sadly this will compile, but generate </font><br />
+<font color='#006600'>// a buch of errors when run</font><br />
+BiotCoil myCol(&quot;line&quot;, 4000);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsBiotCoil'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BiotCoil(const Vector&lt;coord&lt;&gt; &gt; &pts, double loops=1000, double inamps=2.5):<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pts--&gt; the Vector of (x,y,z) points that define a coil<br />
+loops--&gt; the number of wraps this coil makes<br />
+inamps--&gt; the current through the coil (in amps)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a Boil object assuming the input Vector contains all the points in the shape.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;coord&lt;&gt; &gt; pts;<br />
+for(int i=0;i&lt;1;i+=0.02){<br />
+ pts.push_back(coord&lt;&gt;(i,2*i,i*i));<br />
+}<br />
+BoitCoil myCoil(pts);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsBiotCoil'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BiotCoil(const Vector&lt;Vector&lt;coord&lt;&gt; &gt; &gt; &pts, double loops=1000, double inamps=2.5);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pts--&gt; the Vector of Vectors of (x,y,z) points that define a coil<br />
+loops--&gt; the number of wraps this coil makes<br />
+inamps--&gt; the current through the coil (in amps)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a Boil object assuming the input Vector contains all the points in the shape.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;Vector&lt;coord&lt;&gt; &gt; &gt; pts;<br />
+for(int j=-1;j&lt;3;++j){<br />
+ pts.push_back(Vector&lt;coord&lt;&gt; &gt;(0,0));<br />
+for(int i=0;i&lt;1;i+=0.02){<br />
+pts[j].push_back(coord&lt;&gt;(i,j,i*i));<br />
+}<br />
+BoitCoil myCoil(pts);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element ExtractionconstField'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; constField();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the 'constant Field' value given ONLY if the type='constant.'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type constant</font><br />
+<font color='#006600'>// constField 4,70,8</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+BiotCoil myCoil(myfile, &quot;mycoil&quot;);<br />
+cout&lt;&lt;myCoil.constField(); <font color='#006600'>//prints [4,70,8]</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractiontype'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+std::string type();<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the type that was read by the reader.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type line</font><br />
+<font color='#006600'>// numpts 4000</font><br />
+<font color='#006600'>// begin -1,-1,-1</font><br />
+<font color='#006600'>// end 1,1,1</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>// loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+BiotCoil myCoil(myfile, &quot;mycoil&quot;);<br />
+cout&lt;&lt;myCoil.type(); <font color='#006600'>//will print &quot;line&quot;</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentsconstField'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; constField(const coord&lt;&gt; &inF);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+inF--&gt; the new constant Field in GAUSS<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the 'constant Field' value given ONLY if the type='constant.'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type constant</font><br />
+<font color='#006600'>// constField 4,70,8</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+BiotCoil myCoil(myfile, &quot;mycoil&quot;);<br />
+myCoil.constField(coord&lt;&gt;(3,8,90)); <font color='#006600'>//sets the field</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOprint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void print(std::ostream &out=cout);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; an output stream<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Prints a valid Parameter set representation of the input coil.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type constant</font><br />
+<font color='#006600'>// constField 4,70,8</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+BiotCoil myCoil(myfile, &quot;mycoil&quot;);<br />
+myCoil.print();<br />
+<font color='#006600'>//prints</font><br />
+<font color='#006600'>//#BiotCoil..</font><br />
+<font color='#006600'>//mycoil{</font><br />
+<font color='#006600'>// type constant</font><br />
+<font color='#006600'>// constField 4,70,8</font><br />
+<font color='#006600'>//}</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void read(std::string in,std::string sec=&quot;coil&quot;);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+infile--&gt; the name of the file to read<br />
+sec--&gt; the parameter section to obtain the coil info from (default=&quot;coil&quot;). Setting sec=&quot;&quot; will make the program read the global variables.<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads the boitcoil from a file give the name 'in' from the valid parameter section 'sec'. This is like the constructor of the same form, except this re-reads the Coil.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type line</font><br />
+<font color='#006600'>// numpts 4000</font><br />
+<font color='#006600'>// begin -1,-1,-1</font><br />
+<font color='#006600'>// end 1,1,1</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>// loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+BiotCoil myCoil;<br />
+myCoil.read(myfile, &quot;mycoil&quot;);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void read(Parameters &in,std::string sec=&quot;coil&quot;);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pset--&gt; a Paremeter set<br />
+sec--&gt; the section in the parameter object to read from (default=&quot;coil&quot;)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads a coil from a previously declared parameter set, and reads the info from the section 'sec.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type circle</font><br />
+<font color='#006600'>// center -1,-1,-1</font><br />
+<font color='#006600'>// R 3</font><br />
+<font color='#006600'>// axis x</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>// loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+Parameters pset(myfile);<br />
+BiotCoil myCoil;<br />
+myCoil.read(pset, &quot;mycoil&quot;);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void read(const Vector&lt;std::string&gt; &in,std::string sec=&quot;coil&quot;);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pars--&gt; a vector of strings<br />
+sec--&gt; the section in the parameter object to read from (default=&quot;coil&quot;)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads a coil object from a set of strings, and reads the info from the section 'sec.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type circle</font><br />
+<font color='#006600'>// numpts 4000</font><br />
+<font color='#006600'>// center -1,-1,-1</font><br />
+<font color='#006600'>// R 3</font><br />
+<font color='#006600'>// axis x</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>// loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+Parameters pset(myfile);<br />
+pset.addSection(&quot;mycoil&quot;);<br />
+BiotCoil myCoil;<br />
+myCoil.read(pset.section(&quot;mycoil&quot;), &quot;&quot;);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void read();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Simply Re-Reads the Parameter set given in the constrcutor or an previos read function.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type circle</font><br />
+<font color='#006600'>// numpts 4000</font><br />
+<font color='#006600'>// center -1,-1,-1</font><br />
+<font color='#006600'>// R 3</font><br />
+<font color='#006600'>// axis x</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>// loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+Parameters pset(myfile);<br />
+BiotCoil myCoil;<br />
+myCoil.read(pset, &quot;mycoil&quot;);<br />
+myCoil.read(); <font color='#006600'>//read it again</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOreadShape'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void readShape(std::string in);<br />
+void readShape(std::fstream &in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; The file name (std::string) OR an input stream (std::fstream)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads a file in the 'BiotCoil' format. It does not write the Parameter set, but it reads the format as generated by 'writeShape'<br />
+<br />
+START BiotCoil<br />
+amps {num}<br />
+loops {num}<br />
+{x,y,z}<br />
+{x,y,z}<br />
+....<br />
+END BiotCoil<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type line</font><br />
+<font color='#006600'>// numpts 4000</font><br />
+<font color='#006600'>// begin -1,-1,-1</font><br />
+<font color='#006600'>// end 1,1,1</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>// loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+BiotCoil myCoil(myfile, &quot;mycoil&quot;);<br />
+myCoil.writeShape(&quot;outfile&quot;);<br />
+<font color='#006600'>//will print</font><br />
+<font color='#006600'>//START BiotCoil</font><br />
+<font color='#006600'>//amps 2</font><br />
+<font color='#006600'>//loops 2</font><br />
+<font color='#006600'>//-1 -1 -1</font><br />
+<font color='#006600'>//....</font><br />
+<font color='#006600'>//1 1 1</font><br />
+<font color='#006600'>//END BiotCoil</font><br />
+myCoil.readShape(&quot;outfile&quot;); <font color='#006600'>//ill read that file</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOwriteShape'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void writeShape(std::string &out);<br />
+void writeShape(std::fstream &out);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; The file name (std::string) OR an ouput stream (std::fstream)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes a file in the 'BiotCoil' format. It does not write the Parameter set, but it writes the calculated points with the current values of the amps and nloops. It has the form<br />
+<br />
+START BiotCoil<br />
+amps {num}<br />
+loops {num}<br />
+{x,y,z}<br />
+{x,y,z}<br />
+....<br />
+END BiotCoil<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type line</font><br />
+<font color='#006600'>// numpts 4000</font><br />
+<font color='#006600'>// begin -1,-1,-1</font><br />
+<font color='#006600'>// end 1,1,1</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>// loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+BiotCoil myCoil(myfile, &quot;mycoil&quot;);<br />
+myCoil.writeShape(&quot;outfile&quot;);<br />
+<font color='#006600'>//will print</font><br />
+<font color='#006600'>//START BiotCoil</font><br />
+<font color='#006600'>//amps 2</font><br />
+<font color='#006600'>//loops 2</font><br />
+<font color='#006600'>//-1 -1 -1</font><br />
+<font color='#006600'>//....</font><br />
+<font color='#006600'>//1 1 1</font><br />
+<font color='#006600'>//END BiotCoil</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionsmin,max'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; min();<br />
+coord&lt;&gt; max();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These return the min (or max) extent of the coil in all three directions.  Most likely this will NOT be a point in the coil .<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type line</font><br />
+<font color='#006600'>// numpts 4000</font><br />
+<font color='#006600'>// begin -1,1,1</font><br />
+<font color='#006600'>// end 1,-1,2</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>// loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+BiotCoil myCoil(myfile, &quot;mycoil&quot;);<br />
+cout&lt;&lt;myCoil.min(); <font color='#006600'>//outputs [-1,-1,1]</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionssize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int size();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the size of the coil.  It return the TOTAL number of points (i.e. a Sum of all the sub coils in the 'Coil 'variable).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type line</font><br />
+<font color='#006600'>// numpts 4000</font><br />
+<font color='#006600'>// begin -1,-1,-1</font><br />
+<font color='#006600'>// end 1,1,1</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>// loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+BiotCoil myCoil(myfile, &quot;mycoil&quot;);<br />
+cout&lt;&lt;myCoil.size(); <font color='#006600'>//should print 4000</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionstranslate'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void translate(const coord&lt;&gt; &dir);<br />
+void translate(double x, double y, double z);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+dir--&gt; a coord of x,y,z lengths to move the coil<br />
+x,y,z--&gt; the lengths to move the coil<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Moves the entire coil by the lengths specified in the input (x,y,z). <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//Imagine an input file like so</font><br />
+<font color='#006600'>//-------</font><br />
+<font color='#006600'>// mycoil{</font><br />
+<font color='#006600'>// type line</font><br />
+<font color='#006600'>// numpts 4000</font><br />
+<font color='#006600'>// begin -1,-1,-1</font><br />
+<font color='#006600'>// end 1,1,1</font><br />
+<font color='#006600'>// amps 2</font><br />
+<font color='#006600'>// loops 2</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//---------</font><br />
+<br />
+<font color='#006600'>//here is the file name</font><br />
+std::string myfile=&quot;input.sim&quot;;<br />
+BiotCoil myCoil(myfile, &quot;mycoil&quot;);<br />
+<font color='#006600'>//move the entire coil by 5 in x, and 6 along y and z</font><br />
+myCoil.translate(5,6,6); <br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

@@ -1,0 +1,986 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("39menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("39menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("39menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("39title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("39");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class SolidSys : public SpinSys {...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This class integrates both the SpinSys (Spin operators and parameters) and the interactions (Dip, Csa, J, Qua).  It maintains a Rotations object as well as lists of each interaction to create total system Hamiltonians.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Public Vars'></a>Public Vars</font>
+</td></tr></table>
+<tr><td>
+<a name='Public Varscsa'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;Csa&gt; csa;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Holds the list of CSAs in the SolidSys.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+<font color='#006600'>//a solid system with 1 csa on the 2nd spin</font><br />
+moo.csa.push_back(Csa(200, 4000, 0, 1));<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Public Varsdip'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;Dip&gt; dip;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Holds the list of Dipoles in the SolidSys.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+<font color='#006600'>//a solid system with 1 dipole</font><br />
+<font color='#006600'>// between the first and second spin</font><br />
+moo.csa.push_back(Dip(200,  0, 1));<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Public Varsjcop'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;J&gt; jcop;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Holds the list of J-couplings in the SolidSys.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+<font color='#006600'>//a solid system with 1 csa on the 2nd spin</font><br />
+moo.jcoup.push_back(J(200, 0, 1));<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Public Varsqua'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;Qua&gt; qua;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Holds the list of Quadrupoles in the SolidSys.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+<font color='#006600'>//a solid system with 1 csa on the 2nd spin</font><br />
+moo[0]=&quot;2H&quot;; <font color='#006600'>//a quadrupole</font><br />
+moo.qua.push_back(Qua(20e6, 0.1, 0));<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Public VarstheRotations'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Rotations theRotations<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This object iss the master rotations object that is used to calculate the total Hamiltonians of the system from each interaction.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+moo.theRotations.setPowderAngles(PI/3, PI/3);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsSolidSys'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+SolidSys(SolidSys &cp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp--&gt; the SolidSys you wish to copy<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The copy constructor.  Copies all relevent information (theRotations, Bfield, the interactions, etc)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(4);<br />
+SolidSys loo(moo);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsSolidSys'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+SolidSys(SpinSys &sys)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+sys--&gt; a previously declared SpinSys<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets up an object from a previously declared SpinSys object.  The 'Bfield' is set to 0 and all angles in 'theRotations' are set to 0.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys sys(3); <font color='#006600'>//3 spin system</font><br />
+SolidSys moo(sys); <font color='#006600'>//a solid system</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsSolidSys'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+SolidSys(int numsp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+numsp--&gt; the number of spins in the system<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets up an object with 'numsp' spins, all protons.  There are no interactions however, and the Bfield is set to 0.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3); <font color='#006600'>//3 spin 1/2 protons</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsSolidSys'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+SolidSys()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+empty constructor.  No interactions are set and Bfield is set to 0.  There is only one spin in the system, a proton.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo;<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element ExtractionBfield, Bo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double Bfield();<br />
+double Bo();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the Bfield for the spin system. <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+moo.setBfield(300e6);<br />
+cout&lt;&lt;moo.Bfield();<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentsaddCsa'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void addCsa(Csa c);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+c--&gt; A new CSA to add to the system<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Adds a CSA to Solid System and sets the Spin Operators for the new csa.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+<font color='#006600'>//adds a csa</font><br />
+moo.addCsa(Csa(200, 0.1,1));<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentsaddDip'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void addDip(Dip d);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+d--&gt; A new Dipole to add to the system<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Adds a Dipole to Solid System and sets the Spin Operators for the new dipole.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+<font color='#006600'>//adds a dipole</font><br />
+moo.addDip(Dip(200, 0,1));<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentsaddJ'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void addJ(J inj);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+inj--&gt; a J coupling object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Adds a J-coupling to the Solid System<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+<font color='#006600'>//adds a j-coupling</font><br />
+moo.addJ(J(200, 0,1));<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentsaddQ'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void addQ(Qua q);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+q--&gt; a quadrupole object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Adds a Quadrupole to Solid System, sets the Bfield, and sets the Spin Operators for the new quadrupole.<br />
+ <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+<font color='#006600'>//adds a quadrupole</font><br />
+moo.addQ(Qua(200, 0.3,1));<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetBfield'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setBfield(double Bf);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Bf--&gt; the magnetic field in Hz<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the Bfield of the system AND all the Bfield of any quadrupoles in the system.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+moo[0]=&quot;14N&quot;;<br />
+moo.setBfield(300e6);<br />
+moo.addQ(Qua(3000, 0, 0)); <font color='#006600'>//this set the Bfield from the SolidSys </font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOdisplay'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void display();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+is the same as 'print(std::cout)' print the string<br />
+<br />
+#--------------------------------<br />
+#--------spin parameters---------<br />
+#--------------------------------<br />
+#you have {numspins} spins in your system<br />
+<br />
+...A line for each Interaction in the system...<br />
+	<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(3);<br />
+A.csa.push_back(Csa(400, 0, 0, 1));<br />
+A.display();<br />
+<font color='#006600'>//will print a nice formatted string to the console</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOoperator<<'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+std::ostream &operator&lt;&lt;(std::ostream &otr, SolidSys &out);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+otr--&gt; an ostream <br />
+out--&gt; the SolidSys object you wish to print<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The output printing operator.  Performs the same task as 'print(otr).'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(3);<br />
+A.csa.push_back(Csa(400, 0, 0, 1));<br />
+cout&lt;&lt;A&lt;&lt;endl;<br />
+<font color='#006600'>//will print a nice formatted string to the console</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOprint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void print(std::ostream &oo)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an ostream<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Prints a nice formatted string to the ostream oo of the form<br />
+<br />
+#--------------------------------<br />
+#--------spin parameters---------<br />
+#--------------------------------<br />
+#you have {numspins} spins in your system<br />
+<br />
+...A line for each Interaction in the system...<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(3);<br />
+A.csa.push_back(Csa(400, 0, 0, 1));<br />
+A.print(std::cout);<br />
+<font color='#006600'>//will print a nice formatted string to the console</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void read(const std::string in);<br />
+void read(const char * in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a file name<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This reads the SolidSys from a file by the name 'in.'<br />
+<br />
+It reads this format<br />
+<br />
+numspins {num}<br />
+T {label} {spin count}<br />
+C {iso} {del} {eta} {spin} {si} {psi} {chi}<br />
+D  {del} {spin1} {spin2} {si} {psi} {chi<br />
+J {iso}  {spin1} {spin2} {si} {psi} {chi} {strong}<br />
+Q {Q} {eta} {spin} {si} {psi} {chi} {order}<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//suppose our input file was</font><br />
+<font color='#006600'>// numspins 2</font><br />
+<font color='#006600'>// T 1H 0</font><br />
+<font color='#006600'>// T 13C 1</font><br />
+<font color='#006600'>// C 200 300 0.1 0</font><br />
+<font color='#006600'>// C 0 4000 0 1</font><br />
+<font color='#006600'>// D 400 0 1</font><br />
+<br />
+<font color='#006600'>//declare our spin system</font><br />
+SolidSys moo;<br />
+moo.read(&quot;infile&quot;); <br />
+<br />
+<font color='#006600'>//the size of SolidSys is 2, with 2 CSAs and 1 dipole</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+read(Vector&lt;std::string&gt;  list);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+list--&gt; a Vector&lt;std::string&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads a Solid Sys from a Vector&lt;std::string&gt; with each entry being the same line as from an input file 'read' function.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;std::string&gt; list;<br />
+------------------------------------------------------------------------<font color='#006600'>//suppose our input file was</font><br />
+list.push_back(&quot;numspins 2&quot;);<br />
+list.push_back(&quot;T 1H 0&quot;);<br />
+list.push_back(&quot;T 13C 1&quot;);<br />
+list.push_back(&quot; C 200 300 0.1 0&quot;);<br />
+list.push_back(&quot;C 0 4000 0 1&quot;);<br />
+list.push_back(&quot;D 400 0 1&quot;);<br />
+------------------------------------------------------------------------<font color='#006600'>//suppose our input file was</font><br />
+<font color='#006600'>// numspins 2</font><br />
+<font color='#006600'>// T 1H 0</font><br />
+<font color='#006600'>// T 13C 1</font><br />
+<font color='#006600'>// C 200 300 0.1 0</font><br />
+<font color='#006600'>// C 0 4000 0 1</font><br />
+<font color='#006600'>// D 400 0 1</font><br />
+<br />
+<font color='#006600'>//declare our spin system</font><br />
+SolidSys moo;<br />
+moo.read(list); <br />
+<br />
+<font color='#006600'>//the size of SolidSys is 2, with 2 CSAs and 1 dipole</font><br />
+<br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOwrite'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void write(std::ostream &otr);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+otr--&gt; an ostream<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes a SolidSys READABLE (via 'read') chunk of text.  It has the form<br />
+<br />
+numspins {num}<br />
+T {label} {spin count}<br />
+C {iso} {del} {eta} {spin} {si} {psi} {chi}<br />
+D {del} {spin1} {spin2} {si} {psi} {chi<br />
+J {iso} {spin1} {spin2} {si} {psi} {chi} {strong}<br />
+Q {Q} {eta} {spin} {si} {psi} {chi} {order}<br />
+<br />
+<br />
+depending on what is in the SolidSys<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//suppose our input file was</font><br />
+<font color='#006600'>// numspins 2</font><br />
+<font color='#006600'>// T 1H 0</font><br />
+<font color='#006600'>// T 13C 1</font><br />
+<font color='#006600'>// C 200 300 0.1 0</font><br />
+<font color='#006600'>// C 0 4000 0 1</font><br />
+<font color='#006600'>// D 400 0 1</font><br />
+<br />
+<font color='#006600'>//declare our spin system</font><br />
+SolidSys moo;<br />
+moo.read(&quot;infile&quot;); <br />
+<font color='#006600'>//the size of SolidSys is 2, with 2 CSAs and 1 dipole</font><br />
+<br />
+moo.csa[0].iso(3000);<br />
+ostream out(&quot;outfile&quot;);<br />
+moo.write(out);<br />
+<font color='#006600'>//will print this to the 'outfile'</font><br />
+<font color='#006600'>// numspins 2</font><br />
+<font color='#006600'>// T 1H 0</font><br />
+<font color='#006600'>// T 13C 1</font><br />
+<font color='#006600'>// C 3000 300 0.1 0</font><br />
+<font color='#006600'>// C 0 4000 0 1</font><br />
+<font color='#006600'>// D 400 0 1</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOwrite'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void write(std::string &otr);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+otr--&gt; the output file name, the file will be OVERWRITTEN with this data<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes a SolidSys READABLE (via 'read') chunk of text.  It has the form<br />
+<br />
+numspins {num}<br />
+T {label} {spin count}<br />
+C {iso} {del} {eta} {spin} {si} {psi} {chi}<br />
+D {del} {spin1} {spin2} {si} {psi} {chi<br />
+J {iso} {spin1} {spin2} {si} {psi} {chi} {strong}<br />
+Q {Q} {eta} {spin} {si} {psi} {chi} {order}<br />
+<br />
+<br />
+depending on what is in the SolidSys<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//suppose our input file was</font><br />
+<font color='#006600'>// numspins 2</font><br />
+<font color='#006600'>// T 1H 0</font><br />
+<font color='#006600'>// T 13C 1</font><br />
+<font color='#006600'>// C 200 300 0.1 0</font><br />
+<font color='#006600'>// C 0 4000 0 1</font><br />
+<font color='#006600'>// D 400 0 1</font><br />
+<br />
+<font color='#006600'>//declare our spin system</font><br />
+SolidSys moo;<br />
+moo.read(&quot;infile&quot;); <br />
+<font color='#006600'>//the size of SolidSys is 2, with 2 CSAs and 1 dipole</font><br />
+<br />
+moo.csa[0].iso(3000);<br />
+moo.write(&quot;outfile&quot;);<br />
+<font color='#006600'>//will print this to the 'outfile'</font><br />
+<font color='#006600'>// numspins 2</font><br />
+<font color='#006600'>// T 1H 0</font><br />
+<font color='#006600'>// T 13C 1</font><br />
+<font color='#006600'>// C 3000 300 0.1 0</font><br />
+<font color='#006600'>// C 0 4000 0 1</font><br />
+<font color='#006600'>// D 400 0 1</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other FunctionsHamiltonian'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+hmatrix &Hamiltonian(double wr , double beta, double th, double phi, double t1=0, double t2=0)<br />
+hmatrix &Hamiltonian(double t1, double t2, double wr=0.0);<br />
+hmatrix &Hamiltonian();<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+wr--&gt; the spinning speed curretn phase (typically wr*PI2*t) in RADIANS<br />
+beta--&gt; the rotor angle (typically the magic angle) in RADIANS<br />
+th--&gt; the powder THETA angle in RADIANS<br />
+phi--&gt; the powder PHI angle in RADIANS<br />
+t1--&gt; the begining time for the 'dt' step<br />
+t2--&gt; the end time for the 'dt' step<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This returns the total Hamiltonian for the entire spin system with all the interactions, given the angles and/or the ‘dt’ time step.  It returns a REFERENCE to an internal private member.  This is for SPEED, as the matrix needs to only be initialized once.<br />
+<br />
+The best and fastest way to use this function is AFTER calling 'setPowderAngles' and 'setRotorAngles' as the 'theRotations' object gets updated appropriately. If you call these two functions, then 'Hamiltonian()' is the same as 'Hamiltonian(t1, t2)'<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(3);<br />
+A.csa.push_back(Csa(400, 0, 0, 1));<br />
+A.setSpinMats();<br />
+A.setCrystalAs();<br />
+A.setPowderAngles(pi/3, pi/4, pi/5);<br />
+double wr=5000.0, t1=0.1, t2=0.15, ma=acos(1.0/sqrt(3.0));<br />
+A.setRotorAngles(wr*((t2-t1)/2.0+t1)*PI2,ma);<br />
+cout&lt;&lt;A.Hamiltonian(t1, t2,wr); <br />
+cout&lt;&lt;A.Hamiltonian(); <font color='#006600'>//same as above</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsisDiagonal'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool isDiagonal()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+If the object only contains CSA and Quadrupole interactions (i.e. the size of jcop and dip are 0) then the generated hamiltonian is a diagonal real matrix and this function will return true.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(2);<br />
+A.addCsa(Csa(300, 2000, 0,1));<br />
+A.isDiagonal(); <font color='#006600'>//this is true</font><br />
+A.addDip(Dip(2000, 0, 1));<br />
+A.isDiagonal(); <font color='#006600'>//this is false</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionssetCrystalAs'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setCrystalAs();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This sets all the Cyrstal Spacial Tensors (the relative orientations of each interaction) for each interaction in the SolidSys. If you add an interaction via 'mySys.csa.push_back(...)' then you must call these two functions afterwards to get correct hamiltonans 'setSpinMats()' and 'setCrystalAs().' Using the functions 'addCsa', etc. will automatically call these functions, however, if you plan to add many interactions, the 'addCsa', etc functions are much slower. It is better to use the 'push_back' functions for each Interaction list and THEN call the two function 'setCrystalAs()' and 'setSpinMats()'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(3);<br />
+A.csa.push_back(Csa(400, 0, 0, 1));<br />
+A.setSpinMats();<br />
+A.setCrystalAs();<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionssetPowderAngles'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setPowderAngles(double theta, double phi, double gam=0.0);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+THE ORDER OF THETA AND PHI ARE REVERSED FROM THE 'theRotations' OBJECT FUNCTION.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+theta--&gt; the theta powder angle in RADIANS<br />
+phi--&gt; the phi powder angle in RADIANS<br />
+gamma--&gt; the gamma powder angle in RADIANS<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This sets the powder angles in 'theRotations' objects.  This is equivilent to SolidSys::theRotations.setPowderAngles(phi, theta, gamma)<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+moo.setPowderAngles(pi/3, pi/5);<br />
+<font color='#006600'>//this is the same as above, but note the order change</font><br />
+moo.theRotations.setPowderAngles(pi/5, pi/3);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionssetRotorAngles'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setRotorAngles(double wr, double beta, double chi=0)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+wr--&gt; the alpha rotor angle in RADIANS (usually wr*t*PI2)<br />
+beta--&gt; the beta rotor angle in RADIANS<br />
+chi--&gt; the gamma powder angle in RADIANS<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This sets the rotor angles in 'theRotations' objects. This is equivilent to SolidSys::theRotations.setRotorAngles(wr, beta, chi)<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+moo.setRotorAngles(wr*0.1*PI2, 54.7*DEG2RAD);<br />
+<font color='#006600'>//this is the same as above</font><br />
+moo.theRotations.setRotorAngles(wr*0.1*PI2, 54.7*DEG2RAD);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionssetSpinMats'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setSpinMats();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This sets all the Spin Tensors for each interaction in the SolidSys.  If you add an interaction via 'mySys.csa.push_back(...)' then you must call these two functions afterwards to get correct hamiltonans 'setSpinMats()' and 'setCrystalAs().' Using the functions 'addCsa', etc. will automatically call these functions, however, if you plan to add many interactions, the 'addCsa', etc functions are much slower.  It is better to use the 'push_back' functions for each Interaction list and THEN call the two function 'setCrystalAs()' and 'setSpinMats()'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(3);<br />
+A.csa.push_back(Csa(400, 0, 0, 1));<br />
+A.setSpinMats();<br />
+A.setCrystalAs();<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionssize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int size();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the number of Spins in the system.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys moo(3);<br />
+moo.size(); <font color='#006600'>//returns 3</font><br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

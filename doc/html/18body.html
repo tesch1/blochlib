@@ -1,0 +1,159 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("18menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("18menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("18menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("18title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("18");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Function, class T=double, class Container=Vector&lt;T&gt; &gt;<br />
+class bs{....<br />
+<br />
+template&lt;class Function, class T=double, class Container=Vector&lt;T&gt; &gt;<br />
+class ckrk{....<br />
+<br />
+template&lt;class Function, class T=double, class Container=Vector&lt;T&gt; &gt;<br />
+class stiffbs{....<br />
+<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+       <ul>
+          <li>Accepted Template Params             <ul>
+              <li><B> Function></B>--> 
+                A class that need only really contain ONE thing a public funtion, 
+                you guessed it, call 'function' (see below about the exact 
+                format)</li>
+              <li ><B>T</B> --> 
+                A class that is the 'type' to solve (although it best be a numerical 
+                type)...double, complex, coord, Vector<int>, matrix (although 
+                i would not recommend a matrix...if you have a matrix already, 
+                more then likely it can be solved more efficiently via another 
+                technique (like diagonalization)), etc</li>
+              <li><B>Container</B> --> The most important 
+                piece...this is the list of data...it can be ANY CLASS that has 
+                these functions defined for it..&quot;Container.resize&quot;, 
+                &quot;max(Container)&quot;, &quot;min(Container)&quot;, &quot;abs(Container)&quot;, 
+                &quot;Container + Container&quot;, &quot;Container - Container&quot;, 
+                &quot;Container + T&quot;, &quot;Conatiner - T&quot; ,&quot;Container 
+                * T&quot;, &quot;Conatiner / T&quot;, &quot;T+ Container&quot;, 
+                &quot;T+Conatiner&quot; ,&quot;T * Container&quot;, &quot;T/Conatiner&quot;...For 
+                most purposes this 'Conatiner' will almost always be the 'Vector' 
+                class </li>
+            </ul>
+          </li>
+        </ul>
+      <ul>
+              <li>This class(es) integrate large sets of arbitrariliy sized differential 
+                equations.</li>
+              <li>There are 3 SEPARATE METHODS to perform integrations... 
+                <ul>
+                  <li><B>bs</B>--> A Bulirsch-Stoer 
+                    Modified Mid Point-Richard Extrapolation method (see <i>Numerical 
+                    Recepies in C.</i> Saul A. Teukolsky, <i>et al.</i>, 1997 
+                    for a nice intro to this type of method, and the nice book...Stoer, 
+                    J. and Bulirsch, R. <i>Introduction to numerical analysis</i>, 
+                    1980 Springer-Verlag)....this is my personal favorite. It 
+                    is fast, quite accurate, and 'almost' devoid of the need for 
+                    too much fine tuning. It uses an adaptive Step size to adjust 
+                    the time step to not linger around 'slow varying' times, and 
+                    to take more steps during fast varying times. </li>
+                  <li><B>stiffbs</B>--> A Bulirsch-Stoer 
+                    Modified Mid PointBader-Deuflhard Semi-implicit method (see 
+                    <i>Numerical Recepies in C.</i> Saul A. Teukolsky, <i>et al.</i>, 
+                    1997 for a nice intro to this type of method, and the nice 
+                    book...Stoer, J. and Bulirsch, R. <i>Introduction to numerical 
+                    analysis</i>, 1980 Springer-Verlag)....is the equivilent to 
+                    the 'bs' above except it is really fast a good for STIFF sets 
+                    of equations (equations 2 or more wildly different evolution 
+                    frequencies). It requires a Jacobian function in the 'func' 
+                    of the form &quot;void jacobian(double time, Containter &y, 
+                    rmatrix &dfdy)&quot;</li>
+                  <li><B>ckrk</B> --> Cash-Karp-Runga-Kutta 
+                    method ( fifth order method). A standard work horse. This 
+                    will probably integrate every ODE known to man with little 
+                    trouble...BUT i have found it can add a some atrifacts and 
+                    it is farily slow in comparison the 'bs' method...but it is 
+                    much more stable, espeically when it comes to 'impulses' in 
+                    the diffeqs (although, no method really treats this too well 
+                    without some care (i shall give you pointers later). It handles 
+                    stiff ODEs okay, the BS does not at all...</li>
+                </ul>
+              </li>
+             </blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+<ul> 
+<li>This part of manual will be a bit different as there are lots 
+                of 'hidden' numerics that you, as a user, do not need need to 
+                know the ins-and-outs of...instead this will be a highly example 
+                driven tutorial on how to use the integrator</li>
+              <li>ALL 3 CLASSES HAVE EXACTLY THE SAME FUNCTIONS AND ARE IMPLIMENTED 
+                IN EXACTLY YHTE SAME WAY...the only thing you need to change is 
+                the contructor string from bs<func, double> mo(...) to ckrk<func, 
+                double> moo(...) or to stiffbs<func, double>...NOTE stiffbs 
+                requires a jacobian....</li>
+              <li>USE DIMENSIONLESS UNITS!!--> These methods always work best, 
+                fastest, etc when everything is on an order of magnitude of 1...you 
+                can choose not to, but if numerical precision is what you desire, 
+                dimensionless units give better results.</li>
+            </ul></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

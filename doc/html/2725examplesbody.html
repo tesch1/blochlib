@@ -1,0 +1,103 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Using Gradients with ListBlochParams<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This example demonstrates how to create a GradientGrid using the XYZshapes as the base.  It then uses the GradientGrid as the Grid for the 'ListBlochParams.' The ListBlochParams is then assigned as a pointer to the BlochInteraction 'Offset' where the Gradient offsets are calculated on top of a global spin offset.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+<font color='#006600'>//create&nbsp;a&nbsp;10x10x10&nbsp;grid</font><br />
+coord&lt;&gt;&nbsp;mins(-1,-1,-1),&nbsp;maxs(1,1,1);<br />
+coord&lt;int&gt;&nbsp;dims(10,10,10);<br />
+Grid&lt;UniformGrid&gt;&nbsp;grid(mins,&nbsp;maxs,&nbsp;dims);&nbsp;<br />
+<br />
+<font color='#006600'>//a&nbsp;full&nbsp;cylinder&nbsp;of&nbsp;radius&nbsp;0.5&nbsp;and&nbsp;length&nbsp;2</font><br />
+typedef&nbsp;XYZshape&lt;XYZcylinder&gt;&nbsp;TheShape;<br />
+coord&lt;&gt;&nbsp;smins(0,0,-1),&nbsp;smaxs(0.5,&nbsp;PI2,&nbsp;1);&nbsp;<br />
+XYZcylinder&nbsp;inshape(smins,&nbsp;smaxs);<br />
+TheShape&nbsp;myshape(grid,&nbsp;inshape);<br />
+<br />
+<font color='#006600'>//set&nbsp;up&nbsp;the&nbsp;a&nbsp;gradient&nbsp;grid</font><br />
+typedef&nbsp;GradientGrid&lt;TheShape&gt;&nbsp;TheGrid;<br />
+TheGrid&nbsp;gradgrid(myshape);<br />
+<br />
+<font color='#006600'>//set&nbsp;up&nbsp;the&nbsp;gradient&nbsp;parameters</font><br />
+<font color='#006600'>//&nbsp;for&nbsp;Gx=0,&nbsp;Gy=0,&nbsp;Gz=5&nbsp;Gauss/cm</font><br />
+gradgrid.G(0.0,0.0,&nbsp;5.0);<br />
+<br />
+<font color='#006600'>//setup&nbsp;the&nbsp;list&nbsp;of&nbsp;bloch&nbsp;parameters</font><br />
+<font color='#006600'>//using&nbsp;the&nbsp;gradient&nbsp;grid&nbsp;as&nbsp;its&nbsp;base</font><br />
+typedef&nbsp;ListBlochParams&lt;&nbsp;TheGrid&gt;&nbsp;MyPars;<br />
+MyPars&nbsp;mypars(gradgrid.size(),&nbsp;&quot;1H&quot;,&nbsp;gradgrid);<br />
+<br />
+<br />
+<font color='#006600'>//now&nbsp;set&nbsp;up&nbsp;the&nbsp;Offset&nbsp;Interaction&nbsp;using&nbsp;the&nbsp;gradeint&nbsp;grid&nbsp;list&nbsp;of&nbsp;parameters</font><br />
+double&nbsp;offset=100.0*PI2;&nbsp;<font color='#006600'>//a&nbsp;100&nbsp;Hz&nbsp;offset&nbsp;frequency&nbsp;for&nbsp;all&nbsp;the&nbsp;spins</font><br />
+Offset&lt;MyPars&gt;&nbsp;myOffs(mypars,&nbsp;offset);<br />
+myOffs.on();&nbsp;<font color='#006600'>//turn&nbsp;on&nbsp;the&nbsp;gradient&nbsp;in&nbsp;the&nbsp;offsets&nbsp;</font><br />
+<br />
+<font color='#006600'>//USING&nbsp;THE&nbsp;ITERATOR</font><br />
+MyPars::iterator&nbsp;myit(mypars);<br />
+whilw(myit){<br />
+&nbsp;&nbsp;cout&lt;&lt;myOffs.offset(myit.curpos())&lt;&lt;endl;&nbsp;<font color='#006600'>//the&nbsp;will&nbsp;print&nbsp;out&nbsp;dot(G,&nbsp;Point())</font><br />
+&nbsp;&nbsp;++myit;<br />
+}&nbsp;<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

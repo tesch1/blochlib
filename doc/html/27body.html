@@ -1,0 +1,632 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("27menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("27menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("27menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("27title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("27");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Stencils...Finite differences on Vectors<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Here you will find a body of functions designed to apply Stencils (or finite-difference operators) to vectors (i.e. 1D systems).  To see the implimentation for Grids look to Stencils-Grids.<br />
+<br />
+Stencil operators are designed to impliment numerical derivatives in a fast manner.  The naming scheme for the operators is simple<br />
+<br />
+Derivative{F,B,''}_{depth}_{order}{n}<br />
+<br />
+{F,B,''} --&gt; if 'F' use foward differences, if 'B' use backwards differences, if ''(nonthing) use central differences<br />
+{depth}--&gt;which derivative (i.e. first, second, thrid, forth) it is a number from 1..4.<br />
+{order}--&gt; the approximation order of the derivative<br />
+{n}--&gt; if present it will NORMALIZE the derivative <br />
+<br />
+<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Global Functions'></a>Global Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Global Functions1st order::backwards'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector DerivativeB_1_1(Vector in)<br />
+Vector DerivativeB_1_1n(Vector in)<br />
+Vector DerivativeB_1_2(Vector in)<br />
+Vector DerivativeB_1_2n(Vector in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using the first order methods (1_1, 1_1n), the begining point is NOT EFFECTED.<br />
+<br />
+If using the second order methods (1_2, 1_2n), the begining 2 points are NOT EFFECTED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the first derivatives for using the backards difference calculation. <br />
+<br />
+1_1 --&gt; v[i]= v[0]-v[i-1]<br />
+1_1n --&gt; v[i]= v[0]-v[i-1]<br />
+1_2 --&gt; v[i]= v[i-2]+3*v[0]-4*v[i-1]<br />
+1_2n --&gt; v[i]= (v[i-2]+3*v[0]-4*v[i-1])/2<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//moo=[0 1 2 3 4]</font><br />
+Vector&lt;double&gt; moo(Spread&lt;double&gt;(0, 5, 1)),loo;<br />
+<font color='#006600'>//loo=[0 2 2 2 2]</font><br />
+loo=DerivativeB_1_1(moo);<br />
+<font color='#006600'>//note:: the last point is not effected</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global Functions1st order::central'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector Derivative_1_2(Vector in)<br />
+Vector Derivative_1_2n(Vector in)<br />
+Vector Derivative_1_4(Vector in)<br />
+Vector Derivative_1_4n(Vector in)<br />
+<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using the second order methods (1_2, 1_2n), the begining point and the last point are NOT EFFECTED.<br />
+<br />
+If using the forth order method(1_4, 1_4n), the begining 2 points and the last 2 points are NOT EFFECTED.<br />
+<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the first derivatives for using the 'Central' difference calculation.  <br />
+<br />
+The stencils are<br />
+<br />
+1_2 --&gt; v(i)=v(i+1)-v(i-1);<br />
+1_2n --&gt; v(i)=(v(i+1)-v(i-1))/2;<br />
+1_4 --&gt; v(i)=v(i-2)-8.0*v(i-1)+8.0*v(i+1)-v(i+2);<br />
+1_4n --&gt; v(i)=(v(i-2)-8.0*v(i-1)+8.0*v(i+1)-v(i+2))/12;<br />
+<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//moo=[0 1 2 3 4]</font><br />
+Vector&lt;double&gt; moo(Spread&lt;double&gt;(0, 5, 1)),loo;<br />
+<font color='#006600'>//loo=[0 2 2 2 4]</font><br />
+loo=Derivative_1_2(moo);<br />
+<font color='#006600'>//note:: the first and last point are not effected</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global Functions1st order::forward'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector DerivativeF_1_1(Vector in)<br />
+Vector DerivativeF_1_1n(Vector in)<br />
+Vector DerivativeF_1_2(Vector in)<br />
+Vector DerivativeF_1_2n(Vector in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using the second order methods (1_1,1_1n), the last  point is NOT EFFECTED.<br />
+<br />
+If using the second order methods (1_2,1_2n), the last 2 points are NOT EFFECTED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; a vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the first derivatives for using the foward difference calculation. <br />
+<br />
+1_1 --&gt; v[i]=v[i+1]-v[i];<br />
+1_1n --&gt; v[i]=v[i+1]-v[i];<br />
+1_2 --&gt; v[i]=4*v[i+1]-3*v[i]-v[i+2];<br />
+1_2n --&gt; v[i]=(4*v[i+1]-3*v[i]-v[i+2])/2;<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//moo=[0 1 2 3 4]</font><br />
+Vector&lt;double&gt; moo(Spread&lt;double&gt;(0, 5, 1)),loo;<br />
+<font color='#006600'>//loo=[2 2 2 2 4]</font><br />
+loo=DerivativeF_1_1(moo);<br />
+<font color='#006600'>//note:: the last point is not effected</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global Functions2nd order::backwards'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector DerivativeB_2_1(Vector in)<br />
+Vector DerivativeB_2_1n(Vector in)<br />
+Vector DerivativeB_2_2(Vector in)<br />
+Vector DerivativeB_2_2n(Vector in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using the first order methods (2_1, 2_1n), the begining 2 points are NOT EFFECTED.<br />
+<br />
+If using the second order methods (2_2, 2_2n), the begining 3 points are NOT EFFECTED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; a vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the first derivatives for using the backards difference calculation. <br />
+<br />
+2_1 --&gt; v[i]=v[0]+v[i-2]-2*v[i-1]<br />
+2_1n --&gt; v[i]=v[0]+v[i-2]-2*v[i-1]<br />
+2_2 --&gt; 2*v[0]+4*v[i-2]-5*v[i-1]-v[i-3];<br />
+2_2n --&gt; 2*v[0]+4*v[i-2]-5*v[i-1]-v[i-3];<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//moo=[0 1 2 3 4]</font><br />
+Vector&lt;double&gt; moo(Spread&lt;double&gt;(0, 5, 1)),loo;<br />
+<font color='#006600'>//loo=[0 1 0 0 0]</font><br />
+loo=DerivativeB_2_1(moo);<br />
+<font color='#006600'>//note:: the last point is not effected</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global Functions2nd order::central'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector Derivative_2_2(Vector in)<br />
+Vector Derivative_2_2n(Vector in)<br />
+Vector Derivative_2_4(Vector in)<br />
+Vector Derivative_2_4n(Vector in)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using the second order methods (2_2, 2_2n), the begining point and the last point are NOT EFFECTED.<br />
+<br />
+If using the forth order method(2_4, 2_4n), the begining 2 points and the last 2 points are NOT EFFECTED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the second derivatives for using the central difference calculation. <br />
+<br />
+<br />
+2_2--&gt;v(i)=v(i-1)-2.0*v(i)+v(i+1);<br />
+2_2n--&gt;v(i)=v(i-1)-2.0*v(i)+v(i+1);<br />
+2_4--&gt;v(i)=30.*v(i) + 16.*(v(i-1)+v(i+1))-(v(i-2)+v(i+2))<br />
+2_4n--&gt;v(i)=(30.*v(i) + 16.*(v(i-1)+v(i+1))-(v(i-2)+v(i+2)))/12<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//moo=[0 1 2 3 4]</font><br />
+Vector&lt;double&gt; moo(Spread&lt;double&gt;(0, 5, 1)),loo;<br />
+<font color='#006600'>//loo=[0 0 0 0 4]</font><br />
+loo=Derivative_2_2(moo);<br />
+<font color='#006600'>//note:: the first and last point are not effected</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global Functions2nd order::forward'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector DerivativeF_2_1(Vector in)<br />
+Vector DerivativeF_2_1n(Vector in)<br />
+Vector DerivativeF_2_2(Vector in)<br />
+Vector DerivativeF_2_2n(Vector in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using the first order methods (2_1,2_1n), the last 2 points are NOT EFFECTED.<br />
+<br />
+If using the second order methods (2_2,2_2n), the last 3 points are NOT EFFECTED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; a vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the second derivatives for using the foward difference calculation. <br />
+<br />
+2_1 --&gt; v[i]=v[i]+v[i+2]-2*v[i+1];<br />
+2_1n --&gt; v[i]=v[i]+v[i+2]-2*v[i+1];<br />
+2_2 --&gt; v[i]=2*v[i]+4*v[i+2]-5*v[i+1]-v[i+3];<br />
+2_2n --&gt; v[i]=2*v[i]+4*v[i+2]-5*v[i+1]-v[i+3];<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//moo=[0 1 2 3 4]</font><br />
+Vector&lt;double&gt; moo(Spread&lt;double&gt;(0, 5, 1)),loo;<br />
+<font color='#006600'>//loo=[0 0 0 3 4]</font><br />
+loo=DerivativeF_2_1(moo);<br />
+<font color='#006600'>//note:: the last 2 points are not effected</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global Functions3rd order::backwards'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector DerivativeB_3_1(Vector in)<br />
+Vector DerivativeB_3_1n(Vector in)<br />
+Vector DerivativeB_3_2(Vector in)<br />
+Vector DerivativeB_3_2n(Vector in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using the first order methods (3_1, 3_1n), the begining 3 points are NOT EFFECTED.<br />
+<br />
+If using the second order methods (3_2, 3_2n), the begining 4 points are NOT EFFECTED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; a vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the first derivatives for using the backards difference calculation. <br />
+<br />
+3_1 --&gt; v[i]=3*v[i-2]+v[i-1]+v[0]-v[i-3];<br />
+3_1n --&gt; v[i]=3*v[i-2]+v[i-1]+v[0]-v[i-3];<br />
+3_2 --&gt; v[i]=5*v[i] - 18*v[i-1] + 24*v[i-2] -14*v[i-3] + 3*v[i-4];<br />
+3_2n --&gt; v[i]=(5*v[i] - 18*v[i-1] + 24*v[i-2] -14*v[i-3] + 3*v[i-4])/2;<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//moo=[0 1 2 3 4]</font><br />
+Vector&lt;double&gt; moo(Spread&lt;double&gt;(0, 5, 1)),loo;<br />
+<font color='#006600'>//loo=[0 1 2 0 0]</font><br />
+loo=DerivativeB_3_1(moo);<br />
+<font color='#006600'>//note:: the last point is not effected</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global Functions3rd order::central'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector Derivative_3_2(Vector in)<br />
+Vector Derivative_3_2n(Vector in)<br />
+Vector Derivative_3_4(Vector in)<br />
+Vector Derivative_3_4n(Vector in)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using the second order methods (3_2, 3_2n),  the begining 2 points and the last 2 points are NOT EFFECTED.<br />
+<br />
+If using the forth order method(3_4, 3_4n), the begining 3 points and the last 3 points are NOT EFFECTED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the third derivatives for using the central difference calculation. <br />
+<br />
+3_2--&gt; v(i)=2*v(i-1)-v(v-2)-2*v(i+1)+v(i+2);<br />
+3_2n--&gt; v(i)=(2*v(i-1)-v(v-2)-2*v(i+1)+v(i+2))/2;<br />
+3_4 --&gt; v(i)=v(i-3) - 8*v(i-2) +13*v(i-1)<br />
+     -13.*v(i+1)+8.*v(i+2)-v(i+3);<br />
+3_4n --&gt; v(i)=(v(i-3) - 8*v(i-2) +13*v(i-1)<br />
+     -13.*v(i+1)+8.*v(i+2)-v(i+3))/8;<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//moo=[0 1 2 3 4]</font><br />
+Vector&lt;double&gt; moo(Spread&lt;double&gt;(0, 5, 1)),loo;<br />
+<font color='#006600'>//loo=[0 1 0 3 4]</font><br />
+loo=Derivative_3_2(moo);<br />
+<font color='#006600'>//note:: the first and last point are not effected</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global Functions3rd order::foward'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector DerivativeF_3_1(Vector in)<br />
+Vector DerivativeF_3_1n(Vector in)<br />
+Vector DerivativeF_3_2(Vector in)<br />
+Vector DerivativeF_3_2n(Vector in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using the second order methods (3_1,3_1n), the last 3 points are NOT EFFECTED.<br />
+<br />
+If using the second order methods (3_2,3_2n), the last 4 points are NOT EFFECTED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the third derivatives for using the foward difference calculation. <br />
+<br />
+3_1 --&gt; v[i]=3*v[i+1]-3*v[i+2]-v[0]+v[i+3]<br />
+3_1n --&gt; v[i]=3*v[i+1]-3*v[i+2]-v[0]+v[i+3];<br />
+3_2 --&gt; v[i]=18*v[i+1]-24*v[i+2]-5*v[0]+14*v[i+3]-3*v[i+4];<br />
+3_2n --&gt; v[i]=18*v[i+1]-24*v[i+2]-5*v[0]+14*v[i+3]-3*v[i+4];<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//moo=[0 1 2 3 4]</font><br />
+Vector&lt;double&gt; moo(Spread&lt;double&gt;(0, 5, 1)),loo;<br />
+<font color='#006600'>//loo=[0 0 2 3 4]</font><br />
+loo=DerivativeF_3_1(moo);<br />
+<font color='#006600'>//note:: the last 3 points are not effected</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global Functions4th order::backwards'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector DerivativeB_4_1(Vector in)<br />
+Vector DerivativeB_4_1n(Vector in)<br />
+Vector DerivativeB_4_2(Vector in)<br />
+Vector DerivativeB_4_2n(Vector in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using the first order methods (4_1, 4_1n), the begining 4 points are NOT EFFECTED.<br />
+<br />
+If using the second order methods (4_2, 4_2n), the begining 5 points are NOT EFFECTED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; a Vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the forth derivatives for using the backards difference calculation. <br />
+<br />
+4_1 --&gt; v[i]=6*v[2]-4*v[i-1]-v[i]-4*v[i-3]+v[i-4];<br />
+4_1n --&gt; v[i]=6*v[2]-4*v[i-1]-v[i]-4*v[i-3]+v[i-4];<br />
+4_2 --&gt; v[i]=26*v[i-2]-14*v[i-1]-3*v[i]-24*v[i-3]+11*v[i-4]-2*v[i-5];<br />
+4_2n --&gt; v[i]=26*v[i-2]-14*v[i-1]-3*v[i]-24*v[i-3]+11*v[i-4]-2*v[i-5];<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//moo=[0 1 2 3 4]</font><br />
+Vector&lt;double&gt; moo(Spread&lt;double&gt;(0, 5, 1)),loo;<br />
+<font color='#006600'>//loo=[0 1 2 3 0]</font><br />
+loo=DerivativeB_4_1(moo);<br />
+<font color='#006600'>//note:: the last point is not effected</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global Functions4th order::central'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector Derivative_4_2(Vector in)<br />
+Vector Derivative_4_2n(Vector in)<br />
+Vector Derivative_4_4(Vector in)<br />
+Vector Derivative_4_4n(Vector in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using the second order methods (4_2,4_2n), the begining 2 points and the last 2 points are NOT EFFECTED.<br />
+<br />
+If using the forth order method(4_4, 4_4n), the begining 3 points and the last 3 points are NOT EFFECTED.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the forth derivatives for using the central difference calculation. <br />
+<br />
+4_2 --&gt; v[i]=v[i-2]-4*v[i-1]+6*v[i+0]-4*v[i+1]+v[i+2];<br />
+4_2n--&gt; v[i]=v[i-2]-4*v[i-1]+6*v[i+0]-4*v[i+1]+v[i+2];<br />
+4_4 --&gt; v[i]=-v[i-3]+12*v[i-2]-39*v[i-1]<br />
+    +56*A-39*v[i+1]+12*v[i+2]-v[i+3];<br />
+4_4n --&gt; v[i]=(-v[i-3]+12*v[i-2]-39*v[i-1]<br />
+    +56*A-39*v[i+1]+12*v[i+2]-v[i+3])/6;<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//moo=[0 1 2 3 4]</font><br />
+Vector&lt;double&gt; moo(Spread&lt;double&gt;(0, 5, 1)),loo;<br />
+<font color='#006600'>//loo=[0 1 0 3 4]</font><br />
+loo=Derivative_4_2(moo);<br />
+<font color='#006600'>//note:: the first 2 and last 2 points are not effected</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global Functions4th order::foward'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector DerivativeF_4_1(Vector in)<br />
+Vector DerivativeF_4_1n(Vector in)<br />
+Vector DerivativeF_4_2(Vector in)<br />
+Vector DerivativeF_4_2n(Vector in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using the first order methods (4_1,4_1n), the last 4 points are NOT EFFECTED.<br />
+<br />
+If using the second order methods (4_2,4_2n), the last 5 points are NOT EFFECTED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the forth derivatives for using the foward difference calculation. <br />
+<br />
+4_1--&gt; v[i]=6.0*v[i+2]-4.0*v[i+1]-v[0]-4.0*v[i+3]+v[i+4];<br />
+4_1n --&gt; v[i]=6.0*v[i+2]-4.0*v[i+1]-v[0]-4.0*v[i+3]+v[i+4];<br />
+4_2--&gt; v[i]=26.0*v[i+2]-14.0*v[i+1]-3.0*v[0]-24.0*v[i+3]+11.0*v[i+4]-2.0*v[i+5];<br />
+4_2n--&gt; v[i]=26.0*v[i+2]-14.0*v[i+1]-3.0*v[0]-24.0*v[i+3]+11.0*v[i+4]-2.0*v[i+5];<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//moo=[0 1 2 3 4]</font><br />
+Vector&lt;double&gt; moo(Spread&lt;double&gt;(0, 5, 1)),loo;<br />
+<font color='#006600'>//loo=[0 1 2 3 4]</font><br />
+loo=DerivativeF_4_2(moo);<br />
+<font color='#006600'>//note:: the last 4 points are not effected</font><br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

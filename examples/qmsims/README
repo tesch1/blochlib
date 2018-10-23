@@ -1,0 +1,74 @@
+
+
+
+--blochlib/examples/qmsims/
+ 
+ Here are the oodles of Quantum Mechanical invloved simulations
+ These range from very simple to hopelessly complex...some
+ are even full scale applications (i.e. in the 'perms' folder)
+
+***** 
+DO NOT LOOK AT THESE...(well okay you can, but they are far
+from begin anything yet, and so may cause you more confusion then good)
+--qmsims/iterates/ --> nothing yet, but a thought
+--qmsims/statevec/ --> not yet complete thus documentation is silly
+--qmsims/multiq/ --> not yet complete thus documentation is silly
+****
+
+LOOK AT THESE
+
+--qmsims/simple90.cc --> a simple 'hardcoded' 90 pulse on the spins system 
+                         below for either static or spinning FIDs
+                         
+
+--qmsims/simplequad.cc --> a simple 'hardcoded' 90 pulse on the spins system 
+                          below for either static or spinning quadrupoles
+                         
+--qmsims/zerofield.cc --> simulates the spectrum of a zero field dipole-dipole
+                          interaction...
+                          DEMONSTRATES how you can impliment your own
+                          'Hamiltonian' generation class inside a oneFID<>
+                          container...by overwritting the 'SolidSys' versions
+                          but still using the "SolidSys' internal functionality
+
+
+--qmsims/perms/ --> This is a series of programs that 
+ 			1) tensorgen-->generete all spin tensors up to a
+ 			   arbitrary order, multiplication, communtation
+ 			   spherical, cartsian, Hamiltonians
+ 			   saves them to a file for later reading by the
+ 			   same class 
+ 			2) rectrain--> generates and calculates the 
+ 			   'efficiancy' of various permutations and
+ 			   sequence lengths for a given 'recoupleing'
+ 			   and/or decouple sequences to arbitrary
+ 			   number of applications...this is a huge
+ 			   programs and will have a paper written 
+ 			   about it soon enough
+
+
+
+--qmsims/MMMQMAS/ --> calculates VERY efficently various MQ-MAS experiment
+		      on up to 2 quadrupoles
+		      	1) reduce --> uses an iterative scheme
+		      	   to take impliment matrix multiplication
+		      	   reduction when computing Spinning Sample
+		      	   FIDs where the sampling rate and the Rotor
+		      	   speed are some Rational Fraction...
+		      	   i.e. if we collect every 7/9 of a rotor cycle
+		      	   then we need only calculate 9 propogators
+		      	   and use some nifty time ordering properties
+		      	2) mmqmas --> creates FIDs from an MQMAS experiment
+		      	   for a varity of transfer types (3-->1, 5--3, 5--1, etc)
+		      	   for up to 2 coupled Quadrupoles...it assumes 'ideal'
+		      	   pulse behavior
+
+--qmsims/shapes/ --> shows you how to prepare a class
+                     to handle shaped pulses where the 
+                     pulse shape must be read in from a file
+                     ...and impliment the pulse on
+                     a typical spin system
+
+
+
+   

@@ -1,0 +1,1 @@
+SUBDIRS =  @MINUIT_DIR@

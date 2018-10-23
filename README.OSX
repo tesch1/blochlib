@@ -1,0 +1,22 @@
+BlochLib README.OSX
+
+author:: Bo Blanton
+last modified:: Sept 10 2003
+
+**The old isnan problem should be now fixed on the oSX machine world
+I can use 'finite' instead...i wonder why i never thought of that earlier?
+
+This should allow the lib to compile, but you will not have
+the ability to use the 'isnan' function or the 'hasnan' function 
+on vectors or matrices....
+
+FORTRAN PROBLEMS
+osX does not come with a fortran compiler...saddly..but there are 
+some folks out there that have made a port of g77...so go that and
+install it (a simple google search for "Fortran osX" will find you some)
+
+I tried making a 'Project Builder' version of blochlib and noticed that even
+though a fortran compiler was installed...the Project Builder could not find
+it...so the MINUIT support is probably out of the game if you use the 'Project Builder'
+otherwise the command line stuff should work fine...
+

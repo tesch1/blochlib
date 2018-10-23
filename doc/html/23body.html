@@ -1,0 +1,752 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("23menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("23menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("23menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("23title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("23");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;int BPops=BPoptions::Density | BPoptions::HighField, class Offset_T=double&gt;<br />
+class BlochParams :<br />
+public Isotope{....<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<ul>
+<li>This class acts as an extension to the 'Isotope' class and includes 
+settings for the BASIC parameters used in solving the bloch </li>
+<li><TT>BPops</TT>--> This is where you 
+specifiy the &quot;Type&quot; of parameter it is... 
+<ul>
+  <li><B>BPoptions::Density | BPoptions::HighField</B> 
+    --> Each parameter is concidered a volume of spins which 
+    'Bulk' properties...Equilibrium magnetization is given by 
+    The Curie Law and is All initially Mz (the HighField assumption)...You 
+    should use this is you are concidering effects like Bulk Suseptability, 
+    or Radiation Damping, or the Demagnetizing Field...Diffusion 
+    is also treated differently in this case..the 'Dipole-Dipole' 
+    interaction HERE is meaningless and is replaced withe the 
+    Demagnetizing Field</li>
+  <li><B>BPoptions::Particle | BPoptions::HighField</B> 
+    --> Each parameter is a 'single spin' (so things like Radiation 
+    Damping, etc are invalid interactions)...This is used mainly 
+    to demonstrate and simulate the Dipole-Dipole interaction</li>
+  <li><B>BPoptions::Density | BPoptions::ZeroField</B> 
+    -->Not Yet Ready</li>
+  <li><B>BPoptions::Particle | BPoptions::ZeroField</B> 
+    --> Not Yet Ready</li>
+</ul>
+</li>
+<li><TT><B>Offset_T</B></TT>--> The offset Type 
+(a Double or coord ) 
+<ul>
+  <li><B>double</B> -->The standard high field along the z-hat direction 
+    assumption...becuase the Bfield along Z is so strong, the 
+    other directions are all truncated with respect to this axis 
+    so everything (Bo, Mo, offsets, T2, T1, etc) are all along 
+    this main axis...</li>
+  <li><B>coord</B> --> &quot;off axis high fields&quot; where 
+    one can no longer assume the interactions are truncated along 
+    the z-axis...but an arbitrary axis relative to the lab frame. 
+    offsets, Bo, Mo, etc all become 3 vectors</li>
+</ul>
+</li>
+</ul></blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsBlochParams'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BlochParams()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+empty constructor--&gt; Sets up the default Parameter<br />
+The Default isotope is &quot;1H&quot;<br />
+The Default Bo_=4.7 tesla (if Offset_T==coord&lt;&gt;, Bo_=(0,0,4.7))<br />
+The Default Mo_=Curie Law (if Offset_T==coord&lt;&gt;, Mo_=(0,0, Mo), for Particle Mo_=(0,0,1))<br />
+The Default Temperature=300 K<br />
+The Default moles=1<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParam&lt;&gt; moo; <br />
+std::string sys=moo.symbol(); <font color='#006600'>//returns &quot;1H&quot;</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsBlochParams'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BlochParams(std::string symbol) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+symbol--&gt; the name of the atom...in the format &quot;&lt;atomic mass&gt;&lt;periodic lable&gt;&quot; like &quot;1H&quot;, &quot;2H&quot;, &quot;7Li&quot;...etc<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates an params data set from the correct 'symbol.'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;13C&quot;); <br />
+std::string sys=moo.symbol(); <font color='#006600'>//returns &quot;13C&quot;</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsBlochParams'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BlochParams(const BlochParams &cp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp--&gt; an exsisting isotope to copy..<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a copy of the old BlochParam.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;27Al&quot;); <br />
+BlochParams loo(moo); <font color='#006600'>//moo is copied into loo</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element ExtractionBo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Offset_T &Bo()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using this for assignment..YOU MUST PERFORM a &quot;calcMo()&quot; in order to get the correct &quot;Mo.&quot; <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the Magnetic field on that spin (also can be used for assignment).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;27Al&quot;);<br />
+moo.Bo()=5; <br />
+moo.calcMo(); <br />
+cout&lt;&lt;moo.Bo(); <font color='#006600'>//prints out '5'</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionMo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Offset_T Mo()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The initial total magnitization of the 'spin' at equilibrium inside a large magnetic field.<br />
+<br />
+<br />
+Each spin has the equilibrium magnitization given by the curie formula <br />
+<br />
+Mo=(gamma()*hbar*tanh(hbar*PI*(Bo()*gamma()/PI2)<br />
+/kb/temperature())*moles()*No*1e3/2.0)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;1H&quot;);<br />
+moo.Bo()=4.7; <br />
+moo.calcMo(); <br />
+cout&lt;&lt;moo.Mo(); <font color='#006600'>//prints out something ~10E-4 </font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionmoles'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double &moles()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using this for assignment..YOU MUST PERFORM a &quot;calcMo()&quot; in order to get the correct &quot;Mo.&quot;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the number of moles of that spin (also can be used for assignment).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;27Al&quot;);<br />
+moo.Moles()=0.5; <br />
+moo.calcMo(); <br />
+cout&lt;&lt;moo.moles(); <font color='#006600'>//prints out '0.5'</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractiontemperature'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double &temperature()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using this for assignment..YOU MUST PERFORM a &quot;calcMo()&quot; in order to get the correct &quot;Mo.&quot;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the Temperature of the spin IN KELVIN (also can be used for assignment).<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;27Al&quot;);<br />
+moo.temperature()=256.0; <br />
+moo.calcMo(); <br />
+cout&lt;&lt;moo.temperature(); <font color='#006600'>//prints out '256'</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentsBo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Bo(Offset_T newB) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+This automatically RECALCULATES &quot;Mo&quot; and &quot;Ho.&quot;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newB--&gt; the new magnetic field in Tesla<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the Main Magnetic field of the spin.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;27Al&quot;);<br />
+moo.Bo(2.0); <font color='#006600'>//Bo is now 2.0 Telsa</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentsMo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Mo(Offset_T newM) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+This DOES NOT 'back' calulate the Temperature or Bo...in fact this is recommended not to be used unless you really need to you are using 'BPoptions::Particle'<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newM--&gt; the new equilibrium magnetization<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the equilibrium magnetization of the spin.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams&lt;&gt; moo(&quot;27Al&quot;);<br />
+moo.Mo(2.0e-5); <font color='#006600'>//Mo is now 2.0e-5</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Assignmentsmoles'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void moles(double newM)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+This automatically RECALCULATES &quot;Mo.&quot;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newM--&gt; the New moles <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the Moles of the spin.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;27Al&quot;);<br />
+moo.Moles(2.0); <font color='#006600'>//number of moles is now 2.0 </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BlochParams &operator=(const BlochParams&rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; the item you wish to copy.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns one BlochParams from another.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;27Al&quot;);<br />
+BlochParams koo;<br />
+koo=moo; <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BlochParams &operator=(const std::string &sym);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+sym--&gt; A symbol string<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns the isotope from the symbol name.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;27Al&quot;);<br />
+BlochParams koo;<br />
+koo=&quot;1H&quot;;  <br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BlochParams &operator=(const Isotope &sym);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+sym--&gt; An isotope object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns the isotope from another isotope.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Isotope moo(&quot;13C&quot;);<br />
+BlochParams koo;<br />
+koo=moo; <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Assignmentstemperature'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void temperature(double newT) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+This automatically RECALCULATES &quot;Mo.&quot;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newT--&gt; the New Temperature in Kelvin<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the Temperature of the spin.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;27Al&quot;);<br />
+moo.Temperature(245.0); <font color='#006600'>//Temperature is now 245 K</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Math'></a>Math</font>
+</td></tr></table>
+<tr><td>
+<a name='Math==, !='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool operator==(const BlochParams &rhs);<br />
+bool operator!=(const BlochParams &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; another BlochParams<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Ddetermins weather or not the rhs is the same isotope as the lhs.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;1H&quot;), loo(&quot;13C&quot;);<br />
+moo!=loo; <font color='#006600'>//would be true</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOoperator<<'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ostream &operator&lt;&lt;(BlochParams &bp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+bp--&gt; the BlochParams you wish to output<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+writes the string....<br />
+&quot;BlochParam: offset={offset}, T1={T1}, T2={T2}, moles={Moles}, Spin={symbol}, momentum={Momentum}, gamma={gamma}&quot;<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;1H&quot;);<br />
+cout&lt;&lt;moo; <font color='#006600'>// will write the string &quot;BlochParam: offset=0, T1=0, T2=0, moles=1, Spin=1H, momentum=1/2, gamma=2.6752E+8&quot;</font><br />
+ <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOoperator>>'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+fstream &operator&gt;&gt;(const BlochParams &bp);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+bp--&gt; the BlochParams you wish to read into<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+READS the binary data as....<br />
+BP{binary size}{Mo}{Moles}{Bo}{Temp}{Spin}.<br />
+<br />
+It advances the position of the file pointer.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;1H&quot;);<br />
+fstream in(ios::binary | ios::in); <br />
+in&gt;&gt;moo; <font color='#006600'>// will attempt to READ the Binary Data from a file</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOprint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void print(ostream &oo=cout)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an output stream<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes the string<br />
+&quot;BlochParam: offset={offset}, T1={T1}, T2={T2}, moles={Moles}, Spin={symbol}, momentum={Momentum}, gamma={gamma}&quot;<br />
+to the ostream oo.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;1H&quot;);<br />
+moo.print() <font color='#006600'>// will write the string &quot;BlochParam: offset=0, T1=0, T2=0, moles=1, Spin=1H, momentum=1/2, gamma=2.6752E+8&quot; to the console</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void read(fstream &ii)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+ii--&gt; an INPUT BINARY stream you wish to import the data<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+READS the binary data as....<br />
+BP{binary size}{Mo}{Moles}{Bo}{Temp}{Spin}<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;1H&quot;);<br />
+fstream in(ios::binary | ios::in);<br />
+moo.read(in); <font color='#006600'>// will attempt to READ the Binary of &quot;BP {size} 0 0 0 1 4.7 300 1H&quot; to the fstream</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOwrite'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void write(fstream &oo)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an output BINARY stream you wish to output the data<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+writes the binary data as....<br />
+BP {binarysize} {Mo} {Moles} {Bo} {Temp} {Spin}<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;1H&quot;);<br />
+fstream out(ios::binary | ios::out);<br />
+moo.write(out) <font color='#006600'>// will write the Binary of &quot;BP {size} 0 0 0 1 4.7 300 1H&quot; to the fstream</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other FunctionscalcMo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void calcMo()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Calculates the initial total magnitization of the 'spin' at equilibrium inside a large magnetic field given by the curie formula <br />
+<br />
+Mo=Moles*No*hbar*hbar*gamma()*gamma()/3./kb/Temperature*Ho*qn()*(qn() + 1.);<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;1H&quot;);<br />
+moo.Bo()=4.7; <br />
+moo.calcMo(); <br />
+cout&lt;&lt;moo.Mo(); <font color='#006600'>//prints out something ~10E-4 </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionssetInitialCondition'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setInitialCondition(InititalCondition_t IC)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+IC--&gt;an intial condition can be any 'InitialCondition'<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+IC--&gt;an intial condition can be<br />
+It can be any of the following....<br />
+InitialCondition::AllUp --&gt; Mo will be the max along z<br />
+InitialCondition::AllDown --&gt; Mo will be as negative a possible along Z<br />
+InitialCondition::HalfUpHalfDown --&gt; Will be half +Z and half -Z<br />
+InitialCondition::RandomDistribution --&gt; Mo will be randomly distributed along the enitre bloch sphere<br />
+InitialCondition::RandomUp --&gt; Mo will be randomly placed in the Top hemisphere<br />
+InitialCondition::RandomDown --&gt; Mo will be randomly placed in the Bottom hemisphere<br />
+InitialCondition::RandomUpDown --&gt; Mo will be +Z or -Z but randomly (i.e. there is a possiblility for the sample to be more up the down or vice versa)<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;1H&quot;), loo(&quot;13C&quot;);<br />
+moo.setInitialCondition(InitialCondition::Random); <font color='#006600'>//sets the param to a random value</font><br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

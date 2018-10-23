@@ -1,0 +1,134 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Setting up a master-slave procedure<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This is a simple example on how to create a Master/Slave model of splitting a loop. This model is good for when you have machines of DIFFERENT or unknown speeds. <br />
+a &quot;Master&quot; proc simply listens for requests by any of the other procs, and send them data when they need them...it does NO calculation...so for optimum efficiency spawn one extra job then processors. If I have 2 working processor, then I'd want to do &quot;mpirun -np 3 &lt;myprog&gt;&quot; such that each proc is running full force. Doing &quot;mpirun -np 2 &lt;myprog&gt;&quot; will be the same speed (most likely slower becauase of communcations) as NO parallelization.<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<font color='#006600'>//define&nbsp;out&nbsp;function&nbsp;we&nbsp;wish&nbsp;to&nbsp;run&nbsp;in&nbsp;parallel</font><br />
+void&nbsp;MyFunction(int&nbsp;kk){<br />
+&nbsp;&nbsp;cout&lt;&lt;endl&lt;&lt;&quot;I&nbsp;was&nbsp;called&nbsp;on:&nbsp;&quot;&lt;&lt;MPIworld.rank()&lt;&lt;&quot;&nbsp;with&nbsp;value:&nbsp;&quot;&lt;&lt;kk&lt;&lt;endl;<br />
+&nbsp;&nbsp;sleep(MPIworld.rank()-1);<br />
+}<br />
+<br />
+<br />
+int&nbsp;main(int&nbsp;argc,char*&nbsp;argv[])<br />
+{<br />
+<font color='#006600'>//Start&nbsp;up&nbsp;the&nbsp;Master&nbsp;controller</font><br />
+&nbsp;&nbsp;MPIworld.start(argc,&nbsp;argv);<br />
+<br />
+<font color='#006600'>//dump&nbsp;out&nbsp;info&nbsp;about&nbsp;what&nbsp;and&nbsp;where&nbsp;we&nbsp;are</font><br />
+&nbsp;&nbsp;std::cout&lt;&lt;MPIworld.name()&lt;&lt;&quot;::&quot;&lt;&lt;MPIworld.rank()&lt;&lt;&quot;/&quot;&lt;&lt;MPIworld.size()&lt;&lt;std::endl&lt;&lt;endl;<br />
+<br />
+<font color='#006600'>//this&nbsp;int&nbsp;gets&nbsp;sent&nbsp;went&nbsp;the&nbsp;Master&nbsp;has&nbsp;sent&nbsp;everything&nbsp;(the&nbsp;kill&nbsp;switch)</font><br />
+&nbsp;&nbsp;int&nbsp;done&nbsp;=-1;<br />
+&nbsp;&nbsp;int&nbsp;cur=0;&nbsp;<font color='#006600'>//the&nbsp;current&nbsp;value</font><br />
+<br />
+<font color='#006600'>//if&nbsp;we&nbsp;are&nbsp;the&nbsp;master,&nbsp;we&nbsp;need&nbsp;to&nbsp;initialize&nbsp;some&nbsp;things</font><br />
+&nbsp;&nbsp;if(MPIworld.master()){<br />
+<br />
+<font color='#006600'>//the&nbsp;elements&nbsp;in&nbsp;here&nbsp;will&nbsp;be&nbsp;sent&nbsp;to&nbsp;the&nbsp;slave&nbsp;procs</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;Max=10;&nbsp;<font color='#006600'>//only&nbsp;want&nbsp;to&nbsp;send&nbsp;10&nbsp;things</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;CT=0,&nbsp;rr=-1;<br />
+<br />
+<font color='#006600'>//we&nbsp;must&nbsp;perform&nbsp;an&nbsp;initial&nbsp;send&nbsp;to&nbsp;all&nbsp;the&nbsp;proc</font><br />
+<font color='#006600'>//from&nbsp;1..size,&nbsp;if&nbsp;size&gt;Max&nbsp;we&nbsp;need&nbsp;to&nbsp;send&nbsp;no&nbsp;more</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;qq=1;qq&lt;MPIworld.size();++qq){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MPIworld.put(CT,&nbsp;qq);&nbsp;++CT;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(CT&gt;Max)&nbsp;break;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;get;<br />
+<br />
+<font color='#006600'>//now&nbsp;we&nbsp;get&nbsp;an&nbsp;Integer&nbsp;from&nbsp;ANY&nbsp;processor&nbsp;that&nbsp;is&nbsp;NOT&nbsp;</font><br />
+<font color='#006600'>//&nbsp;the&nbsp;master...and&nbsp;keep&nbsp;putting&nbsp;values&nbsp;until&nbsp;we&nbsp;run&nbsp;out</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(CT&lt;Max){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;get=MPIworld.getAny(rr);&nbsp;<font color='#006600'>//get&nbsp;an&nbsp;int&nbsp;('get'=the&nbsp;proc&nbsp;is&nbsp;came&nbsp;from)</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MPIworld.put(CT,get);&nbsp;<font color='#006600'>//put&nbsp;the&nbsp;next&nbsp;value</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++CT;&nbsp;<font color='#006600'>//advance</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+<font color='#006600'>//put&nbsp;the&nbsp;'We-Are-Done'&nbsp;flag&nbsp;to&nbsp;all&nbsp;the&nbsp;procs&nbsp;once&nbsp;we&nbsp;finish&nbsp;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;qq=1;qq&lt;MPIworld.size();++qq)&nbsp;&nbsp;&nbsp;MPIworld.put(done,&nbsp;qq);<br />
+<br />
+&nbsp;&nbsp;}else{&nbsp;<font color='#006600'>//slave&nbsp;procs</font><br />
+<br />
+<font color='#006600'>//keep&nbsp;looping&nbsp;until&nbsp;we&nbsp;the&nbsp;master&nbsp;tells&nbsp;us&nbsp;to&nbsp;quit</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(1){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MPIworld.get(cur,0);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(cur==done)&nbsp;break;&nbsp;<font color='#006600'>//id&nbsp;we&nbsp;get&nbsp;the&nbsp;kill&nbsp;switch&nbsp;get&nbsp;out</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MyFunction(cur);&nbsp;<font color='#006600'>//run&nbsp;out&nbsp;function&nbsp;with&nbsp;the&nbsp;gotten&nbsp;value</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MPIworld.put(cur,0);&nbsp;<font color='#006600'>//send&nbsp;back&nbsp;a&nbsp;request&nbsp;for&nbsp;more</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;}<br />
+<br />
+<font color='#006600'>//exit&nbsp;MPI&nbsp;and&nbsp;leave&nbsp;the&nbsp;prog</font><br />
+&nbsp;&nbsp;MPIworld.end();<br />
+&nbsp;&nbsp;return&nbsp;0;<br />
+}&nbsp;<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

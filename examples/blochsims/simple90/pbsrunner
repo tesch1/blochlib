@@ -1,0 +1,7 @@
+#PBS -o /usr/people/magneto/pbsdump/clasicMas.log
+#PBS -l ncpus=1
+#PBS -q @waugh.cchem.berkeley.edu
+#PBS -N calssicMAS
+#PBS -j oe
+cd /usr/people/magneto/code/blochlib-0.9/examples/blochsims/simple90
+a.out 90part.sim

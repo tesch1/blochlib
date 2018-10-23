@@ -1,0 +1,149 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+matlab::reading and writing<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+There are essentialy 2 function you need to know...get (to read) and put (to write)<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<br />
+int&nbsp;main(int&nbsp;argc,char*&nbsp;argv[]){&nbsp;<br />
+<font color='#006600'>//get&nbsp;the&nbsp;file&nbsp;name&nbsp;of&nbsp;the&nbsp;matlab&nbsp;file</font><br />
+&nbsp;&nbsp;int&nbsp;q=1;<br />
+&nbsp;&nbsp;std::string&nbsp;fname;<br />
+&nbsp;&nbsp;query_parameter(argc,argv,q++,&nbsp;&quot;Enter&nbsp;File&nbsp;Name&nbsp;to&nbsp;read:&nbsp;&quot;,&nbsp;fname);<br />
+<br />
+<font color='#006600'>//open&nbsp;a&nbsp;matlab&nbsp;file&nbsp;for&nbsp;reading</font><br />
+&nbsp;&nbsp;matstream&nbsp;mat(fname,&nbsp;ios::in&nbsp;|&nbsp;ios::binary);<br />
+<font color='#006600'>//print&nbsp;to&nbsp;the&nbsp;console&nbsp;what&nbsp;is&nbsp;in&nbsp;the&nbsp;file...</font><br />
+<font color='#006600'>//(this&nbsp;prints&nbsp;things&nbsp;exactly&nbsp;like&nbsp;'whos'&nbsp;in&nbsp;matlab&nbsp;itself)</font><br />
+&nbsp;&nbsp;mat.whos(cout);<br />
+<br />
+<font color='#006600'>//get&nbsp;a&nbsp;complex&nbsp;vector&nbsp;from&nbsp;the&nbsp;inputfile&nbsp;named&nbsp;'vdat'</font><br />
+&nbsp;&nbsp;Vector&lt;complex&gt;&nbsp;loo;<br />
+&nbsp;&nbsp;mat.get(&quot;vdat&quot;,&nbsp;loo);<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;simple&nbsp;variable&nbsp;'zfill'&nbsp;from&nbsp;the&nbsp;file</font><br />
+&nbsp;&nbsp;double&nbsp;zf;<br />
+&nbsp;&nbsp;mat.get(&quot;zfill&quot;,&nbsp;zf);<br />
+<br />
+<font color='#006600'>//close&nbsp;the&nbsp;input&nbsp;file...</font><br />
+&nbsp;&nbsp;mat.close();<br />
+<br />
+<font color='#006600'>//open&nbsp;a&nbsp;file&nbsp;for&nbsp;output...</font><br />
+&nbsp;&nbsp;matstream&nbsp;outt(&quot;out.mat&quot;,&nbsp;ios::out&nbsp;|&nbsp;ios::binary);<br />
+<br />
+<font color='#006600'>//define&nbsp;several&nbsp;vars&nbsp;to&nbsp;write...</font><br />
+&nbsp;&nbsp;complex&nbsp;poo(7,8),&nbsp;hhh(3,4);<br />
+&nbsp;&nbsp;Vector&lt;complex&gt;&nbsp;outmat(loo.size(),&nbsp;complex(6,6));<br />
+<br />
+<font color='#006600'>//put&nbsp;these&nbsp;containers&nbsp;giveing&nbsp;them&nbsp;matlab&nbsp;names...</font><br />
+&nbsp;&nbsp;outt.put(&quot;vdat&quot;,&nbsp;outmat);<br />
+&nbsp;&nbsp;outt.put(&quot;poo&quot;,poo);<br />
+&nbsp;&nbsp;outt.put(&quot;hhh&quot;,hhh);<br />
+<br />
+&nbsp;&nbsp;Vector&lt;complex&gt;&nbsp;hj(7,&nbsp;complex(3,2));<br />
+&nbsp;&nbsp;Vector&lt;int&gt;&nbsp;kj(5,4);<br />
+<br />
+<font color='#006600'>//puts&nbsp;matrices,&nbsp;vectors,&nbsp;numbers,&nbsp;etc..</font><br />
+&nbsp;&nbsp;outt.put(&quot;loo&quot;,&nbsp;loo);<br />
+&nbsp;&nbsp;outt.put(&quot;hj&quot;,hj);<br />
+&nbsp;&nbsp;outt.put(&quot;kj&quot;,kj);<br />
+&nbsp;&nbsp;outt.put(&quot;jjj&quot;,kj);<br />
+&nbsp;&nbsp;matrix&nbsp;kji(5,5,3);<br />
+&nbsp;&nbsp;outt.put(&quot;kji&quot;,&nbsp;kji);<br />
+<br />
+<font color='#006600'>//put&nbsp;a&nbsp;more&nbsp;complex&nbsp;data&nbsp;strcuture&nbsp;into&nbsp;the&nbsp;file...</font><br />
+<font color='#006600'>//the&nbsp;output&nbsp;in&nbsp;the&nbsp;matlab&nbsp;file&nbsp;will&nbsp;be&nbsp;'VecC0',&nbsp;'VecC1',&nbsp;VecC2'&nbsp;</font><br />
+<font color='#006600'>//corresponding&nbsp;to&nbsp;each&nbsp;direction&nbsp;in&nbsp;the&nbsp;coord&nbsp;(x,y,z)</font><br />
+&nbsp;&nbsp;Vector&lt;coord&lt;&gt;&nbsp;&gt;&nbsp;jk(35,&nbsp;21);<br />
+&nbsp;&nbsp;outt.put(&quot;VecC&quot;,&nbsp;jk);<br />
+<br />
+<font color='#006600'>//close&nbsp;the&nbsp;output&nbsp;file</font><br />
+&nbsp;&nbsp;outt.close();<br />
+<br />
+<font color='#006600'>//open&nbsp;the&nbsp;ouput&nbsp;file&nbsp;and&nbsp;check&nbsp;output&nbsp;its&nbsp;contents&nbsp;to&nbsp;the&nbsp;console</font><br />
+&nbsp;&nbsp;matstream&nbsp;mat2(&quot;out.mat&quot;,&nbsp;ios::in&nbsp;|&nbsp;ios::binary);<br />
+&nbsp;&nbsp;mat2.whos(cout);<br />
+<font color='#006600'>//the&nbsp;whos&nbsp;command&nbsp;should&nbsp;print&nbsp;out...&nbsp;</font><br />
+&nbsp;<br />
+<font color='#006600'>//Name&nbsp;Size&nbsp;Bytes&nbsp;Class</font><br />
+<font color='#006600'>//vdat&nbsp;10x1&nbsp;160&nbsp;Double&nbsp;Precision&nbsp;Array&nbsp;(complex)</font><br />
+<font color='#006600'>//poo&nbsp;1x1&nbsp;16&nbsp;Double&nbsp;Precision&nbsp;Array&nbsp;(complex)</font><br />
+<font color='#006600'>//hhh&nbsp;1x1&nbsp;16&nbsp;Double&nbsp;Precision&nbsp;Array&nbsp;(complex)</font><br />
+<font color='#006600'>//loo&nbsp;10x1&nbsp;160&nbsp;Double&nbsp;Precision&nbsp;Array&nbsp;(complex)</font><br />
+<font color='#006600'>//hj&nbsp;7x1&nbsp;112&nbsp;Double&nbsp;Precision&nbsp;Array&nbsp;(complex)</font><br />
+<font color='#006600'>//kj&nbsp;5x1&nbsp;40&nbsp;Double&nbsp;Precision&nbsp;Array</font><br />
+<font color='#006600'>//jjj&nbsp;5x1&nbsp;40&nbsp;Double&nbsp;Precision&nbsp;Array</font><br />
+<font color='#006600'>//kji&nbsp;5x5&nbsp;400&nbsp;Double&nbsp;Precision&nbsp;Array&nbsp;(complex)</font><br />
+<font color='#006600'>//VecC0&nbsp;35x1&nbsp;280&nbsp;Double&nbsp;Precision&nbsp;Array</font><br />
+<font color='#006600'>//VecC1&nbsp;35x1&nbsp;280&nbsp;Double&nbsp;Precision&nbsp;Array</font><br />
+<font color='#006600'>//VecC2&nbsp;35x1&nbsp;280&nbsp;Double&nbsp;Precision&nbsp;Array</font><br />
+<br />
+<br />
+<br />
+<br />
+}<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

@@ -1,0 +1,119 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+A simple wave reader and writer<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Nothing special...just a nice template to start more complex things from<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+<br />
+<br />
+<br />
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+int&nbsp;main(int&nbsp;argc,&nbsp;const&nbsp;char*&nbsp;argv[])<br />
+{<br />
+  if&nbsp;(argc&nbsp;&lt;3)<br />
+    cout&nbsp;&lt;&lt;&nbsp;&quot;reads&nbsp;and&nbsp;writes&nbsp;a&nbsp;wave&nbsp;file...{inwave}&nbsp;{outwave}&quot;&nbsp;&lt;&lt;&nbsp;endl;<br />
+  else&nbsp;{<br />
+<br />
+<br />
+    wavestream&nbsp;myW(argv[1],&nbsp;ios::in);<br />
+<br />
+  <font color='#006600'>//dump&nbsp;some&nbsp;info&nbsp;about&nbsp;the&nbsp;input&nbsp;file</font><br />
+<br />
+    cout&lt;&lt;myW&lt;&lt;endl;<br />
+    Vector&lt;short&gt;&nbsp;dat(myW.getNumSamples());<br />
+<br />
+  <font color='#006600'>//reads&nbsp;the&nbsp;data...although&nbsp;it&nbsp;does&nbsp;not</font><br />
+  <font color='#006600'>//&nbsp;do&nbsp;much&nbsp;with&nbsp;it...</font><br />
+    myW&gt;&gt;dat;<br />
+<br />
+<br />
+  <font color='#006600'>//make&nbsp;a&nbsp;noise&nbsp;'A'&nbsp;440&nbsp;Hz&nbsp;ring</font><br />
+  <font color='#006600'>//&nbsp;2&nbsp;seconds&nbsp;long...</font><br />
+    wavestream&nbsp;outW(argv[2],&nbsp;ios::out&nbsp;);<br />
+<br />
+  <font color='#006600'>//out&nbsp;little&nbsp;noise&nbsp;function</font><br />
+    Random&lt;UniformRandom&lt;double&gt;&nbsp;&gt;&nbsp;myR(-0.01,0.01);<br />
+<br />
+  <font color='#006600'>//11025&nbsp;Hz,&nbsp;16&nbsp;bits,&nbsp;and&nbsp;1&nbsp;channel</font><br />
+    outW.setupFormat(11025,&nbsp;16,1);<br />
+  <font color='#006600'>//the&nbsp;number&nbsp;of&nbsp;poitns&nbsp;we&nbsp;wish&nbsp;to&nbsp;write</font><br />
+  <font color='#006600'>//(2&nbsp;seconds&nbsp;worth)</font><br />
+    int&nbsp;len=2*outW.getSampleRate();<br />
+  <font color='#006600'>//the&nbsp;frquency</font><br />
+    double&nbsp;freq=440,&nbsp;alpha=0;<br />
+<br />
+  <font color='#006600'>//dump&nbsp;away</font><br />
+    for(int&nbsp;i=0;i&lt;len;++i){<br />
+      outW&lt;&lt;(sin(alpha)&nbsp;/&nbsp;2)+myR();<br />
+      alpha+=PI2*freq/outW.getSampleRate();<br />
+    }<br />
+  <font color='#006600'>//close&nbsp;the&nbsp;final&nbsp;writing</font><br />
+    outW.close();<br />
+<br />
+  }<br />
+  return&nbsp;0;<br />
+}<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

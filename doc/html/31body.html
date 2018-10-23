@@ -1,0 +1,262 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("31menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("31menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("31menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("31title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("31");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Global Spin operator Functions<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<ul
+<li>These are simple a series of funcitons that generate matrix representations of the standard spin operators (Iz, Ix, Iy, Ip, Imi, Ie) for both a 'Hilbert Space size' (i.e. spin 1/2, or spin 1, etc) AND composite spin spaces (i.e. the Ix operator for a 13C in the space of 13C-14N together...). </li>
+<li>These functions generate these operator ONCE upon calling, and save them in a 'map' so that if used again, they do not have to be regenerated.
+</li></ul></blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Global Functions'></a>Global Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Global FunctionsIe'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rimatrix Ie(int Hs);<br />
+rimatrix Ie(SpinSys A, int spin);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Hs--&gt; Hilbert Space size<br />
+A--&gt; A 'spin_system'<br />
+spin--&gt; the spin NUMBER you wish to obtain the operator for<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns Identity matrix of size HsxHs (a real identity matrix).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+cout&lt;&lt;Ie(3); <font color='#006600'>//prints out '(1 0 0}, (0 1 0}, (0 0 1)'</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsImi'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rmatrix Imi(int Hs)<br />
+rmatrix Imi(SpinSys &A, int spin)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Hs--&gt; Hilbert Space size<br />
+A--&gt; A 'spin_system'<br />
+spin--&gt; the spin NUMBER you wish to obtain the operator for<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns Imi matrix of size HsxHs (a real diagonal matrix). If given a SpinSys it returns Ix matrix of the TOTAL spin system size.<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+cout&lt;&lt;Imi(2); <font color='#006600'>//prints out '(0 0), (1 0)'</font><br />
+SpinSys A(3);<br />
+cout&lt;&lt;Imi(A,2); <font color='#006600'>//prints out the Im matrix (6x6) for the third spin </font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global FunctionsIp'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rmatrix Ip((int Hs);<br />
+rmatrix Ip(SpinSys A, int spin)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Hs--&gt; Hilbert Space size<br />
+A--&gt; A 'spin_system'<br />
+spin--&gt; the spin NUMBER you wish to obtain the operator for<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+cout&lt;&lt;Ip(2); <font color='#006600'>//prints out '(0 1), (0 0)'</font><br />
+SpinSys A(3);<br />
+cout&lt;&lt;Ip(A,2); <font color='#006600'>//prints out the Ip matrix (6x6) for the third spin </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsIx'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+smatrix Ix(int Hs);<br />
+smatrix Ix(SpinSys A, int spin)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Hs--&gt; Hilbert Space size<br />
+A--&gt; A 'spin_system'<br />
+spin--&gt; the spin NUMBER you wish to obtain the operator for<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns Ix matrix of size HsxHs (a real symmetric matrix). If given a SpinSys it returns Ix matrix of the TOTAL spin system size.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+cout&lt;&lt;Ix(A,2); <font color='#006600'>//prints out the Ix matrix (6x6) for the third spin </font><br />
+cout&lt;&lt;Ix(2); <font color='#006600'>//prints out '(0 1), (1 0)'</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global FunctionsIy'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+hmatrix Iy(int Hs);<br />
+hmatrix Iy(SpinSys A, int spin)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Hs--&gt; Hilbert Space size<br />
+A--&gt; A 'spin_system'<br />
+spin--&gt; the spin NUMBER you wish to obtain the operator for<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns Iy matrix of size HsxHs (a hermitian matrix). If given a SpinSys it returns Ix matrix of the TOTAL spin system size.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+cout&lt;&lt;Iy(2); <font color='#006600'>//prints out '(0 complexi), (-complexi 0)</font><br />
+<br />
+SpinSys A(3);<br />
+cout&lt;&lt;Iy(A,2); <font color='#006600'>//prints out the Iy matrix (6x6) for the third spin </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsIz'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rdmatrix Iz((int Hs);<br />
+rdmatrix Iz(SpinSys A, int spin)<br />
+<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Hs--&gt; Hilbert Space size<br />
+A--&gt; A 'spin_system'<br />
+spin--&gt; the spin NUMBER you wish to obtain the operator for<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns Iz matrix of size HsxHs (a real diagonal matrix). If given a SpinSys it returns Ix matrix of the TOTAL spin system size.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+cout&lt;&lt;Iz(2); <font color='#006600'>//prints out '(1 0), (0 -1)</font><br />
+<br />
+SpinSys A(3);<br />
+cout&lt;&lt;Iz(A,2); <font color='#006600'>//prints out the Iz matrix (6x6) for the third spin </font><br />
+<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

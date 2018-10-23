@@ -1,0 +1,55 @@
+
+
+#parameter file for 2 pulse sequences
+
+dim 1,1,2
+min -0.5,-0.5,-0.5
+max 0.5, 0.5, 0.5
+
+#spinning grid
+rotaxis 1,1,1
+spinrate 0
+
+#fid pieces
+npts 1024
+tf 0.1
+
+#the pulse bits
+pulseangle 45  
+pulsephase 270
+pulseamp 80000
+
+#spins initial condition
+# can be AllUp, AllDown,Random, RandomUpDown, RandomUp, RandomDown
+initcond RandomUp
+# number of conditions to sumover
+numRand 80
+#save each spectrum(1) or just the total one(0)
+saveSubs 0
+
+#basic spin parametesr
+Bo 11
+temperature 300
+offset 500
+T2 0
+T1 0
+spintype 1H
+moles .2
+
+#the extra interactions parts
+dipole_str 500
+raddamp 0
+bulksus 0
+
+
+#calculate lypuvnovs[1] or not[0]
+lyps 0
+lypout lyps
+
+#file output names for the data
+fidout data
+magout mag
+trajectories traj
+#output display level
+#2-->max, 1-->simple, 0-->none
+showProgress 1

@@ -1,0 +1,300 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("54menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("54menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("54menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("54title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("54");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class ScriptParse {...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+
+<p>This takes in a <tt>Vector<std::string></tt> as the input that allows 
+  for variable setting, simple looping, and simple if, elseif, else structures... 
+  <br>
+  It is designed to be a base class for specific 'functional' classes where input 
+  scripts could be necessary....sub-classes only need to create another virtual 
+  function called 'decide' to add additional functional input. <br>
+  It determines what to do if it hits a 'loop', an assignment (A=B), or 'if/else 
+  if/else' statements. Currently there are not 'break' or 'return' keywords <br>
+  Assignments can be made using simple syntax 
+<blockquote> <tt>A=B </tt>(A gets set from B) </blockquote>
+where B can be some expression <br>
+loops are performed via the 
+<blockquote><tt> loop(i=1:40)<br>
+  ...do things <br>
+  end </tt></blockquote>
+<p>syntax where the<tt> i=1:40</tt> means &quot;loop from 1 to 40&quot; and</p>
+<blockquote><tt> if(t==9) <br>
+  ...<br>
+  else if(moo==34) <br>
+  ... <br>
+  else <br>
+  ... <br>
+  end </tt></blockquote>
+
+It also has a print function as well that will display the argument to the terminal 
+
+<blockquote> <tt>print(56) </tt><br>
+    <br>
+</blockquote>
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Public Vars'></a>Public Vars</font>
+</td></tr></table>
+<tr><td>
+<a name='Public VarsmyParse'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Parser myParse;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This an instance of the Parser object that handles all the expression evaluation.  The ScriptParse add variables to the LOCAL (unless they are already declared in the global set) variable set in 'myParse'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsScriptParse'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ScriptParse()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The empty constructor.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ScriptParse myScr;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsScriptParse'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ScriptParse(Parameters &pset);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pset--&gt; a parameter set with the main section already added<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Uses the main parameter set section ('section(&quot;&quot;)') to use as the script input. It will immediately parse in the input string.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+std::string inputFile=&quot;someName&quot;;<br />
+Parameter pset(inputFile);<br />
+<br />
+<font color='#006600'>//this will 'run' in the script</font><br />
+ScriptParse myScr(pset);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsScriptParse'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ScriptParse(const Vector&lt;std::string&gt; &pset);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pset--&gt; a Vector&lt;std::string&gt; containing the script to parse.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Uses the string list as the script input. It will immediately parse in the input string.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;std::string&gt; myP;<br />
+<font color='#006600'>//..fill myP with something...</font><br />
+<br />
+<font color='#006600'>//this will run the input</font><br />
+ScriptParse myScr(myP);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionsdecide'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+virtual bool decide(std::string inSqe);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+inSqe--&gt; a single line from the input script<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the main virtual function that sub class should rewrite, but the sub classes should also point to this function as the last step(i.e. ScriptParse::decide(inSqe)) as loops and ifs and variables parsing are still needed.  This function decides what to do with the input string (see the example for more details).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+(see 'decide' example)<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsparse'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool parse()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Will re-run a script if the data vector has already been inputted.  This is so you can run the script as many times as you wish.  It returns false if a parse error occurred.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+std::string inputFile=&quot;someName&quot;;<br />
+Parameter pset(inputFile);<br />
+<br />
+<font color='#006600'>//this will 'run' in the script</font><br />
+ScriptParse myScr(pset);<br />
+<br />
+<font color='#006600'>//re run the script again</font><br />
+myScr.parse();<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsparse'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool parse(Parameter &pset);<br />
+bool parse(const Vector&lt;std::string&gt; &pset);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pset--&gt; a valid parameter object or a list of strings<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Will run a script give the input data vector (or the pset.section(&quot;&quot;)). This will reparse the script and run it. If something fails it will return false, otherwise it returns true.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+std::string inputFile=&quot;someName&quot;;<br />
+Parameter pset(inputFile);<br />
+<br />
+<font color='#006600'>//this sets up an object</font><br />
+ScriptParse myScr;<br />
+<br />
+<font color='#006600'>//run the script again</font><br />
+myScr.parse(pset);<br />
+<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

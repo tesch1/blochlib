@@ -1,0 +1,1238 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("9menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("9menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("9menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("9title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("9");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Type&gt;<br />
+class Vector : public MemChunk&lt;Type&gt;{....<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Accepted Template Params <br />
+Type --&gt; another class...typically a number type (int, doulbe, complex, float....)...but can be anything (default=NONE) <br />
+MemChunk is a class that handles the memory allocation and deallocation for ALL the various containers here <br />
+Notes:: mathematical operations are ELEMENT BY ELEMENT except for a few like 'norm,' 'dot,' 'max, ' and 'min.' <br />
+<br />
+Matrix--Vector operations are described in 'Matrix' <br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+NUMERICAL NOTE::DO NOT confuse this class with the STL 'vector' (the one here has a CAPITAL 'V'). The STL vector class is much better suited as a 'holder' or an object that simply holds a bunch of object...this class is meant for performing numerical operations on large lists...it does maintain the same resizing/adding/dropping options as the STL version, but they are a bit slower then the STL version <br />
+<br />
+NUMERICAL NOTE:: The default compiling options DOES NOT CHECK ANY BOUNDS...if you go outside the Vectors length you will crash the program...this is for SPEED...if it does not have to check the bounds then it is one less operation it must do. YOU CAN TURN THIS BACK ON by defining 'VBoundCheck 1' in the compile string <br />
+i.e. g++ -DVBoundCheck myprog.cc <br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsVector'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+None<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+empty constructor, sets length=0<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; moo;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsVector'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector(const Vector&lt;T&gt; &cp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+anonther Vector of number Type 'T' and length 'N1'<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+copy constructor<br />
+performs auto type conversions from 'T' to 'Type' if possible else error at compile time<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; moo2(moo);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsVector'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector(int num)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+num--&gt; the Length of the new Vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a Vector of length 'num' will all elements set to Type(0).. <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; moo2(3);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsVector'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector(Range R)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+R--&gt; A range from [start...end]<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a Vector of length of the range that simply is the entire range in integer form<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; moo2(Range(3,4)); <font color='#006600'>//produces [3,4]</font><br />
+Vector&lt;int&gt; moo(Range(-4, 2, 2)); <font color='#006600'>//produces [-4,-2,0,2]</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractionget'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type get(int R);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NO BOUNDS error checking is performed for SPEED<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+R-&gt;an int from 0..size()<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Extracts an element from the vector<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double tmm=oldC.get(3); <font color='#006600'>//extraction</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionget'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type get(Range R);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NO BOUNDS error checking is performed for SPEED<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+R-&gt;a Range<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Extracts an subvector from the vector<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; tmm=oldC.get(Range(Range::Start, 3)); <font color='#006600'>//extraction</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionoperator()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type operator(int);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NO BOUNDS error checking is performed for SPEED<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+an int from 0--size()<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Extracts an element from the coord<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double firstelement=oldC(0);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionoperator(Range)'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; &operator(Range R); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NO BOUNDS error checking is performed for SPEED<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+R--&gt; A range<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Extracts a sub vector of a vector<br />
+can also be used for assignement <br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; V1(8, 1); V1[3]=9; <font color='#006600'>// V1=[1,1,1,9,1,1,1,1]</font><br />
+Vector&lt;double&gt; V2=V1[Range(2, 5)]; <font color='#006600'>// V2=[1,9,1,1]</font><br />
+V2(Range(0,2))=V1(Range(1,3)); <font color='#006600'>//V2=[1,1,9,1] </font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionoperator[Range]'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; &operator[Range R]; <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NO BOUNDS error checking is performed for SPEED<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+R--&gt; A range<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Extracts a sub vector of a vector<br />
+can also be used for assignement<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; V1(8, 1); V1[3]=9; <font color='#006600'>// V1=[1,1,1,9,1,1,1,1]</font><br />
+Vector&lt;double&gt; V2=V1[Range(2, 5)]; <font color='#006600'>// V2=[1,9,1,1]</font><br />
+V2[Range(0,2)]=V1[Range(1,3)]; <font color='#006600'>//V2=[1,1,9,1] </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionoperator[]'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type operator[int]<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NO BOUNDS error checking is performed for SPEED<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Extracts an element from the coord<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double secondele=oldC[1];<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionput'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void put(int where, const T num) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NUMERICAL NOTE::Does not Check bounds for speed<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+where --&gt; an integer <br />
+num--&gt;an number of Type 'T' <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+puts the element 'num' in the posistion 'where'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;int&gt; tmpVec(3, 2);<br />
+tmpVec.put(1,5); <font color='#006600'>//puts the number '5' in element 1</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionput'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void put(Range R, Vector&lt;T1&gt; rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NUMERICAL NOTE::Does not Check bounds for speed<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+R --&gt;the range to place the items in 'rhs' into the vector<br />
+rhs--&gt;A vector that is AT LEAST as long as the range, R, (it can be longer)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+puts the elements begining at '0' in rhs in the posistions of R.begin into the output vector<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;int&gt; V1(6, 2); <font color='#006600'>//V1=[2,2,2,2,2,2] </font><br />
+V1.put(Range(3,5),Vector&lt;int&gt;(3,4)); V1=[2,2,2,4,4,4]<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; operator=(const Vector&lt;T2&gt; &rhs) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;a Vector object OF THE SAME LENGTH as left-hand-side(can be of different type) <br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assignment operator...there is NO 'N' conversions assigment...does do Type conversions<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=oldC;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; operator=(const coord&lt;T,N&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;a coord&lt;T,N&gt; object  <br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assignment from a coord operator...does do Type conversions<br />
+the resulting vector will be of size()=N<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; cor(3, 2);<br />
+Vector&lt;double&gt; tmpVec=cor; <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;Type&gt; operator=(T &rhs) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs-&gt;a number<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+will fill the entire vector the the 'rhs' (will not change the vector's length to 1)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;&gt; moo(5);<br />
+moo=7; <font color='#006600'>// moo=[7,7,7,7,7];</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Math'></a>Math</font>
+</td></tr></table>
+<tr><td>
+<a name='Math +=, -=, /=, *='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; operator+=(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; operator+=(coord&lt;T1, N&gt; &rhs)<br />
+Vector&lt;T&gt; operator+=(T &rhs)<br />
+<br />
+Vector&lt;T&gt; operator-=(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; operator-=(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; operator-=(T &rhs)<br />
+<br />
+Vector&lt;T&gt; operator/=(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; operator/=(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; operator/=(T &rhs)<br />
+<br />
+Vector&lt;T&gt; operator*=(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; operator*=(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; operator*=(T &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs-&gt;a coord, Vector or scaler (number)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+self addition(+=), subtraction(-=), division(/=), or mulitplication(*=) operator with another coord, Vector, or constant.  <br />
+-For a coord with size()=3...<br />
+a+=b--&gt; a[0]+=b[0]; a[1]+=b[1]; a[2]+=b[2];<br />
+-For a Vector of size N=3...<br />
+a+=b--&gt; a[0]+=b[0]; a[1]+=b[1]; a[2]+=b[2];<br />
+-For a Vector of size N=3...<br />
+a+=4--&gt; a[0]+=4; a[1]+=4; a[2]+=4;<br />
+<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+oldC+=newC*2+4;<br />
+oldC+=tmVec*2+4;<br />
+oldC+=4;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Math+, -, /, *'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; operator+(const Vector&lt;T1&gt; &rhs, const Vector&lt;T2&gt; &lhs)<br />
+Vector&lt;T&gt; operator+(const Vector&lt;T1&gt; &rhs, const coord&lt;T2,N&gt; &lhs)<br />
+Vector&lt;T&gt; operator+(constVector&lt;T1&gt; &lhs, const T2 rhs)<br />
+(similar for -, /, and *)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+lhs--&gt; A Vector of length N (the left hand side)<br />
+rhs--&gt;A coord, Vector, or Number of type 'T' (the right hand side)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Adds, Subtracts, Divides, or Multiplies the Number 'rhs' ELEMENT BY ELEMENT to the 'lhs'<br />
+Will convert to the 'highest' type between T1 and T2 (i.e. int+double--&gt;double)<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; c1(4);<br />
+Vector&lt;double&gt; c2;<br />
+Vector&lt;int&gt; v2(3, 2);<br />
+c2=c1+v2; <font color='#006600'>// the result is now a double Vector with elements 6</font><br />
+c2=v2+c1; <font color='#006600'>// also valid with elements as 6</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Math==, !=, >, >=, <, <='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool operator==(Vector&lt;T&gt; &rhs)<br />
+bool operator!=(Vector&lt;T&gt; &rhs)<br />
+bool operator&gt;=(Vector&lt;T&gt; &rhs)<br />
+...similar from other operators<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Vector&lt;T&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+the comparison operators....<br />
+performs the initial comparison element by element and if any of the elements if false it will return false, if non of the elements are false it will return true<br />
+<br />
+if a=(1,2,2) and b=(3,1,3)..then b&gt;a will be FALSE<br />
+if a=(1,2,2) and b=(3,3,3)..then b&gt;a will be TRUE<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+bool test= oldC!=newC;<br />
+bool test= oldC&gt;newC;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathasin, acos, atan'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; asin(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; acos(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; atan(Vector&lt;T&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Vector&lt;T&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+performs an element-by-element evalutation of the inverse trig functions asin, acos, atan<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=acos(oldC*Pi/180)<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathasinh, acosh, atanh'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; asinh(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; acosh(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; atanh(Vector&lt;T&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Vector&lt;T&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+performs an element-by-element evalutation of the inverse hyperbolic trig functions asinh, acosh, atanh<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=atanh(oldC*Pi/180)<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathciel, floor, abs'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; ceil(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; floor(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; abs(Vector&lt;T&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Vector&lt;T&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+element-by-element of 'ceil' (if n=4.9, ciel(n)=5), 'floor' (if n=4.6 floor(n)=4), and 'abs' (if n=-9, abs(n)=9)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=floor(oldC)<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathexp, log'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; exp(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; log(Vector&lt;T&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Vector&lt;T&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+element-by-element evaluation of exponential and natrual logorithm<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=exp(oldC)<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathfft, ifft'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;complex&gt; fft(const Vector&lt;T&gt; &in)<br />
+Vector&lt;complex&gt; ifft(const Vector&lt;T&gt; &in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; a Vector&lt;double&gt; or Vector&lt;complex&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Return the complex Fouier transform (fft) or the inverse (ifft) of the in vector.  T can be double, or complex.  It uses FFTW if it is available, and returns a vector where the order of the fft elements is 0...w...-w<br />
+<br />
+to get the 'spectral' ordering (-w...0...w) use 'fftshift'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; myV(5, 2);<br />
+Vector&lt;complex&gt; myFFT=fftshift(fft(myV));<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathfftshift, ifftshift'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; fftshift(const Vector&lt;T&gt; &in)<br />
+Vector&lt;T&gt; ifftshift(const Vector&lt;T&gt; &in)<br />
+<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Vector&lt;T&gt; --&gt; a vector of any type<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Simply 'rotates' the Vector....places the last half of the vector as the first half, to achieve the 'spectral' ordering seen in most spectra.  ifftshift returns the vector to the normal (algorithmic) ordering before on should perform an ifft.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; myV(5, 2);<br />
+Vector&lt;complex&gt; myFFT=fftshift(fft(myV));<br />
+<font color='#006600'>//this should be the same as 'myV'</font><br />
+Vector&lt;double&gt; myIFFT=Re(ifft(ifftshift(myV)));<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathmin, max'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type min(Vector&lt;T&gt; &rhs)<br />
+Type max(Vector&lt;T&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Vector&lt;T&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+finds the max (or min) value inside the coord<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double mymin=min(oldC)<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathmin, max'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type min(Vector&lt;T1&gt; &rhs, T2 num)<br />
+Type max(Vector&lt;T1&gt; &rhs, T2 num)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;A Vector of the Type T1 <br />
+num--&gt; a number of type T2<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+eturns the min (or max) entry in the list in rhs and then the smallest (or largest) between 'num' and that number <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector  c1(6);<br />
+double mymin=min(c1, 0.2); <font color='#006600'>//the result here is 0.2</font><br />
+double mymin=min(0.2, c1/100); <font color='#006600'>//this is also valid with the result of 0.06</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathnorm, dot'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type dot(Vector&lt;T&gt; &c1 Vector&lt;T2&gt; &c2)<br />
+Type norm(Vector&lt;T&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;Another Vector of the SAME Type<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+norm returns (if size()=3) (x*x + y*y+ z*z)^(1/2)<br />
+dot returns (x1*x2+y1*y2+z1*z2)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double mynorm=norm(oldC);<br />
+double dd=dot(oldC, newC);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathsin, cos, tan'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; sin(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; cos(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; tan(Vector&lt;T&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Vector&lt;T&gt; <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+performs an element-by-element evalutation of the trig functions sin, cos, tan<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=cos(oldC*Pi/180);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathsinh, cosh, tanh'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; sinh(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; cosh(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; tanh(Vector&lt;T&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Vector&lt;T&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+performs an element-by-element evalutation of the hyperbolic trig functions sinh, cosh, tanh<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=tanh(oldC*Pi/180)<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathsqrt, sqr'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; sqrt(Vector&lt;T&gt; &rhs)<br />
+Vector&lt;T&gt; sqr(Vector&lt;T&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Vector&lt;T&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+element-by-element square and square root<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=sqr(oldC)<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathsum'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Type sum(Vector&lt;Type&gt; &c1)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+c1--&gt;A Vector of the numerical type 'Type'<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+takes the sum af a Vector v[0]+v[1]+...v[N]<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; v1(3,4)<br />
+double dd=sum(v1); <font color='#006600'>//result is 12</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionsapply'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class Func&gt;<br />
+void apply( Func &f)<br />
+<br />
+template&lt;class Func&gt;<br />
+void apply( Func &f, const Range &r)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+f--&gt; a class with the T operator()(T in, int i) defined for it.<br />
+<br />
+r--&gt; the row range object<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+applys a funciton on the data inside the matrix...the class 'Func' MUST have this operator <br />
+<br />
+T operator()(T in, int i)<br />
+<br />
+where 'in' is the vector data element, and i is the index defined in order for the apply to work. <br />
+<br />
+If the Ranges are specified then only those elements in the vector specified in the ranges will be effected. <br />
+If no ranges are specified all the element will be effected.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+class myF{<br />
+myF(){}<br />
+double T operator()(double in, int i){<br />
+return (i+1);<br />
+}<br />
+<br />
+Vector&lt;double&gt; fm(2,5); <font color='#006600'>//fm={5,5}</font><br />
+myF func;<br />
+fm.apply(func); <font color='#006600'>//fm={1,2}</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsempty'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool empty()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns true of length==0 flase if not<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;complex&gt; tmpVec;<br />
+bool l=tmpVec.empty(); <font color='#006600'>//would be true</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsfill'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;Type&gt; fill(T &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs-&gt;a number<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+fills the vector with the value of the rhs<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;&gt; moo(3);<br />
+moo.fill(4); <font color='#006600'>//moo=[4,4,4];</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionspop'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void pop()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+if the Vector is very long this opperation becomes VERY expensive. Because the list is not a linked list, but a continous array, the droppin process must copy all the old data excet for the last one<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+resizes the vector to a length length-1...<br />
+it preserves all the data and just dropping the LAST element in the list<br />
+this is equivilent to 'resizeAndPreserve(size()-1)' <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;complex&gt; tmpVec(3, 2);<br />
+tmpVec.pop(); <font color='#006600'>//new vector length is 2 with elements 1--2 are all still 2 </font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionspush_back'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void push_back(T num)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+if the Vector is very long this opperation becomes VERY expensive. Because the list is not a linked list, but a continous array, the adding process must copy all the old data before adding the new element<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+num --&gt; Adds the element 'num' to the back of the list and increases the vector length by one<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+resizes the vector to a length length+1...<br />
+this is like 'resizeAndPreserve(size()+1, num)'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;complex&gt; tmpVec(3, 2);<br />
+tmpVec.push_back(complex(0,3)); <font color='#006600'>//new vector length is 4 with elements 1--3 are all still 2 the 4th elemenet is complex(0,3)</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsresize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void resize(int newL)<br />
+void resize(int newL, T num)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NOTE::data integrity is NOT garenteeded after this operations (most likely all exsisting data will be lost)<br />
+NUMERCAL NOTE::THIS IS A SLOW OPERATION...it is best to 'over shoot' your size requirements, then perform a 'resizeAndPreserve' operation...<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newL --&gt; the new size of the vector<br />
+num --&gt; the vector will be filled with 'num' after resizing<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+resizes the vector to a length newL...<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;complex&gt; tmpVec(3, 2);<br />
+tmpVec.resize(5); <font color='#006600'>//new vector length is 5</font><br />
+tmpVec.resize(5, 4); <font color='#006600'>//new vector length is 5 filled with 4's</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionsresizeAndPreserve'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void resizeAndPreserve(int newL)<br />
+void resizeAndPreserve(int newL, T num)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NUMERICAL NOTE:: this is slower then 'resize' becuase of the data copying<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newL --&gt; the new size of the vector<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+resizes the vector to a length newL...<br />
+if newL &lt; old length then ALL the data up to newL is kept...<br />
+if newL &gt; old Length then all data is kept, but the NEW entries are NOT initiallized (or are filled with 'num')<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;complex&gt; tmpVec(3, 2);<br />
+tmpVec.resizeAndPreserve(5); <font color='#006600'>//new vector length is 5 with elements 1--3 are all still 2</font><br />
+tmpVec.resizeAndPreserve(5, complex(0,3)); <font color='#006600'>//new vector length is 5 with elements 1--3 are all still 2 and 4-5 are complex(0,3)</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsrotateRight'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; rotateRight(Vector&lt;T&gt;, int n)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Vector&lt;T&gt; --&gt; a vector of any type<br />
+n --&gt; the amount of points to shift the vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Rotates a vector by placing the last 'n' elements at the begining and the first 'size-n' elements at the end.  'n' should be NO larger then size()/2<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; myV(6);<br />
+<font color='#006600'>//same as 'fftshift'</font><br />
+myV=rotateRight(myV, 3);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionssize, length'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int size()<br />
+int length()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the length of the Vector<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;complex&gt; tmpVec(3, 2);<br />
+int l=tmpVec.size(); <br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

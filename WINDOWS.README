@@ -1,0 +1,73 @@
+********
+**** Getting BlochLib To work On Windows
+**** Getting OPTIMIZED BLAS routines on Windows
+**** (also getting BlochLib to work as well)
+****** 
+*****
+
+author: Bo Blanton
+last update: 04.23.02
+email: bo@theaddedones.com
+
+*This document will hopefully show you how to create a highly 
+ optimized set of BLAS libraies for the CYGWIN and MINGW environments.
+
+------------------Note for Visual C++ --------------------
+----------------------------------------------------------
+If you are using Visual C++ then INTEL has already created
+a very fast set of BLAS routines optimized for each Processor type.
+Go here to get the DLL and static libs..
+http://developer.intel.com/software/products/mkl/index.htm 
+the linking directions are in that distribution
+
+
+------------------CYGWIN & MINGW -------------------------
+----------------------------------------------------------
+*CYGWIN and MINGW are unix emulation layers over Windows that allow
+ folks to write code that will copmile on Linux, Unix, and Windows
+ with minimal effort.  
+
+*CYGWIN & MINGW--> CYGWIN provides a POSIX emulation layer over windows
+ so one can use all the good UNIX command line tools and scripting
+ capabilities (like bash, perl, etc)...it provide the GCC compiler
+ suite as well.  However, all programs and/or libaraies are dependant
+ on the Cygwin Run time DLL...meaning 'double cliking' on a program
+ will typically result in an error becuase it cannot find the cygwin dll
+ thus to run the program you must have cygwin installed...which is not 
+ bad so long as you are not going to distribute the programs.  MingW solves
+ this problem, by linking 'reverting' the basic cygwin dependancies on to 
+ the Windows Sub System (the OS).  MINGW is simply a new set of libraries and
+ includes to replace the Cygwin ones...cygwin, however, allows the usual make
+ and bulid process to happen flawlessly...so you need both...
+
+*Getting CYGWIN::
+  1) go here: http://cygwin.com
+  2) run the 'setup.exe' program and read the directions to install
+     (i think that is easy enough)
+  3) the installation will typically be in "C:\cygwin" but you 
+     can change it...
+
+*Getting MINGW runtime libs
+  1) go here: https://sourceforge.net/projects/mingw/
+  2) get the newest release (as of this writing it was "mingw-1.1")
+  3) open the Cygwin Bash Shell....
+  3) create a sub directory "C:\cygwin\mingw\"
+  4) copy "MinGW-1.1.tar.gz" to "C:\cygwin\mingw\"
+  5) untar the dist. "tar -zxvf MinGW-1.1.tar.gz"
+  ---below the copiable commands
+  
+  mkdir /mingw
+  cp MinGW-1.1.tar.gz /mingw
+  tar -zxvf MinGW-1.1.tar.gz
+  
+*You should now have everything you need to start compiling things
+ in any way, shape, or form you desire.
+ 
+
+now Read the "README.BLAS" for getting really fast BLAS
+routines on your particular system....
+
+
+      
+     
+  

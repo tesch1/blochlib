@@ -1,0 +1,36 @@
+
+
+#spin system
+spins{
+	
+	#the rectangluar gir dot arrange or spins
+	min -1,-1,-1
+	max 1,1,1
+	dim 2,2,2
+	
+	#the maximal dipole-dipole coupling
+	# for nearest-neighbors
+	maxD 1000
+	
+	#choose 'nearest' neighbor or 'all'
+	neighbor nearest
+}
+
+parameters{
+	
+	
+	#time for a single C7
+	cycleTime 1.5e-3
+	
+	#initial density matrix
+	initro Iz
+	
+	#The multi-quantum pump order
+	N 4
+	
+	#maximal time to perform an integration
+	maxtstep 1e-6
+
+}
+
+

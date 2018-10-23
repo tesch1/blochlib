@@ -1,0 +1,243 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("40menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("40menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("40menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("40title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("40");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class HamiltonianGen {...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Generates hamiltonians from an input std::string like &quot;<tt>2000*A22*T22_0,1</tt>&quot; 
+used for generation of detection matrices, initial density operators, or any other 
+spin function you wish to know from an input string. <BR>
+<BR>
+Below You will find the available functions <br>
+<BR>
+The constants <tt>pi, e, and complexi=(complex(0,1)) </tt>are avalable. Even though 
+no direction use of 'complex(#,#)' can be used, the <tt>complexi</tt> will create 
+complex numbers.<BR>
+<br>
+You are now alowed to perform basic functions on either the numbers or the matrices. 
+NOTE:: all functions on the matrices are Element-By-Element...for example, the 
+expresion 'exp(Ix)' will NOT return the matrix exponential, but is equivilient 
+to exp(Ix(i,j)) for each element in the matrix. <BR>
+The available math functions included so far are 
+<blockquote>
+  <tt>exp, ln, log, sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, 
+    acosh, atanh, abs, floor, ceil, sqrt, real, imag</tt>
+</blockquote>
+<BR>
+Available functional pieces
+
+<ul>
+<li>Spatial spherical tensors: <br>
+    rank 1: <B>A11</B>, 
+<B>A10</B>, <B>A1m1</B><br>
+    rank 2:  <B>A22</B>, 
+<B>A21</B>, <B>A20</B>, 
+<B>A2m1</B>, <B>A2m2</B></li>
+<li>Spin spherical tensors:<br>
+    rank 1: <B>T11</B>, 
+<B>T10</B>, <B>T1m1</B><br>
+    rank 2: <B>T22</B>,<B>T21</B>,<B>T20</B>,<B>T2m1</B>,<B>T2m2</B></li>
+<li>Pauli Spin Matrices:<br>
+    <B>Ix</B>, <B>Iy</B>, 
+<B>Iz</B>, <B>Ii</B>, 
+<B>Ip</B>, <B>Im</B></li>
+  <li>plain numbers (sorry no complex numbers at this time, except '<tt>complexi</tt>') 
+  </li>
+</ul>
+<br>
+--Selecting spin tensors and pauli matrices for a specific spin<br>
+--IF no '_#' is present the total spin tensor is used for pauli matrices<br>
+   however, you will get an error if you use the rank 2 
+spin tensors (and the spin space is larger the 2) without specifying 
+the spins.<br>
+
+<ul>
+<li>Special Tensors:: Not spin specific</li>
+<li>Spin Tensors:<br>
+   rank 1 (single spin tensors):  <br>
+                
+<B>T11_0</B>  (means T11 of spin 
+0)<br>
+                
+<B>T1m1_2</B>   (means T1-1 
+for spin 2)<br>
+  rank 2 (double spin tensors):  <br>
+    <B>T20_1,2</B> (means T20 from spin 1 and 2)<br>
+    <B>T2m1_0,2</B> (means T2-1 from spin 0 and 2)<br>
+  rank 2 (same spin tensors:: make sure you have defined 
+a spin with s>1/2 or these will be zero...i.e. a quadrupole)<br>
+    <B>T20_1,1</B> (means T20 for spin 1)</li>
+<li>Pauli Matrices:<br>
+         <B>Ix_1</B>  
+(means Ix from spin 1)<br>
+         <B>Ip_4</B>  
+(means I+ from spin 4)</li>
+</ul>
+<p><BR>
+  Operators:: EVERY thing except the first and last element require the normal 
+  operators...'+', '-', '/', '*'<br>
+  Example functions:: Input Strings</p>
+<blockquote>
+  <TT> 500*A20*T20_0,1<br>
+    4000*(A21*T21_1,0+*A2m1*T2m1_1,0)</TT><TT><br>
+    A22*T22_0,1+A20*T20_1,1+Ix_0+Iz_1 </TT> 
+</blockquote>
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsHamiltonianGen'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+HamiltonianGen();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The empty constructor<br />
+simply declares an object ready to be used for Hamiltonian Generation.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+HamitonianGen myGen;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsHamiltonianGen'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+HamiltonianGen(std::string func);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+func--&gt; the input string to parse (like &quot;A22*T20&quot;)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Declares an object ready to be used for Hamiltonian Generation, and sets the function string to parse later by 'Hamiltonian.'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+HamiltonianGen myGen(&quot;Iy_0*Iy_1&quot;);<br />
+SolidSys A(2);<br />
+<font color='#006600'>//generates 'Iy_0*Iy_1' from the </font><br />
+<font color='#006600'>// total hilbert space of A</font><br />
+matrix myMat=myGen.Hamiltonian(A);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other FunctionsHamiltonian'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+matrix Hamiltonian(SpinSys &A, double theta=0, double phi=0);<br />
+matrix Hamiltonian(SpinSys &A, std::string func, double theta=0, double pho=0);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt; a SolidSys or a SpinSys (or any class derived from them)<br />
+func--&gt; a valid function string (like Ix_0)<br />
+theta--&gt; the powder THETA angle in RADIANS<br />
+phi--&gt; the powder PHI angle in RADIANS<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Generates the matrix from a string 'func' (or if the string constructor was called, from that input string).  You only need to enter in 'theta' and 'phi' if there are Spacial Tensors in the input string.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+HamiltonianGen myGen;<br />
+SolidSys A(2);<br />
+A[0]=&quot;1H&quot;;<br />
+A[1]=&quot;13C&quot;;<br />
+<font color='#006600'>//returns the Ix matrix from the first spin in </font><br />
+<font color='#006600'>// the TOTAL Hilbert Space of A</font><br />
+matrix myMat=myGen.Hamiltonian(A, &quot;Ix_0&quot;); <br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

@@ -1,0 +1,91 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Using Gradient Grids.<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Using Gradient Grids.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+coord&lt;&gt;&nbsp;mins(-1,-1,-1),&nbsp;maxs(1,1,1);<br />
+coord&lt;int&gt;&nbsp;dims(10,10,10);<br />
+<br />
+Grid&lt;UniformGrid&gt;&nbsp;mygrid(mins,&nbsp;macs,&nbsp;dims);<br />
+XYZshape&lt;XYZrect&gt;&nbsp;myshape(mygrid,&nbsp;XYZrect(mins,&nbsp;maxs,&nbsp;dims));&nbsp;<font color='#006600'>//a&nbsp;rectanglular&nbsp;grid&nbsp;of&nbsp;1000&nbsp;points</font><br />
+<br />
+<font color='#006600'>//the&nbsp;gradient&nbsp;grid</font><br />
+GradientGrid&lt;TheGrid&nbsp;&gt;&nbsp;mygrad(jj);<br />
+<font color='#006600'>//to&nbsp;use&nbsp;the&nbsp;grid...the&nbsp;number&nbsp;of&nbsp;blochparameters&nbsp;should&nbsp;be&nbsp;the</font><br />
+<font color='#006600'>//&nbsp;same&nbsp;number&nbsp;as&nbsp;those&nbsp;in&nbsp;the&nbsp;shape...</font><br />
+<font color='#006600'>//NOTE::&nbsp;placing&nbsp;the&nbsp;'GradientGrid'&nbsp;class&nbsp;in&nbsp;the&nbsp;template&nbsp;definition&nbsp;</font><br />
+<font color='#006600'>//automatically&nbsp;sets&nbsp;up&nbsp;the&nbsp;Gradient&nbsp;object&nbsp;a</font><br />
+ListBlochParams&lt;GradientGrid&lt;&nbsp;XYZshape&lt;XYZrect&gt;&nbsp;&gt;&nbsp;&gt;&nbsp;mypars(mygrad.size(),&nbsp;&quot;1H&quot;,&nbsp;mygrad);&nbsp;<font color='#006600'>//a&nbsp;list&nbsp;of&nbsp;1000&nbsp;protons..</font><br />
+<br />
+ListBlochParams&lt;GradientGrid&lt;&nbsp;XYZshape&lt;XYZrect&gt;&nbsp;&gt;&nbsp;&gt;::iterator&nbsp;myIt(myPars);&nbsp;<font color='#006600'>//set&nbsp;up&nbsp;an&nbsp;iterator</font><br />
+while(myIt){<br />
+&nbsp;&nbsp;myIt.Bo(400.0e6);&nbsp;<font color='#006600'>//set&nbsp;the&nbsp;Bo&nbsp;to&nbsp;400&nbsp;MHz</font><br />
+<font color='#006600'>//the&nbsp;grid&nbsp;iterator&nbsp;is&nbsp;attached&nbsp;to&nbsp;this&nbsp;iterator&nbsp;also...</font><br />
+<font color='#006600'>//&nbsp;so&nbsp;they&nbsp;advance&nbsp;in&nbsp;tandum</font><br />
+&nbsp;&nbsp;cout&lt;&lt;myIt.Point()&lt;&lt;endl;&nbsp;<font color='#006600'>//print&nbsp;out&nbsp;the&nbsp;csurrent&nbsp;grid&nbsp;position</font><br />
+<br />
+&nbsp;&nbsp;cout&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;myIt.Bo()&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;myIt.Point()&lt;&lt;endl;&nbsp;<font color='#006600'>//print&nbsp;</font><br />
+&nbsp;&nbsp;++myIt;&nbsp;<font color='#006600'>//advance&nbsp;the&nbsp;iterator</font><br />
+}<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

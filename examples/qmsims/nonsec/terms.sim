@@ -1,0 +1,37 @@
+
+
+spins{
+	numspin 2
+	T 13C 0
+	T 14N 1
+}
+
+pars{
+	wr 5000
+	npts 512
+	avetype zcw
+	theta 45
+	phi 45
+	
+	thetastep 144
+	phistep 89
+	gammastep 5
+	
+	sample 5
+	timestep 1e-5
+	
+	wo 20
+	wq 2
+	eta 0
+	J 1000
+	
+	secondorder 1
+	
+	outfile fidpow
+	
+	wrsteps 32
+	wrstep 1000
+	
+	verbose 1
+}
+	

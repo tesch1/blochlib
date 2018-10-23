@@ -1,0 +1,2107 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("14menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("14menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("14menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("14title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("14");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Type, class Structure&gt;<br />
+class _matrix : protected MemChunkRef&lt;Type&gt;{....<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<ul>Accepted Template Params 
+<ul>
+<li><B>Type</B> --> another class...typically a number type (int, double, complex, float....)...but can be anything (NO default) 
+</li>
+<li><B>Structure</B> --> The Matrix form <B>(FullMatrix, HermitianMatrix, SymmetricMatrix, DiagonalMatrix, IdentityMatrix) </B></li>
+MemChunk is a class that handles the memory allocation and deallocation for ALL the various containers here 
+</ul></ul>
+
+there are 2 classes of mathematical operations the first ELEMENT BY ELEMENT and then the 'total' operations (those that require the use of temporaries and total matrix accsess) <BR>
+---------------------------------------------
+<BR>
+The Main Matrix Types...each one has its one set of optimizations 
+  to save CPU time and memory
+<ul>
+  <li><B>FullMatrix</B>
+    <ul>
+      <li>This is the most general matrix. It assumes each element is unique. IT also requires the most storage (rows*cols elements) </li>
+    </ul>
+  </li>
+  <li ><B>HermitianMatrix </B>
+    <ul>
+      <li >This should always be of the 'complex' number type. Only the diagonal and the upper triangle of the matrix is stored. The Lower triangle is assumed to be the conjugate of the upper triangle. The elements Along the DIAGONAL ARE FORCED TO BE REAL!</li>
+    </ul>
+  </li>
+  <li><B>SymmetricMatrix </B>
+     
+    <ul>
+      <li>This is like the Hermitian Type except that ALL the elements are REAL and so the upper triangle IS the lower triangle</li>
+    </ul>
+  </li>
+  <li><B>DiagonalMatrix </B>
+    <ul>
+      <li>Contains ONLY elements along the diagonal</li>
+    </ul>
+  </li>
+  <li><B>IdentityMatrix </B>
+    <ul>
+      <li>Contains only ONE element the number '1' but is treated like a DiagonalMatrix in terms of 1's all along the diagonal</li>
+    </ul>
+  </li>
+</ul>
+---------------------------------------------
+<li>To use matrix include the file &quot;matrix.h&quot; 
+    this contains the typically used matrix types as typdefs to avoid 
+    lots of typing 
+    <ul>
+      <li ><B>matrix</B> --> _matrix(complex, FullMatrix)</li>
+      <li ><B>rmatrix</B>  -->_matrix(double, FullMatrix)</li>
+      <li ><B>hmatrix</B>  -->_matrix(complex, HermitianMatrix)</li>
+      <li ><B>smatrix</B>  -->_matrix(double, SymmetricMatrix)</li>
+      <li ><B>dmatrix</B>  --> _matrix(complex, DiagonalMatrix)</li>
+      <li ><B>rdmatrix</B> --> _matrix(double, DiagonalMatrix)</li>
+      <li ><B>imatrix</B>  --> _matrix(complex, IdentityMatrix)</li>
+      <li ><B>rimatrix</B> --> _matrix(double, IdentityMatrix)</li>
+    </ul>
+  </li></blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+<B><U><I>PLEASE SEE 'operator=' for IMPORTANT INFO</I></U></B>
+<BR><BR>
+The default compiling options DOES NOT CHECK ANY BOUNDS. If you go outside the matrix sizes you will crash the program. This is for SPEED. If it does not have to check the bounds then it is one less operation it must do. YOU CAN TURN THIS BACK ON by defining 'MatDeBug 1' in the compile string 
+<BR>
+i.e. g++ --DMatDeBug myprog.cc 
+<BR><BR>
+The default option DOES NOT CHECK ASSIGNMENTS!! (i.e. a identitymatrix=fullmatrix would be allowed). For correctness sake this should not be allowed as it would loose all the info in the full matrix. It is turned off becuase in most cases you know your matrix contents....and doing things like Hermitian=Full is okay espeically when constructing Hamiltonians from FullMatrix Parts when you know that the end matrix will be Hermitian.. 
+<BR>
+To Turn on the Checking either &quot;#define MatAssignCheck 1&quot; or
+
+<BR>
+g++ -DMatAssignCheck myfile.cc 
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Global Constants'></a>Global Constants</font>
+</td></tr></table>
+<tr><td>
+<a name='Global ConstantsMatrixType'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+enum MatrixType{Mgeneral,Mfull, Mdiagonal, Midentity, Msymmetric, Mhermitian}; <br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+a data elements for the matrix types<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='Constructorsmatrix'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix&lt;T, Stucture&gt;()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+None<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+empty constructor, sets rows=0, cols=0<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix moo;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Constructorsmatrix'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix(const _matrix&lt;T1, S1&gt; &cp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+WILL DOWN convert S1 to Strucutre (i.e. you will loose information if you do this) but will up convert to Strucutre if need be<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp --&gt; another matrix that can be of different number type AND structure<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+copy constructor<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rdmatrix moo1;<br />
+matrix moo2(moo1); <font color='#006600'>//no info lost here</font><br />
+rimatrix moo3(moo1); <font color='#006600'>//info Will be LOST (i.e. diagonal--&gt;identity)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Constructorsmatrix'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix(int rs, int cs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rs--&gt; the number of rows for the new matrix<br />
+cs--&gt; the number of cols for the new matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a new matrix WITH NO initialization<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix moo2(3, 5); <font color='#006600'>//a 3x5 complex full matrix </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Constructorsmatrix'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix(int rs, int cs, T1 num)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rs--&gt; the number of rows for the new matrix<br />
+cs--&gt; the number of cols for the new matrix<br />
+num--&gt; a number of Type 'T1'<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a new matrix with all elements fill with num...it performs the type conversion to 'Type' if nessesary or possible<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix moo2(3, 5, 89); <font color='#006600'>//a 3x5 complex full matrix filled with complex(89,0)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Constructorsmatrix'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class T1&gt;<br />
+_matrix(int rows, int cols, T1 **in);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rows--&gt; the number of rows for the new matrix<br />
+cols--&gt; the number of cols for the new matrix<br />
+in--&gt; a pointer to a matrix data chunk of type T1<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates a matrx from a data pointer.  Since it cannot check the length of the data pointer, it better be the same size as 'rows' and 'cols' are or the program will crash. It will attempt to convert 'T1' to 'T', and will create a memory copy of the data, not just reference the data.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double data[2][2]={{1,1},{2,2}};<br />
+rmatrix myMa(2,2,data);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Constructorsmatrix'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix(int rows, int cols, T *in):<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rows--&gt; the number of rows<br />
+cols--&gt;the number of columns in the matrix<br />
+in--&gt; a data ptr to a vector...<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+fills matrix from a 1D data pointer<br />
+meant really for coping the data array<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double *data={1,2,3,4};<br />
+rmatrix mm(2,2,data); <font color='#006600'>//mm={{1,2},{3,4}}</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractioncol'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; col(int which)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+which --&gt; the column that you wish to extract from the matrix<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns a vector of length &quot;rows()&quot; of the values of the column 'which' in the matrix<br />
+<br />
+effecting the elements in the vector DOES NOT effect the elements in the matrix <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+hmatrix hm(3, 3, complex(0,2));<br />
+Vector&lt;complex&gt; rs=im.col(1); <font color='#006600'>//returns the vector (complex(0,2),0,complex(0,-2))</font><br />
+<font color='#006600'>//Note:: hermitian matrix cannot have complex diagonal elements thus upon filling the matrix with complex(0,2)...the diagonal gets set to the real part</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractiondata'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+T *data();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+the length of the output is &quot;elements()&quot; NOT rows*cols<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+return the pointer to the array of 'T' that MemChunk managed <br />
+<br />
+if you alter these values you alter the matrix values<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double *vdat=oldC.data(); <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionget'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+T &get(int r, int c);<br />
+T get(int r, int c) const;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+r--&gt; the row to acsess<br />
+c--&gt; the column to acsess<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Extracts an element from the Matrix;<br />
+<br />
+can also be used for assignement <br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix m1(4,4, 2);<br />
+double ele=m1.get(0,3); <font color='#006600'>//extraction ele=2</font><br />
+oldC.get(3,1)=56; <font color='#006600'>//assignment</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractiongetCol'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; getCol(int c);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+c--&gt; the coulmn index<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+gets a column out of the matrix<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix fm(4,4,5);<br />
+Vector&lt;double&gt; loo=fm.getCol(1); <font color='#006600'>//loo=[5,5,5]</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractiongetRow'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; getRow(int r)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+r--&gt; the row<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+gets a row from the matrix<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix fm(4,4,5);<br />
+Vector&lt;double&gt; loo=fm.getRow(1); <font color='#006600'>//loo=[5,5,5,5]</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionoperator()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+T &operator(int r, int c); <br />
+T operator(int r, int c) const; <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ NO BOUNDS error checking is performed for SPEED <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+r--&gt; the row to acsess<br />
+c--&gt; the column to acsess<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+--Extracts an element from the Matrix;<br />
+<br />
+--can also be used for assignement <br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix m1(4,4, 2);<br />
+double ele=m1(0,3); <font color='#006600'>//extraction </font><br />
+oldC(3,1)=56; <font color='#006600'>//assignment</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionoperator(range,range)'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; operator()(const Range &r, int c) <br />
+Vector&lt;T&gt; operator()(int r, const Range &c) <br />
+_matrix operator()(const Range &r, const Range &c)<br />
+_matrix operator()(int br, int bc, int er, int ec)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+r-&gt; a Range or index<br />
+c-&gt; a range of index<br />
+<br />
+br--&gt; begining row index, <br />
+bc--&gt; begining column index, <br />
+er--&gt; ending row index<br />
+ec--&gt; endgin column index<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+get sub elements of the matrix, either get<br />
+column subelements (Range, column)<br />
+row subelements (row, Range)<br />
+or<br />
+submatrices (Range, Range)<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix fm(5,5,2);<br />
+cout&lt;&lt;fm(Range(0,3), 4); <font color='#006600'>//[5 5 5]</font><br />
+cout&lt;&lt;fm(Range(0,2),Range(0,2)); <font color='#006600'>//{{5,5},{5.5}}</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionrow'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;T&gt; row(int which);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+which --&gt; the row that you wish to extract from the matrix<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns a vector of length &quot;cols()&quot; of the values of the row 'which' in the matrix<br />
+<br />
+Effecting the elements in the vector DOES NOT effect the elements in the matrix<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rimatrix im(3, 3);<br />
+Vector&lt;double&gt; rs=im.row(2); <font color='#006600'>//returns the vector (0,0,1)</font><br />
+rs(2)=5; <font color='#006600'>//this only effects the Vecotr NOT the matrix</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='Assignmentscopy'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void copy(const matrix&lt;T, Structure&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Works only for the SAME matrix types and Structures<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs --&gt; a matrix as the same type as the object.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This performs a memory copy of the rhs into the matrix.  This Can ONLY work for the SAME 'T' and 'SAME' Structure matrices.  It is faster then the A=rhs operator becuase the 'memcpy' function is used.  The 'T' in the matrix should also ONLY be a simple data type (like double, complex, etc).  This is why the memcpy function is not used in general...<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Random&lt;&gt; ryR(-2. 2);<br />
+rmatrix loo(5,5);<br />
+loo.apply(ryR);<br />
+<br />
+rmatrix koo(5,5);<br />
+koo.copy(loo); <font color='#006600'>//faster then koo=loo</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix operator=(const _matrix&lt;T1, S1&gt; &rhs) <br />
+_matrix operator=(const T &rhs) <br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+the Left Hand Side (lhs) matrix structure of any assignment determines the extent of the final loop AND the Right Hand Side (rhs) the effect the series of operation has. <br />
+<br />
+rdmatrix dm(3,3,2); <font color='#006600'>//a 3x3 diagonal matrix filled with 2's</font><br />
+matric fm(3,3,5); <font color='#006600'>//a 3x3 full matrix filled with 5's</font><br />
+fm=cos(dm); <font color='#006600'>//see below </font><br />
+<br />
+In the example above a full matrix is being assigned from a diagonal matrix. This the entire loop MUST loop over the fullmatrix parts (so the entire loop counts from 'rows*cols' instead of the diagonal count which is only 'rows.') However the 'cos' is ONLY APPLIED to the diagonal elements<br />
+<br />
+    (cos(2), 0, 0) <br />
+fm= (0, cos(2), 0)<br />
+    (0, 0, cos(2)) <br />
+<br />
+For multiple operations that do not involve 'enitre' matrix strucutre (like Mexp and '*') the final Rhight Hand Side (rhs) structure is determined by the 'largest' strucutre (Full&gt;Hermitian&gt;Symmetric&gt;Diagonal&gt;Identity) <br />
+<br />
+rdmatrix dm(3,3,2); <font color='#006600'>//a 3x3 diagonal matrix filled with 2's</font><br />
+matrix fm(3,3,5); <font color='#006600'>//a 3x3 full matrix filled with 5's</font><br />
+smatrix sm(3,3,10); <font color='#006600'>//a symmetric matrix filled with 10 </font><br />
+fm=cos(dm)+sm; <font color='#006600'>//see below </font><br />
+<br />
+The 'cos' will now be appiled Much differently then in the previous case becuase the final rhs is now considered a symmetric matrix where there are entries in the every off diagonal elements (only one side is nessesary for computation)<br />
+<br />
+     (cos(2)+10, cos(0)+10, cos(0)+10) <br />
+fm= (cos(0)+10, cos(2)+10, cos(0)+10)<br />
+    (cos(0)+10, cos(0)+10, cos(2)+10) <br />
+<br />
+If the 'MatAssignCheck' flag is turned off then we get another 'legal' form of assignment <br />
+<br />
+dm=cos(sm)+fm;<br />
+    (cos(10)+5, 0, 0) <br />
+dm= (0, cos(10)+5, 0)<br />
+    (0, 0, cos(10)+5) <br />
+<br />
+Note that the loop is only excecuted for the DIAGONAL elements the rest of the elements on the rhs are IGNORED <br />
+So the moral of this fair story is to remember what matrix forms you are dealing with and what structures they are being assigned to..this will save you a few headaches later <br />
+You may ask yourself why is this matrix class set up like this...SPEED...everything is unrolled to ONE loop (unless the operations require entire matrix transforms like '*' or Mexp)...so the compilated expression a=4*b+w-5*cos(c) is completely unrolled to one loop and hence a speed increase from the 'normal' C++ matrix class of a factor of 4. There is always a bit of a price to pay for SPEED v ease/generality. This class keeps the generality but a bit of 'ease' is lost..sorry but you'll have to think a little bit more about the acctual form of the code.... <br />
+to avoid most of these subtile hangups you can make everything a 'FUll' matrix if you wish..<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;a matrix object OF THE SAME SIZE as left-hand-side(can be of different type)...the Structure can be different if the macro definition MatAssignCheck is undefined<br />
+rhs--&gt; or a 'constant' number<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assignment operator...does do Type conversions<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+_matrix&lt;float, DiagonalMatrix&gt; dm(4,4,6);<br />
+rmatrix fm(4,4,7);<br />
+dm=fm; <font color='#006600'>//if 'MatAssignCheck' is off this will compile but you will end up with a diagonal matrix filled with 7's accross the diagonal</font><br />
+fm=dm; <font color='#006600'>//this is a valid assignment fm will still be a fullmatrix with only 6's along the diagonal</font><br />
+<br />
+fm=complex(2,3); <font color='#006600'>// a full matrix completely filled with the complex number complex(2,3);</font><br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Assignmentsput'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class T2&gt;<br />
+void put(int whereR, int whereC, const T2 num) <br />
+void put(Range whereR, int whereC, const Vector&lt;T2&gt; num) <br />
+void put(int whereR, Range whereC, const Vector&lt;T2&gt; num) <br />
+void put(Range whereR, Range whereC, const matrix num) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+if the matrix type is diagonal then <br />
+mat.put(2,1,5.0) WILL NOT ASSIGN ANYTHING!!!<br />
+<br />
+Does not Check bounds for speed<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+whereR --&gt; the row of the matrix (or range of rows)<br />
+whereC --&gt; the column of the matrix (or range of columns)<br />
+num--&gt;an number of Type 'T2', or Vector having the same length as the Range object, or a matrix having same length as the Ranges<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+puts the element 'num' in the posistion '(whereR,whereC)'<br />
+<br />
+Will only put the number 'num' in the matrix IF that matrix Type has that (row,col) allowed<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+dmatrix dm(2,2);<br />
+dm.put(0,0,4); <font color='#006600'>//places a 4 in the (0,0) element</font><br />
+dm.put(1,0, 5); <font color='#006600'>//DOES NOT PLACE ANYTHING a diagonalmatrix has not off diagonal bits</font><br />
+<br />
+<font color='#006600'>//The vector should be as long as the range is</font><br />
+Vector&lt;double&gt; moo(2); moo[0]=1; moo[1]=5;<br />
+rmatrix fm(3,3,0);<br />
+fm.put(Range(1,3), 1, moo);<font color='#006600'>// fm={{0,0,0},{0,1,0},{0,5,0}}</font><br />
+fm.put(1,Range(1,3), moo);<font color='#006600'>// fm={{0,0,0},{0,1,5},{0,5,0}}</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentsputCol'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class newT&gt;<br />
+void putCol(int c, const Vector&lt;newT&gt; &in)<br />
+<br />
+template&lt;class newT, int N&gt;<br />
+void putCol(int c, const coord&lt;newT, N&gt; &in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+c--&gt; the column<br />
+in--&gt; the data vector to place in the matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+put an entire column from either a Vector (should be the same length as the number of columns) or from a coord&lt;T,N&gt; (the number of columns of the matrix should be N.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix fm(3,3,0);<br />
+Vector&lt;double&gt; moo(3,0); moo[0]=1; moo[1]=3; moo[2]=50;<br />
+fm.putRow(1,moo); <font color='#006600'>//fm={{0,1,0},{0,3,0},{0,0,50}}</font><br />
+coord&lt;&gt; goo(4,5,60);<br />
+fm.putCol(1,goo); <font color='#006600'>//fm={{0,4,0},{0,5,0},{0,60,0}}</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentsputRow'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class newT&gt;<br />
+void putRow(int r, const Vector&lt;newT&gt; &in)<br />
+<br />
+template&lt;class newT, int N&gt;<br />
+void putRow(int r, const coord&lt;newT, N&gt; &in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+r--&gt; the row<br />
+in--&gt; the data vector to place in the matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+put an entire row from either a Vector (should be the same length as the number of columns) or from a coord&lt;T,N&gt; (the number of columns of the matrix should be N<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix fm(3,3,0);<br />
+Vector&lt;double&gt; moo(3,0); moo[0]=1; moo[1]=3; moo[2]=50;<br />
+fm.putRow(1,moo); <font color='#006600'>//fm={{0,0,0},{1,3,50},{0,0,0}}</font><br />
+coord&lt;&gt; goo(4,5,60);<br />
+fm.putRow(1,goo); <font color='#006600'>//fm={{0,0,0},{4,5,60},{0,0,0}}</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Math'></a>Math</font>
+</td></tr></table>
+<tr><td>
+<a name='Math*='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rmatrix operator*=(const rmatrix &A);<br />
+matrix operator*=(const matrix &A);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ONLY VALID FOR REAL AND COMPLEX FULL MATRICES<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt; a real or complex Full Matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is a special multiplication operator.  It DOES NOT perform this operation (B=B*A) .. IT DOES perform the DYSON TIME MULTIPLICATION...U=A*U...<br />
+<br />
+NOTE the order change from a 'normal' *= operator.<br />
+<br />
+you can only use this for Real Full Matricies and Complex Full Matrices.  This is faster then writing it out by hand (e.g. U=A*U) becuase we save a few temporary copying steps.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix A(4,4), U(4,4);<br />
+U.identity(); <font color='#006600'>//make it the idenity matrix </font><br />
+<font color='#006600'>//fill it up</font><br />
+U*=A; <font color='#006600'>//performs U=A*U;</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Math+,-,/,*'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix&lt;UpT, UpS&gt; operator+(const _matrx&lt;T1, S1&gt; &lhs, const _matrix&lt;T2, S2&gt; &rhs)<br />
+_matrix&lt;UpT, UpS&gt; operator+(const _matrx&lt;T1, S1&gt; &lhs, const T2 &rhs)<br />
+<br />
+... similar for other operators...<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Will convert to the 'highest' type, UpT, between T1 and T2 (i.e. int+double--&gt;double) <br />
+<br />
+Will output a matrix of the Highest Structure type, UpS, (i.e. Full+Diagonal--&gt;Full)<br />
+<br />
+ NO Bounds checking is performed for Speed.<br />
+<br />
+NUMERICAL NOTE:: This is a 'holding' operator...it does nothing UNTIL you assign it to something (a=c+b)..upon assignment the Left Hand Side's strucutre will determine the ENTIRE Structure...the Right Hand Structure is determined as the 'UpS'<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+lhs--&gt;a matrix or number<br />
+rhs--&gt;a matrix or number<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Adds, Subs, Divides, multiplies rhs to the Left hand side <br />
+<br />
+if the operator is *, or / then these are special matrix operations...<br />
+<br />
+matrix/matrix--&gt; means A*inverse(B)<br />
+matrix*matrix --&gt; means MatrixMultiply NOT an element by element operation<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix rm(5, 5,6);<br />
+rimatrix im(5, 5);<br />
+hmatrix hm(5, 5,45);<br />
+rm=im+hm; <font color='#006600'>// no data is lost here (UpS=Hermitian, UpT=complex)</font><br />
+hm=rm+im; <font color='#006600'>//data is lost from the 'rm; (UpS=Full, UpT=complex)</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Math+=,-=, *=, /='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix operator+=(const _matrix&lt;T2,S2&gt; &rhs)<br />
+_matrix operator+=(T2 &rhs)<br />
+<br />
+..similar for -=,/=,*=<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+will perform a type conversion to 'Type' if possible or nessesary <br />
+<br />
+DOES NOT check for structure compatability (i.e. if the 'lhs' is a diagonal matrix and the 'rhs' is a fullmatrix YOU WILL LOOSE DATA as the final matrix will still be diagonal...To check for this Define the macro flag 'MatAssignCheck'<br />
+<br />
+DOES NOT Check Bounds....unless the macro 'MatDeBug' is defined.<br />
+<br />
+Faster then lhs=lhs+rhs<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;Another a matrix of number type 'T2' and strucutre &quot;S2&quot; OR a number<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+self math operation with a matrix or a number<br />
+<br />
+matrix/=matrix--&gt; means A=A*inverse(B)<br />
+matrix*=matrix --&gt; means &quot;Matrix Multiply&quot; NOT an element by element operation<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rdmatric dm(3,3, 1);<br />
+rmatrix fm(3,3,4);<br />
+dm+=fm*2+4; <font color='#006600'>//you will loose the info from fm here</font><br />
+fm+=dm*5; <font color='#006600'>//a proper matrix-matrix operations</font><br />
+fm+=7; <font color='#006600'>//add 7 to each element</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Math==, !='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool operator==(_matrix&lt;T1,S1&gt; &lhs, _matrix&lt;T2, S2&gt; &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+lhs--&gt; a matrix of number type 'T1' and structure 'S1'<br />
+rhs --&gt; a matrix of number type 'T2' and structure 'S2'<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+equality test &quot;==&quot;<br />
+if ALL the elements are the same this is true<br />
+in-equality test &quot;!=&quot;<br />
+if ALL the elements are the same this is false<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+bool test= m1==m2;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathchop'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void chop(double eps)<br />
+matrix chop(matrix &in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;A matrix of any type<br />
+eps--&gt; the largest allowed number allowed in the matrix.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+sets all entries whos ABSOLUTE VALUE is less then 'eps' to 0.<br />
+<br />
+THe external function simply chops everything BELOW 1e-12 to 0...it is not possible to set the 'eps' value for this function.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix cc(4,4, 1.e-8);<br />
+cc.chop(1.e-7); <font color='#006600'>//all elements are set to zero</font><br />
+<font color='#006600'>//OR--</font><br />
+matrix moo=chop(cc);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathconj'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix conj(_matrix &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; A matrix of any type<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+takes the conjugate of each element in a matrix<br />
+<br />
+Simply switches the sign of the complex part of any element (if the matrix in not complex this will still work, it will just do nothing)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+hmatrix hm(4,4, complex(3,4));<br />
+hmatrix hm2=conj(hm); <font color='#006600'>// hm2 has the upper triangle now all complex(3,-4) and the lower diagonal all complex(3,4)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathcross(vec,vec)'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix&lt;UpT, FullMatrix&gt; cross(const Vector&lt;T1&gt; &rhs, const Vector&lt;T2&gt; &lhs) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Does not Check bounds for speed <br />
+DOES not check bounds for Vector <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;A Vector of any type<br />
+lhs--&gt; A Vector of any type (its length should be the same as rhs)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cross product between 2 vectors...does do Type conversions to UpT<br />
+returns a FULL matrix of Length x Length where length is the length of the vector(s)<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;complex&gt; vm(5, 5);<br />
+Vector&lt;complex&gt; vm2(5,2);<br />
+matrix fm=cross(vm, vm2);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathcross, tensor_product'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix&lt;UpT, UpS&gt; cross(_matrix&lt;T1,S1&gt; &A, _matrix&lt;T2, S2&gt; &B)<br />
+_matrix&lt;UpT, UpS&gt; tensor_product(_matrix&lt;T1,S1&gt; &A, _matrix&lt;T2, S2&gt; &B)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt; a matrix<br />
+B--&gt; a matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the 'tensor product', 'cross' product, or 'kroneker product' of two matrices<br />
+the return matrix will be of the size &quot;lhs.rows()*rhs.rows()&quot;x&quot;lhs.cols()*rhs.cols()&quot;<br />
+The UpS will be determined as the largest of S1 or S2<br />
+the UpT will be determined as the largest of T1 and T2<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix m1(4,4,3);<br />
+matrix m2(5,5,2);<br />
+matrix m3=cross(m1, m2); <font color='#006600'>//m3 is a 20x20 matrix</font><br />
+m3=tensor_product(m1,m2); <font color='#006600'>//Same as 'cross'</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathdiag'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void diag(_matrix &rhs, _matrix&lt;Type, DiagonalMatrix&gt; &eigenvalues, _matrix&lt;Type, FullMatrix&gt; &eigenvectors)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+when diagonalizing Full Matrices, the egienvalues MUST be a complex FullMatrix...<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;any matrix you wish to diagonalize<br />
+eignvalues--&gt; A Diagonal matrix that will contain the eigenvalues<br />
+eignvectors--&gt; a Full matrix that will contain the eigenvectors of the system<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Solves the General Eigenvalue problem...it is smart about which method is chooses to diagonalize the matrix<br />
+if rhs--&gt;HermitianMatrix--&gt;uses a complex Housholder algorithm<br />
+if rhs--&gt;Symmetric--&gt; uses a real Housholder algorithm<br />
+if rhs--&gt;Diagonal or Identity--&gt; no need to diagonalize<br />
+if rhs--&gt;Full--&gt; uses a QR type method <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix MyMat(4,4,6);<br />
+dmatrix diags(4,4);<br />
+matrix evect(4,4);<br />
+diag(MyMat, diags, evect); <font color='#006600'>//uses the QR type method for diagonalization</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathexp,log'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix exp(_matrix &rhs);<br />
+_matrix log(_matrix &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;a matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+tkes the exp or log of each ELEMENT in the matrix (NOT a matrix Exp or Matrix Log...see Mexp and Mlog)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=exp(oldC);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathfloor, ceil, abs'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix floor(_matrix&rhs);<br />
+_matrix ceil(_matrix&rhs);<br />
+_matrix abs(_matrix&rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs-&gt;a matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+takes the floor, ceil, or abs of each element in the matrix<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=ceil(oldC)<br />
+newC=abs(oldC)<br />
+newC=max(oldC)<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='MathGramSchmidt <br /> OrthoNorm'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix GramSchmidt(_matrix &rhs)<br />
+_matrix OrthoNorm(_matrix &rhs)<br />
+_matrix GramSchmidt(_matrix &rhs, Vector&lt;double&gt; &norms) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;any matrix<br />
+norms--&gt; a vector that will contain the NORMALIZATION contstants nessesary to perform the orthonormalization...these norms can be usefull in other compuations....<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+performs the Gram Schmidt Orthonormalization to COLUMNS of the matrix...Errors will occur for a Singular matrix...the columns are NORMALIZED and ORTHOGONAL after the process<br />
+<br />
+Matrix MUST BE SQUARE<br />
+<br />
+The normalization constants are held in &quot;norms&quot;<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix MyMat(4,4,6);<br />
+matrix MatN=GramSchmidt(MyMat); <font color='#006600'>//matrix orthonormalization</font><br />
+Vector&lt;double&gt; n;<br />
+MatN=GramSchmidt(MyMat,n); <font color='#006600'>//matrix orthonormalization with norms contained in 'n'</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathinv'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix&lt;Type, invers_structure&gt; inv(_matrix &rhs);<br />
+void inv()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; a matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Matrix Inverse<br />
+<br />
+Solves the set of linear equations where A x=b where b is looped through (1,0,0,...), (0,1,0,0,...), (0,0,1,0,...)...(0,0,...0,1) as shown in LUBackSub...<br />
+<br />
+the result is the inverse of the rhs matrix<br />
+<br />
+Matrix MUST BE SQUARE<br />
+<br />
+both the 'external' function and 'internal' function are provided<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix MyMat(4,4,6);<br />
+matrix MatInv=inv(MyMat); <font color='#006600'>//valid matrix inverse</font><br />
+<font color='#006600'>//or you can use the internal function</font><br />
+MayInv=MyMat.inv(); <font color='#006600'>//also a valid for the matrix inverse</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='MathLU'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int LU()<br />
+int LU(_matrix&lt;T, FullMatrix&gt; &LU);<br />
+int LU(_matrix&lt;T, FullMatrix&gt; &L,_matrix&lt;T, FullMatrix&gt; &U);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Use 'LUdecomp' if you need to solve linear systems becuase it should be much faster when you use the permutation vector and the compact form.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+LU--&gt;  a full matrix<br />
+U, L--&gt; full matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+destructive LUdecomp's<br />
+int LU()<br />
+<br />
+non destructive LU's<br />
+...(slower, but potential more usful) where the LU matrices are either stored in compact form (LU(matrix)) or in separate matrices (LU(L,U))<br />
+<br />
+will return '-1' if the matrix is singular and '1' if not<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix fm(4,4,3), L, U;<br />
+fm.LU(L,U); <font color='#006600'>//non-destructive LU decomposition</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='MathLUbackSub'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void LUbackSub(Vector&lt;int&gt; &rowperm, Vector&lt;T&gt; &b)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rowperm--&gt; the premutation of the matrix from an LUdecomp<br />
+b--&gt; a vector to solve the linear set of equations A x= b ('A' is the matrix)<br />
+The Solutions will be IN 'b'<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Solve the linear system 'A x=b' with a varity of different b's assuming that you have already performed an 'LUdecomp' on the matrix...the matrix is preserved...if you wish to reuse the decomposistion matrix perform the solve in this order<br />
+<br />
+this is used as a functional step in either creating the matrix Inverse or for solving a linear system of equations<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Vector&lt;double&gt; b=...;<br />
+matrix MyMat=...;<br />
+matrix LUd=MyMat;<br />
+Vector&lt;int&gt; rp(MyMat.rows(),0);<br />
+LUd.LUdecomp(rp);<br />
+for(...){<br />
+Vector&lt;double&gt; mysol=b;<br />
+LUd.LUBackSub(rp,mysol);<br />
+...do something with the solutions...<br />
+...change 'b'...<br />
+} <br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='MathLUdecomp'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int LUdecomp(Vector&lt;int&gt; &rowperm)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The is an intermediate step to performing a matrix Inverse, but it needs to be done only once in order to solve linear systems, A*x=b, with other 'b' vectors<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rowperm--&gt;a storage place for the row permutations (should be of length &quot;rows()&quot;)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+LU decomposition of the matrix (does this inplace returning the row permutation vector)<br />
+<br />
+This is a destructive decomposistion (the matrix will be replaced with the LU matrix)<br />
+<br />
+The 2 matrices &quot;L&quot; and &quot;U&quot; are contained inside the single matrix <br />
+<br />
+The Matrix MUST be square<br />
+<br />
+this is used as a functional step in either creating the matrix Inverse or for solving a linear system of equations<br />
+<br />
+The return value will be '1' if the matrix is NOT singular, but '-1' if the matrix is singular.  An error mesage will be posted to cerr if the &quot;LUwarn&quot; flag is true, to turn the warning off set &quot;LUwarn=false&quot;<br />
+if the <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix fm(4,4,3);<br />
+Vector&lt;int&gt; rp(4,0);<br />
+fm.LUdecomp(rp);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='MathLUsolve'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void LUsolve(Vector&lt;T&gt; &b)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+b--&gt; a vector to solve the linear set of equations A x= b ('A' is the matrix)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+DESTRUCTIVE..b will be overwritten with the solutions, and the matrix will be the LU decomposition in compact form...<br />
+<br />
+Solve the linear system 'A x=b' ONLY ONCE...the matrix afterwards will be GARBAGE...<br />
+if you wish to reuse the decomposistion matrix perform the solve in this order<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//To perform a Solve where you can reuse the matrix Do THIS</font><br />
+Vector&lt;double&gt; b=...;<br />
+matrix MyMat=...;<br />
+matrix LUd=MyMat;<br />
+Vector&lt;int&gt; rp(MyMat.rows(),0);<br />
+LUd.LUdecomp(rp);<br />
+for(...){<br />
+Vector&lt;double&gt; mysol=b;<br />
+LUd.LUBackSub(rp,mysol);<br />
+...do something with the solutions...<br />
+...change 'b'...<br />
+} <br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathmatrix*vector'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;UpT&gt; operator*(const _matrix&lt;T1, S1&gt; &rhs, const Vector &lhs) <br />
+<br />
+Vector&lt;coord&lt;T, N&gt; &gt; operator*(const _matrix&lt;T1, S1&gt; &rhs, const Vector&lt;coord&lt;T, N&gt; &gt;&lhs) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Does not Check bounds for speed <br />
+<br />
+DOES not check bounds for Vector <br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;A matrix of anytype<br />
+lhs--&gt; A Vector of any type (its length should be the same number of rows as the matrix)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Multiplication operator...does do Type conversions to UpT<br />
+<br />
+for matrix*Vector&lt;coord&lt;&gt; &gt;<br />
+!!if the Vector is a Vector&lt;coord&lt;T,N&gt; &gt; then the number of columns in the Matrix should be N*size(vector).  It treats the coord vector as a fully unrolled object !!<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+_matrix&lt;float, DiagonalMatrix&gt; dm(4,4,6);<br />
+Vector&lt;complex&gt; vm(dm.rows, 5);<br />
+Vector&lt;complex&gt; mulV=dm*vm;<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='MathMexp, Mlog'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix&lt;Type, OutStruct&gt; Mexp(_matrix &rhs, T number=1);<br />
+_matrix&lt;Type, OutStruct&gt; Mlog(_matrix &rhs, T number=1);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rhs MUST be square<br />
+<br />
+The OutStruct is determined from the structure of the lhs...for all Matrix Strucutures except Diagonal and Identity the OutStruct=FullMatrix<br />
+<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs-&gt;matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The Matrix Exponential calculated by diagonalizing the lhs, and recollecting the parts as<br />
+<br />
+adjoint(U)*exp(diagonal*number)*U<br />
+<br />
+The Matrix Logorithm calculated by diagonalizing the lhs, and recollecting the parts as<br />
+<br />
+adjoint(U)*log(diagonal*number)*U<br />
+<br />
+--If you wish to perform this operation exp(M*i t) TO GET CORRECT RESULTS AND FASTER PERFORMANCE USE  &quot;Mexp(Matrix, i*t) this correctness issue arrises from the casting of matrix type as desciribed in the 'operator='<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix fm(4,4,3);<br />
+fm=Mexp(fm, complex(0, 0.2); <font color='#006600'>//standard QM Spin propogator</font><br />
+fm*=complex(0,0.2); <br />
+fm=Mexp(fm); <font color='#006600'>//this is slower then the method on the line above (and sometimes can produce ODD results...moral--&gt; USE THIS FOR PROPOGATORS!)</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathprop, adjprop'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix&lt;UpT, UpS&gt; prop(_matrix&lt;T1,S1&gt; &U, _matrix&lt;T2, S2&gt; &ro)<br />
+_matrix&lt;UpT, UpS&gt; adjprop(_matrix&lt;T1,S1&gt; &U, _matrix&lt;T2, S2&gt; &ro)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+the matrix U MUST be Unitary such that adjoint(U)=inverse(U)for this to produce the expected result<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+U-&gt;matrix<br />
+ro-&gt;matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+&quot;prop&quot; performs this operation<br />
+<br />
+U*ro*adjoint(U) <br />
+<br />
+~30% more efficiently then the explicit version above<br />
+<br />
+&quot;adjprop&quot; performs this operation<br />
+<br />
+adjoint(U)*ro*U<br />
+<br />
+~30% more efficiently then the explicit version above<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+hmatrix rm(3,3,2);<br />
+dmatrix dm(3,3);<br />
+matrix evects(3,3);<br />
+diag(rm, dm, evects); <font color='#006600'>//evects will be unitary becuase we are diagonalizing a hermitian matrix</font><br />
+hmatrix rm2=prop(evects, rm);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='MathQR'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void QR(_matrix &rhs, matrix &Q, matrix &R)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt;the matrix input matrix you wish to perform the QR upon<br />
+Q--&gt; the 'Q' matrix that will be filled with the proper values<br />
+R--&gt; The 'R' matrix that will be filled with the upper triangular values.. <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+performs the QR algorithm to the rhs of the matrix<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix MyMat(4,4,6), Q(4,4,0), R(4,4,0);<br />
+QR(MyMat, Q, R); <font color='#006600'>//a simple QR decomposition...</font><br />
+ <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='MathRe, Im'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix Re(_matrix &rhs);<br />
+_matrix Im(_matrix &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; a matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+takes the Real part(Re) or Imaginary part (Im) of each element of a matrix.<br />
+if the matrix is Real then &quot;Im&quot; does nothing, and will return a matrix of zeros<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+hmatrix hm(4,4, complex(3,4));<br />
+hm.put(2,1, complex(0,8));<br />
+hmatrix hm2=Re(hm); <font color='#006600'>//all the complex parts are now 0</font><br />
+rmatrix fm(5,5,3);<br />
+fm=Im(fm); <font color='#006600'>//fm is now a bunch of zeros</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathsin, cos, tan,<br /> asin, acos, atan,<br /> sinh, cosh, tanh,<br /> asinh, acosh, atanh'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix sin(_matrix &rhs)<br />
+...similar for other trig functions...<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs-&gt;a matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+performs the various trig functions to EACH ELEMENT. These are not Matrix Trig function.  To perform those operations you will need to do a diagonalization<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+newC=tanh(oldC*Pi/180)<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Mathtrace'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+SumType(T) trace(_matrix &A);<br />
+SumType(UpT) trace(_matrix&lt;T1,S1&gt; &A, _matrix&lt;T2, S2&gt; &B)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt;a matrix<br />
+B--&gt;a matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+the single matrix trace returns<br />
+Sum(A(i,i))<br />
+<br />
+the double matrix trace performs a highly optimized version of<br />
+trace(A*B)<br />
+there is no need to perform the A*B multiplication if only the trace is desired<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix rm(3,3,2);<br />
+double tr=trace(rm); <font color='#006600'>//tr=6</font><br />
+rmatrix rm2(3,3,4);<br />
+tr=trace(rm, rm2); <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Mathtranspose, adjoint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+_matrix transpose(_matrix &rhs);<br />
+_matrix adjoint(_matrix &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; a matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+transpose takes the transpose of a matrix<br />
+Simply switches the (i,j) indexing to (j,i) and is thus an element by element type operator<br />
+<br />
+adjoint takes the conjugate transpose of a matrix<br />
+Simply switches the (i,j) indexing to (j,i) and is thus an element by element type operator AND takes the conjugate of the element<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+hmatrix hm(4,4, complex(3,4));<br />
+hm.put(2,1, complex(0,8));<br />
+hmatrix hm2=adjoint(hm); <font color='#006600'>//the same as conj(transpose(hm))</font><br />
+hmatrix hm3=transpose(hm); <font color='#006600'>//now the lower triangle of the matrix is the positive side</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOoperator<<'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+std::ostream &operator&lt;&lt;(std::ostream &otr, _matrix&lt;complex, structure&gt; oo);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+otr--&gt; an output stream<br />
+oo--&gt;the matrix you wish to ouput<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+prints out a matrix that is readable directly by matlab in the format<br />
+<br />
+&lt;MatrixType&gt; &lt;rows&gt;x&lt;Cols&gt;<br />
+[ [ ...]<br />
+[ ... ]<br />
+ ...<br />
+]<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix b(2,2,4);<br />
+cout&lt;&lt;b; <br />
+<font color='#006600'>//prints</font><br />
+<font color='#006600'>//FullMatrix 2x2</font><br />
+<font color='#006600'>//[ [ 2 2]</font><br />
+<font color='#006600'>//[2 2]</font><br />
+<font color='#006600'>//]</font><br />
+<br />
+matrix cm(2,2,2);<br />
+cout&lt;&lt;cm;<br />
+<font color='#006600'>//prints</font><br />
+<font color='#006600'>// FullMatrix 2x2</font><br />
+<font color='#006600'>// [ [ complex(2,0) complex(2,0) ]</font><br />
+<font color='#006600'>// [ complex(2,0) complex(2,0) ]</font><br />
+<font color='#006600'>// ]</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionsapply'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class Func&gt;<br />
+void apply( Func &f)<br />
+<br />
+template&lt;class Func&gt;<br />
+void apply( Func &f, const Range &r, const  Range &c)<br />
+		<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+f--&gt; a class with the T operator()(T in, int i, int j) defined for it.<br />
+<br />
+r--&gt; the row range object<br />
+c--&gt; the column range object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+applys a funciton on the data inside the matrix...the class 'Func' MUST have this operator <br />
+<br />
+T operator()(T in, int i, int j)<br />
+<br />
+where 'in' is the matrix data element, and i,j are th row, column indexes defined in order for the apply to work.  <br />
+<br />
+If the Ranges are specified then only those elements in the matrix specified in the ranges will be effected. <br />
+If no ranges are specified all the element will be effected<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+class myF{<br />
+myF(){}<br />
+double T operator()(double in, int i, int j){<br />
+  return (i+1)*(j+1);<br />
+}<br />
+<br />
+rmatrix fm(2,2,5); <font color='#006600'>//fm={{5,5},{5,5}}</font><br />
+myF func;<br />
+fm.apply(func); <font color='#006600'>//fm={{1,2},{2,4}}</font><br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionscols'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int cols()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the number of columns in the matrix <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rimatrix im(3, 3);<br />
+int rs=im.cols(); <font color='#006600'>//returns the number '3'</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionselements'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int elements()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the number of VALID elements in the matrix <br />
+is rows*cols for fullmatrix<br />
+is rows*(rows+1)/2; for hermetian and symmetric matrix<br />
+is rows for diagonal matrix<br />
+is 1 for identity matrix<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rimatrix im(3, 3);<br />
+int rs=im.elements(); <font color='#006600'>//is '1'</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsempty'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool empty()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns true of rows==0 and cols==0 false if not<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix fm;<br />
+bool l=fm.empty(); <font color='#006600'>//would be true</font><br />
+rmatrix mm(1,1); <br />
+bool l=mm.empty(); <font color='#006600'>//would be false</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsfill'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class T2&gt;<br />
+void fill(T2 Num)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Num--&gt; fills every valid entry in the matrix with 'Num'<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets every possible element to 'Num'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix im(3, 3, 9); <font color='#006600'>//a matrix full of 9's</font><br />
+im.fill(6); <font color='#006600'>//now the matrix is full of 6's</font><br />
+imatrix km(4,4); <font color='#006600'>// identity matrix </font><br />
+fm.fill(7); <font color='#006600'>//NOT POSSIBLE identity matrix only has 1's....</font><br />
+dmatrix lm(2,2); <font color='#006600'>//diagona matrix</font><br />
+lm.fill(56); <font color='#006600'>//places 56 along the diagonal (but NOwhere else)</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsidentity'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void identity()<br />
+void identity(int newSize)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newSize--&gt; will resize the matrix to newSize x newSize<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the matrix to the Identity Matrix (i.e. only ones along the diagonal) it DOES NOT change the matrix type...just sets things to 0 and 1<br />
+<br />
+if &quot;newSize&quot; is preset<br />
+first resizes the matrix to 'newSize x newSize' then...<br />
+then sets the matrix to the Identity Matrix (i.e. only ones along the diagonal) it DOES NOT change the matrix type...just sets things to 0 and 1<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix im(3, 3, 9); <font color='#006600'>//a matrix full of 9's</font><br />
+im.identity(); <font color='#006600'>//now the matrix has ones along the diagonal and 0's elsewhere </font><br />
+im.identity(6); <font color='#006600'>//now the matrix has ones along the diagonal and 0's elsewhere and is no a 6x6 matrix but is still a full matrix</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsposition'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int position(int r, int c)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+r--&gt; the row of the matrix<br />
+c--&gt; the column of the matrix<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+returns the position in the 'data()' vector of the proper element in the list. The data for the matrix is acctually stored as a Vector..the operators know which element is which in the vector using this function <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rdmatrix dm(3, 3);<br />
+int pos=dm.position(1,1); <font color='#006600'>//pos would be '2'</font><br />
+double secondele=dm.data()[pos]; <font color='#006600'>//would be the same as 'dm(1,1)'</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsreshape'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void reshape(int newR, int newC);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newR--&gt; the new number of rows<br />
+newC--&gt; the new number of columns<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Simply redefines the size of the matrix without altering any of the elements. As a result newR*newC MUST BE the same as rows()*cols().<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matrix mat(4,4, 5);<br />
+<br />
+<font color='#006600'>//a 2x8 matrix</font><br />
+mat.reshape(2,8); <br />
+<br />
+<font color='#006600'>//THIS WILL FAIL</font><br />
+mat.reshape(3,5);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsresize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void resize(int newR, int newC)<br />
+void resize(int newR, int newC, T num)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+if num is not present...<br />
+data integrity is NOT garenteeded after this operations (most likely all exsisting data will be lost)<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newR --&gt; number of new rows<br />
+newC --&gt; number of new columns<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+resizes the matrix to a size (newR, newC)...<br />
+<br />
+if num is present the matrix will be filled with that object<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+hmatrix hm;<br />
+hm.resize(5,5); <font color='#006600'>// a 5x5 hermitian matrix</font><br />
+smatrix sm(4,4);<br />
+sm.resize(5,5, 4.0); <font color='#006600'>//new matrix length is 5x5 filled with 4's</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsresizeAndPreserve'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void resizeAndPreserve(int newR, int newC)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newR--&gt; the new Row size<br />
+newC--&gt; the new Column size<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+resizes the matrix to a size (newR, newC) preserving all the data it can (i.e. if the resize is smaller then the current size, you will loose the over index values)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix fm(5,5, 7);<br />
+fm.resizeAndPreserve(6,6);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsrows'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int rows()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the number of rows in the matrix <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rimatrix im(3, 3);<br />
+int rs=im.rows(); <font color='#006600'>//returns the number '3'</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionstype'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+MatrixType type()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the enum 'MatrixType' of the matrix type<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rimatrix im(3, 3);<br />
+MatrixType rs=im.type(); <font color='#006600'>//is 'Midentity'</font><br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

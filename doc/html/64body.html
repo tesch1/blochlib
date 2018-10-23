@@ -1,0 +1,850 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("64menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("64menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("64menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("64title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("64");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class wavestream{...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This class allows you to read and/or write .wav audio files from/to a data vector.  Wave files are either 8 (char) or 16 (short) bits long, however, this class converts any other data type (doubles, ints, floats, etc) into the proper bit stream.  You should be careful when converting LARGE floats or ints becuase a short can only hold ~32,000 as its largest value.<br />
+<br />
+Before you can save a wave file you need to specify the 'sampling rate' (8 kHz, 11.025 kHz, 16 kHz, 22.05 kHz, 24 kHz, 32 kHz, and 44.1 kHz), the number of channels (1 (mono) or 2 (stereo)), and the bit rate (8 or 16).  <br />
+<br />
+Becuase a wave file needs a special header, the data is not written to the file UNTIL it is either destructed (~wavestream) or closed (wavestream::close()).  The header file require the total number of bits, and this can change as you write more and more data.  It saves the input data into a valid buffer, then dumps it out to the file...soooo if your data output is very large, this buffer can get large. If you have the desire to manipulate and write CD length (~700 Mb of data), then i could potentially use a 'temp' file type of creation...if this is desired, please let me know and i will write it up....<br />
+<br />
+If the input of output data is complex it will put (or write) the data as if it was a '2 channel' with the right channel as the real, and the left as the complex values.  In reading, the file may not be 2 channels, so only the reals may have any data.<br />
+<br />
+a matrix that is 2xN will be treated as 2 channels as well. A 2xN 'complex' matrix will not work....<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='Constructorswavestream'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+wavestream()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The emtpy constructor...does nothing.you need to use 'open' before anything can happen.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Constructorswavestream'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+wavestream(const char *fname, std::ios::openmode iom);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+fname --&gt; the filename<br />
+iom--&gt; the open mode<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The basic constructor.  If iom=std::ios::out, the stream is set up to write, if iom=std::ios::in, the stream is set up to read. <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave(&quot;moo.wav&quot;, std::ios::out);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element ExtractiongetBitsPerChannel'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+short int getBitsPerChannel() const;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the bits per channel in a file (either 8 or 16)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::in)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+cout&lt;&lt;mywave.getBitsPerChannel()&lt;&lt;endl;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractiongetBytesPerSecond'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+unsigned short getBytesPerSample() const;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the bytes per sample (8 or 16) in the wave file.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::in)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+cout&lt;&lt;mywave.getBytesPerSample()&lt;&lt;endl;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractiongetNumChannels'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+unsigned short getNumChannels() const;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the number of channels in a file.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::in)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+cout&lt;&lt;mywave.getNumChannels()&lt;&lt;endl;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractiongetNumSamples'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+unsigned long getNumSamples() const;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the number of samples in the file (basically the number of unique data words).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::in)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+cout&lt;&lt;mywave.getNumSamples()&lt;&lt;endl;<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractiongetNumSeconds'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+float getNumSeconds() const;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the length (in seconds) of the data file<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::in)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+cout&lt;&lt;mywave.getNumSeconds()&lt;&lt;endl;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractiongetSampleRate'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+unsigned long getSampleRate() const;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the sample rate of the wave file (usually 8 kHz, 11.025 kHz, 16 kHz, 22.05 kHz, 24 kHz, 32 kHz, and 44.1 kHz)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::in)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+cout&lt;&lt;mywave.getSampleRate()&lt;&lt;endl;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentssetBitsPerChannel'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setBitsPerChannel(unsigned short bits);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+bits --&gt; the number of bits (8 or 16) in a channel<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the number of bits per channel (8 or 16)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::out)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+mywave.setBitsPerChannel(16);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetBytesPerSample'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setBytesPerSample(unsigned short bytes);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+bytes--&gt; the bytes per channel (1 or 2) (8 bit, 16 bit)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the number of bytes per sample..1 or 2<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::out)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+<font color='#006600'>//a 16 bit output</font><br />
+mywave.setBytesPerSample(2);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetBytesPerSecond'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setBytesPerSecond(unsigned long bytes);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+bytes --&gt; a rate of bytes per second<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the number of bytes per second (for output)...this should be (SampleRate*bytesPerSample*numberChannels)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::out)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+<font color='#006600'>//valid for sampleRate=8000 and</font><br />
+<font color='#006600'>// bytesPerSample=2</font><br />
+<font color='#006600'>// numberChannels=1</font><br />
+mywave.setBytesPerSecond(16000);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetNumChannels'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setNumChannels(unsigned short num);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+num --&gt; the number of channels (1 or 2)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the number of Channels in the wave file (used in writing)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::out)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+mywave.setNumChannels(1);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetNumSamples'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setNumSamples(unsigned long num);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+num --&gt; the number of samples<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the number of samples.  You need not use this function to set this value, as, as you start writing it keeps tally of how many items you have put in the file.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::out)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+mywave.setNumSamples(16000);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetSampleRate'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setSampleRate(unsigned long rate);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rate --&gt; a valid sampling rate for a wave file.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the sampleing rate of the output file.<br />
+(8 kHz, 11.025 kHz, 16 kHz, 22.05 kHz, 24 kHz, 32 kHz, and 44.1 kHz)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::out)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+mywave.setSampleRate(8000);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOclose'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool close();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Closes the file handel.  If the iomode was std::ios::out, then this writes the Header and the data into a proper wave file. Returns true if all is good.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::out)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+Vector&lt;double&gt; moo(1500, 3);<br />
+mywave&lt;&lt;moo;<br />
+mywave.close();<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOopen'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool open(const char* name, std::ios::openmode);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+fname --&gt; the filename<br />
+iom--&gt; the open mode<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Open the stream.  It does the same thing as the constructor. If iom=std::ios::out, the stream is set up to write, if iom=std::ios::in, the stream is set up to read.  If all goes well, it returns 'true' else false.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::out)){<br />
+  std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOoperator<<'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+wavestream &operator&lt;&lt;(wavestream &oo, T out)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo --&gt; a wave stream<br />
+T --&gt; a data element or object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The same thing as 'write' except in operator form.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::out)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+<br />
+<font color='#006600'>//use the default</font><br />
+mywave.setupFormat();<br />
+<br />
+Vector&lt;double&gt; myDat;<br />
+mywave&lt;&lt;myDat&lt;&lt;1.3&lt;&lt;1.2;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOoperator>>'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+wavestream &operator&lt;&lt;(wavestream &oo, T &in)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo --&gt; a wave stream<br />
+in --&gt; a data element or object<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The same thing as 'read' except in operator form.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::in)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+<br />
+Vector&lt;double&gt; myDat;<br />
+mywave&gt;&gt;myDat;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool read(T &in);<br />
+bool read(T *in, int length);<br />
+bool read(Vector&lt;T&gt; &in);<br />
+bool read(_matrix&lt;T, FullMatrix&gt; &in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; a data element or object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads a data element..<br />
+<br />
+if the bits per channel=8, then T can only be<br />
+usigned char, char, float, double, complex&lt;float&gt;, and complex&lt;double&gt;<br />
+<br />
+if bits per channel=16 then T can only be<br />
+short, int, float, double, complex&lt;float&gt;, and complex&lt;double&gt;<br />
+<br />
+when reading complex values it will read single data into the REAL part, and if a 2 channel is present it will read it into the imaginary part<br />
+<br />
+when reading in pointer you need to allocate the memmory.<br />
+it will attempt to determin the proper size of the object based on the input type 'T' and the number of channels.<br />
+<br />
+if everything functioned properly it will return true<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::in)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+<br />
+Vector&lt;double&gt; myDat;<br />
+if(!mywave.read(myDat)){<br />
+ cerr&lt;&lt;&quot;error reading file...&quot;&lt;&lt;endl;<br />
+}<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOwrite'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool write(T &in);<br />
+bool write(T *in, int length);<br />
+bool write(Vector&lt;T&gt; &in);<br />
+bool write(_matrix&lt;T, FullMatrix&gt; &in);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; a data element or object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads a data element..<br />
+<br />
+if the bits per channel=8, then T can only be<br />
+usigned char, char, float, double, complex&lt;float&gt;, and complex&lt;double&gt;<br />
+<br />
+if bits per channel=16 then T can only be<br />
+short, int, float, double, complex&lt;float&gt;, and complex&lt;double&gt;<br />
+<br />
+when writing complex values it will change the number of channels to '2'.<br />
+<br />
+if everything functioned properly it will return true.<br />
+<br />
+if the matrix is 2xN it will change the number of channels to '2'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::out)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+<br />
+<font color='#006600'>//use the default</font><br />
+mywave.setupFormat();<br />
+<br />
+Vector&lt;double&gt; myDat;<br />
+if(!mywave.write(myDat)){<br />
+cerr&lt;&lt;&quot;error writing data...&quot;&lt;&lt;endl;<br />
+}<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functions=='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool operator == (const wavestream &lhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+IT DOES NOT COMPARE THE DATA!!!!<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+lhs --&gt; another wavestream.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Compares 2 wave files and sees if the formatting matches on both. IT DOES NOT COMPARE the DATA!!!!<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+wavestream mywave2;<br />
+<font color='#006600'>//this is true;</font><br />
+mywave==mywave2;<br />
+mywave.setNumChannels(2);<br />
+<br />
+<font color='#006600'>//this is false</font><br />
+mywave==mywave2;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionscopyFormat'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void copyFormat(const wavestream& other);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+other--&gt; another wavestream<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Copies the format in one wavestream into another one.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::out)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+<br />
+wavestream myw2;<br />
+myw2.copyFormat(mywave);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsprint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void print(ostream &out);<br />
+ostream &opeartor&lt;&lt;(ostream &out, wavestream &oo);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; a ostream to print out on<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Prints out all the info we have on the wave file (samples, bits, etc)<br />
+<br />
+like<br />
+<br />
+Format:           1 (PCM)<br />
+Channels:         1<br />
+Sample rate:      11025<br />
+Bytes per second: 22050<br />
+Bytes per sample: 2<br />
+Bits per channel: 16<br />
+Bytes:            11836<br />
+Samples:          5918<br />
+Seconds:          0.53678<br />
+File pointer:     good<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+if(!mywave.open(&quot;moo.wav&quot;, std::ios::out)){<br />
+std::cerr&lt;&lt;&quot;cannot open file...&quot;&lt;&lt;std::endl;<br />
+}<br />
+<br />
+<font color='#006600'>//use the default</font><br />
+mywave.setupFormat();<br />
+<br />
+cout&lt;&lt;mywave&lt;&lt;endl;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionssetupFormat'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setupFormat(int sampleRate = 44100, short bitsPerChannel = 16, short channels = 1);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+sampleRate--&gt; the sampling rate (default 44100)<br />
+bitsPerChannel --&gt; the bit per channel (8 or 16)<br />
+channels--&gt; the number of channels (1 or 2)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets up the basic format parameters given a sampling Rate (default=44100), the bits perchannel (default=1) and the number of channels (defaul=1). To write a valid wave file.<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+wavestream mywave;<br />
+mywave.setupFormat(8000); <br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

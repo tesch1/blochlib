@@ -1,0 +1,126 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+simple get/put example<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Shows how to use the basic MPI functions for getting and putting<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+to compile, do this (assuming you have done a 'make install')::<br />
+<br />
+blcc -mpi test.cc -o test<br />
+<br />
+<br />
+to run, do this::<br />
+<br />
+mpirun -np 2 ./test<br />
+<br />
+<br />
+expected output would be<br />
+<br />
+waugh.cchem.berkeley.edu rank: 0 num procs: 2<br />
+rank: 0 [ 1 4 9 16 ] <br />
+After put/get--rank: 0 [ 1 4 9 16 ]<br />
+waugh.cchem.berkeley.edu rank: 1 num procs: 2<br />
+rank: 1 [ 1 2 3 4 ] <br />
+After put/get--rank: 1 [ 1 4 9 16 ] <br />
+After scatter--rank: 0 [ 9 36 81 144 ]<br />
+After scatter--rank: 1 [ 9 36 81 144 ]<br />
+<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+int&nbsp;main(int&nbsp;argv,&nbsp;char&nbsp;**argc){<br />
+&nbsp;&nbsp;MPIworld.start(argv,&nbsp;argc);&nbsp;<font color='#006600'>//start&nbsp;up&nbsp;MPI&nbsp;subsystem</font><br />
+<br />
+<font color='#006600'>//print&nbsp;out&nbsp;some&nbsp;info....</font><br />
+&nbsp;&nbsp;std::cout&lt;&lt;MPIworld.name()&lt;&lt;&quot;&nbsp;rank:&nbsp;&quot;&lt;&lt;MPIworld.rank()&lt;&lt;&quot;&nbsp;num&nbsp;procs:&nbsp;&quot;&lt;&lt;MPIworld.size()&lt;&lt;std::endl;<br />
+<font color='#006600'>//create&nbsp;some&nbsp;vector&nbsp;to&nbsp;shuv&nbsp;around</font><br />
+&nbsp;&nbsp;Vector&lt;double&gt;&nbsp;tmD(Spread&lt;double&gt;(1.0,4.0,1.0));<br />
+&nbsp;&nbsp;Range&nbsp;All(Range::Start,&nbsp;Range::End);<br />
+&nbsp;&nbsp;if(MPIworld.master())&nbsp;tmD(All)=tmD(All)*tmD(All);<br />
+&nbsp;&nbsp;std::cout&lt;&lt;&quot;rank:&nbsp;&quot;&lt;&lt;MPIworld.rank()&lt;&lt;&quot;&nbsp;[&nbsp;&quot;&lt;&lt;tmD&lt;&lt;&quot;]&nbsp;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;if(MPIworld.master()){<br />
+<font color='#006600'>//put&nbsp;the&nbsp;manipulated&nbsp;vector&nbsp;to&nbsp;the&nbsp;other&nbsp;procs</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;i=1;i&lt;MPIworld.size();++i)&nbsp;MPIworld.put(tmD,&nbsp;i);&nbsp;<br />
+&nbsp;&nbsp;}else{<br />
+<font color='#006600'>//get&nbsp;the&nbsp;vector&nbsp;from&nbsp;proc&nbsp;0</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;MPIworld.get(tmD,0);&nbsp;<br />
+&nbsp;&nbsp;}&nbsp;<br />
+&nbsp;&nbsp;std::cout&lt;&lt;&quot;After&nbsp;put/get--rank:&nbsp;&quot;&lt;&lt;MPIworld.rank()&lt;&lt;&quot;&nbsp;[&nbsp;&quot;&lt;&lt;tmD&lt;&lt;&quot;]&quot;&lt;&lt;std::endl;<br />
+<br />
+<font color='#006600'>//&nbsp;Or&nbsp;use&nbsp;the&nbsp;'scatter'&nbsp;to&nbsp;distribute&nbsp;the&nbsp;new&nbsp;value</font><br />
+&nbsp;&nbsp;if(MPIworld.master())&nbsp;tmD*=9;<br />
+&nbsp;&nbsp;MPIworld.scatter(tmD);&nbsp;<br />
+&nbsp;&nbsp;std::cout&lt;&lt;&quot;After&nbsp;scatter--rank:&nbsp;&quot;&lt;&lt;MPIworld.rank()&lt;&lt;&quot;&nbsp;[&nbsp;&quot;&lt;&lt;tmD&lt;&lt;&quot;]&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;<br />
+<font color='#006600'>//end&nbsp;this&nbsp;very&nbsp;boring&nbsp;mpi&nbsp;session</font><br />
+&nbsp;&nbsp;MPIworld.end();&nbsp;<br />
+&nbsp;&nbsp;return&nbsp;0;<br />
+}<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

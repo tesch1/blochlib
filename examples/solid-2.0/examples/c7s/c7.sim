@@ -1,0 +1,66 @@
+#performs a point-to-point C7 (a 1D FID)
+spins{	
+#the global options
+	numspin 2
+	T 13C 0
+	T 13C 1
+	#T 1H 2
+#	C	-2000	750	0.1	0	10	-50	10
+#	C	-1000	500 0.2 1	80	20	-30
+#	C	0	1000	0.7 2	-80	120	-40
+#	C	1000	750	0.4	3	10	50	-30
+#	C	2000	750	0.4	4	60	-40	-90
+	D -2000 0 1	
+}
+
+parameters{	
+	powder{
+		aveType zcw
+		thetaStep 233
+		phiStep 144
+	}		
+#the intergrator step size	
+	maxtstep=1e-6
+#number of 1D fid points	
+	npts1D=256	
+	roeq= Iz_0+Iz_1	
+	detect=Iz_0	
+}
+
+pulses{
+#show()	
+#set the spinning	
+	wr=5000
+	rotor=rad2deg*acos(1/sqrt(3))
+#our post-C7 sub pulse section
+	amp=7*wr
+	sw=wr/4
+#phse stepers
+	stph=0
+	phst=360/7
+#pulse times
+	t90=1/amp/4
+	t270=3/amp/4
+	t360=1/amp
+	t180=1/amp/2
+	
+	sub1{	
+		amplitude(amp)
+		loop(oo=0:6)
+			13C:pulse(2*t360, stph) 
+			stph = stph +phst
+		end
+	}	
+
+	
+#a single fid is concidered point to point
+	ptop()
+#can use 'reuse' as things parameters 
+# are set once in our subsection
+	reuse(sub1)		
+
+	fid()
+	savefidtext(simpC7) #save tas a text file
+}
+
+	

@@ -1,0 +1,623 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("60menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("60menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("60menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("60title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("60");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Bloch_T, class ODEs_T=bs&lt;Bloch_T, coord&lt;&gt;, Vector&lt;coord&lt;&gt; &gt; &gt;<br />
+class BlochSolver{ ....<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This class adds a nice interface between the ODE solver and user, specifically for the NMR type experiment.  It, by default, uses the 'bs' ODE integrator (the best one for the job in most any NMR case).  It allows the user a variety of data collection, display, and data output possibilities from the data generated from the ODE solver.  <br />
+<br />
+Its main focus is as a memory saver.  If one was to simulate 1000 spins over 1024 data points and save the entire data chunk in memory, not only would performance be affected, but the memory requirements for 3000*1024 doubles is quite large.  So it provides a seemless way to continously dump data to a file without holding it in memory.  It also provides simple 'detection' methods for collection of the magnetization and an 'FID' for the desired spins in the entire list.  It can also save a bit of initialization of the ODE step size determiniation by carring the ODE object around.  Finally the progress of the integrator can be displayed to the console (or not displayed) with a simple 'switch.' <br />
+<br />
+The main interface provides  methods for setting initial conditions and simple 'policy' settings for data collection and ouput.<br />
+<br />
+For context usage see the examples in 'DemagField', 'DipoleDipole', 'Relax', 'BulkSus', and 'RadDamp'<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsBlochSolver'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BlochSolver&lt;Bloch_T&gt;()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The empty contructor.  Sets the default policies the Bloch pointer is NULL and the intial condition is empty.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef Bloch&lt;Parameter_T, Pulse_T, Interactions_T&gt; mybloch;<br />
+<br />
+BlochSolver&lt;mybloch&gt; emptybs;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsBlochSolver'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BlochSolver&lt;Bloch_T&gt;(Bloch_T &bloch, const Vector&lt;coord&lt;&gt; &gt; & initC);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+bloch --&gt; A Bloch object (the main function)<br />
+initC --&gt; the initial condition<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The basic constructor.  Sets the Bloch_T pointer to the input (NOTE: if the Bloch_T object is destroyed before the BlochSolver, and the Solver is used, the program will likely crash).  The Initial Condition to the solver is also set to initC.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef Bloch&lt;Parameter_T, Pulse_T, Interactions_T&gt; mybloch;<br />
+mybloch bloch(pars, pulse, inters);<br />
+<br />
+BlochSolver&lt;mybloch&gt; bsolver(bloch, bloch.currentMag());<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element ExtractionFID'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;complex&gt; FID();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the FID calculated fom the solver.  It returns a non-empty vector when the collection policy is SolverOps::FID,SolverOps::MagAndFID, or SolverOps::All.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setWritePolicy(SolverOps::Continous);<br />
+<br />
+bsolver.setDetect(&quot;1H&quot;);<br />
+<br />
+<font color='#006600'>//solver things...</font><br />
+<br />
+Vector&lt;complex&gt; fdi=bsolver.FID();<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionlastPoint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;coord&lt;&gt; &gt; lastPoint();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Retrieves the last integrated point performed by the solver. It iwll caontain both the Mangetization points and the Variational data (ifthe Variational points were desired)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setWritePolicy(SolverOps::Continous);<br />
+<br />
+std::string trajName=&quot;traj.out&quot;;<br />
+<font color='#006600'>//the initall opeing of the file</font><br />
+bsolver.setRawOut(trajName);<br />
+<br />
+<font color='#006600'>//solve things</font><br />
+<br />
+<font color='#006600'>//set up a new solver using the last point </font><br />
+<font color='#006600'>//of the previous integration as the </font><br />
+<font color='#006600'>//starting point for this one</font><br />
+BlochSolver&lt;AntoherBloch&gt; bsolver2(mybloch2, bsolver.lastPoint());<br />
+<br />
+<font color='#006600'>//dump all the data</font><br />
+bsolver2.setWritePolicy(SolverOps::Continous);<br />
+<br />
+<font color='#006600'>//wish to appen the new data</font><br />
+<font color='#006600'>// to the end of the same file</font><br />
+bsolver.setRawOut(trajName, std::ios::app|std::ios::out);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractionM'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;coord&lt;&gt; &gt; M();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the magnetization vector.  It will return a non-empty vector when the collection policy is non-empty vector when the collection policy is SolverOps::Magnetization, SolverOps::MagAndFID, or SolverOps::All.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setWritePolicy(SolverOps::Continous);<br />
+<br />
+bsolver.setDetect(&quot;1H&quot;);<br />
+<br />
+<font color='#006600'>//solve things...</font><br />
+<br />
+Vector&lt;coord&lt;&gt; &gt; mag=bsolver.M();<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentssetBloch'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setBloch(Bloch&lt;...&gt; &inb);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+inb--&gt; a Bloch object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets a new Bloch function object.  It must be of the same type as the template argument. BlochSolver maintains a Pointer to this object, so if the Bloch object is destroyed before the Solver, most likely the program will crash of teh Solver object is used.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setWritePolicy(SolverOps::Continous);<br />
+<br />
+std:;string trajName=&quot;traj.out&quot;;<br />
+<font color='#006600'>//the initall opeing of the file</font><br />
+bsolver.setRawOut(trajName);<br />
+<br />
+<font color='#006600'>//solve things</font><br />
+<br />
+<font color='#006600'>//set up a new solver using the last point </font><br />
+<font color='#006600'>//of the previous integration as the </font><br />
+<font color='#006600'>//starting point for this one</font><br />
+BlochSolver&lt;AntoherBloch&gt; bsolver2;<br />
+bsolver2.setBloch(bloch2);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetCollectionPolicy'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setCollectionPolicy(SolverOps::collection colpol);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+colpol --&gt; a SolverOps colltion policy (All,Magnetization, MagAndFID, FIDonly, FinalPoint)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the data collection policy for each time integrated step. The available policies are...<br />
+<br />
+SolverOps::All --&gt; collect ALL the data (NOTE:: this can be quite memory intensize and thus slow the program down, i do not recommend using this, instead use the WritePolicy, SolverOps::Continous to dump the trajectories as you go (takes no memory to do this)).<br />
+<br />
+SolverOps::Magnetization --&gt; collect only the TOTAL magnetization for the spins you wish to detect (see 'setDetect').  This is Vector&lt;coord&lt;&gt; &gt; object that store Mx, My, Mz as a function of time.<br />
+<br />
+SolverOps::MagAndFID --&gt; will collect both the TOTAL magnetization and the TOTAL FID (simply Mx + i My) for the detected spins (see 'setDetect').<br />
+<br />
+SolverOps::FIDonly--&gt; will collet only the TOTAL FID (Mx + i My) for the detected spins (see 'setDetect').<br />
+<br />
+SolverOps::FinalPoint --&gt; store ONLY the finall integrated <br />
+point from the solver.  This usfull for things like 90 pulses when you will simply pass this last point to the next integrator.<br />
+<br />
+<br />
+the default is SolverOps::MagAndFID.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//define the Bloch object...</font><br />
+<br />
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setCollectionPolicy(SolverOps::MagAndFID);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetDetect'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setDetect(std::string spinLabel);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+spinLabel --&gt; a spin isotope label (like &quot;1H&quot;, &quot;13C&quot;, etc).<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the isotope to 'detect.'  It is used for collection of the FID and Magnetization.  If it is not set, then all spins will be detected if the collection policy is set to SolverOps::MagAndFID,SolverOps::Magnetization, SolverOps::FID, or SolverOps::All.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setWritePolicy(SolverOps::Continous);<br />
+<br />
+bsolver.setDetect(&quot;1H&quot;);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetDetect'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setDetect(const Vector&lt;int&gt; &list);<br />
+void setDetect(const Range &list);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+list --&gt; a list of integers speficying which spins in the parameter list should be detected.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the spins that will be detected from the indexes stored in the input list. It is used for collection of the FID and Magnetization. If it is not set, then all spins will be detected if the collection policy is set to SolverOps::MagAndFID,SolverOps::Magnetization, SolverOps::FID, or SolverOps::All.<br />
+<br />
+When use the Range object ...DO NOT use Range::Start and Range::End as the end nor start is specified anywhere.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setCollectionPolict(SolverOps::FID);<br />
+<br />
+<font color='#006600'>//collect every other spin</font><br />
+Vector&lt;int&gt; list(mypars.size());<br />
+list=Range(0, 10, Range::End);<br />
+bsolver.setDetect(list);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetInitialCondition'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setInitialCondition(const Vector&lt;coord&lt;&gt; &gt; &InitialCon)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+InitialCon --&gt; the new initial condition<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the initial condition for the solver. It DOES NOT overwrite the initial condition set in the Bloch object.  The two are separated from each other. It should be os the same length as the number of spins.  If the Variational equations are desired then it should be of length 4*num-of-spins.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setWritePolicy(SolverOps::Continous);<br />
+<br />
+std:;string trajName=&quot;traj.out&quot;;<br />
+<font color='#006600'>//the initall opeing of the file</font><br />
+bsolver.setRawOut(trajName);<br />
+<br />
+<font color='#006600'>//solve things</font><br />
+<br />
+<font color='#006600'>//set up a new solver using the last point </font><br />
+<font color='#006600'>//of the previous integration as the </font><br />
+<font color='#006600'>//starting point for this one</font><br />
+BlochSolver&lt;AntoherBloch&gt; bsolver2;<br />
+bsolver2.setBloch(bloch2);<br />
+bsolver2.setInitialCondition(bsolver.lastPoint());<br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetLyapunovPolicy'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setLyapunovPolicy(SolverOps::lyapunovcalc lypol);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+lypol --&gt; a SolverOps lyp policy (SolverOps::LypNoCalc, SolverOps::LypHold, or SolverOps::LypContinous)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the collection and calulation of Lyapunov exponent calculation and data collection.  You must set the 'calcVariational()' in you Bloch in order for these to work.  If you turn on the policy without setting the Variational data set it will AUTOMATICALLY call 'calcVariational()' in the Bloch object as well as issuing a warning. The available policies are<br />
+<br />
+SolverOps::LypNoCalc --&gt; do not calcualte them or store anything at all<br />
+<br />
+SolverOps::LypContinous --&gt; Calculate them, but as soon as they are calculated dump them to a file.  This is recommended as for each spin there will be 3 exponents (one for Mx, My, and My) thus the data storage for these can be enormous for large spin sets. If you use this one, you should also set the output file name with 'setLypDataFile()' otherwise it will dump the exponenets to a file named 'Lyapunov.out'.<br />
+<br />
+SolverOps::LypHold --&gt; Calculate them, and store them. This is NOT recommended becuase the memmory requirements for them can be huge.<br />
+<br />
+the default is SolverOps::LypNoCalc.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//define the Bloch object...</font><br />
+<br />
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setWritePolicy(SolverOps::Continous);<br />
+<br />
+mybloch.calcVariational();<br />
+bsolver.setLyapunovPolicy(SolverOps::LypContinous);<br />
+bsolver.setLypDataFile(&quot;mylyps&quot;);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetProgressBar'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setProgressBar(SolverOps::progress progpol);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+progpol --&gt; the Solver Ops progress policy (On or Off)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This sets weather or not to display the progress bar to the console.  It is simply a little visual aid to show you where in the integration the solver is...for 'fast' integrations (like 1-2 spins) the progress bar can acctually hurt performance (i.e. it takes almost as much processor to display the rapidly updating bar as it does to do the integration)...also if you plan on 'backgrounding' the program, it is advisable to turn it off as it is useless and can potentially interfear with your terminal.<br />
+<br />
+The available options are..<br />
+<br />
+SolverOps::On --&gt; turn on the progress bar<br />
+SolverOps::Off --&gt; turn off the progress bar<br />
+<br />
+default is SolverOps::On<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//define the Bloch object...</font><br />
+<br />
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setProgressBar(SolverOps::Off);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetRawOut'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setRawOut(std::string inname, std::ios::openmode iosf=std::ios::out);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+innname --&gt; the output filename<br />
+iosf --&gt; the open mode for the file (should be ios::out or std::ios::app|std::ios::out)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the raw data ouput file.  This file is used IF the Write policy is 'SolverOps::Continous'.  If you desire to collect tragectories between different BLochSolver objects, then set the openmode to 'std::ios::app|std::ios::out' to append the new data to the end of the file.  The first call to this function, however, should simply be 'ios::out' as one probably wishes to write over the old data.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setWritePolicy(SolverOps::Continous);<br />
+<br />
+std:;string trajName=&quot;traj.out&quot;;<br />
+<font color='#006600'>//the initall opeing of the file</font><br />
+bsolver.setRawOut(trajName);<br />
+<br />
+<font color='#006600'>//solve things</font><br />
+<br />
+<font color='#006600'>//set up a new solver using the last point </font><br />
+<font color='#006600'>//of the previous integration as the </font><br />
+<font color='#006600'>//starting point for this one</font><br />
+BlochSolver&lt;AntoherBloch&gt; bsolver2(mybloch2, bsolver.lastPoint());<br />
+<br />
+<font color='#006600'>//dump all the data</font><br />
+bsolver2.setWritePolicy(SolverOps::Continous);<br />
+<br />
+<font color='#006600'>//wish to appen the new data</font><br />
+<font color='#006600'>// to the end of the same file</font><br />
+bsolver.setRawOut(trajName, std::ios::app|std::ios::out);<br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetWritePolicy'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setWritePolicy(SolverOps::writePol wpol);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+wpol --&gt; A SolverOps flag (SolverOps::Hold, SolverOps::Continous )<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This allows you to set simple data writing polices as the solver integrates.  The allowed 'writePol' are<br />
+<br />
+SolverOps::Hold --&gt; write nothing<br />
+<br />
+SolverOps::Continous --&gt; write the tragecjtories as each time step is encountered in the ODE solver (allows one to see the data before the integrator is finished).  It dumps out ALL the tragectory data except the Variational elements.<br />
+<br />
+The default is SolverOps::Hold<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//define the Bloch object...</font><br />
+<br />
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setWritePolicy(SolverOps::Continous);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionssolve'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool solve(TimeTrain&lt;TimerEng&gt; &therun);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+therun --&gt; a time train specifiying the colection points, times, and substeps...<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The master solver.  It returns true if everything was solved happily, and false if it failed.  It performs the integration, Lypunov calculations (if desired), and the various data ouputting (if desired).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochSolver&lt;MyBloch&gt; bsolver(mybloch);<br />
+bsolver.setWritePolicy(SolverOps::Continous);<br />
+bsolve.setCollectionPolicy(SolverOps::MagAndFID);<br />
+<br />
+std:;string trajName=&quot;traj.out&quot;;<br />
+<font color='#006600'>//the initall opeing of the file</font><br />
+bsolver.setRawOut(trajName);<br />
+<br />
+<font color='#006600'>//a time train</font><br />
+TimeTrain&lt;UniformTimeEngine&gt; myT(0, 2.0, 1024,1);<br />
+<br />
+<font color='#006600'>//solve it</font><br />
+bsolver.solve(myT);<br />
+<br />
+<font color='#006600'>//dump the data to the console</font><br />
+bsolve.FID().print(cout, &quot;
+&quot;);<br />
+<br />
+bsolv<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

@@ -1,0 +1,484 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("25menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("25menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("25menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("25title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("25");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class GridEngine_t&gt;<br />
+class GradientGrid : <br />
+     public GridEngine_t<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<ul>
+<li>This is the class used for in BOTH the ListBochParams' 
+AND 'Offset<...>' classes to create a valid Gradient across 
+a physical sample sample. </li>
+<li><B>GridEngine_t</B>--> The is the 
+basic Grid and provides the (x,y,z) to the gradients...Everything 
+you can do with a Grid you can do with this class (including the 
+iterators)...however, there are extra functions for the Gradient 
+parts..This can be either the 'XYZshape<...>' 
+classes or the Grid<...>' classes.</li>
+<li><b>NOTE</b>:: this class by itself does little except act like 
+a 'Grid' it is used primarily for the ListBlochParams and the 
+interaction 'Offset'</li>
+</ul></blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+<li > <B>NOTE</B>::This is a HIGH FIELD Gradient, meaning the only part of the Gradient Tensor that matters is the Diagonal, and all the gradients contribute to an offset along the Bo direction.</li>
+<li><b>NOTE</b>:: units for the Gradient stengths are assumed to be Gauss/cm</li>
+<li > <B>NOTE</B>:: this Gradient is only valid for 
+a BlochParameter or ListBlochParameter with Offset_T=double (the coord<> is in the works)</li>
+<li > <B>NOTE</B>:: All the functions available to GridEngine_t are also available for this class</li>
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsGradientGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+GradientGrid(const GradientGrid &dup):<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+dup--&gt; the old GradientGrid to copy<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Copy constructor.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//create a cube from (-1,-1,-1)..(1,1,1) with 10 steps </font><br />
+<font color='#006600'>// on all sides</font><br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo(-1, 1, 10); <br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; loo(moo);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsGradientGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+GradientGrid(double min, double max, int dims):<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+min--&gt; min x,y,z value for the grid<br />
+max--&gt; max x,y,z value for the grid<br />
+dim--&gt; number of dimensions for the grid<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Initializes the GridEngine_t using the min, max, and dims.  Sets the Gradient strength along all 3 directions to 0.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//create a cube from (-1,-1,-1)..(1,1,1) with 10 steps </font><br />
+<font color='#006600'>// on all sides</font><br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo(-1, 1, 10); <br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsGradientGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+GradientGrid(GridEngine_t &grid):<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+grid--&gt; a grid<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a Gradient Grid from an already initialized GridEngine.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//create a cube from (-1,-1,-1)..(1,1,1) with 10 steps </font><br />
+<font color='#006600'>// on all sides</font><br />
+XYZshape&lt;&gt; shape(-1,1,10);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo(shape); <br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element ExtractionG'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; &G();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the Gradient 3-vector. Can also be used for assignment.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;&gt; shape(-1,1,10);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo(shape); <br />
+moo.G()=coord&lt;&gt;(5,6,0); <font color='#006600'>//set the Gradient</font><br />
+coord&lt;&gt; myG=moo.G(); <font color='#006600'>//get the gradient</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+GridEngine_t *Grid();<br />
+const GridEngine_t *Grid() const;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Obtains the pointer to the GridEngine_t inside the GradientGrid. <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;&gt; shape(-1,1,10);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo(shape); <br />
+XYZshape&lt;&gt; *gptr=moo.Grid();<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractionGx, Gy, Gz'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double Gx();<br />
+double Gy();<br />
+double Gz();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the Gradient Stength along the (x,y,z) direction in Gauss/cm.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;&gt; shape(-1,1,10);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo(shape); <br />
+moo.Gx(5); <font color='#006600'>//set the gradient along x</font><br />
+double gx=moo.Gx();<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionoffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double offset(int i);<br />
+double offset(int i, double t);<br />
+<br />
+double offset(); --&gt; FOR ITERATORS<br />
+double offset(double t); --&gt; FOR ITERATORS<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the grid point index<br />
+t--&gt; a time<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the total offsets along each three directions using<br />
+<br />
+offset=r(x,y,z) .dot. G(x,y,z).<br />
+<br />
+If r=r(t) (the grid is time dependant) use the overaloaded function for include time. <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;&gt; shape(-1,1,10);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo(shape); <br />
+double offs=moo.offset(5);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt;::iterator iter(moo);<br />
+offs=iter.offset();<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractionXoffset,Yoffset, Zoffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double Xoffset(int i); <br />
+double Yoffset(int i);<br />
+double Zoffset(int i);<br />
+<br />
+double Xoffset(int i, double t); <br />
+double Yoffset(int i, double t);<br />
+double Zoffset(int i, double t);<br />
+<br />
+double Xoffset(); --&gt; FOR ITERATORS<br />
+double Yoffset(); --&gt; FOR ITERATORS<br />
+double Zoffset(); --&gt; FOR ITERATORS<br />
+<br />
+double Xoffset(double t); --&gt; FOR ITERATORS<br />
+double Yoffset(double t); --&gt; FOR ITERATORS<br />
+double Zoffset(double t); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the grid point index<br />
+t--&gt; a time<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the (x,y,z) offset FROM THE GRADIENT (i.e. x*Gx, y*Gy, z*Gz) not from a spins offset. If the GridEngine_t is time dependant (i.e. r=r(t)) then use the overload function.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;&gt; shape(-1,1,10);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo(shape); <br />
+moo.Xoffset(5);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt;::iterator iter(moo);<br />
+iter.Xoffset();<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentsG'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void G(coord&lt;&gt; &inG);<br />
+void G(double Gx, double Gy, double Gz);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+inG--&gt; a 3-vector coord<br />
+Gx, Gy, Gz--&gt; the gradient along all three directions<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Set the Gradient 3 vector in Gauss/cm.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;&gt; shape(-1,1,10);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo(shape); <br />
+moo.G(coord&lt;&gt;(5,5,5));<br />
+moo.G(5,5,5); <font color='#006600'>//the same thing as above</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentsGx, Gy, Gz'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Gx(double inG);<br />
+void Gy(double inG);<br />
+void Gz(double inG);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+inG--&gt; a double in Guass/cm<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns the Gradient along all three directions.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;&gt; shape(-1,1,10);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo(shape); <br />
+moo.Gx(5); <font color='#006600'>//set the gradient along x</font><br />
+double gx=moo.Gx();<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setGrid(GridEngine_t &in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a grid<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Set the GridEngine_t to a new one.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;&gt; shape(-1,1,10);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo; <br />
+moo.setGrid(shape);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void operator=(const GradientGrid &rhs)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; another GradientGrid<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns a GradientGrid from another.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;&gt; shape(-1,1,10);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo(shape); <br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; loo;<br />
+loo=moo;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionssize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int size() <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Obtains the size of the grid.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;&gt; shape(-1,1,10);<br />
+GradientGrid&lt;XYZshape&lt;&gt; &gt; moo(shape); <br />
+int ss=moo.size();<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

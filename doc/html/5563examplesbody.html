@@ -1,0 +1,163 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+A SpinSight--&gt;Matlab--&gt;Text converter<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Simply converts a SpinSight data file into a Matlab or Text file</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+<br />
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<font color='#006600'>//the&nbsp;required&nbsp;2&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<font color='#006600'>//&nbsp;Converts&nbsp;binary&nbsp;SpinSight&nbsp;NMR&nbsp;data&nbsp;(BIG&nbsp;ENDIAN)</font><br />
+<font color='#006600'>//&nbsp;to&nbsp;a&nbsp;matlab&nbsp;file&nbsp;for&nbsp;a&nbsp;1D&nbsp;spectrum</font><br />
+<br />
+<br />
+int&nbsp;main(int&nbsp;argc,&nbsp;char&nbsp;**argv)<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;q=1;<br />
+&nbsp;&nbsp;std::string&nbsp;fname=&quot;&quot;,&nbsp;matname;<br />
+&nbsp;&nbsp;std::cout&lt;&lt;std::endl&lt;&lt;&quot;**BlochLib&nbsp;SpinSight&nbsp;(Chemmagnetics)&nbsp;'directory'&nbsp;--&gt;&nbsp;Matlab&nbsp;converter&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;query_parameter(argc,&nbsp;argv,&nbsp;q++,&nbsp;&quot;&nbsp;&nbsp;--Enter&nbsp;SpinSight&nbsp;Data&nbsp;Directory:&nbsp;&quot;,&nbsp;fname);<br />
+&nbsp;&nbsp;query_parameter(argc,&nbsp;argv,&nbsp;q++,&nbsp;&quot;&nbsp;&nbsp;--Enter&nbsp;Output&nbsp;File&nbsp;Name:&nbsp;&quot;,&nbsp;matname);<br />
+&nbsp;&nbsp;int&nbsp;txt=0;<br />
+&nbsp;&nbsp;query_parameter(argc,&nbsp;argv,&nbsp;q++,&nbsp;&quot;&nbsp;&nbsp;--Text[0]&nbsp;or&nbsp;Matlab[1]&nbsp;&quot;,&nbsp;txt);<br />
+<br />
+<br />
+&nbsp;&nbsp;SpinSightStream&nbsp;loadF(fname);<br />
+&nbsp;&nbsp;double&nbsp;sw,dw;<br />
+&nbsp;&nbsp;int&nbsp;TD,&nbsp;TD2;<br />
+&nbsp;&nbsp;std::string&nbsp;nnuu;<br />
+<br />
+<br />
+&nbsp;&nbsp;loadF.acq1D.get(&quot;al&quot;,&nbsp;TD);<br />
+&nbsp;&nbsp;cout&lt;&lt;&quot;&nbsp;&nbsp;*points&nbsp;in&nbsp;1D:&nbsp;&quot;&lt;&lt;TD&lt;&lt;endl;<br />
+<br />
+&nbsp;&nbsp;loadF.acq1D.get(&quot;dw&quot;,&nbsp;dw);<br />
+&nbsp;&nbsp;sw=1.0/dw;<br />
+&nbsp;&nbsp;cout&lt;&lt;&quot;&nbsp;&nbsp;*Sweep&nbsp;width&nbsp;in&nbsp;1D:&nbsp;&quot;&lt;&lt;sw&lt;&lt;&quot;Hz&quot;&lt;&lt;endl;<br />
+<br />
+&nbsp;&nbsp;if(loadF.is2D()){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;loadF.acq2D.get(&quot;al2&quot;,&nbsp;TD2);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;&quot;&nbsp;&nbsp;*points&nbsp;in&nbsp;2D:&nbsp;&quot;&lt;&lt;TD2&lt;&lt;endl;<br />
+&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;std::string&nbsp;vname=matname;<br />
+&nbsp;&nbsp;matstream&nbsp;mm;<br />
+<br />
+&nbsp;&nbsp;if(txt==1){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(matname.find(&quot;.mat&quot;)&gt;matname.size()){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matname+=&quot;.mat&quot;;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vname=matname.substr(0,&nbsp;matname.find(&quot;.mat&quot;));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;mm.open(matname,&nbsp;ios::out&nbsp;|&nbsp;ios::binary);<br />
+&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;matrix&nbsp;fid2d;<br />
+&nbsp;&nbsp;Vector&lt;complex&gt;&nbsp;fid;<br />
+&nbsp;&nbsp;if(!loadF.is2D()){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;loadF.read(fid);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(txt==1){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mm.put(vname,&nbsp;fid);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mm.put(&quot;sw1&quot;,&nbsp;sw);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cout&lt;&lt;&quot;&nbsp;&nbsp;*Data&nbsp;Saved&nbsp;in&nbsp;'&quot;&lt;&lt;matname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;&quot;'&nbsp;under&nbsp;the&nbsp;variable&nbsp;'&quot;&lt;&lt;vname&lt;&lt;&quot;'&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cout&lt;&lt;&quot;&nbsp;&nbsp;*The&nbsp;Sweep&nbsp;Width&nbsp;information&nbsp;is&nbsp;also&nbsp;stored&nbsp;as&nbsp;variables&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;&quot;
+&nbsp;&nbsp;&nbsp;'sw1'&nbsp;for&nbsp;1D&nbsp;info&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::ofstream&nbsp;of(matname.c_str());<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;i=0;i&lt;fid.size();++i){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of&lt;&lt;fid[i].Re()&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;fid[i].Im()&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cout&lt;&lt;&quot;&nbsp;&nbsp;*Data&nbsp;Saved&nbsp;in&nbsp;'&quot;&lt;&lt;matname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;&quot;'&nbsp;(in&nbsp;cols&nbsp;&lt;real&gt;&nbsp;&lt;imag&gt;)&nbsp;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;loadF.read(fid2d);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(txt==1){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mm.put(vname,&nbsp;fid2d);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mm.put(&quot;sw1&quot;,&nbsp;sw);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cout&lt;&lt;&quot;&nbsp;&nbsp;*Data&nbsp;Saved&nbsp;in&nbsp;'&quot;&lt;&lt;matname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;&quot;'&nbsp;under&nbsp;the&nbsp;variable&nbsp;'&quot;&lt;&lt;vname&lt;&lt;&quot;'&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cout&lt;&lt;&quot;&nbsp;&nbsp;*The&nbsp;Sweep&nbsp;Width&nbsp;information&nbsp;is&nbsp;also&nbsp;stored&nbsp;as&nbsp;variables&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;&quot;
+&nbsp;&nbsp;&nbsp;'sw1'&nbsp;for&nbsp;1D&nbsp;info&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;&quot;
+&nbsp;&nbsp;&nbsp;'sw2'&nbsp;is&nbsp;NOT&nbsp;known&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::ofstream&nbsp;of(matname.c_str());<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;i=0;i&lt;fid.size();++i){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;j=0;j&lt;fid.size();++j){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of&lt;&lt;i&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;j&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;fid2d(i,j).Re()&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;fid2d(i,j).Im()&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cout&lt;&lt;&quot;&nbsp;&nbsp;*Data&nbsp;Saved&nbsp;in&nbsp;'&quot;&lt;&lt;matname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;&quot;'&nbsp;(in&nbsp;cols&nbsp;&lt;row&gt;&nbsp;&lt;col&gt;&nbsp;&lt;real&gt;&nbsp;&lt;imag&gt;)&nbsp;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;return(0);<br />
+}<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

@@ -1,0 +1,143 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+How to write your own Shape Generation Engine<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+The easiest way to show you how to write a shape is to show you how simple the built in types are i will show you &quot;XYZcylinder&quot;....The comments below will contain most of the 'things you must do' to get the shape working<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+<font color='#006600'>//you&nbsp;need&nbsp;to&nbsp;Include&nbsp;this&nbsp;file...it&nbsp;will&nbsp;be&nbsp;in&nbsp;the&nbsp;path&nbsp;&quot;{source-top}/src/container/grids/&quot;</font><br />
+#include&nbsp;&quot;xyzgenshape.h&quot;<br />
+<br />
+<font color='#006600'>//start&nbsp;with&nbsp;a&nbsp;class&nbsp;definintion...and&nbsp;make&nbsp;public&nbsp;the&nbsp;&quot;GeneralXYZShape&quot;&nbsp;class</font><br />
+<font color='#006600'>//as&nbsp;shown&nbsp;below..This&nbsp;acts&nbsp;a&nbsp;the&nbsp;container&nbsp;for&nbsp;the&nbsp;'Min'&nbsp;'Max'&nbsp;and&nbsp;'Center'&nbsp;coord's</font><br />
+class&nbsp;XYZcylinder_:&nbsp;public&nbsp;GeneralXYZShape&nbsp;{<br />
+<br />
+&nbsp;&nbsp;<br />
+&nbsp;&nbsp;public:<br />
+<font color='#006600'>//null&nbsp;constructor..ALWAYS&nbsp;good&nbsp;practice&nbsp;to&nbsp;put&nbsp;this&nbsp;here&nbsp;even&nbsp;if&nbsp;it&nbsp;does&nbsp;NOTHING</font><br />
+&nbsp;&nbsp;&nbsp;XYZcylinder_(){}<br />
+<br />
+<font color='#006600'>//copy&nbsp;constructor..ALWAYS&nbsp;good&nbsp;practice&nbsp;to&nbsp;put&nbsp;this&nbsp;here&nbsp;even&nbsp;if&nbsp;it&nbsp;does&nbsp;NOTHING</font><br />
+&nbsp;&nbsp;&nbsp;XYZcylinder_(XYZcylinder&nbsp;&&nbsp;copy):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min_(copy.min_),&nbsp;max_(copy.max_),&nbsp;center_(copy.center_)<br />
+&nbsp;&nbsp;&nbsp;{}<br />
+<br />
+<font color='#006600'>//the&nbsp;basic&nbsp;constructor&nbsp;for&nbsp;this&nbsp;class&nbsp;takes&nbsp;in&nbsp;the&nbsp;Min&nbsp;(r,phi,&nbsp;z)&nbsp;and&nbsp;the&nbsp;Max(r,phi,z)</font><br />
+&nbsp;&nbsp;&nbsp;XYZcylinder_(coord&lt;&gt;&nbsp;&minin,&nbsp;coord&lt;&gt;&nbsp;&maxin):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;min_(minin),&nbsp;max_(maxin),&nbsp;center_(0)<br />
+&nbsp;&nbsp;&nbsp;{}<br />
+<br />
+<font color='#006600'>//the&nbsp;basic&nbsp;constructor&nbsp;for&nbsp;this&nbsp;class&nbsp;takes&nbsp;in&nbsp;the&nbsp;Min&nbsp;(r,phi,&nbsp;z)&nbsp;and&nbsp;the&nbsp;Max(r,phi,z)&nbsp;</font><br />
+<font color='#006600'>//in&nbsp;the&nbsp;non-coord&nbsp;style</font><br />
+&nbsp;&nbsp;XYZcylinder_(double&nbsp;rmin,&nbsp;double&nbsp;rmax,&nbsp;double&nbsp;phimin,&nbsp;double&nbsp;phimax,&nbsp;double&nbsp;zmin,&nbsp;double&nbsp;zmax):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;min_(rmin,&nbsp;phimin,&nbsp;zmin),&nbsp;max_(rmax,&nbsp;phimax,&nbsp;zmax),&nbsp;center_(0)<br />
+&nbsp;&nbsp;{}<br />
+<br />
+<font color='#006600'>//THESE&nbsp;ARE&nbsp;THE&nbsp;TWO&nbsp;FUNCTIONS&nbsp;YOU&nbsp;HAVE&nbsp;TO&nbsp;HAVE</font><br />
+<font color='#006600'>//THESE&nbsp;ARE&nbsp;THE&nbsp;TWO&nbsp;FUNCTIONS&nbsp;YOU&nbsp;HAVE&nbsp;TO&nbsp;HAVE</font><br />
+<font color='#006600'>//i&nbsp;repeat....</font><br />
+<font color='#006600'>//THESE&nbsp;ARE&nbsp;THE&nbsp;TWO&nbsp;FUNCTIONS&nbsp;YOU&nbsp;HAVE&nbsp;TO&nbsp;HAVE</font><br />
+<font color='#006600'>//***You&nbsp;Must&nbsp;CALL&nbsp;THEM&nbsp;&quot;ShapeFunc&quot;***</font><br />
+<font color='#006600'>//----They&nbsp;take&nbsp;in&nbsp;an&nbsp;XYZ&nbsp;point&nbsp;and&nbsp;return&nbsp;A&nbsp;TRUE&nbsp;or&nbsp;FALSE</font><br />
+<font color='#006600'>//----TRUE--&gt;&nbsp;if&nbsp;that&nbsp;point&nbsp;belongs&nbsp;inside&nbsp;the&nbsp;shape</font><br />
+<font color='#006600'>//----FALSE--&gt;&nbsp;if&nbsp;that&nbsp;point&nbsp;does&nbsp;NOT&nbsp;belong&nbsp;inside&nbsp;the&nbsp;shape</font><br />
+<br />
+<font color='#006600'>//this&nbsp;one&nbsp;takes&nbsp;in&nbsp;a&nbsp;grid&nbsp;point&nbsp;as&nbsp;the&nbsp;'x,&nbsp;y,&nbsp;z'</font><br />
+&nbsp;&nbsp;bool&nbsp;ShapeFunc(double&nbsp;x,&nbsp;double&nbsp;y,&nbsp;double&nbsp;z)<br />
+&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//this&nbsp;is&nbsp;the&nbsp;'r'&nbsp;value&nbsp;of&nbsp;the&nbsp;input&nbsp;point</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;tmr=sqrt(x*x+y*y);&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//this&nbsp;is&nbsp;the&nbsp;phi&nbsp;angle&nbsp;of&nbsp;the&nbsp;input&nbsp;point&nbsp;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;tmph=0.0;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(tmr!=0)&nbsp;tmph=acos(y/tmr);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(x&lt;0.0){&nbsp;tmph=PI2-tmph;&nbsp;}<br />
+<br />
+<font color='#006600'>//remeber&nbsp;the&nbsp;user&nbsp;was&nbsp;to&nbsp;input&nbsp;&quot;r,&nbsp;Phi,&nbsp;z&quot;&nbsp;into&nbsp;the&nbsp;constructors</font><br />
+<font color='#006600'>//although&nbsp;here&nbsp;it&nbsp;looks&nbsp;like&nbsp;i&nbsp;am&nbsp;comparing&nbsp;&quot;x&quot;&nbsp;to&nbsp;&quot;r&quot;&nbsp;remeber&nbsp;the&nbsp;extraction&nbsp;element</font><br />
+<font color='#006600'>//the&nbsp;first&nbsp;entry&nbsp;in&nbsp;a&nbsp;coord&lt;&gt;&nbsp;is&nbsp;&quot;x()&quot;&nbsp;and&nbsp;so&nbsp;on&nbsp;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(tmr&gt;=min_.x()&nbsp;&&&nbsp;tmr&lt;=max_.x())<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(tmph&gt;=min_.y()&nbsp;&&&nbsp;tmph&lt;=max_.y())<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(z&gt;=min_.z()&nbsp;&&&nbsp;z&lt;=max_.z())<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;true;&nbsp;<font color='#006600'>//okay,&nbsp;this&nbsp;point&nbsp;is&nbsp;within&nbsp;the&nbsp;limits...</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;&nbsp;<font color='#006600'>//this&nbsp;point&nbsp;failed&nbsp;the&nbsp;test...&nbsp;</font><br />
+&nbsp;&nbsp;}&nbsp;<br />
+<font color='#006600'>//this&nbsp;one&nbsp;takes&nbsp;a&nbsp;grid&nbsp;point&nbsp;as&nbsp;the&nbsp;coord(x,y,z)'</font><br />
+&nbsp;&nbsp;bool&nbsp;ShapeFunc(coord&lt;&gt;&nbsp;&xyz)<br />
+&nbsp;&nbsp;{<br />
+<font color='#006600'>//here&nbsp;all&nbsp;we&nbsp;are&nbsp;doing&nbsp;is&nbsp;overloading&nbsp;the&nbsp;ShapeFunc&nbsp;and&nbsp;diverting&nbsp;it&nbsp;to&nbsp;the&nbsp;one&nbsp;above</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;ShapeFunc(xyz(0),&nbsp;xyz(1),&nbsp;xyz(2));<br />
+&nbsp;&nbsp;}&nbsp;<br />
+};<br />
+<br />
+<font color='#006600'>//Now&nbsp;you&nbsp;Must&nbsp;'Register'&nbsp;the&nbsp;shape&nbsp;using&nbsp;this&nbsp;typedef</font><br />
+<font color='#006600'>//&nbsp;this&nbsp;allows&nbsp;the&nbsp;expression&nbsp;like&nbsp;'Shape1&nbsp;||&nbsp;Shape2'</font><br />
+<font color='#006600'>//&nbsp;to&nbsp;function&nbsp;properly</font><br />
+typedef&nbsp;XYZparts&lt;XYZcylinder_&gt;&nbsp;XYZcylinder;<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

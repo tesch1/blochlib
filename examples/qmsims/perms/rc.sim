@@ -1,0 +1,171 @@
+
+
+spins{
+	numspin 2
+	T 13C 0
+	T 13C 1
+	#T 1H 2
+	D 2146 0 1 0 0 0
+#	D 523 0 1 0 0 0
+	C 1254 12345 0 0
+	C -1544 8552 0 1
+	#D 10234 0 2
+	#D 7123 1 2
+}
+
+# the parameter sets for the tensor generator
+tensors{
+
+	#order of tensor generation
+	order 2
+	
+	#the 'axis' type
+	#xyz, T1, T2, T1T2, hamiltonians
+	axis T2
+	
+	#Multiplication Type, multiply, commutate, add
+	operator multiply
+	
+	#the spin list options 'single' 'choose' 'all'
+	spinops choose
+	#the 'single spin' index 
+	singlespin 1
+	
+	#the choose index(s)
+	choosespins1 0
+	choosespins2 1	
+	
+	#output file names
+	binout sphere2.bin
+	logout logf
+}
+
+params{
+
+	#rotor speed and angle
+	wr 5000
+	rotor 54.7356
+	
+	#the pregenerated binary tensor file
+	# generated from the 'tensorgen' program
+	#can be more then one file...just separate file names with a comma
+	tensorfile traceMats/sphere2.bin, traceMats/cart2.bin
+	
+	# largest time for a propogator step 
+	maxtimestep 1e-6
+
+	#powder average type	
+	#powder ../../../cyrstals/rep256.cry
+	powder zcw
+	
+	#if the powder is 'liquid'
+	singletheta 68.5.0
+	singlephi 36
+	singlegamma 45.0
+	
+	#for non-iquid powder average types
+	thetasteps 616	
+	phisteps 377
+
+
+	# if this is '-1' all will be calculated
+	# if this is '-2' NONE will be calculated
+	# else if will calculate the trace for that train only
+	traceForIndex -1
+	
+	#matlab file where data is saved
+	# naming is as  "<recouple type>_p<permution length>_n<napps>_<rotorspeed>"
+	# so a sinlge post-C7 sequnce applied 10 time would be
+	# spinning at 10 Khz
+	# "Cp71_p1_n10_10k.mat"
+	#matout Cp71_p1_n32_5k_csa2.mat
+	#matout CpCppBar71_p1_n8_5k_csa2_4c_a.mat
+	#matout Cp71_p1_n20_5k_csa2.mat
+	matout data/matout.mat
+	
+	#output file name for the seqeunce names
+	# should be 'blaaa'.m a simple matlab script file
+	seqout data/seqnames_8_4c_a.m
+
+	#this is the name of the matlab file
+	# that makes an array of the names of the tenor types
+	# so that you can load it as a function
+	nameout data/names.m
+
+
+	#if you deisre to collect an fid of a certain train
+	# set to '-1' if no fid desired
+	fidForIndex 1
+	initro Iz
+	detect Iz_0+Iz_1
+	npts 512
+	fidout dat
+	
+	#debug level (info dumping) level for the program
+	debuglevel 0
+	progress 2
+	
+	#inary output file and options for generation
+	# can be: ReadAndRun, GenerateAndSave, GenerateAndRun
+	generationOps ReadAndRun
+	trainFile permutationTrains/pCy_4x4.bn
+}
+
+pulses{
+	pulsespin 13C
+	
+	baseSym 7
+	factorSym 1
+	
+	#number of rotor periods the sequence should be applied over
+	wrfactor 2
+
+	#number of applications of the sequence
+	napps 1
+	
+	#subunit ids define what chars will be used as units below
+	subUnitIds o,O
+	#,w,W
+	
+	#types associate a 'rtype' with a subunit id
+	# valid types are: R, Rp, RBar, RpBar, 
+	# C, CpBar, CBar, Cpp, CppBar
+	typeIds Cp,CpBar
+	#,Cpp, CppBar
+	
+	#we can increase the 'basic' unit for each sequence
+	#can be any combo of the 'subUnitIds' above
+	
+	#'4a' units
+	#units oOWw, OowW, WwoO,wWOo
+	
+	#'4b' units
+	#units oOOo, OooO, wWWw,WwwW
+
+	#'4c' units
+	#units oOOo, OooO
+
+	#'4c_a' units
+	units oOOo, OooO, o, O
+
+	#'4d' units
+	#units wWWw,WwwW
+
+	#'4d_a' units
+	#units wWWw,WwwW, w, W
+
+	#'4e' units
+	#units wWWw,WwwW,o,O
+	
+	#'4f' units
+	#units oOOo,OooO,w,W
+	
+	#units o
+	
+	#the 'longest' list to permute the
+	permutations 4
+	
+}
+
+
+

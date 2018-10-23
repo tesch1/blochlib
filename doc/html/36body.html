@@ -1,0 +1,840 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("36menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("36menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("36menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("36title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("36");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class Dip { ...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Dipole-Dipole interactions. This clas holds all the relevent data for dipole and calulates the hamiltonian optimized for each rotation type. <br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Global Functions'></a>Global Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Global Functionsread_dip'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;Dip&gt; read_dip(Vector&lt;std::string&gt; &in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; A vector of strings that typically comes from reading in a file (but not nessesarliy).<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Read the string<br />
+<br />
+D {del} {on1} {on2} {si} {chi} {psi} <br />
+<br />
+from an element in the Vector&lt;std::string&gt;.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+data.push_back(&quot;C 89 900 0.1 0&quot;);<br />
+data.push_back(&quot;C 4455 900 0.1 1&quot;);<br />
+data.push_back(&quot;D 500 0 1&quot;);<br />
+<br />
+Vector&lt;Dip&gt; mydip=rea_dip(data);<br />
+<font color='#006600'>// mydip has 1 dip in it... </font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Public Vars'></a>Public Vars</font>
+</td></tr></table>
+<tr><td>
+<a name='Public VarsT20'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+matrix T20;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+T20 --&gt; the second rank m=0 spin matrix <br />
+<br />
+These are the spin tensors for that spin in the ENTIRE Hilbert Space of a spin system.  Therefore in order for this class to correctly function, you must perform a 'setSpinMats' functional call, before you can calculate hamiltonians.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+<font color='#006600'>//the dip is ready... to be used</font><br />
+Dip myc(del, spin1, spin2);<br />
+myc.setSpinMats(sys); <br />
+cout&lt;&lt;myc.T00&lt;&lt;endl;<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsDip'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Dip()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+empty constructor<br />
+DEFAULTS:::<br />
+del=0.;<br />
+si=0.;<br />
+chi=0.;<br />
+psi=0.;<br />
+spin1=0;<br />
+spin2=0;<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo;<br />
+cout&lt;&lt;moo.del(); <font color='#006600'>//prints out '0'</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsDip'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Dip( double del,  int spin1,int spin2, double si=0, double chi=0, double psi=0) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+del--&gt; anisotropic shift (dipole-dipole coupling)<br />
+spin1--&gt; the first spin number inside the 'SpinSys'<br />
+spin2--&gt; the second spin number inside the 'SpinSys'<br />
+[si, chi, psi]--&gt; Euler angle for relative molecular orientation<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates a Dip data structure<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(500, 0, 2); <br />
+cout&lt;&lt;moo.del(); <font color='#006600'>//prints '500'</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsDip'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Dip(const Dip &cp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp--&gt; an exsisting SpinSys to copy..<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates a copy of the old Dip...COPIES SPIN-OPS ALSO<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(3000, 0, 1);<br />
+Dip loo(moo); <font color='#006600'>//moo is copied into loo</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractionalpha, beta, gamma'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double alpha();<br />
+double beta();<br />
+double gamma();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the same as [si, psi, chi] for the Euler angles [alpha, beta, gamma].<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(3000, 0, 1);<br />
+cout&lt;&lt;moo.alpha(); <font color='#006600'>//prints '0' same as moo.si()</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractiondel'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double del();<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the anisotropy (del the dipole coupling) parameter.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(3000, 0, 1);<br />
+cout&lt;&lt;moo.del(); <font color='#006600'>//prints '3000'</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractiongetParam'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double getParam(std::string which)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+which--&gt;The info flag you wish to get (which can be<br />
+&quot;del&quot;,&quot;si&quot;, &quot;chi&quot;, &quot;psi&quot;, &quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;, &quot;on1&quot;, &quot;on2&quot;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the parameter corresponding to the input string.<br />
+All 'int' types are converted to doubles.<br />
+<br />
+which can be<br />
+&quot;del&quot;,&quot;si&quot;, &quot;chi&quot;, &quot;psi&quot;, &quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;, &quot;on1&quot;, &quot;on2&quot;<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(3000, 0, 1);<br />
+cout&lt;&lt;moo.getParam(&quot;del&quot;); <font color='#006600'>//prints '3000'</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionsi, chi, psi'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double si();<br />
+double psi();<br />
+double chi();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the Euler angles [si, psi, chi].<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(3000, 0, 1);<br />
+cout&lt;&lt;moo.si(); <font color='#006600'>//prints '0'</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractionspinON1, on1'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int spinOn1();<br />
+int on1();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns FIRST spin number label.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo( 3000, 0, 1);<br />
+cout&lt;&lt;moo.on1(); <font color='#006600'>//prints '0'</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionspinON2, on2'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int spinOn2();<br />
+int on2();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns SECOND spin number label.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo( 3000, 0, 1);<br />
+cout&lt;&lt;moo.on2(); <font color='#006600'>//prints '1'</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='Assignmentsalpha, beta, gamma'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void alpha(double in);<br />
+void beta(double in);<br />
+void gamma(double in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+THE ANGLES ARE IN DEGREES.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; the new value for the [si, psi, chi] angle (DEGREES)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These functions set the Euler orientation angles [alpha, beta, gamma].  These are equivalent to the [si, psi, chi]versions of these functions.  Upon calling these functions, the crystal Orientation tensors components are recalculated.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(3000, 0, 1);<br />
+cout&lt;&lt;moo.beta(); <font color='#006600'>//prints '0'</font><br />
+moo.beta(35); <font color='#006600'>//changes to 35 degrees..</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsdel'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void del(double in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; the new value for the del<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Allows the setting of theanisotropy (del the dipole coupling) parameter.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(230, 0, 1);<br />
+cout&lt;&lt;moo.del(); <font color='#006600'>//prints '230'</font><br />
+moo.del(600); <font color='#006600'>//changes to 600</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Assignmentson1, on2'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void on1(int in);<br />
+void on2(int in) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; the new value for the spin index<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Allows the setting of FIRST (on1) spin number label and the second (on2) number label.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(3000, 0, 1);<br />
+cout&lt;&lt;moo.on1(); <font color='#006600'>//prints '1'</font><br />
+moo.on1(2); <font color='#006600'>//changes to 2</font><br />
+moo.on2(1); <font color='#006600'>//changes to 1</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Dip &operator=(const Dip &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; the item you wish to copy<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns one Dip from another.<br />
+This also copies all the Spin Operators if they have been already calculated.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(230, 0, 1);<br />
+Dip koo;<br />
+koo=moo; <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetParam'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setParam(std::string which, double val);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+which--&gt; the item you wish to set..<br />
+&quot;del&quot;,&quot;si&quot;, &quot;chi&quot;, &quot;psi&quot;, &quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;, &quot;on1&quot;, &quot;on2&quot;<br />
+<br />
+val--&gt; that value you wish to set it to...<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets a value inside the structure (any 'int' will be converted properly.)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(230, 0, 1);<br />
+moo.setParam(&quot;del&quot;, 56); <font color='#006600'>//cahnges del to 56</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentssi, psi, chi'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void si(double in);<br />
+void psi(double in);<br />
+void chi(double in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+THE ANGLES ARE IN DEGREES.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; the new value for the [si, psi, chi] angle (DEGREES)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These functions set the Euler orientation angles [si, psi, chi].  These are equivalent to the alpha, beta, gamma versions of these functions.  Upon calling these functions, the crystal Orientation tensors components are recalculated.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(3000, 0, 1);<br />
+cout&lt;&lt;moo.chi(); <font color='#006600'>//prints '0'</font><br />
+moo.chi(35); <font color='#006600'>//changes to 35 degrees..</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOdisplay'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void display()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes the string<br />
+<br />
+#-----------------------Dipd--------------------------<br />
+# spin del alpha beta gamma<br />
+{on1},{on2} {del} {si} {chi} {psi} <br />
+<br />
+to the Console.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(230, 3000, 0, 1);<br />
+moo.display(); <br />
+/*<br />
+will print out...<br />
+#-----------------------DIP---------------------------<br />
+# spin del alpha beta gamma <br />
+0,1 230 0 0 0 <br />
+*/ <br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOoperator<<'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ostream &operator&lt;&lt;(stream &oo, Dip &out)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an output string<br />
+out--&gt; a Dip object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes the string....<br />
+#-----------------------Dipd--------------------------<br />
+# spin      del   alpha beta gamma<br />
+{on1},{on2} {del} {si} {chi} {psi} <br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(230, 0, 1);<br />
+cout&lt;&lt;moo; <br />
+/*<br />
+will print out...<br />
+#-----------------------DIP---------------------------<br />
+# spin     del   alpha  beta  gamma  <br />
+   0,1       230     0      0     0   <br />
+*/ <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOwrite'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void write(ostream &out)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; file/output stream you wish to write a VALID, READABLE string for the 'read_dip' function<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes the string....<br />
+<br />
+D {del} {on1} {on2} {si} {chi} {psi} <br />
+<br />
+to the ostream.<br />
+<br />
+This string is then readable by the 'read_dip' function below to produce a valid Dip object.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(230, 0, 1);<br />
+ostream out(&quot;params&quot;);<br />
+moo.write(out); <br />
+<br />
+<font color='#006600'>// D   230   0   1    0      0     0   </font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functions==, !='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool operator==(const Dip &rhs);<br />
+bool operator!=(const Dip &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; another Dip <br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Determins weather or not the rhs is the not the same Dip as the lhs.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(230, 3000, 0, 1), loo(500, 3000, 0, 1);<br />
+moo==loo; <font color='#006600'>//would be false</font><br />
+moo.del(500);<br />
+moo==loo; <font color='#006600'>//true</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsH, Hamiltonian'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+dmatrix H(SpinSys &sys, Rotations &rot)<br />
+dmatrix Hamiltonian(SpinSys &sys, Rotations &rot) <br />
+<br />
+dmatrix H(SpinSys &sys,double alpha=0, double beta=0, double theta=0, double phi=0)<br />
+dmatrix Hamiltonian(SpinSys &sys,double alpha=0, double beta=0, double theta=0, double phi=0) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+sys--&gt; the Master Spin System<br />
+rot--&gt; the 'Rotations' class structure (see 'spin/space tensor)<br />
+<br />
+alpha--&gt; the rotor Phase (usually wr*time*PI2) (RADIANS)<br />
+beta--&gt; the rotor angle (RADIANS)<br />
+theta--&gt; theta powder angle (RADIANS)<br />
+phi--&gt; phi powder angle (RADIANS)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The master Hamiltonian function returns the Hamiltonian in matrix form...at the proper angles<br />
+<br />
+The bottom two functions are typically meant for Liquid type sims. The one that explicitly include the 'Rotations' class are faster only in that they do not need to calculate a 'Rotations' each iteration.<br />
+<br />
+H={some rotation stuff}*T20<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(230, 0, 1);<br />
+SpinSys sys(2);<br />
+moo.setSpinMats(sys);<br />
+Rotations rots(34*Pi/180, 56*Pi/180); <font color='#006600'>//[phi theta] powder angle</font><br />
+cout&lt;&lt;moo.H(sys, rots)&lt;&lt;end; <font color='#006600'>//valid hamiltonian</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsis_zero'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool is_zero()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Determins weather or not the interacting is 'zero'<br />
+i.e. if del==0 then the interaction is usless.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo( 3000, 0, 1);<br />
+moo.is_zero(); <font color='#006600'>// false</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionssetCrystalAs'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setCrystalAs()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the nessesary initial crystal A2m's from the [si, chi, psi] and [iso, del, eta] set of parameters.<br />
+<br />
+This is done automatically at initialization and when ever you change ANY parameter (except for 'on').<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(230, 0, 1);<br />
+SpinSys sys(2);<br />
+moo.setSpinMats(sys);<br />
+Rotations rots(34*Pi/180, 56*Pi/180); <font color='#006600'>//[phi theta] powder angle</font><br />
+cout&lt;&lt;moo.H(sys, rots)&lt;&lt;end; <font color='#006600'>//valid hamiltonian</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionssetSpinMats'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setSpinMats(SpinSys &sys)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+YOU MUST DO THIS in order to generate a correct Hamiltonian<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+sys--&gt; A vlid spin system<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the 'T20' spin matricies from the spin system.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Dip moo(3000, 0, 1);<br />
+SpinSys sys(2);<br />
+moo.setSpinMats(sys);<br />
+cout&lt;&lt;moo.T20&lt;&lt;end;<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

@@ -1,0 +1,75 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Simple usage of the Csa class<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This example shows how to declare and set the parameters, as well as using the Rotations class to get the CSA Hamiltonian.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+double&nbsp;iso=4000,&nbsp;del=3000,&nbsp;eta=0,&nbsp;spin=1;<br />
+SpinSys&nbsp;sys(2);<br />
+<font color='#006600'>//the&nbsp;csa&nbsp;is&nbsp;ready...&nbsp;to&nbsp;be&nbsp;used</font><br />
+Csa&nbsp;myc(iso,&nbsp;del,&nbsp;eta,&nbsp;spin);&nbsp;<font color='#006600'>//need&nbsp;to&nbsp;set&nbsp;the&nbsp;correct&nbsp;spin&nbsp;matrices&nbsp;before&nbsp;calling&nbsp;the&nbsp;hamiltonian</font><br />
+myc.setSpinMats(sys);&nbsp;<br />
+Rotations&nbsp;Rots;<br />
+Rots.setPowderAngles(56*Pi/180,&nbsp;70*Pi/180);<br />
+<font color='#006600'>//the&nbsp;hamiltonian...at&nbsp;the&nbsp;powder&nbsp;angle&nbsp;(56,&nbsp;70);</font><br />
+cout&lt;&lt;myc.H(sys,&nbsp;Rots);&nbsp;<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

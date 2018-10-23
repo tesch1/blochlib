@@ -1,0 +1,596 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("43menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("43menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("43menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("43title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("43");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Func_T&gt;<br />
+class oneFID : <br />
+ public Func_T<br />
+{...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This class contains all the optimized algorithms for collection of FIDs in most any NMR situation (typically spinning, static, with powder angles, without powder angles).  It will collect powder averaged FIDs in parallel.  This wraps the 'compute' algorithm and the static algorithms into one master class.  <br />
+<br />
+In order for the class to function properly, the class 'Func_T' typically is the SolidSys class, where these functions are public to Func_T<br />
+<br />
+matrix Hamiltonian(t1, t2, wr);<br />
+matrix Hamiltonian(wrPhase, rotorBeta, theta, phi, t1, t2);<br />
+void setPowderAngles(theta, phi, gamma);<br />
+void setRotorAngles(wrPhase, rotorBeta);<br />
+<br />
+<br />
+Any class derived from SolidSys will be a valid candidate, as typically all you may need to do is overwrite the Hamiltonian functions with new ones.<br />
+<br />
+If either the rotor speed OR or the rotor angle is zero, then the static algorithm is used.<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+If you use a derived class that has 'Pulses' (like decoupling) during the FID collection phase, usage of the 'compute' algorithm will be invalid UNLESS the pulse power (amplitude) is a multiple of the rotor speed.  Even the static (non-spinning) case FID will be incorrect as the Hamiltonian is NOT time independent.  There are few ways to treat this case in any optimal sense other than brute-force (performing a Dyson Time series explicitly).  You could treat a continuous radiation (periodic pulse Hamiltonian) similarly to the spinning rotor simulation.  However, the ‘wr’ would be the Pulse amplitude and you would have to write the valid Hamiltonian for these cases (the SolidSys Hamiltonians assume the ‘wr’ is for the rotor spinning speed). <br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Public Vars'></a>Public Vars</font>
+</td></tr></table>
+<tr><td>
+<a name='Public VarsController'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+MPIcontroller Controller<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the oneFID's MPI controller.  If it is not set, then none of the algorithms will be calculated in parallel.  If it is set, then the oneFID function that rely on a 'powder' object will be calculated in parallel.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+MPIworld.start(argc, argv); <font color='#006600'>//start MPI</font><br />
+<br />
+SolidSys A(3);<br />
+A.addCsa(Csa(300, 3400, 0, 0));<br />
+<font color='#006600'>//a fid with 512 pts, </font><br />
+<font color='#006600'>// a sweep width of 30 kHz, spinning at</font><br />
+<font color='#006600'>// 3 kHz at the magic angle</font><br />
+oneFID&lt;SolidSys&gt; myFid(512, 30000, 2000, 54.7*DEG2RAD);<br />
+<font color='#006600'>//set the 'SolidSys' class to A</font><br />
+myFID.setFunction(A);<br />
+<font color='#006600'>//set the objects conbtroller</font><br />
+myFID.Controller=MPIworld;<br />
+<br />
+powder mypow(powder::zcw, 233, 144);<br />
+matrix roeq=A.Ix();<br />
+matrix detect=A.Ip();<br />
+<font color='#006600'>//this will be caculated in parallel</font><br />
+Vector&lt;complex&gt; fid=myFID.FID(mypow, roeq, detect);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsoneFID'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class Func_T&gt;<br />
+oneFID&lt;Func_T&gt;()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Null constructor that sets the defulat values<br />
+<br />
+wr=0<br />
+rotorAngle=0<br />
+npts=0<br />
+sweepwidth=20000<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(2);<br />
+oneFID&lt;SolidSys&gt; myFid;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsoneFID'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+oneFID(int npts, double sw=20000, double wr=0, double rotb=0, startT=0)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+npts--&gt; the number of points in the fid<br />
+sw--&gt; the sweep width in Hz (default=20 kHz)<br />
+wr--&gt; the rotor spinning speed in Hz (default=0)<br />
+rotb--&gt; the angle in RADIANS the rotor makes with the magnetic field (default=0)<br />
+startT--&gt; the starting time in seconds (default=0)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets up a oneFID object with an empty Func_T.  To set the 'Func_T' use the 'setFunction' function.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(3);<br />
+A.addCsa(Csa(300, 3400, 0, 0));<br />
+<font color='#006600'>//a fid with 512 pts, </font><br />
+<font color='#006600'>// a sweep width of 30 kHz, spinning at</font><br />
+<font color='#006600'>// 3 kHz at the magic angle</font><br />
+oneFID&lt;SolidSys&gt; myFid(512, 30000, 2000, 54.7*DEG3RAD);<br />
+<font color='#006600'>//set the 'SolidSys' class to A</font><br />
+myFID.setFunction(A);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsoneFID'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+oneFID(Func_T &func, int npts, double sw=20000, double wr=0, double rotb=0, double startT=0)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The function is maintained by a pointer, such that if you destroy the Func_T before the oneFID object, the oneFID object will not function (and probably crash the machine).<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+func--&gt; the function base to the oneFID object<br />
+npts--&gt; the number of points in the fid<br />
+sw--&gt; the sweep width in Hz (default=20 kHz)<br />
+wr--&gt; the rotor spinning speed in Hz (default=0)<br />
+rotb--&gt; the angle in RADIANS the rotor makes with the magnetic field (default=0)<br />
+startT--&gt; the starting time in seconds (default=0)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets up a oneFID object with the Hamiltonian function generator given by 'func.' <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(3);<br />
+A.addCsa(Csa(300, 3400, 0, 0));<br />
+<font color='#006600'>//a fid with 512 pts, from the 'A' system</font><br />
+<font color='#006600'>// a sweep width of 30 kHz, spinning at</font><br />
+<font color='#006600'>// 3 kHz at the magic angle</font><br />
+oneFID&lt;SolidSys&gt; myFid(A, 512, 30000, 2000, 54.7*DEG3RAD);<br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsoneFID'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+oneFID(const oneFID &cp);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp--&gt; another oneFID object.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The copy constructor.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+oneFID&lt;SolidSys&gt; myFID(512, 30000);<br />
+oneFID&lt;SolidSys&gt; myFID2(myFID); <font color='#006600'>//copied</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractionnpts, size'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int npts();<br />
+int size();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the size of the desired FID vector.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//an oneFID object</font><br />
+oneFID&lt;SolidSys&gt; myFid(512, 30000, 2000, 54.7*DEG3RAD);<br />
+cout&lt;&lt;myFid.npts(); <font color='#006600'>//prints '512'</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionstartTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double startTime()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the start time for the fid.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//an oneFID object</font><br />
+oneFID&lt;SolidSys&gt; myFid(512, 30000, 2000, 54.7*DEG3RAD);<br />
+cout&lt;&lt;myFid.startTime(); <font color='#006600'>//prints '0'</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionsw'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double sw();<br />
+double sweepWidth();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the current sweep width.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//a oneFID object</font><br />
+oneFID&lt;SolidSys&gt; myFid(512, 30000, 2000, 54.7*DEG3RAD);<br />
+cout&lt;&lt;myFid.sw(); <font color='#006600'>//prints '30000'</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionwr'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double wr();<br />
+double rotorSpeed();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Return the current rotor speed.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//a fid object</font><br />
+oneFID&lt;SolidSys&gt; myFid(512, 30000, 2000, 54.7*DEG3RAD);<br />
+cout&lt;&lt;myFid.wr(); <font color='#006600'>//prints '2000'</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentssetNpts'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setNpts(int nptsNew);<br />
+void setSize(int nptsNew);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+nptsNew--&gt; the new size of the FID vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the size of the FID vector.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//an oneFID object</font><br />
+oneFID&lt;SolidSys&gt; myFid(512, 30000, 2000, 54.7*DEG3RAD);<br />
+myFid.setNpts(1024); <font color='#006600'>//sets the FID size to 1024</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetStartTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setStartTime(double newStart)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newStart--&gt; the new start time for the FID.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the start time of the FID.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//an oneFID object</font><br />
+oneFID&lt;SolidSys&gt; myFid(512, 30000, 2000, 54.7*DEG3RAD);<br />
+myFid.setStartTime(0.03); <font color='#006600'>//sets start Time ro 0.03 seconds</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetSweepWidth'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setSweepWidth(double swNew);<br />
+void setSw(double swNew);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+swNew--&gt; the new Sweep Width in Hz<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the sweep width of the FID.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//an oneFID object</font><br />
+oneFID&lt;SolidSys&gt; myFid(512, 30000, 2000, 54.7*DEG3RAD);<br />
+myFid.setSw(60000); <font color='#006600'>//sets the sweep to 60 kHz</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetWr'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setWr(double wrNew);<br />
+void setRotorSpeed(double wrNew);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+wrNew--&gt; the new rotor speed in Hz<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the rotor speed (in Hz) for the FID object.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//an oneFID object</font><br />
+oneFID&lt;SolidSys&gt; myFid(512, 30000, 2000, 54.7*DEG3RAD);<br />
+myFid.setWr(6000); <font color='#006600'>//sets the rotor speed to 6 kHz</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other FunctionsFID'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;complex&gt; FID(powder &myPows, matrix &roEQ, matrix &det);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If the 'Controller' object has been set, it will calculate the FID in parallel over the powder angles.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+myPows--&gt; a powder object containing the desired integration powder angles<br />
+roEQ--&gt; an initial density matrix (must be the same hilbert space size as the Func_T class)<br />
+det--&gt; a detection matrix (must be the same hilbert space size as the Func_T class)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Collects an FID given a powder object, an intial density matrix and a detection matrix. You must have define the function class before this will work.  <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(3);<br />
+A.addCsa(Csa(300, 3400, 0, 0));<br />
+<font color='#006600'>//a fid with 512 pts, </font><br />
+<font color='#006600'>// a sweep width of 30 kHz, spinning at</font><br />
+<font color='#006600'>// 3 kHz at the magic angle</font><br />
+oneFID&lt;SolidSys&gt; myFid(512, 30000, 2000, 54.7*DEG2RAD);<br />
+<font color='#006600'>//set the 'SolidSys' class to A</font><br />
+myFID.setFunction(A);<br />
+<font color='#006600'>//set the objects conbtroller</font><br />
+myFID.Controller=MPIworld;<br />
+<br />
+powder mypow(powder::zcw, 233, 144);<br />
+matrix roeq=A.Ix();<br />
+matrix detect=A.Ip();<br />
+<font color='#006600'>//this will be caculated in parallel</font><br />
+Vector&lt;complex&gt; fid=myFID.FID(mypow, roeq, detect);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsFID'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;complex&gt; FID(matrix &roEQ, matrix &det, double theta=0, double phi=0, double gamma=0);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+This does NOT perform a parallel calculation even if the Controller is set.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+roEQ--&gt; the initial density matrix<br />
+det--&gt; the detection matrix<br />
+theta--&gt; the 'theta' Powder angle (in RADIANS)<br />
+phi--&gt; the 'phi' Powder angle (in RADIANS)<br />
+gamma--&gt; the 'gamma' Powder angle (in RADIANS)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Will calculate an FID for ONE Euler angle (phi, theta, gamma).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(3);<br />
+A.addCsa(Csa(300, 3400, 0, 0));<br />
+<font color='#006600'>//a fid with 512 pts, </font><br />
+<font color='#006600'>// a sweep width of 30 kHz, spinning at</font><br />
+<font color='#006600'>// 3 kHz at the magic angle</font><br />
+oneFID&lt;SolidSys&gt; myFid(512, 30000, 2000, 54.7*DEG2RAD);<br />
+<font color='#006600'>//set the 'SolidSys' class to A</font><br />
+myFID.setFunction(A);<br />
+<font color='#006600'>//set the objects conbtroller</font><br />
+myFID.Controller=MPIworld;<br />
+<br />
+matrix roeq=A.Ix();<br />
+matrix detect=A.Ip();<br />
+<font color='#006600'>//this will be caculated for one powder angle</font><br />
+Vector&lt;complex&gt; fid=myFID.FID(roeq, detect, PI/3.0, PI/4.0);<br />
+<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

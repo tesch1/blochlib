@@ -1,0 +1,146 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+parses 3 sections in an input file<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Assume that you have a file input that is composed of 3 main sections...a 'spin' section, 'params' section, and a 'pulse' section (a typical NMR type experiement) and that this file looks like this<br />
+<br />
+<br />
+<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+---------------input.txt----------------<br />
+#comments&nbsp;are&nbsp;easily&nbsp;made&nbsp;by&nbsp;useing&nbsp;the&nbsp;'#'&nbsp;<br />
+<br />
+#we&nbsp;can&nbsp;define&nbsp;global&nbsp;variables...<br />
+napps&nbsp;23<br />
+<br />
+#this&nbsp;'spin'&nbsp;input&nbsp;section&nbsp;is&nbsp;the&nbsp;exact&nbsp;type&nbsp;taken&nbsp;by&nbsp;the&nbsp;class&nbsp;'SolidSys'<br />
+spin{<br />
+&nbsp;&nbsp;&nbsp;numspin&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;T&nbsp;1H&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;T&nbsp;13C&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;C&nbsp;1200&nbsp;455&nbsp;0&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;C&nbsp;0&nbsp;3400&nbsp;0&nbsp;0<br />
+&nbsp;&nbsp;&nbsp;D&nbsp;2000&nbsp;0&nbsp;1<br />
+}&nbsp;<br />
+params{<br />
+&nbsp;&nbsp;wr&nbsp;2000<br />
+&nbsp;&nbsp;npts&nbsp;512<br />
+#this&nbsp;is&nbsp;a&nbsp;LOCAL&nbsp;variable&nbsp;(local&nbsp;to&nbsp;'params')<br />
+#it&nbsp;does&nbsp;not&nbsp;overwrite&nbsp;any&nbsp;global&nbsp;ones...<br />
+&nbsp;&nbsp;napps&nbsp;12<br />
+&nbsp;&nbsp;fileout&nbsp;data<br />
+}<br />
+<br />
+pulse{<br />
+&nbsp;&nbsp;angle&nbsp;90<br />
+&nbsp;&nbsp;phase&nbsp;0<br />
+}<br />
+-------------input.txt------------------&nbsp;<br />
+<br />
+<font color='#006600'>//NOW&nbsp;for&nbsp;the&nbsp;source&nbsp;code&nbsp;to&nbsp;read&nbsp;in&nbsp;and&nbsp;extract&nbsp;things&nbsp;from&nbsp;this&nbsp;parameter&nbsp;file</font><br />
+<br />
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+int&nbsp;main(int&nbsp;argv,&nbsp;char&nbsp;**argc){<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;file&nbsp;name&nbsp;to&nbsp;parse&nbsp;&nbsp;</font><br />
+&nbsp;&nbsp;std::string&nbsp;fname;<br />
+&nbsp;&nbsp;query_parameter(argv,&nbsp;argc,&nbsp;1,&nbsp;&quot;Enter&nbsp;File&nbsp;Name&nbsp;to&nbsp;parse:&quot;,&nbsp;fname);<br />
+&nbsp;&nbsp;<br />
+<font color='#006600'>//Set&nbsp;up&nbsp;the&nbsp;parameters&nbsp;object</font><br />
+&nbsp;&nbsp;Parameters&nbsp;pset(fname);<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;tell&nbsp;the&nbsp;parameters&nbsp;what&nbsp;sections&nbsp;are&nbsp;in&nbsp;the&nbsp;file</font><br />
+&nbsp;&nbsp;pset.addSection(&quot;spin&quot;);<br />
+&nbsp;&nbsp;pset.addSection(&quot;params&quot;);<br />
+&nbsp;&nbsp;pset.addSection(&quot;pulse&quot;);<br />
+<br />
+<font color='#006600'>//The&nbsp;spins&nbsp;section&nbsp;is&nbsp;already&nbsp;handled&nbsp;by&nbsp;the&nbsp;'SolidSys'&nbsp;class</font><br />
+<font color='#006600'>//so&nbsp;we&nbsp;pass&nbsp;that&nbsp;entire&nbsp;section&nbsp;to&nbsp;it</font><br />
+&nbsp;&nbsp;SolidSys&nbsp;mysys(pset.section(&quot;spin&quot;));<br />
+<br />
+<font color='#006600'>//now&nbsp;to&nbsp;grab&nbsp;the&nbsp;other&nbsp;parts</font><br />
+&nbsp;&nbsp;<font color='#006600'>//gets&nbsp;a&nbsp;'double'&nbsp;called&nbsp;'wr'&nbsp;from&nbsp;the&nbsp;section&nbsp;'param'&nbsp;&nbsp;</font><br />
+&nbsp;&nbsp;double&nbsp;wr=pset.getParamD(&quot;wr&quot;,&nbsp;&quot;params&quot;);&nbsp;<br />
+&nbsp;&nbsp;<font color='#006600'>//gets&nbsp;an&nbsp;'integer'&nbsp;calls&nbsp;'napps'&nbsp;from&nbsp;the&nbsp;section&nbsp;'param'</font><br />
+&nbsp;&nbsp;<font color='#006600'>//if&nbsp;the&nbsp;parameter&nbsp;is&nbsp;not&nbsp;preset&nbsp;it&nbsp;will&nbsp;not&nbsp;ask&nbsp;for&nbsp;it,&nbsp;instead&nbsp;it&nbsp;will</font><br />
+&nbsp;&nbsp;<font color='#006600'>//&nbsp;return&nbsp;its&nbsp;default&nbsp;value&nbsp;of&nbsp;'90'</font><br />
+&nbsp;&nbsp;int&nbsp;napps=pset.getParamI(&quot;napps&quot;,&nbsp;&quot;params&quot;,&nbsp;false,&nbsp;90);<br />
+<br />
+<font color='#006600'>//this&nbsp;grabs&nbsp;out&nbsp;'global&nbsp;variable'</font><br />
+&nbsp;&nbsp;int&nbsp;napGlobal=pset.getParamI(&quot;napps&quot;);<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;pulse&nbsp;pieces</font><br />
+&nbsp;&nbsp;double&nbsp;ang=pset.getParamD(&quot;angle&quot;,&nbsp;&quot;pulse&quot;);&nbsp;<br />
+&nbsp;&nbsp;double&nbsp;phase=pset.getParamD(&quot;phase&quot;,&nbsp;&quot;pulse&quot;);<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;the&nbsp;'file&nbsp;out'&nbsp;string&nbsp;</font><br />
+&nbsp;&nbsp;std::string&nbsp;fout=pset.getParamS(&quot;fileout&quot;,&nbsp;&quot;params&quot;);&nbsp;<br />
+<br />
+<font color='#006600'>//now&nbsp;'do&nbsp;things'&nbsp;with&nbsp;all&nbsp;you&nbsp;inputted&nbsp;dat.....</font><br />
+}&nbsp;<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

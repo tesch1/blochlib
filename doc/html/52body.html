@@ -1,0 +1,526 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("52menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("52menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("52menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("52title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("52");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Offset_T=double&gt;<br />
+class Relax {...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This is the Relaxation interaction.  Relaxation is treated quite simply ad involves 2 parameters, a T2 (or dephasing or transverse or reversible) relaxation and a T1 (or longitudinal or non-reversible).  
+<BR><BR>
+T2 is typically thought of as a phase relaxation, it does not decrease the magnetic contribution of an individual spin, but as a bulk, the magnetic vectors become dephased with respect to one another.  Thus the total magnetization appears decreased when summed up.  Things like pulse imperfection, dipole-dipole, and field inhomogeneities cause this relaxation and theoretically they can all be refocused (reversed) using proper pulse sequences.  The interaction here is treated on a spin-by-spin basis where each 'spin' is considered a 'density' of spins, and this little density is dephased.  Thus this interaction makes little sence for a BPoptions::Particle (but it is not disallowed).  Mathematically it effects the Mx and My components of the magnetization and effectively shrinks them at a rate of 1/T2.
+<blockquote> <TT> wx=-Mx*T2<BR>
+  wy=-My*T2</TT> </blockquote>
+<BR>
+T1 is typically thought of as a longitudinal relaxation, it does decrease the magnetic contribution of an individual spin along the transverse plane (the X-Y plane) and 'moves' it back to the z-axis.  It can be thought of as a force on the spin to return to equilibrium (in a high magnetic field along the z-axis, equilibrium magnetization is a vector along the z-axis).  Thus this interaction requires the knowledge of the initial magnetization, and any magnetization not along the z-axis will be forced back to it at a rate of 1/T1
+<blockquote> <TT> wz=(Mo.z()-M.z())*T1</TT> </blockquote>
+<BR>
+If the main magnetic axis is NOT along the z-axis, but along some axis, <tt>n=(n1, 
+n2, n3)</tt>, (the <tt>Offset_T=coord<> </tt>case), then T2 effects the plane 
+perpendicular to this axis and T1 attempts to move the magnetization back to the 
+n axis. <br>
+Both T2 and T1 are still scalar interactions even in a tilted frame. Assuming 
+that you have set the n axis (and that is does not change in time), then we need 
+to rotate our x,y,z axis set into this new frame. Thus we need some Euler angles 
+which can be determined from the given n-axis. We can only determine theta and 
+phi from the axis and not gamma, as we do not know the rotation of that tilted 
+frame. However, the transverse relaxation spans that entire plane, so gamma is 
+not really necessary. 
+<blockquote> <TT> theta=acos(n<sub>z</sub>/norm(n))<br>
+  phi=atan(n<sub>x</sub>/n<sub>y</sub>) <BR>
+  </TT> </blockquote>
+we can then rotate our interaction back our normal basis by doing the inverse 
+rotation, these equations can be written in our Cartesian basis as 
+<blockquote> <TT> w<sub>x</sub>=-T2*cos(phi)*M<sub>x</sub>+sin(phi)*(T2*cos(theta)*M<sub>y</sub>+T1*sin(theta)*(Mo-M<sub>z</sub>)), 
+  <BR>
+  w<sub>y</sub>=-T2*cos(phi)*cos(theta)*M<sub>y</sub>-T2*M<sub>x</sub>*sin(phi)+T1*cos(phi)*sin(theta)*(M<sub>z</sub>-Mo), 
+  <BR>
+  w<sub>z</sub>=T1*cos(theta)*(Mo-M<sub>z</sub>)-T2*M<sub>y</sub>*sin(theta)<BR>
+  </TT> </blockquote>
+where <tt>Mo</tt> is the magnitude of the n of the axis. The only way we could 
+have a relaxation axis different from the z-axis is if our magnetic field axis 
+was off of the z-axis. Thus this sort of interaction only makes sence for both 
+<tt>Offset_T</tt> of the <tt>ListBlochParams</tt> and the <tt>Offset_T</tt> of 
+the <tt>Offset</tt> to be <tt>coord&lt;&gt;</tt>. <br>
+<br>
+Currently there is NO relaxation that would have a time dependant theta and phi 
+(theta=theta(t) and phi=phi(t)) this is simply because the parameters 'T1 and 
+T2' should also fluctuate under such a time dependant Hamiltonian. Modeling such 
+a system would require some Redfield theory and is out of the scope of this library.<BR>
+
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsRelax'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Relax()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for both Offset_T=double and Offset_T=coord&lt;&gt;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The empty constructor.  Sets the interaction size to 0.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//an empty Offet_T=double relaxation class</font><br />
+Relax&lt;&gt; mRel;<br />
+<br />
+<font color='#006600'>//an empty Offset_T=coord&lt;&gt; relaxation class</font><br />
+Relax&lt;coord&lt;&gt; &gt; myRel2;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsRelax'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Relax(int len, double inT2=0, double inT1=0 )<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for both Offset_T=double and Offset_T=coord&lt;&gt;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+len--&gt; the length of the interaction (should be the size of a ListBlochParams object)<br />
+inT2--&gt; the T2 relaxation parameter (dephasing) in 1/SECONDS (If this is 0, then, it is assumed that there is NO T2 interaction)<br />
+inT1--&gt; the T1 relaxation parameter (transverse) in 1/SECONDS (If this is 0, then, it is assumed that there is NO T1 interaction)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the size of the object to 'len' with the values inT2 and inT1 for every spin in the list.  <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//a relaxation object of size 5, and t2=0.02 sec</font><br />
+Relax&lt;&gt; myRel(5, 0.02);<br />
+<br />
+<font color='#006600'>//a relaxation object of size 5,  t2=0.02 sec, and t1=0.01 sec</font><br />
+Relax&lt;&gt; myRel2(5, 0.02, 0.01);<br />
+<br />
+<font color='#006600'>//a coord&lt;&gt; version</font><br />
+Relax&lt;coord&lt;&gt; &gt; myRel3(5, 0.02, 0.01);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsRelax'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Relax(const Vector&lt;double&gt; &inT2,const Vector&lt;double&gt; &inT1 )<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for both Offset_T=double and Offset_T=coord&lt;&gt;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+inT2--&gt; a vector of  T2 relaxation parameters (dephasing) in 1/SECONDS for each spin (If this is 0, then, it is assumed that there is NO T2 interaction)<br />
+inT1--&gt; a vector of T1 relaxation parameters (transverse) in 1/SECONDS  for each spin(If this is 0, then, it is assumed that there is NO T1 interaction)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creats a Relaxation object using the input vectors for T2 and T1.  Both vectors should be the SAME size.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//create 2 vector spreads</font><br />
+<font color='#006600'>//T2...0..6 seconds</font><br />
+Vector&lt;double&gt; T2s(Spread&lt;double&gt;(0,6, 2));<br />
+<font color='#006600'>//T1...6...0 seconds</font><br />
+Vector&lt;double&gt; T1s(Spread&lt;double&gt;(6, 0, -2));<br />
+<br />
+<font color='#006600'>//a realxation object</font><br />
+Relax&lt;&gt; myRel(T2s, T1s);<br />
+<br />
+<font color='#006600'>//the coord&lt;&gt; version</font><br />
+Relax&lt;coord&lt;&gt; &gt; myRel2(T2s, T1s);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsRelax'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class GridEngine_t, int BPops, class Offset_T&gt;<br />
+		Relax(ListBlochParams&lt;GridEngine_t, BPops, Offset_T&gt; &bc, double inT2=0,  double inT1=0)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for both Offset_T=double and Offset_T=coord&lt;&gt;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+bc--&gt; a ListBlochParams object that sets the size of the object.<br />
+inT2--&gt; the T2 relaxation parameter (dephasing) in 1/SECONDS (If this is 0, then, it is assumed that there is NO T2 interaction)<br />
+inT1--&gt; the T1 relaxation parameter (transverse) in 1/SECONDS (If this is 0, then, it is assumed that there is NO T1 interaction)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the size of the object to length of the ListBlochParams with the values inT2 and inT1 for every spin in the list. If the Offset_T=coord&lt;&gt; in Relax, then it will set the Relaxation interaction axis to the axis where Mo lies (as well as obtain the magnitude of Mo).  So if you have not set the Mo or Bo in the ListBlochParams, then it will default to (0,0,Mo).  You can use the 'setMo(ListBlochParam)' to reset this axis from an already declare Relax&lt;coord&lt;&gt; &gt; object.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up the grids</font><br />
+<br />
+<font color='#006600'>//create a grid</font><br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+<br />
+<font color='#006600'>//create a shape</font><br />
+XYZshape&lt;XYZfull&gt; myShape(gg, XYZfull());<br />
+<br />
+<font color='#006600'>//create the List BLoch Params with a gradient</font><br />
+typedef ListBlochParams&lt; XYZshape&lt;XYZfull&gt;, BPoptions::HighField | BPoptions::Particle, double&gt; myList;<br />
+<br />
+int numSpins=myGrad.size();<br />
+std::string spinType=&quot;1H&quot;;<br />
+MyPars myList(numSpins,spinType, myShape);<br />
+<br />
+<font color='#006600'>//set up a relaxation object</font><br />
+Relax&lt;&gt; myRel(myList, 0.4, 0.3)<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element ExtractionMo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;coord&lt;&gt; &gt; Mo();<br />
+coord&lt;&gt;  Mo(int i);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid ONLY for Offset_T=coord&lt;&gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the spin index you wish to obtain<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is valid for the 'coord&lt;&gt;' version where this vector is the direction where the longitudinal relaxation relaxes to.  The transverse relaxation relaxes the components in the plane perpendicular to this axis.  It does not check the vector bounds (for speed) so accessing an element greater then the vector size will likely cause the program to crash.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up an object</font><br />
+Relax&lt;coord&lt;&gt; &gt; myRel(5, 0.02, 0.01);<br />
+<br />
+<font color='#006600'>//the default rhat vector is (0,0,1) (z-axis)</font><br />
+<font color='#006600'>// for all spins...</font><br />
+cout&lt;&lt;myRel.Mo();<br />
+<br />
+<font color='#006600'>//get the second spins</font><br />
+cout&lt;&lt;myRel.rhat(1); <font color='#006600'>//prints [0 0 1]</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionT1, T2'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double T1(int i);<br />
+double T2(int i);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for both Offset_T=doule and Offset_T=coord&lt;&gt;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the spin index<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the individual T1 (or T2) for the spin at index i.  It does NOT check the bounds (so imputting an out of bounds index will more then likely crash the program).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//create 2 vector spreads</font><br />
+<font color='#006600'>//T2...0..6 seconds</font><br />
+Vector&lt;double&gt; T2s(Spread&lt;double&gt;(0,6, 2));<br />
+<font color='#006600'>//T1...6...0 seconds</font><br />
+Vector&lt;double&gt; T1s(Spread&lt;double&gt;(6, 0, -2));<br />
+<br />
+<font color='#006600'>//a relaxation object</font><br />
+Relax&lt;&gt; myRel(T2s, T1s);<br />
+<br />
+<font color='#006600'>//get a single spin T2 value</font><br />
+cout&lt;&lt;myRel.T2(0); <font color='#006600'>//prints '0'</font><br />
+<font color='#006600'>//get a T1 value</font><br />
+cout&lt;&lt;myRel.T1(1); <font color='#006600'>//prints '4'</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractionT2, T1'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;double&gt; T2();<br />
+Vector&lt;double&gt; T1();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for both Offset_T=double and Offset_T=coord&lt;&gt;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the T2 (or the T1) data vector in the object.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up an object</font><br />
+Relax&lt;&gt; myRel(50, 0.02);<br />
+<br />
+<font color='#006600'>//the entire 50 spin vector with each element=0.02</font><br />
+Vector&lt;double&gt; myRel.T2(); <br />
+<br />
+<font color='#006600'>//the entire 50 spin vector with each element=0</font><br />
+Vector&lt;double&gt; myRel.T1(); <br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentssetMo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setMo(const Vector&lt;coord&lt;&gt; &gt; &newMo);<br />
+void setMo(int i,const coord&lt;&gt;  &newMo);<br />
+void setMo(const coord&lt;&gt;  &newMo);<br />
+<br />
+template&lt;class GridEngine_t, int BPops, class Offset_T&gt;<br />
+void setMo(ListBlochParams&lt;GridEngine_t, BPops, Offset_T &gt;  &Lbc);<br />
+<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid ONLY for Offset_T=coord&lt;&gt;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newMo--&gt; A Vector of coord&lt;&gt; (or a single coord&lt;&gt; for spin i) that sets the new relaxation axis.  <br />
+Lbc--&gt; a ListBlochParams with the Mo set to the coorect axis (if Offset_T=double, the axis always be (0,0,1))<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is valid for the 'coord&lt;&gt;' version where this vector is the direction where the longitudinal relaxation relaxes to. The transverse relaxation relaxes the components in the plane perpendicular to this axis. This either sets the direction for a single spin (at index i) or the enitre object's rhat vector. If using the 'setMo(coord&lt;&gt;)' version then ALL the spins get set to this axis. It also normalizes the input coord&lt;&gt; (even if you did not). Using 'setMo(ListBlochParams)' will set interaction axis to the one given in by the Mo of the ListBlochParams.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up an object</font><br />
+Relax&lt;coord&lt;&gt; &gt; myRel(5, 0.02, 0.01);<br />
+<br />
+<font color='#006600'>//the default rhat vector is (0,0,1) (z-axis)</font><br />
+<font color='#006600'>//set all the spins to relax to the x axis</font><br />
+myRel.setMo(coord&lt;&gt;(14,0,0));<br />
+<br />
+<font color='#006600'>// set the 2nd spin with a (1,0,1) axis</font><br />
+myRel.setMo(2,coord&lt;&gt;(1,0,1));<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentsT1, T2'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double &T1(int i);<br />
+double &T2(int i);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for both Offset_T=double and Offset_T=coord&lt;&gt;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the spin index<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the individual reference to the T1 (or T2) for the spin at index i. It does NOT check the bounds (so inputting an out of bounds index will more then likely crash the program).<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//a relaxation object of length 3</font><br />
+Relax&lt;&gt; myRel(3);<br />
+<br />
+<font color='#006600'>//get a single spin T2 value</font><br />
+myRel.T2(0)=0.3; <font color='#006600'>//set the first spins T2 value to 0.3</font><br />
+myRel.T1(1)=2; <font color='#006600'>//set the second spins T1 value to 2</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentsT2, T1'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;double&gt; &T2();<br />
+Vector&lt;double&gt; &T1();<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for both Offset_T=double and Offset_T=coord&lt;&gt;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the reference to the vector data object so that you can set a new data vector.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//create 2 vector spreads</font><br />
+<font color='#006600'>//T2...0..6 seconds</font><br />
+Vector&lt;double&gt; T2s(Spread&lt;double&gt;(0,6, 2));<br />
+<font color='#006600'>//T1...6...0 seconds</font><br />
+Vector&lt;double&gt; T1s(Spread&lt;double&gt;(6, 0, -2));<br />
+<br />
+<font color='#006600'>//set up an empty object</font><br />
+Relax&lt;&gt; myRel;<br />
+<br />
+<font color='#006600'>//set the T2 vector</font><br />
+myRel.T2()=T2s;<br />
+<br />
+<font color='#006600'>//set the T1 vector</font><br />
+myRel.T1()=T1s;<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

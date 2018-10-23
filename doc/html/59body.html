@@ -1,0 +1,1025 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("59menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("59menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("59menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("59title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("59");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Parameters_T, class Pulse_T, class Interactions_T&gt;<br />
+class Bloch {....<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This class is designed to be the master function object to the ODE solvers and the BlochSolver.  It wraps the ListBlochParameters, Pulse (or NoPulse) and the interactions object to specifcally optimize the 'void function(double time, Vector&lt;coord&lt;&gt; &gt; &y, Vector&lt;coord&lt;&gt; &gt; &dydt)' functional call based on the parameters, the Offset_T of the parameters, pulseing or no pulses, and the interaction set.<br />
+<br />
+Parameters_T --&gt; is (in every case) some ListBlochParameter class definition.<br />
+Pulse_T --&gt; is either 'Pulse' if there is a pulse on the system and 'NoPulse' if there is no pulse on the system.<br />
+Interaction_T--&gt; is an Interaction class.<br />
+<br />
+This classes main interface is for you to set the initial conditions, parameters, and pulses of the class (the 'function' interface you will probably never use).  It give you the ability to easily specify weather or not to calculate the variational equations (use to calculate Lyapunov numbers).<br />
+<br />
+The 'function' objects are of the same for as required by the ODE solver (and not described below).  There are also some 'helper' functions to aid in preparation and excecution of the 'function' that are also not described below.<br />
+<br />
+<br />
+For context usage see the examples in 'DemagField', 'DipoleDipole', 'Relax', 'BulkSus', and 'RadDamp'.<br />
+<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsBloch'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Bloch();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for all Bloch template types<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a Bloch an empty object.  Not very usful, as you will need to set the parameters, pulses, and interactions later.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Bloch myBloch;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsBloch'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Bloch(Parameters_T &pars)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for all tempalte Arguments.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pars --&gt; An input Parameters set (a ListBlochParam&lt;Grid_T, BPoptions, Offset_T&gt;)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Set up a basic bloch object using the input parameters 'pars'.  If you have a Pulse and Interactions then you must set those later.  It maintains a pointer to the Parameters object, so if you delete that parameters object, the Bloch will probably crash the program if used...<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef XYZfull TheShape;<br />
+typedef XYZshape&lt;TheShape&gt; TheGrid;<br />
+<br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+TheShape tester;<br />
+TheGrid jj( gg, tester);<br />
+<br />
+typedef ListBlochParams&lt;<br />
+               TheGrid,<br />
+               BPoptions::Particle | BPoptions::HighField,<br />
+               double &gt; MyPars;<br />
+MyPars parsIn(nsp, &quot;1H&quot;, jj);<br />
+<br />
+<font color='#006600'>//need to typdef the MyInteractions</font><br />
+<font color='#006600'>//use 'Pulse' or 'NoPulse' for the Pulse_T</font><br />
+typedef Bloch&lt; MyPars, Pulse_T, MyInteraction&gt; PulseBloch;<br />
+<br />
+<font color='#006600'>//sets the parameters pointer, however, </font><br />
+<font color='#006600'>// you may need to set the Pulse pointer</font><br />
+<font color='#006600'>// (if Pulse_T != NoPulse)</font><br />
+<font color='#006600'>//and the set the interaction pointers</font><br />
+PulseBloch pbloch(pars);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsBloch'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BLoch(Parameters_T &in, Pulse &pul);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The is valid ONLY for Parameter_T and Pulse_T=Pulse and Ineteractions_T=NoInteractions.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pars --&gt; An input Parameters set (a ListBlochParam&lt;Grid_T, BPoptions, Offset_T&gt;)<br />
+pul --&gt; A pulse object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The basic constructor for No Interactions and a Pulse.  It sets the Parameters_T (a ListBLochParam) pointer and the Pulse pointer.  If you destroy the Pulse or the Parameter_T object and use the Bloch object, more then likely the program will crash (becuase now the pointers are undefined).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef XYZfull TheShape;<br />
+typedef XYZshape&lt;TheShape&gt; TheGrid;<br />
+<br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+TheShape tester;<br />
+TheGrid jj( gg, tester);<br />
+<br />
+typedef ListBlochParams&lt;<br />
+TheGrid,<br />
+BPoptions::Particle | BPoptions::HighField,<br />
+double &gt; MyPars;<br />
+MyPars pars(nsp, &quot;1H&quot;, jj);<br />
+<br />
+typedef Bloch&lt; MyPars, Pulse, NoInteractions&gt; PulseBloch;<br />
+<br />
+<font color='#006600'>// (spin, amplitude, phase)</font><br />
+Pulse PP1(&quot;1H&quot;, 150000, 0.); <br />
+<br />
+<font color='#006600'>//sets the parameters pointer, however, </font><br />
+<font color='#006600'>// and the Pulse pointer</font><br />
+PulseBloch pbloch(pars, PP1);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsBloch'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Bloch(Parameters_T &pars, Pulse &pul,Interaction_t &inter):<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid ONLY for Pulse_T != NoPulse and Interactions_T != NoInteracions.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pars --&gt; An input Parameters set (a ListBlochParam&lt;Grid_T, BPoptions, Offset_T&gt;)<br />
+pul --&gt; A pulse object<br />
+inter--&gt; An Interactions object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The master constructor with Pulse_T != NoPulse Interactions_T != NoInteractions. Creates an object using all three basic template arguments. If you destroy the Pulse, Parameter_T, or the Interactions_T object and use the Bloch object, more then likely the program will crash (becuase now the pointers are undefined).<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef XYZfull TheShape;<br />
+typedef XYZshape&lt;TheShape&gt; TheGrid;<br />
+<br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+TheShape tester;<br />
+TheGrid jj( gg, tester);<br />
+<br />
+typedef ListBlochParams&lt;<br />
+TheGrid,<br />
+BPoptions::Particle | BPoptions::HighField,<br />
+double &gt; MyPars;<br />
+MyPars pars(nsp, &quot;1H&quot;, jj);<br />
+<br />
+typedef Interactions&lt;Offset&lt;&gt; &gt; MyInteractions;<br />
+<br />
+Offset offs(pars, 2000.0*PI2);<br />
+MyInteractions inters(offs);<br />
+<br />
+<font color='#006600'>// (spin, amplitude, phase)</font><br />
+Pulse PP1(&quot;1H&quot;, 150000, 0.); <br />
+<br />
+typedef Bloch&lt; MyPars, Pulse, MyInteractions&gt; PulseBloch;<br />
+<br />
+<font color='#006600'>//sets the parameters pointer,</font><br />
+<font color='#006600'>// and the Pulse pointer </font><br />
+<font color='#006600'>// and the Interactions pointer</font><br />
+PulseBloch pbloch(pars, PP1, inters);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsBloch'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Bloch(Parameter_T &pars, Interactions_T &inter)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The is valid ONLY for Parameter_T and Pulse_T=NoPulse and Ineteractions_T.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pars --&gt; An input Parameters set (a ListBlochParam&lt;Grid_T, BPoptions, Offset_T&gt;)<br />
+inter--&gt; An Interactions object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The basic constructor for Pulse_T=NoPulse and an Interactions object. It sets the Parameters_T (a ListBLochParam) pointer and the Interactions_T pointer. If you destroy the Interactions_T or the Parameter_T object and use the Bloch object, more then likely the program will crash (becuase now the pointers are undefined).<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef XYZfull TheShape;<br />
+typedef XYZshape&lt;TheShape&gt; TheGrid;<br />
+<br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+TheShape tester;<br />
+TheGrid jj( gg, tester);<br />
+<br />
+typedef ListBlochParams&lt;<br />
+TheGrid,<br />
+BPoptions::Particle | BPoptions::HighField,<br />
+double &gt; MyPars;<br />
+MyPars pars(nsp, &quot;1H&quot;, jj);<br />
+<br />
+typedef Interactions&lt;Offset&lt;&gt; &gt; MyInteractions;<br />
+<br />
+Offset offs(pars, 2000.0*PI2);<br />
+MyInteractions inters(offs);<br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, MyInteractions&gt; NoPulseBloch;<br />
+<br />
+<font color='#006600'>//sets the parameters pointer, however, </font><br />
+<font color='#006600'>// and the Interactions pointer</font><br />
+NoPulseBloch pbloch(pars, inters);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsBloch'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Bloch(Bloch&lt;Parameters_T, Pulse_T, Interactions_T&gt; &cp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp --&gt; another Bloch object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Copies an exsisting Bloch object to another. Some rules applied to the template arguments.<br />
+<br />
+The Parameters_T must be the same for BOTH the new object and the copied object.<br />
+<br />
+If Pulse_T for the new object = NoPulse then Pulse_T of the copied object can be either Pulse of NoPulse (the Pulse will not be copied).<br />
+If Pulse_T for the new object = Pulse then Pulse_T of the copied object can be either Pulse or NoPulse. If the copied object has Pulse_T=NoPulse, then NO pulse will be copied and you will need to define it later.<br />
+<br />
+If Interactions_T for the new object = NoInteractions then no Inteactions will be copied from the copied object. <br />
+If Interactions_T for the new obeject != NoInteractions, the BOTH the Interactions_T for the two objects MUST BE THE SAME.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef XYZfull TheShape;<br />
+typedef XYZshape&lt;TheShape&gt; TheGrid;<br />
+<br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+TheShape tester;<br />
+TheGrid jj( gg, tester);<br />
+<br />
+typedef ListBlochParams&lt;<br />
+TheGrid,<br />
+BPoptions::Particle | BPoptions::HighField,<br />
+double &gt; MyPars;<br />
+MyPars pars(nsp, &quot;1H&quot;, jj);<br />
+<br />
+typedef Interactions&lt;Offset&lt;&gt; &gt; MyInteractions;<br />
+<br />
+Offset offs(pars, 2000.0*PI2);<br />
+MyInteractions inters(offs);<br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, MyInteractions&gt; NoPulseBloch;<br />
+<br />
+typedef Bloch&lt; MyPars, Pulse, MyInteractions&gt; PulseBloch;<br />
+<br />
+<font color='#006600'>//sets the parameters pointer </font><br />
+<font color='#006600'>// and the Interactions pointer</font><br />
+NoPulseBloch npbloch(pars, inters);<br />
+<br />
+<font color='#006600'>//now we need to set thePulse pointer</font><br />
+PulseBloch pbloch(npbloch);<br />
+Pulse PP1(&quot;1H&quot;, 150000, 0.);<br />
+pbloch.setPulses(PP1);<br />
+<br />
+<font color='#006600'>//a new NoPulse object</font><br />
+NoPulseBloch npbloch2(npbloch);<br />
+<br />
+<font color='#006600'>//can also make one like this</font><br />
+<font color='#006600'>// the pulse is ignored</font><br />
+NoPulseBloch npbloch3(pbloch);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractioninteractions'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Interactions_T *interactions();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NOT valid for Interactions_T = NoInteractions<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the pointer to the current Bloch interaction object.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef XYZfull TheShape;<br />
+typedef XYZshape&lt;TheShape&gt; TheGrid;<br />
+<br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+TheShape tester;<br />
+TheGrid jj( gg, tester);<br />
+<br />
+typedef ListBlochParams&lt;<br />
+TheGrid,<br />
+BPoptions::Particle | BPoptions::HighField,<br />
+double &gt; MyPars;<br />
+MyPars pars(nsp, &quot;1H&quot;, jj);<br />
+<br />
+typedef Interactions&lt;Offset&lt;&gt; &gt; MyInteractions;<br />
+<br />
+Offset offs(pars, 2000.0*PI2);<br />
+MyInteractions inters(offs);<br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, MyInteractions&gt; NoPulseBloch;<br />
+<br />
+<font color='#006600'>//sets the parameters pointer </font><br />
+NoPulseBloch npbloch(pars);<br />
+<br />
+<font color='#006600'>// and the Interactions pointer</font><br />
+npbloch.setInteractions(inters);<br />
+<br />
+MyInteractions newguy;<br />
+newguy=(*npbloch.interactions());<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionparameters'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Parameters_T *parameters();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the pointer to the current Parameter_T object in Bloch.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef XYZfull TheShape;<br />
+typedef XYZshape&lt;TheShape&gt; TheGrid;<br />
+<br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+TheShape tester;<br />
+TheGrid jj( gg, tester);<br />
+<br />
+typedef ListBlochParams&lt;<br />
+TheGrid,<br />
+BPoptions::Particle | BPoptions::HighField,<br />
+double &gt; MyPars;<br />
+MyPars pars(nsp, &quot;1H&quot;, jj);<br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, NoInteractions&gt; NoPulseBloch;<br />
+<br />
+NoPulseBloch npbloch(pars);<br />
+<br />
+MyPars pars2;<br />
+pars2=(*npbloch.parameters());<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionpulses'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Pulse *pulses();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NOT valid for Pulse_T=NoPulse.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the pointer to the current Bloch Pulse object.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef Bloch&lt; MyPars, Pulse, MyInteractions&gt; PulseBloch;<br />
+Pulse PP1(&quot;1H&quot;, 82000, 0.);<br />
+PulseBloch pbloch(pars, PP1, inters);;<br />
+Pulse PP2(&quot;1H&quot;, 150000, 0.);<br />
+pbloch.setPulses(PP1);<br />
+<br />
+Pulse PP3;<br />
+PP3=(*pbloch.pulses());<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Bloch operator=(Bloch&lt;Parameters_T, Pulse_T, Interactions_T&gt; &cp)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp --&gt; another Bloch object<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Copies an exsisting Bloch object to another. Some rules applied to the template arguments.<br />
+<br />
+The Parameters_T must be the same for BOTH the new object and the copied object.<br />
+<br />
+If Pulse_T for the new object = NoPulse then Pulse_T of the copied object can be either Pulse of NoPulse (the Pulse will not be copied).<br />
+If Pulse_T for the new object = Pulse then Pulse_T of the copied object can be either Pulse or NoPulse. If the copied object has Pulse_T=NoPulse, then NO pulse will be copied and you will need to define it later.<br />
+<br />
+If Interactions_T for the new object = NoInteractions then no Inteactions will be copied from the copied object. <br />
+If Interactions_T for the new obeject != NoInteractions, the BOTH the Interactions_T for the two objects MUST BE THE SAME.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef XYZfull TheShape;<br />
+typedef XYZshape&lt;TheShape&gt; TheGrid;<br />
+<br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+TheShape tester;<br />
+TheGrid jj( gg, tester);<br />
+<br />
+typedef ListBlochParams&lt;<br />
+TheGrid,<br />
+BPoptions::Particle | BPoptions::HighField,<br />
+double &gt; MyPars;<br />
+MyPars pars(nsp, &quot;1H&quot;, jj);<br />
+<br />
+typedef Interactions&lt;Offset&lt;&gt; &gt; MyInteractions;<br />
+<br />
+Offset offs(pars, 2000.0*PI2);<br />
+MyInteractions inters(offs);<br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, MyInteractions&gt; NoPulseBloch;<br />
+<br />
+typedef Bloch&lt; MyPars, Pulse, MyInteractions&gt; PulseBloch;<br />
+<br />
+<font color='#006600'>//sets the parameters pointer </font><br />
+<font color='#006600'>// and the Interactions pointer</font><br />
+NoPulseBloch npbloch(pars, inters);<br />
+<br />
+<font color='#006600'>//now we need to set the Pulse pointer</font><br />
+PulseBloch pbloch=npbloch;<br />
+Pulse PP1(&quot;1H&quot;, 150000, 0.);<br />
+pbloch.setPulses(PP1);<br />
+<br />
+<font color='#006600'>//a new NoPulse object</font><br />
+NoPulseBloch npbloch2=npbloch;<br />
+<br />
+<font color='#006600'>//can also make one like this</font><br />
+<font color='#006600'>// the pulse is ignored</font><br />
+NoPulseBloch npbloch3=pbloch;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetInteractions'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setInteractions(Interactions_T &in);<br />
+void setInteractions(Interactions_T *in);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Not valid for Interactions_T=NoInteractions;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; an Interactions object.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the Interaction pointer to the input.  The Interactions_T must be the same as the one initially decalred in Bloch.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef XYZfull TheShape;<br />
+typedef XYZshape&lt;TheShape&gt; TheGrid;<br />
+<br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+TheShape tester;<br />
+TheGrid jj( gg, tester);<br />
+<br />
+typedef ListBlochParams&lt;<br />
+TheGrid,<br />
+BPoptions::Particle | BPoptions::HighField,<br />
+double &gt; MyPars;<br />
+MyPars pars(nsp, &quot;1H&quot;, jj);<br />
+<br />
+typedef Interactions&lt;Offset&lt;&gt; &gt; MyInteractions;<br />
+<br />
+Offset offs(pars, 2000.0*PI2);<br />
+MyInteractions inters(offs);<br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, MyInteractions&gt; NoPulseBloch;<br />
+<br />
+<font color='#006600'>//sets the parameters pointer </font><br />
+NoPulseBloch npbloch(pars);<br />
+<br />
+<font color='#006600'>// and the Interactions pointer</font><br />
+npbloch.setInteractions(inters);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetParameters'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setParameters(Parameters_T &in);<br />
+void setParameters(Parameters_T *in);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; a set of parameters<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Set the parameters point inside the Bloch object. It MUST be the same class type as the initially declared in Bloch. NOTE:: this function will REINITIALLIZE the initial condition (because the size of the parameters can change).  So should you desire to keep the same initial condition, but change the parmaters, you should first get the current Magnetization vector (via currentMag()), set the Parameters, then reset the current Magnetization vector (assuming that the size of the parameters is the same size as the old magnetiziation vector) (via setCurrentMag()) back to the old one.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef XYZfull TheShape;<br />
+typedef XYZshape&lt;TheShape&gt; TheGrid;<br />
+<br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+TheShape tester;<br />
+TheGrid jj( gg, tester);<br />
+<br />
+typedef ListBlochParams&lt;<br />
+TheGrid,<br />
+BPoptions::Particle | BPoptions::HighField,<br />
+double &gt; MyPars;<br />
+MyPars pars(nsp, &quot;1H&quot;, jj);<br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, NoInteractions&gt; NoPulseBloch;<br />
+<br />
+NoPulseBloch npbloch(pars);<br />
+<br />
+<font color='#006600'>//make a new parameter set</font><br />
+MyPars pars2(nsp, &quot;13C&quot;, jj);<br />
+<br />
+<font color='#006600'>//get the old initial magnetization</font><br />
+Vecotor&lt;coord&lt;&gt; &gt; tmM=npbloch.currentMag();<br />
+<br />
+<font color='#006600'>//set the new parameters</font><br />
+npbloch.setParametes(pars2);<br />
+<br />
+<font color='#006600'>//reset the magnetization</font><br />
+npbloch.setCurrentMag(tmM);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetPulses'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setPulses(Pulse &in);<br />
+void setPulses(Pulse *in);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid only for Pulse_T != NoPulse<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; a Pulse object (or pointer to a Pulse object)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the Pulse pointer for a Bloch Object with Pulse_T!=NoPulse.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef Bloch&lt; MyPars, Pulse, MyInteractions&gt; PulseBloch;<br />
+Pulse PP1(&quot;1H&quot;, 82000, 0.);<br />
+PulseBloch pbloch(pars, PP1, inters);;<br />
+Pulse PP2(&quot;1H&quot;, 150000, 0.);<br />
+pbloch.setPulses(PP1);<br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other FunctionscalcVariational'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void calcVariational()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This tells the object that along with the normally evolved magnetization, the Variational equations will also be evolved. For each 3-vector magnetization, there are 3 3-vector variational equations to calculate (really a 3x3 matrix) (thus the ODE solver sees 4*Number of Spins) equations and the time evolution will take 3 times as long.  The intial condition for the variational equations is always the indentity matrix for each spin. This function also sets the initial condition.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+<font color='#006600'>//define your parameters....</font><br />
+<font color='#006600'>//...</font><br />
+<font color='#006600'>//</font><br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, NoInteractions&gt; NoPulseBloch;<br />
+<br />
+NoPulseBloch npbloch(pars);<br />
+npbloch.calcVariational();<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionscurrentMag'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;coord&lt;&gt; &gt; currentMag()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the current magntization.  It is initially the 'initialCondition().'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//define your parameters and interactions</font><br />
+<font color='#006600'>//...</font><br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, MyInteractions&gt; NoPulseBloch;<br />
+<br />
+NoPulseBloch npbloch(pars);<br />
+Vector&lt;coord&lt;&gt; &gt; curM=npbloch.currentMag();<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionscurVariational'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;coord&lt;&gt; &gt; curVariational()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the current variational evolution points(if the 'calcVariational()' function has been called, otherwise a warning will be issued).  The output vector will be 3*number-of-spins.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//define your parameters and interactions</font><br />
+<font color='#006600'>//...</font><br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, MyInteractions&gt; NoPulseBloch;<br />
+<br />
+NoPulseBloch npbloch(pars);<br />
+npbloch.calcVariational();<br />
+<br />
+Vector&lt;coord&lt;&gt; &gt; curV=npbloch.curVariational();<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsinitialCondition'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;coord&lt;&gt; &gt; initialCondition()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the initial condition assigned to the Bloch object. This will be set upon the calling of the constructor or 'setInitialCondition()'. This does NOT evolve with the ODE solver, so you can 'remember' what it was.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+<font color='#006600'>//define your parameters....</font><br />
+<font color='#006600'>//...</font><br />
+<font color='#006600'>//</font><br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, NoInteractions&gt; NoPulseBloch;<br />
+<br />
+NoPulseBloch npbloch(pars);<br />
+<br />
+<font color='#006600'>//will variy depending</font><br />
+<font color='#006600'>// on what you set the 'IntialCondition'</font><br />
+<font color='#006600'>// functional form</font><br />
+<font color='#006600'>// in ListBLochParams to be</font><br />
+Vector&lt;coord&lt;&gt; &gt; m0=npbloch.initialCondition();<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionsnoCalcVariational'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void noCalcVariational()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Will set the Magnetization back to a size that is the number of spins (if the 'calcVariational()') was called.  It does nothing if variationalPolicy()==NoVariational.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//define your parameters....</font><br />
+<font color='#006600'>//...</font><br />
+<font color='#006600'>//</font><br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, NoInteractions&gt; NoPulseBloch;<br />
+<br />
+NoPulseBloch npbloch(pars);<br />
+npbloch.calcVariational();<br />
+<br />
+<font color='#006600'>//reste back to the nonvariation version</font><br />
+npbloch.noCalcVariational();<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionssetIntialCondition'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setInitialCondition(const Vector&lt;coord&lt;&gt; &gt; &in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; the new initial consition<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the inital condition in the BLoch Object.  It will overwrite both the time evolved Magnetization vector AND the initial condtion vector.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//define your parameters....</font><br />
+<font color='#006600'>//...</font><br />
+<font color='#006600'>//</font><br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, NoInteractions&gt; NoPulseBloch;<br />
+<br />
+NoPulseBloch npbloch(pars);<br />
+<br />
+<font color='#006600'>//will variy depending</font><br />
+<font color='#006600'>// on what you set the 'IntialCondition'</font><br />
+<font color='#006600'>// functional form</font><br />
+<font color='#006600'>// in ListBLochParams to be</font><br />
+Vector&lt;coord&lt;&gt; &gt; m0=npbloch.initialCondition();<br />
+<br />
+m0+=5;<br />
+npbloch.setInitialCondition(m0);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionssize()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int size();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the size of the current spin space...this is NOT the size of the magnetization vector (that can be size() or 4*size() depeding on weather or not you are calculating the variation equations as well).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+typedef XYZfull TheShape;<br />
+typedef XYZshape&lt;TheShape&gt; TheGrid;<br />
+<br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+TheShape tester;<br />
+TheGrid jj( gg, tester);<br />
+<br />
+typedef ListBlochParams&lt;<br />
+TheGrid,<br />
+BPoptions::Particle | BPoptions::HighField,<br />
+double &gt; MyPars;<br />
+MyPars pars(nsp, &quot;1H&quot;, jj);<br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, NoInteractions&gt; NoPulseBloch;<br />
+<br />
+NoPulseBloch npbloch(pars);<br />
+<br />
+cout&lt;&lt;mpbloch.size();<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsvariationalPolicy'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BlochOps::VariationEqs variationalPolicy()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns an enum value either {BlochOps::Variational, BlochOps::NoVariational} depending on weather or not you used the 'calcVariational()' function.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//define your parameters and interactions</font><br />
+<font color='#006600'>//...</font><br />
+<br />
+typedef Bloch&lt; MyPars, NoPulse, MyInteractions&gt; NoPulseBloch;<br />
+<br />
+NoPulseBloch npbloch(pars);<br />
+npbloch.calcVariational();<br />
+<br />
+if(npbloch.variationalPolicy()==BlochOps::Variational){<br />
+cout&lt;&lt;&quot;Calculating variational Eqs&quot;&lt;&lt;endl;<br />
+}<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

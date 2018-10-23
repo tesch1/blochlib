@@ -1,0 +1,114 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Using the spacial and spin tensors and a Rotations object to generate the Zero-Field dipolar hamiltonian.<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This is a class demonstration that uses the spacial and spherical tensors to create the 2 functions nessesary for the driver class 'oneFID' to calculate FIDs from a specific hamiltonian embeded in a class.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<br />
+<font color='#006600'>//a&nbsp;class&nbsp;that&nbsp;extends&nbsp;the&nbsp;SolidSys</font><br />
+<font color='#006600'>//&nbsp;nessesary&nbsp;in&nbsp;order&nbsp;for&nbsp;the&nbsp;'oneFID'&nbsp;to&nbsp;function</font><br />
+<font color='#006600'>//&nbsp;properly.&nbsp;&nbsp;This&nbsp;class&nbsp;overwrites&nbsp;the&nbsp;'Hamiltonian'</font><br />
+<font color='#006600'>//&nbsp;functions&nbsp;of&nbsp;SolidSys</font><br />
+class&nbsp;ZeroFieldDipole&nbsp;:<br />
+	public&nbsp;SolidSys<br />
+{<br />
+	public:<br />
+		double&nbsp;D;<br />
+		ZeroFieldDipole():SolidSys(),&nbsp;D(0){}<br />
+		ZeroFieldDipole(double&nbsp;d):SolidSys(),&nbsp;D(d){}<br />
+		ZeroFieldDipole(SolidSys&nbsp;&sys,&nbsp;double&nbsp;d):SolidSys(sys),&nbsp;&nbsp;D(d){}<br />
+<br />
+<font color='#006600'>//This&nbsp;function&nbsp;(and&nbsp;the&nbsp;one&nbsp;below)&nbsp;are&nbsp;nessesary&nbsp;for&nbsp;the</font><br />
+<font color='#006600'>//&nbsp;oneFID&nbsp;driver&nbsp;to&nbsp;calculate&nbsp;the&nbsp;FIDs&nbsp;from&nbsp;</font><br />
+<font color='#006600'>//&nbsp;these&nbsp;hamiltonians</font><br />
+		hmatrix&nbsp;Hamiltonian(double&nbsp;t1,&nbsp;double&nbsp;t2,&nbsp;double&nbsp;wr)<br />
+		{<br />
+<font color='#006600'>//the&nbsp;object&nbsp;'theRotations'&nbsp;is&nbsp;a&nbsp;Rotations&nbsp;object</font><br />
+<font color='#006600'>//&nbsp;embeded&nbsp;inside&nbsp;the&nbsp;SolidSys&nbsp;base&nbsp;class</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;tmid=((t2-t1)/2.0+t1)*wr*PI2);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;D*(<br />
+				&nbsp;A2(tmid,theRotations.beta,-2)*T22(*this,&nbsp;0,1)<br />
+				&nbsp;-A2(tmid,theRotations.beta,-1)*T21(*this,&nbsp;0,1)<br />
+				&nbsp;+A2(tmid,theRotations.beta,0)*T20(*this,&nbsp;0,1)<br />
+				&nbsp;-A2(tmid,theRotations.beta,1)*T2m1(*this,&nbsp;0,1)<br />
+				&nbsp;-A2(tmid,theRotations.beta,2)*T2m2(*this,&nbsp;0,1));<br />
+		}<br />
+<br />
+		hmatrix&nbsp;Hamiltonian(double&nbsp;wr,&nbsp;double&nbsp;rot,&nbsp;double&nbsp;alpha,&nbsp;double&nbsp;beta,&nbsp;double&nbsp;t1,&nbsp;double&nbsp;t2)<br />
+		{<br />
+			return&nbsp;sqrt(6.0)*D*(<br />
+				&nbsp;A2(alpha,beta,-2)*T22(*this,&nbsp;0,1)<br />
+				&nbsp;-A2(alpha,beta,-1)*T21(*this,&nbsp;0,1)<br />
+				&nbsp;+A2(alpha,beta,0)*T20(*this,&nbsp;0,1)<br />
+				&nbsp;-A2(alpha,beta,1)*T2m1(*this,&nbsp;0,1)<br />
+				&nbsp;+A2(alpha,beta,2)*T2m2(*this,&nbsp;0,1));<br />
+		}<br />
+<br />
+<br />
+};<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

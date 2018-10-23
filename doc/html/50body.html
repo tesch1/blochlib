@@ -1,0 +1,501 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("50menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("50menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("50menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("50title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("50");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Inter1, Inter2, ..., Inter9&gt;<br />
+class Interactions {...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+
+<BR>How BlochLib handles the Bloch interactions comprise 
+  the bulk of the code in the 'bloch equations' section.  
+  The grids, gradients, magnetic fields, and rotations all interact with the interactions 
+  to produce highly efficient methods to both assign properties to spins, and 
+  to solve the resulting differential equations.
+<BR>
+The master class, <TT>Interactions</TT>, acts as the master container for all the interactions in the system. This class is NOTHING without the various interaction classes described below.  It provides the main interaction function to interface with the Bloch class to provide the ODE solver with the correct function. It can hold up to 9 different interactions in its template definition.  
+<br>  
+<BR>The interactions can be broken up into three sub categories
+<ul>
+  <li><b>Particle interactions</b>...here, no information about the other spins 
+    in the system is necessary.  Offsets and Relaxation fit into this category.</li>
+  <li><b>Global interactions</b>...some total system property(s) is necessary 
+    to calculate the interaction.  Bulk susceptibility and Radiation Damping fit 
+    into this category.</li>
+  <li><b>Multi Particle interactions</b>...These interactions are typically the 
+    most non-linear of all the interactions.  To calculate the necessary information, 
+    the current state of the entire spin system must be known, making these interactions 
+    also the most time consuming to calculate. Dipoles and the Demagnetizing Field 
+    both fit into this category.</li>
+</ul>
+<BR>
+  Each interaction class has the same set of REQUIRED functions and constants.  
+  These functions are designed to interface with the BlochSolver and the Bloch 
+  classes to infer the fastest way to calculate the interactions.  To input new 
+  interactions of your own, they must have these functions to function in the 
+  solver.  These functions are listed in the <B> Special Functions</B> section and are both valid to the <TT>Interactions</TT> class iteself as well as the sub-interaction classes.  
+<br>
+Below are the types of interactions and a brief description of each.  Functions specific to each interaction are described in their own class section.
+
+<br>
+<p><b>The Particle interactions....</b></p>
+<ul>
+  <li><TT>template&lt;class FieldCalc_t= NullBFcalc, class Offset_T=double&gt;<br>
+    class Offset<br>
+    <br>
+    </tt><TT>FieldCalc_t </tt>acts as the Magnetic Field class. The case where 
+    <TT>FieldCalc_t</tt> is NOT <TT>NullBFcalc</tt> is described below.<br>
+    This is the first basic offset class. For <TT>Offset_T =double</tt> (default) 
+    and the <TT>FieldCalc_t= NullBFcalc</tt>, the offset is assumed to be along 
+    ONLY the z-axis.<br>
+    The second case, where <TT>Offset_T =coord&lt;&gt;</tt> is when the magnetic 
+    field is NOT along the z-axis, but along an arbitrary axis. Here there are 
+    3 offsets, x,y,z.<br>
+    <br>
+  </li>
+  <li> <TT>template &lt;class Grid_t &gt;<br>
+    class Offset&lt;ListBlochParams&lt;GradientGrid&lt;Grid_t&gt;, BPops, double 
+    &gt;, double</tt>&gt;<br>
+    <br>
+    This contains the next basic offset class where a gradient is applied over 
+    entire grid, here the offsets can have basic assigned values (the spin_offset) 
+    and offsets due to gradients. This class will only function for<TT> Offset_T 
+    =double</tt> as currently gradients in an off z-axis frame are not yet written.<br>
+    <br>
+  </li>
+  <li><TT>template&lt;class FieldCalc_t&gt;<br>
+    class Offset&lt;FieldCalc_t, FieldCalc_t ::Offset_T </tt>&gt;<br>
+    <br>
+    When the <TT>FieldCalc_t</tt> is NOT <TT>NullBFcalc</tt> or <TT>ListBlochParams&lt;GradientGrid&lt;Grid_t&gt;, 
+    BPops, double&gt; </tt> it is assumed that the offsets are to be calculated 
+    using an input magnetic field class. These classes have either &quot;<TT>StaticField</tt>&quot; 
+    or &quot;<TT>DynamicField</tt>&quot; as base classes. A <TT>StaticField</tt> base tells 
+    the offset class that the field does NOT change in time (thus <TT>PreCalc=0</tt>), 
+    but that the <TT>Offset_T=coord</tt>&lt;&gt;. A <TT>DynamicField</tt> base 
+    tells the offset will change in time (<tt>PreCalc=1</tt>, how it changes will 
+    be up to you to write) and that the <TT>Offset_T=coord&lt;&gt;</tt>.<br>
+    <br>
+  </li>
+  <li> <TT>template< class Offset_T=double><br>
+    class Relax</tt><br>
+    <br>
+    This class simply holds the container for the spin relaxation parameters, 
+    T1 and T2. The <TT>Offset_T</tt> should be the same as the <TT>ListBlochParams::Offset_T</tt> 
+    and the <TT>Offset::Offset_T</tt>. The T1 and T2 values for each spin are 
+    treated simply as exponential decays along the X-Y plane (T2) and the z-axis 
+    (T1) for <TT>Offset_T=double</tt> (the analogous planes and main axis for 
+    <TT>Offset_T=coord<></tt>).<br>
+  </li>
+</ul>
+<p><b>The Global interactions....</b><br>
+</p>
+<ul>
+  <li><TT>class BulkSus</tt><br>
+    <br>
+    The bulk susceptibility relies on the total magnetization of the sample to 
+    create a reaction field to the main field, thus causing slight offset change 
+    from the basic offset. It is a bulk property, and thus makes no sense for 
+    a <TT>BPoptions=BPoptions::Particle</tt>, but only for <TT>BPoptions::Density</tt>.<br>
+    <br>
+  </li>
+  <li> <TT>class RadDamp</tt><br>
+    <br>
+    Radiation damping is effectively the EMF induced in the coil from the sample 
+    polarization back reacting on the sample it self. It is a polarization conserving 
+    interaction (not a 'relaxation' mechanism) but behaves like a sort of nonlinear 
+    relaxation. It is a bulk property, and thus makes no sense for a <TT>BPoptions=BPoptions::Particle</tt>, 
+    but only for <TT>BPoptions::Density</tt>.<br>
+    <br>
+  </li>
+</ul>
+<p><b>The Multi-Particle interactions....</b><br>
+</p>
+<ul>
+  <li><tt> template&lt;class Grid_t&gt;<br>
+    class DipoleDipole</tt><br>
+    <br>
+    This class maintains the Dipole-Dipole interaction between each point on the 
+    grid (not just nearest neighbor, but all neighbors). It determines the dipole 
+    coupling through the spins gamma factors and the distance between them. The 
+    dipole equation of motion is calculated assuming a HIGH z-axis magnetic field 
+    (i.e. truncated).<br>
+    <br>
+  </li>
+  <li><tt> template &lt;class Grid_t&gt;<br>
+    class DimLessDipole</tt><br>
+    <br>
+    This class maintains the Dipole-Dipole interaction between each point on the 
+    grid (not just nearest neighbor, but all neighbors). It determines the dipole 
+    coupling a ratio between some input value (you must specify it) and the distance 
+    between the spins such that the largest possible coupling is the one you specify. 
+    The dipole equation of motion is calculated assuming a HIGH z-axis magnetic 
+    field (i.e. truncated).<br>
+    <br>
+  </li>
+  <li><tt> template&lt;class Grid_t&gt;<br>
+    class DemagField</tt><br>
+    <br>
+    This class calculates the demagnetizing field for a given set of spins. This 
+    field is related to the asymmetry in a shape, or the non-uniform magnetization 
+    of a sample. It is a bulk property, and thus makes no sense for a <tt>BPoptions=BPoptions::Particle</tt>, 
+    but only for <tt>BPoptions::Density</tt>. It is designed to be the effective 
+    dipolar field that a given sees in a bulk sample and is to replace the 'DipoleDipole' 
+    interaction for such density calculations.<br>
+    <br>
+  </li>
+  <li><tt> template&lt;class Grid_t&gt;<br>
+    class DimLessDemagField</tt><br>
+    <br>
+    This class calculates the demagnetizing field for a given set of spins. This 
+    field is related to the asymmetry in a shape, or the non-uniform magnetization 
+    of a sample. It allows you to set the maximal value for a interaction, rather 
+    then relying on the strict distance integration.</li>
+  
+</ul>
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Special Functions'></a>Special Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Special Functionsfunction'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class ParamList&gt;<br />
+inline void function(double t, Vector&lt;coord&lt;&gt; &gt; &M, Vector&lt;coord&lt;&gt; &gt; &dMdt, ParamList *pars, coord&lt;&gt; &totM); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Each interaction class has the this REQUIRED function. These functions are designed to interface with the BlochSolver and the Bloch classes to infer the fastest way to calculate the interactions. To input new interactions of your own, they must have these functions to function in the solver.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+t --&gt; the current time <br />
+M --&gt; current Magnetization <br />
+dMdt --&gt; the current evaluated differential equation<br />
+pars --&gt; the pointer to the Parameter List (this is the ListBlochParams of some kind)<br />
+totM --&gt; the current Total Magnetization for the entire spin system<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the master function for the Interactions class. The Interactions class uses this function to calculate frequency for ALL the spins, along each direction, in the system. The function ADDS the resulting frequencies from the calculation to the appropriate spin in the dMdt vector.<br />
+<br />
+Not all the input parameters are used for every interaction. The bulk susceptibility offset interaction requires the total magnetization (totM), the current magnetization (M) and the list of frequencies (dMdt).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Special Functionsfunction'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class ParamIter&gt;<br />
+inline coord&lt;&gt; function(double t, coord&lt;&gt; &M, coord&lt;&gt; &dMdt, ParamIter *pars, coord&lt;&gt; &totM); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Each interaction class has the this REQUIRED function. These functions are designed to interface with the BlochSolver and the Bloch classes to infer the fastest way to calculate the interactions. To input new interactions of your own, they must have these functions to function in the solver.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+t --&gt; the current time <br />
+M --&gt; current Magnetization <br />
+dMdt --&gt; the current evaluated differential equation<br />
+pars --&gt; the pointer to the Parameter List Iterator (this is the ListBlochParams::iterator of some kind)<br />
+totM --&gt; the current Total Magnetization for the entire spin system<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the master function for the Interactions class. The Interactions class uses this function to calculate frequency for a SINGLE spin, along each direction, in the system. The function returns the resulting frequency 3-vector.<br />
+<br />
+Not all the input parameters are used for every interaction. The basic offset interaction requires only the current magnetization (M) for its calculations. <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Special FunctionsmagneticField'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class ParamList&gt;<br />
+rmatrix magneticField(double t, Vector&lt;coord&lt;&gt; &gt; &M, ParamList *pars, coord&lt;&gt; &totM); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Each interaction class has the this REQUIRED function. These functions are designed to interface with the BlochSolver and the Bloch classes to infer the fastest way to calculate the interactions. To input new interactions of your own, they must have these functions to function in the solver.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+t --&gt; the current time <br />
+M --&gt; the current Magnetization <br />
+dMdt --&gt; the current evaluated differential equation <br />
+pars --&gt; the pointer to the Parameter List (this is the ListBlochParams of some kind)<br />
+totM --&gt; the current Total Magnetization for the entire spin system<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This function returns the magnetic field for each spin in the ParamList in a real square matrix. It calculates the magnetic field as generated by the interaction NOT the frequencies as generated by the ‘function.’ The size of the matrix is the pars.size()*3 x pars.size()*3. The magnetic field along the x-axis (Bx) for the first spin is stored in the (0,0) element of the returned matrix, By is stored in the (1,1) element, Bz is stored in the (2,2) element. The magnetic field along the x-axis (Bx) for the second spin is stored in the (3,3) element of the returned matrix, By is stored in the (4,4) element, Bz is stored in the (5,5) element, and so on for more spins. This output matrix is diagonal. <br />
+<br />
+It takes in the current time (t), the current Magnetization (M), the current evaluated differential equation part (dMdt), the pointer to the Parameter List (pars, this is the ListBlochParams of some kind), and the current Total Magnetization for the entire spin system (totM, this is only calculated if there is an interaction that has TotalMag==1). <br />
+For radiation damping, the elements in the returned matrix are given by <br />
+<br />
+Bx= 1/(Tr* pars[i].TotMo())*totM.y() ;<br />
+By= -1/(Tr* pars[i].TotMo())*totM.x() ;<br />
+Bz=0; <br />
+<br />
+The evolutionMatrix function returns the valid frequencies for each point.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Special FunctionsPreCalc'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+static const int PreCalc;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Each interaction class has the this REQUIRED constant. These functions are designed to interface with the BlochSolver and the Bloch classes to infer the fastest way to calculate the interactions. To input new interactions of your own, they must have these functions to function in the solver.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+If PreCalc==1 then before the interaction can be calculated at a give time, several pre-calculations are required to obtain the correct mathematical values. This flag is set to 1 for dipoles and the demagnetizing field where the current magnetic fields at each point is necessary to calculate the interaction. It is also set to one for offsets that have a ‘dynamic’ field (i.e. time dependant).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Special FunctionspreCalculate'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class ParamList&gt;<br />
+void preCalculate(double t, Vector&lt;coord&lt;&gt; &gt; &M, Vector&lt;coord&lt;&gt; &gt; &dMdt, ParamList *pars, coord&lt;&gt; &totM); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Each interaction class has the this REQUIRED function. These functions are designed to interface with the BlochSolver and the Bloch classes to infer the fastest way to calculate the interactions. To input new interactions of your own, they must have these functions to function in the solver.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+t --&gt; the current time <br />
+M --&gt; current Magnetization <br />
+dMdt --&gt; the current evaluated differential equation<br />
+pars --&gt; the pointer to the Parameter List (this is the ListBlochParams of some kind)<br />
+totM --&gt; the current Total Magnetization for the entire spin system<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This function performs the pre-calculation if necessary (it is necessary if PreCalc==1).<br />
+<br />
+The object of this function is to calculate some internal interaction class variable that is time dependant, but not spin dependant. The dipole interaction requires the magnetic field produced by each spin, for a given instant in time, this field is constant and needs to be calculated only once for every spin, thus reducing the calculation time for determination of the dipole interaction in the differential equation. This function calculates the magnetic fields for a given time that is then later used by ‘function’ to calculate the dipolar couplings. <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Special FunctionsTotalMag'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+static const int TotalMag;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Each interaction class has the this REQUIRED constant. These functions are designed to interface with the BlochSolver and the Bloch classes to infer the fastest way to calculate the interactions. To input new interactions of your own, they must have these functions to function in the solver.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+If TotalMag==1 then this interaction is at least a Global Interaction where the global property (the total magnetization of the spin system) if required to calculate the interaction. This flag is one for radiation damping and bulk susceptibility. <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsInteractions'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class Int_1&gt;<br />
+Interactions(Int_1 &in)<br />
+<br />
+template&lt;class Int_1, class Int_2&gt;<br />
+Interactions(Int_1 &in1, Int_2 &in2)<br />
+<br />
+template&lt;class Int_1, class Int_2, class Int_3&gt;<br />
+Interactions(Int_1 &in1, Int_2 &in2, Int_3 &in3)<br />
+<br />
+....<br />
+template&lt;class Int_1, class Int_2, ..., class Int_9&gt;<br />
+Interactions(Int_1 &in1, Int_2 &in2,..., Int_9 &in9)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If you destroy the pointer before the Interaction, the Interaction will not work and perhaps crash the program.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in1..in9 --&gt; the interaction classes<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The constructor for the Interactions class.  It maintains each interaction in as a pointer. The number of template items corresponds to the number of interaction you input.  For 5 templates, you only have the 5 intraction constructor.  The order of the interaction inputs must be the same as the order of the template arguments.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//some typedefs for simplicuty in typing</font><br />
+typedef XYZfull TheShape;<br />
+typedef XYZshape&lt;TheShape&gt; TheGrida;	<font color='#006600'>//our shape</font><br />
+typedef RotatingGrid&lt;TheGrida&gt; TheGrid; <font color='#006600'>//spinning grid</font><br />
+typedef ListBlochParams&lt; TheGrid, BPoptions::Particle | BPoptions::HighField, double &gt; MyPars;<br />
+<br />
+typedef Interactions&lt;Offset&lt;&gt;, Relax&lt;&gt;, BulkSus, RadDamp, DimLessDipole&lt;TheGrid&gt; &gt; MyInteractions;<br />
+<br />
+<font color='#006600'>//set up the grid</font><br />
+Grid&lt;UniformGrid&gt; gg(coord&lt;&gt;(-1,-1,-1), coord&lt;&gt;(1,1,1), coord&lt;int&gt;(5,5,5)); <font color='#006600'>//the basic grid</font><br />
+TheShape tester;	<br />
+TheGrida jja( gg, tester);<br />
+TheGrid jj(jja, coord&lt;&gt;(1,1,1), 2000.0*PI2);<br />
+<br />
+<font color='#006600'>//the basic parameters</font><br />
+MyPars mypars(jj.size(), &quot;1H&quot;, jj);<br />
+<br />
+<font color='#006600'>//the interaction classes</font><br />
+Offset&lt;&gt; myOffs(mypars, offset);<br />
+double t2s=0, t1s=0;<br />
+Relax&lt;&gt; myRels(mypars, (!t2s)?0.0:1.0/t2s, (!t1s)?0.0:1.0/t1s);<br />
+BulkSus BsRun(1.0);<br />
+RadDamp RdRun(0.01);<br />
+DimLessDipole&lt;TheGrid&gt; DipDip(jj, 3230.0*PI2);<br />
+<font color='#006600'>//turn on the dyanimc flag as spinning the grid</font><br />
+DipDip.Dynamic=true; <br />
+<br />
+<font color='#006600'>//a 5 member interaction class</font><br />
+MyInteractions MyInts(myOffs, myRels,BsRun, RdRun, DipDip);<br />
+<br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

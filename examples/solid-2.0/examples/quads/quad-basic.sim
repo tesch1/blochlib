@@ -1,0 +1,71 @@
+
+# a qudarupole
+
+spins{	
+	#the global options
+	numspin 1
+	T 11B 0
+	Q 2e6 0 0 0 0 0 2
+	#C 0 2154 0 0
+}
+
+parameters{	
+
+	powder{
+		aveType ../../../../crystals/zcw_3722
+		#aveType zcw
+		thetaStep 377
+		phiStep 233
+		gammaStep 5
+	}		
+
+#the intergrator step size	
+	maxtstep=1e-6
+
+#number of 1D fid points	
+	npts1D=512	
+
+#sweepwidth
+	sw=25000
+#the magnetic field
+	Bfield=400e6
+}
+
+
+pulses{
+
+# a2D to loop over field strengths
+	#2D()
+	
+	BFpts=1
+	BFstart=500e6
+	BFend=700e6
+	BFsteps=(BFend-BFstart)/BFpts
+
+#set the spinning	
+	wr=20000
+#set the rotor
+	rotor=rad2deg*acos(1/sqrt(3))
+#set the detection matrix
+
+# the triple Q  'top' (+3)
+	detect(Ip*Ip*Ip)
+
+#loop of over the field strengths
+	loop(i=0:BFpts-1)
+		Bfield=BFstart
+
+	#set the inital matrix
+	#  the triple Q 'bottom' (-3)
+		ro(Im*Im*Im)
+
+#no pulses nessesary	
+
+	#collect the fid 
+		fid()
+		BFstart=BFstart+BFsteps
+	end
+	savefidtext(bftestn) #save as a matlab file
+}
+
+	

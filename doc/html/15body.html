@@ -1,0 +1,864 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("15menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("15menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("15menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("15title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("15");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class MPIcontroler{....<br />
+<br />
+MPIcontroler MPIworld;<br />
+<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<LI>This class wraps all the MPI functionality into a single class. 
+<LI>I recommend learning a bit about parallel programing before you start creating large scale programs, as you can make things hang very easily. 
+<LI>The class consists of a variety of overloaded MPI functions that work in conjunction with the data containers in the library that should be compilable with or without MPI (i.e. if you do not have MPI on one machine, but wish to compile a program that has MPI functionality, it will still compile). 
+<li><TT><B>MPIworld</B></TT> is a GLOBAL instance of MPIcontroler....you can think of it as being the &quot;MPI_COMM_WORLD&quot; in MPI language...or the global communicator object for all the programs 
+<LI>The MPI functionality was designed to work on 'small' parallel jobs where processor counts are of order 1-10 not 100s or 1000s (the get and put functions contain a bit too much overhead for sufficient optimization along these regards) 
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Global Constants'></a>Global Constants</font>
+</td></tr></table>
+<tr><td>
+<a name='Global ConstantsMPIworld'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+MPIworld<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This the the &quot;Master&quot; global controller...visible and used by the classes in the library...it needs to be started up at the the program initialization period uing the 'start' command<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+int main(int argv, cahr ** argc){<br />
+<font color='#006600'>//start up the master</font><br />
+MPIworld.start(argv, argc);<br />
+...do dutff...<br />
+MPIworld.end();<br />
+}<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsMPIcontroller'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+MPIcontroller(int &argv, char *argc[]);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Either Call this function OR use the 'start' function<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+argv--&gt;the standard argv from the 'main' input<br />
+argc--&gt;the standard argc from the 'main' input<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+starts up the master controler object from the command inputs<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPIcontroller MyC(argv, argc)<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsMPIcontroller'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+MPIcontroller(const MPI_Comm &communin);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+communin--&gt; an MPI communicator group<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates a controller from and already initialized MPI_Comm...use this function if you have already start MPI using MPI's start up mechanism<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPI_start(&argv, &argv)<br />
+MPIcontroller myCont(MPI_COMM_WORLD);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsMPIcontroller'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+MPIcontroller(const MPIcontroller &communin);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+communin--&gt; another MPIcontroller<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+the copy constructor...creates a refrence count to the MPI_Comm being copied...<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPIcontroller newC(MPIworld);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsMPIcontroller'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+MPIcontroller()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+the null constructor...simply initalizes all the various variables to their default values...you need to start the communicator using the 'start' command after using this<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPIcontroller myC;<br />
+myC.start(argv, argv);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractioncommunicator'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+MPI_Comm communicator();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+there is an interanl data structure that is the normal MPI_Comm entity, this simply returns that structure. Only really needed if interfacing with other libraries or your own MPI code.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPI_Comm theCom=MPIworld.communicator()<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionsbarrier'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int barrier(); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns any error code generated by MPI<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+performs a barrier...meaning ALL the procs in the controller have to reach this point before the program will continue past this point....<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPIcontroler myMpi;<br />
+myMpi.start(argc, argv); <font color='#006600'>//start an instance after declaration </font><br />
+myMpi.barrier(); <font color='#006600'>//wait till they all get here</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsend, stop'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int end();<br />
+int stop();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+end the controlers and clean up mpi<br />
+returns '1' of sucessful or it will return '0';<br />
+class this function when you no longer need MPI...typically done as the last function in a program<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPIworld.end();<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsget'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class T&gt;<br />
+int get(T &thing, int FromProc, int Tag=DEFAULT_TAG, MPI_Comm comm=DEFAULT_COMM); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+the &lt;class T&gt; can be any of these<br />
+char, int, float, double, complex, string, coord&lt;int,N&gt;, coord&lt;char,N&gt;, coord&lt;float,N&gt;,coord&lt;double,N&gt;, coord&lt;complex,N&gt;, Vector&lt;char&gt;, Vector&lt;int&gt;, Vector&lt;float&gt;, Vector&lt;double&gt;, Vector&lt;complex&gt;, Vector&lt;coord&lt;T,N&gt; &gt;(with T=char, int, double, float, complex, coord&lt;T,N&gt; and Structure), matrix (any flavor) <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+thing--&gt; a 'thing' an entity that can be any of the above objects<br />
+FromProc--&gt; the processor you wish to place the Get the thing from<br />
+Tag--&gt; a specific label you wish to give the send (Will Default if not present)<br />
+comm--&gt;another MPI_Comm if you need one... it will use the MPIcontroller's Communicator if not specified.... <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+there are 2 basic needs when writing parallel code: get data from a proc, and put data to a proc.  This is the get function. It will be able to get data to any proc 'FromProc'.  This is a BLOCKING function, meaning the program will WAIT until there is a 'put' command on the 'FromProc' proc to post the data.  If there is never any 'put' your program will halt here.<br />
+it will return '1' if the put was good<br />
+it will return '0' if something failed<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPIcontroller myMpi;<br />
+myMpi.start(argc, argv); <font color='#006600'>//start an instance after declaration</font><br />
+int moo=6;<br />
+if(myMpi.size()&gt;2 && myMpi.master()) myMpi.put(moo, 1);<br />
+else myMpi.get(moo,0);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsgetAny'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class T&gt;<br />
+int getAny(T &thing, int Tag=MPI_ANY_TAG, MPI_Comm comm=DEFAULT_COMM); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+the &lt;class T&gt; can be any of these<br />
+char, int, float, double, complex, string, coord&lt;int,N&gt;, coord&lt;char,N&gt;, coord&lt;float,N&gt;,coord&lt;double,N&gt;, coord&lt;complex,N&gt;, Vector&lt;char&gt;, Vector&lt;int&gt;, Vector&lt;float&gt;, Vector&lt;double&gt;, Vector&lt;complex&gt;, Vector&lt;coord&lt;T,N&gt; &gt;(with T=char, int, double, float, complex, coord&lt;T,N&gt; and Structure), matrix (any flavor)<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+thing--&gt; a 'thing' an entity that can be any of the above objects<br />
+Tag--&gt; a specific label you wish to give the send (Will Default if not present)<br />
+comm--&gt;another MPI_Comm if you need one... it will use the MPIcontroller's Communicator if not specified.... <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+a BLOCKING get (meaning if the 'FromProc' does not 'put' it, then program will hang there).<br />
+that will wait until it gets something from ANY other processor, then return where it got it from<br />
+<br />
+it returns the processor id it Got something from<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPIcontroller myMpi;<br />
+myMpi.start(argc, argv); <font color='#006600'>//start an instance after declaration</font><br />
+int moo=6;<br />
+if(myMpi.size()&gt;2 && myMpi.master()){<br />
+  myMpi.put(moo, 1);<br />
+  myMpi.getAny(moo); <br />
+}else if(myMpi.size()&gt;2){ <br />
+   myMpi.get(moo);<br />
+   if(myMpi.rank()==1) myMpi.put(moo, 0);<br />
+} <br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsmaster'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool master()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+typically, one wishes to use one proc in the controller to cat as a master (the proc determining the transaction of data), this function returns weather or not the proc is the master (returns true) or not (returns false). The master is determined by a rank==0.  The function is equivilent to rank()==0<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+if(MPIworld.master()){<br />
+<font color='#006600'>//send some data</font><br />
+}else{<br />
+<font color='#006600'>//get the data</font><br />
+}<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsname'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+std::string name()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+the name of the proc is usually not nessesary unless for pretty out purposes, as the internal workings are all performed based on integer 'ranks'. This will return the name (usually the hostname) of the proc<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+std::string procName=MPIworld.name()<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsparallel'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool parallel()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+if there is more then one proc in the controller, then this will return true (no communcation nessesary).  Some alogorithms require drastically different implimentations when performed in parallel then in serial mode, this allows you to choose the proper alorithm in a transparent way.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+if(MPIworld.parallel()){<br />
+<font color='#006600'>//do parallel algo</font><br />
+}<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsput'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class T&gt;<br />
+int put( T &out, int To, int Tag=DEFAULT_TAG, MPI_Comm comm=DEFAULT_COMM)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+the &lt;class T&gt; can be any of these<br />
+char, int, float, double, complex, string, coord&lt;int,N&gt;, coord&lt;char,N&gt;, coord&lt;float,N&gt;,coord&lt;double,N&gt;, coord&lt;complex,N&gt;, Vector&lt;char&gt;, Vector&lt;int&gt;, Vector&lt;float&gt;, Vector&lt;double&gt;, Vector&lt;complex&gt;, Vector&lt;coord&lt;T,N&gt; &gt;(with T=char, int, double, float, complex, coord&lt;T,N&gt; and Structure), matrix (any flavor) <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; the data elemetn you wish to send to the proc<br />
+To--&gt; the proc to send the data to<br />
+Tag--&gt; give the sending a unique tag to distiguish it from others...this will default to some 'DEFAULT_TAG' value if not present.<br />
+comm--&gt; an MPI commincator.  This will default to the one inside the MPIcontroller object if not present.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+there are 2 basic needs when writing parallel code: get data from a proc, and put data to a proc.  This is the put function. It will be able to put data to any proc 'To'.  THis is a BLOCKING function, meaning the program will WAIT until there is a 'get' command on the 'To' proc to recieve the data.  If there is never any 'get' your program will halt here.<br />
+it will return '1' if the put was good<br />
+it will return '0' if something failed<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPIcontroller myMpi;<br />
+myMpi.start(argc, argv); <font color='#006600'>//start an instance after declaration</font><br />
+int moo=6;<br />
+if(myMpi.size()&gt;2 && myMpi.master()) myMpi.put(moo, 1);<br />
+else myMpi.get(moo,0);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsrank'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int rank();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Given 4 processors, there will be 4 ranks...each proc gets a integrer tag from 0..3.<br />
+This functions determins that integer and returns its value.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+int myproc=MPIworld.rank()<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsreconstruct'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class T&gt;<br />
+void reconstruct(Vector&lt;T&gt; &thing, int begin, int end, int masterproc=0); <br />
+void reconstruct(Vector&lt;T&gt; &thing, Range R, int masterproc=0); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+thing--&gt; a vector of some object<br />
+begin--&gt; where the begining of the vector was split on the specific proc<br />
+end--&gt;where the endof the vector was split on the specific proc<br />
+masterproc--&gt;where the final reconstructed vector will be<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This function attempts to piece together 'split' vectors. The other common loop splitting problem uses only sub ranges of vectors, then there is a need to reconstruct the full correct vector from the pieces distributed on the other proc... <br />
+&quot;begin&quot;,&quot;end&quot;, and the &quot;R&quot; should be the same begin,end, and Range as generated from 'splitLoop()' <br />
+The correctly reconstructed vector will on the &quot;masterproc&quot; and you will need to use scatter() to send it back to the rest of the procs.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+see 'reconstruct example' under examples<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsrecv'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class T&gt;<br />
+int recv(T &thing, int FromProc, int Tag=DEFAULT_TAG, MPI_Comm comm=DEFAULT_COMM); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+the &lt;class T&gt; can be any of these<br />
+char, int, float, double, complex, string, coord&lt;int,N&gt;, coord&lt;char,N&gt;, coord&lt;float,N&gt;,coord&lt;double,N&gt;, coord&lt;complex,N&gt;, Vector&lt;char&gt;, Vector&lt;int&gt;, Vector&lt;float&gt;, Vector&lt;double&gt;, Vector&lt;complex&gt;, Vector&lt;coord&lt;T,N&gt; &gt;(with T=char, int, double, float, complex, coord&lt;T,N&gt; and Structure), matrix (any flavor)  <br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+thing--&gt; a 'thing' an entity that can be any of the above objects<br />
+FromProc--&gt; the processor you wish to place the Get the thing from<br />
+Tag--&gt; a specific label you wish to give the send (Will Default if not present)<br />
+comm--&gt;another MPI_Comm if you need one... it will use the MPIcontroller's Communicator if not specified.... <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+there are 2 basic needs when writing parallel code: get data from a proc, and put data to a proc.  This is the get function. It will be able to put data to any proc 'FromProc'.  This is a NON-BLOCKING function, meaning the program will NOT-WAIT for a 'put' on the 'FromProc' and will continue after the post has been made.  Use this with caution becuase it can create large hard-to-find problems in the code.<br />
+it will return '1' if the put was good<br />
+it will return '0' if something failed<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPIcontroller myMpi;<br />
+myMpi.start(argc, argv); <font color='#006600'>//start an instance after declaration</font><br />
+int moo=6;<br />
+if(myMpi.size()&gt;2 && myMpi.master()) myMpi.put(moo, 1);<br />
+else myMpi.recv(moo,0);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsreduce'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class T&gt;<br />
+void reduce(T &thing, int ReduceType, int masterproc=0); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+thing--&gt; the object you wish to reduce<br />
+ReduceType--&gt; 'how' to reduce the thing<br />
+masterproc--&gt;where the final result will be posted to.  If you wish the 'thing' to be on all the procs, you must perform a 'scatter' ofterwards<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+After splitting the loop and calculating the items on different procs, one typically needs/wants to recollect the answers on each proc and use them elsewhere...this function does just that, with several basic 'Collection' operations <br />
+It should be noted that ONLY the 'masterproc' gets the correct results...thus if you want all the procs to get the total results, then use an MPIworld.scatter(thing) to put it on the rest... <br />
+ReduceType can be of these types <br />
+Reduce::Add <br />
+Reduce::Multiply <br />
+Reduce::Divide <br />
+Reduce::Subtract <br />
+Reduce::Min <br />
+Reduce::Max<br />
+<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+se the 'reduce example' under examples<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsscatter'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class T&gt;<br />
+int scatter(T &thing, int MasterProc=0, MPI_Comm comm=DEFAULT_COMM); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+thing--&gt; a 'thing' an entity that can be any of the above objects<br />
+MasterProc--&gt; the processor that has the 'master' data you want to give to all the other procs in the communicator...defaults to the 'master' proc<br />
+comm--&gt;another MPI_Comm if you need one... it will use the MPIcontroller's Communicator if not specified.... <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+a BLOCKING get/put series(meaning if the on of the procs does not get to this point, the program will HANG) that scatters the 'thing' to every proc in the communicator<br />
+<br />
+it returns any error code given my MPI basic put function<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPIcontroller myMpi;<br />
+myMpi.start(argc, argv); <font color='#006600'>//start an instance after declaration</font><br />
+int moo=6;<br />
+myMpi.scatter(moo+6);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionssend'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class T&gt;<br />
+int send(T &thing, int ToProc, int Tag=DEFAULT_TAG, MPI_Comm comm=DEFAULT_COMM); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+the &lt;class T&gt; can be any of these<br />
+char, int, float, double, complex, string, coord&lt;int,N&gt;, coord&lt;char,N&gt;, coord&lt;float,N&gt;,coord&lt;double,N&gt;, coord&lt;complex,N&gt;, Vector&lt;char&gt;, Vector&lt;int&gt;, Vector&lt;float&gt;, Vector&lt;double&gt;, Vector&lt;complex&gt;, Vector&lt;coord&lt;T,N&gt; &gt;(with T=char, int, double, float, complex, coord&lt;T,N&gt; and Structure), matrix (any flavor)  <br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+thing--&gt; a 'thing' an entity that can be any of the above objects<br />
+ToProc--&gt; the processor you wish to place the 'thing' on<br />
+Tag--&gt; a specific label you wish to give the send (Will Default if not present)<br />
+comm--&gt;another MPI_Comm if you need one... it will use the MPIcontroller's Communicator if not specified....<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+there are 2 basic needs when writing parallel code: get data from a proc, and put data to a proc.  This is the put function. It will be able to put data to any proc 'ToProc'.  This is a NON-BLOCKING function, meaning the program will NOT-WAIT for a 'get' on the 'ToProc' and will continue after the post has been made.  Use this with caution becuase it can create large hard-to-find problems in the code.<br />
+it will return '1' if the put was good<br />
+it will return '0' if something failed<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MPIcontroller myMpi;<br />
+myMpi.start(argc, argv); <font color='#006600'>//start an instance after declaration</font><br />
+int moo=6;<br />
+if(myMpi.size()&gt;2 && myMpi.master()) myMpi.send(moo, 1);<br />
+else myMpi.recv(moo,0);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsserial'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool serial()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+if there is only one proc in the controller, then this will return true (no communcation nessesary).  Some alogorithms require drastically different implimentations when performed in parallel then in serail mode, this allows you to choose the proper alorithm in a transparent way.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+if(MPIworld.serial()){<br />
+<font color='#006600'>//do serial algorithm</font><br />
+}else{<br />
+<font color='#006600'>//do parallel algorithm</font><br />
+}<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionssize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int size();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+if there are 4 processors in your controler, the size will return '4'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+int numporcs=MPIworld.size();<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsslave'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool slave();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+typically, one wishes to use one proc in the controller to cat as a master (the proc determining the transaction of data) and the others are slaves, this function returns weather or not the proc is a slave (returns true) or not (returns false). The master is determined by a rank==0.  The function is equivilent to rank()!=0<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+if(MPIworld.slave()){<br />
+<font color='#006600'>//get some data</font><br />
+}else{<br />
+<font color='#006600'>//send the data</font><br />
+}<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionssplitLoop'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Range splitLoop(int &begin, int &end, int &div, int numproc=size); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+It is recommended you do NOT do this operation if your procs are not equivilent (i.e. a LAN of different procs speeds), as each proc will have the same amount of elements to go through.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+begin--&gt; initially the GLOBAL begining...it will be altered to reflect the 'new' begining<br />
+end--&gt; initially the GLOBAL end...it will be altered to reflect the 'new' end<br />
+div--&gt; this will be altered to reflect the step size of the divisions.<br />
+numproc--&gt; will default to the controller size, but it can be an int from 0..size()<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This generates the logical indexes for a given loop on a given processor... <br />
+This can be a good starting point for quick parallelizations, but in most general conditions it is not optimal.<br />
+USE THIS ONLY for an &quot;Equal porcessor&quot; machine(s)...where the procs are all the same speed...if the procs are not the same speed, then you will be in an highly UNoptimized situation...use the code in the above example as a starting point for that sort of parallelization.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If we have a vector of length 10, and we have 2 procs...then 'begin' from MPIworld.rank()==0 will be 0 and end will be 5, for MPIworld.rank()==1 then begin=5 and end=10...div would be 5 (the chunk size)<br />
+<br />
+Vector&lt;double&gt; vect(10,0.0);<br />
+int begin=0, end=vect.size(), div=0;<br />
+Range splitR=MPIworld.splitLoop(begin, end, div);<br />
+<font color='#006600'>//for MPIrank==0, begin=0, end=5, div=5, splitR=Range(0,4)</font><br />
+<font color='#006600'>//for MPIrank==1, begin=5, end=10, div=5, splitR=Range(5,9)</font><br />
+<br />
+<br />
+If the (end-being) is not integer divisible by MPIworld.size(), then the last proc gets the 'extra' pieces<br />
+<br />
+Vector&lt;double&gt; vect(13,0.0);<br />
+int begin=0, end=vect.size(), div=0;<br />
+Range splitR=MPIworld.splitLoop(begin, end, div);<br />
+<font color='#006600'>//for MPIrank==0, begin=0, end=6, div=6, splitR=Range(0,5)</font><br />
+<font color='#006600'>//for MPIrank==1, begin=5, end=13, div=6, splitR=Range(6,12)</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsstart'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int start(int &argv, char *argc[]);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+This function MUST be called to start using MPI...DO this ONLY ONCE!! at the program start up<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+argv--&gt;the standard argv from the 'main' input<br />
+argc--&gt;the standard argc from the 'main' input<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+starts up the master controler object from the command inputs<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+int main(int argv, char **argc){<br />
+<font color='#006600'>//start up the MPI controler</font><br />
+MPIwolrd.start(argv, argc);<br />
+<br />
+...do stuff..<br />
+<br />
+<font color='#006600'>//end the MPI session</font><br />
+MPIworld.end()<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

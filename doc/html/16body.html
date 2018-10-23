@@ -1,0 +1,115 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("16menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("16menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("16menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("16title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("16");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+The CERN minimization package &quot;MINUIT&quot;<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This is the inclusion of the entire fortran functionality of the powerful minimization program and functions 'MINUIT' from CERN. All the basic fortran functions have been included in the library so long as you have a FORTRAN 77 compiler..the best place to look for documentation about MINUIT is at CERN itself. <br />
+<br />
+The initial code was taken from the source-forge project &quot;C-MINUIT&quot; with several major alterations and fixes to both be included in a shared library and in C++ (see source code for details about the make and header alterations) <br />
+<br />
+The examples is to demonstrate to you what is necessary to run MINUIT at all. To learn about the nasty details or to learn more about its functionality, look to CERN's documentation. <br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+CERNS documentation:: http:<font color='#006600'>//wwwinfo.cern.ch/asdoc/minuit/minmain.html</font><br />
+<br />
+C-MINUIT::<br />
+http:<font color='#006600'>//c-minuit.sourceforge.net/</font><br />
+--------------------------------------------------<br />
+To use MINUIT include BOTH &quot;blochlib.h&quot; AND &quot;minuit/minuit.h&quot; in your files<br />
+<br />
+#include &quot;blochlib.h&quot;<br />
+#include &quot;minuit/minuit.h&quot;<br />
+<br />
+<br />
+<br />
+There is one function YOU, as the user, MUST define before MINUIT can be used at all<br />
+<br />
+void fcn (int npar, double* grad, double* fcnval, double* xval, int iflag, void* futil)<br />
+<br />
+<br />
+npar --&gt; the Number of fitting parameters <br />
+grad --&gt; the Derivative of the function with respect to the parameters ( d(func)/d(param) ) <br />
+fcnval --&gt; this is essentially your 'chi squared' that you need to define <br />
+xval --&gt; the place for the current value of the parameters <br />
+iflag --&gt; various flags that function in MINUIT will set <br />
+futil --&gt; an auxiliary function you can pass around to this function<br />
+<br />
+<br />
+For example, If one is fitting some data to a line, my function would be &quot;y=m*x + b&quot; <br />
+npar=2 <br />
+grad[0]=m; grad[1]=0; <br />
+fcnval = sqrt(sum_over_i((xval[0]*x[i]+xval[1]) - y[i] )^2) <br />
+(where 'x' is some independent variable, and 'y' is your data you wish to fit) <br />
+iflag depends on the stage of MINUIT <br />
+futil=NULL for this case<br />
+<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

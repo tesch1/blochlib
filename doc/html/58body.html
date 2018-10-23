@@ -1,0 +1,330 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("58menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("58menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("58menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("58title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("58");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Grid_T&gt;<br />
+class DemagField{...<br />
+<br />
+class ModulatedDemagField{...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+The exploration of the demagnetizing field in NMR is a relatively recent development (E. Belorizky, etal. chem phys. lett. Volume 175, Issue 6, 28 December 1990, Pages 579-584).  Its arrival into the NMR scene so late is a consequence of the higher and higher field strengths available to the NMR spectroscopist. In real samples this effect is quite small, but still present enough to create potentially create long range coherences (He QH, et al. J chem phys 98 (9): 6779-6800 may 1 1993).  It has seen recent interest (as of this writing see Huang SY, et al. J Chem.. Phys. 116 (23): 10325-10337 JUN 15 2002) in potentially chaotic dynamics.  Ideas are currently brewing about dynamic control and long range (macroscopic range) distance determination using this highly non-linear effect.  
+<BR><BR>
+This effect is essentially a better theoretical treatment of the dipole-dipole interaction of a macroscopic sample.  Instead of a direct spin-spin interaction, we sum over all the spins inside a volume to determine the dipole field at a point, r.  The magnetic field induced by a cell volume can be written
+<blockquote>
+<tt>
+dB=  mu<sub>o</sub>((M(r))-(M(r) . rhat)*rhat) )/(4*pi*|r-r<sub>i</sub>|<sup>3</sup>) dr<sup>3</sup>
+</tt></blockquote>
+To get the entire field at point r we must perform a very hard integral.  For highly symmetric samples (like a sphere) this interaction is 0, for almost any other geometry, this interaction is non-zero.  For uniformly magnetized samples this interaction is also 0, but application of gradients, or even other temperature gradients, will cause this interaction to be non-zero.  In our Bloch Interaction frame work, we can approximate the integral by summing over the cell volumes in the grid.  For small grids, this sum is a poor approximation to the interaction, however, it is the best we have for the general case.  
+<BR><BR>
+This interaction can be treated in much the same way the dipole-dipole interaction is except for addition of the dr<sup>3</sup>.  
+<BR><BR>
+There are a few approximations that we can make given the physical description of our system.  The first is the assumption that the magnetization of the sample is uniform throughout the entire sample.  When this happens we can factor out the M(r) of the above integral, and we are then left with a shape factor. 
+<blockquote>
+<tt>
+B=  mu<sub>o</sub>*D/3*(M-(M . rhat)*rhat) ) 
+</tt></blockquote>
+
+ This shape factor, D, is very hard to calculate, so it is left as an input parameter.  For a cylinder D~-1/2, for a sphere D=0, for a flat disk D=1.  This is essentially the Bulk Susceptibility. However, in most any normal situation, the assumption that M is uniform everywhere is quite false and the full integral equation must be used.
+<BR><BR>
+There is one more useful approximation involves to opposite extreme, when the total magnetization is zero.  One can create such a situation by creating a fully modulated magnetization along a single direction (a full helix using gradient pulses).  Then, via a few Fourier transform enlightenments (Deville et al, Phys Rev B (19) p. 5666 1979) we have a much simpler form
+<blockquote>
+<tt>
+B=  del/(td*3)*(M-(M . rhat)*rhat) ) 
+</tt></blockquote>
+where ‘del’ is (3(s.rhat)^2-1)/2. ‘s’ is the direction of the magnetization modulation.  So for a Z-gradient helix, we have s=zhat, and usually our high field makes rhat=zhat.  ‘td’ is the basic magnitude of the effect and is related to the total magnetization present (td=1(/gamma mu Mo)).  Using this equation as is yields a subtile error.  The error comes from the Fourier Transform analysis, where any global constant field for a singularity, thus to fix this we simply subtract out the average magnetization at any given time
+<blockquote>
+<tt>
+B= del/(td*3)*(((M-&lt;M&gt;)-((M . rhat)-(&lt;M&gt;.rhat))*rhat) ) 
+</tt></blockquote>
+This interaction is referred to as the ‘ModulatedDemagField’ class. And it does not need a grid, simply the total magnetization, making this interaction light years faster then the 'normal' case. It is also a normalized interaction meaning both BPoptions::Particle or BPoptions::Density will work.  However, when you calculated td for the BPoptions::Particle, you may be tempted to use the 'totalMo()' function in ListBlochParams.  This will return the wrong desired value (instead of Mo~0.06 for a 600 MHz magnet and 104 mmol protons at 300 K, you will get the sum of the total number of spins in your simulation), so you will need to calculate the Mo properly.
+
+
+
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsDemagField'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+DemagField&lt;Grid_T&gt;()<br />
+ModulatedDemagField()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The empty constructor.  For the DemagField class, the grid point is NULL, for the ModulatedDemagField, td=0 and s=(0,0,1).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+DemagField&lt;myGrid_T&gt; myDM; <font color='#006600'>//empty demagfield</font><br />
+ModulatedDemagField myMDM; <font color='#006600'>//empty modulated field</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsDemagField'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+DemagField&lt;Grid_T&gt;(Grid_T &ingrid)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for only the DemagField&lt;Grid_T&gt; class.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+ingrid--&gt; a grid objecct of some kind<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets up a basic object using the input grid to calculate both the |r|^3 and the cellvolumes.  It sets a  grid pointer inside the object to ingrid, thus if you destroy the grid before this object, you will perhaps crash the program.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; mins(-1,-1,-1), maxs(1,1,1);<br />
+coord&lt;int&gt; dims(10,10,10);<br />
+<br />
+Grid&lt;UniformGrid&gt; mygrid(mins, macs, dims);<br />
+XYZshape&lt;XYZrect&gt; myshape(mygrid, XYZrect(mins, maxs, dims)); <font color='#006600'>//a rectanglular grid </font><br />
+<br />
+DemagField&lt;XYZshape&lt;XYZrect&gt; &gt; myDF(myshape);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsModulatedDemagField'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ModulatedDemagField(double td, coord&lt;&gt; s=(0,0,1));<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid only for the ModulatedDemagField class.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+td--&gt; the time constant (in seconds) typically 1/(muo gamma Mo)<br />
+s--&gt; the modulated magnetization direction. (this input vector will be normalized on input)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The basic constructor for the ModulatedDeamgField object.  It sets the time constant to td and the modulated direction to s (the default is the z-axis).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ModulatedDemagField myMDF(0.04); <font color='#006600'>//uses the default direction</font><br />
+ModulatedDemagField myMDF(0.04, coord&lt;&gt;(0,1,1)); <font color='#006600'>//a different direction</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractiondirection'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; direction()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid only for the ModulatedDemagField class.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the current direction of the modulated magnetiation for the ModulatedDemagField class.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ModulatedDemagField myMDF(0.04, coord&lt;&gt;(0,1,1)); <font color='#006600'>//a different direction</font><br />
+cout&lt;&lt;myMDF.direction()&lt;&lt;endl;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractiontd'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double td()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid only for the ModulatedDemagField class.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the current time constant (in seconds) for the ModulatedDemagField class.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ModulatedDemagField myMDF(0.04); <font color='#006600'>//uses the default direction</font><br />
+cout&lt;&lt;myMDF.td()&lt;&lt;endl;<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentssetDirection()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setDirection(coord&lt;&gt; s);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid only for the ModulatedDemagField class.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+s--&gt; the new Modulated direction.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the new direction in the ModulatedDemagField.  The program will normalize this vector upon input.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+------------------------------------------------------------------------ModulatedDemagField myMDF(0.04); <font color='#006600'>//uses the default direction</font><br />
+myMDF.setDirection(coord&lt;&gt;(2,3,3)); <font color='#006600'>//sets the new direction</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetTd'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setTd(double td)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid only for the ModulatedDemagField class.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+td--&gt; the new time constant (in seconds)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the time constant in ModulateDemagField.  It should be &gt;=0.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ModulatedDemagField myMDF(0.04, coord&lt;&gt;(0,1,1)); <font color='#006600'>//a different direction</font><br />
+myMDF.setTd(0.06); <font color='#006600'>//reset the time constant</font><br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

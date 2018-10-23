@@ -1,0 +1,17 @@
+
+
+yylin.cc README
+
+THis file is meant to test/immitate the 'NMR chaos'  result from
+
+6 OCTOBER 2000 VOL 290 SCIENCE
+
+done by Y.Y.Lin
+
+
+"yylin.cc" is the source file
+"yy.sim" is the input config file
+
+
+The useful Matlab Plotting programs are 'plottraj.m' for plotting the trajectories
+

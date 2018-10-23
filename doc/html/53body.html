@@ -1,0 +1,381 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("53menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("53menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("53menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("53title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("53");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class Parser {...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+The parser class acts as a simple math expression parser for an input string. 
+The available math functions included so far are 
+<blockquote>
+  <p><tt>exp, ln, log, sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, 
+    acosh, atanh, abs, floor, ceil, round, sqrt, int</tt></p>
+</blockquote>
+<p>and the math operators</p>
+<blockquote>
+  <p><tt>-, +, /, *, ^, ==, !=, <=, >=, <, >,&&, ||</tt></p>
+</blockquote>
+<p>and these GLOBAL constants</p>
+<blockquote>
+  <p><tt>e, pi, deg2rad, rad2deg</tt></p>
+</blockquote>
+<p>It can handle levels (i.e. parenthesis) so a general expression input string 
+  would look something like</p>
+<blockquote>
+  <p><tt>&quot;2*4+cos(5)^(-1)-ln(78)&quot;</tt></p>
+</blockquote>
+<p>The only two functions you need to know about are '<tt>parse</tt>' and '<tt>operator()</tt>'. 
+  The parse function parses the input into a stack, the '<tt>operator()</tt>' 
+  (or <tt>'evaluate()</tt>') returns the double from the expression stack.</p>
+<p>Variables can be used as well. There are two levels of variable input, global 
+  and local. Global variables are placed into a container called '<tt>ParserGlobalVars</tt>' 
+  and are visible to ALL instances of '<tt>Parser</tt>.' To add your own variable, 
+  simply add it (using the '<tt>addVar</tt>' function). It will first look in 
+  the local variable set and then in the Global variable set (so you can have 
+  local and global variables of the same name, it will use the local one first). 
+  <br>
+</p>
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Global Constants'></a>Global Constants</font>
+</td></tr></table>
+<tr><td>
+<a name='Global ConstantsParserGlobalVars'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+std::map&lt;std::string, double&gt; ParserGlobalVars;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the main container for the Global variables.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsParser'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Parser()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The empty constructor.  It makes sure the global constants are set.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//a simple object</font><br />
+Parser myParse;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsParser'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Parser(std::string inExpr)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+inExpr--&gt; a valid string expression<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Constructs the object, sets the global variables, and then parsed the input string.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+std::string myE=&quot;45+99&quot;;<br />
+Parser myParse(myE);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void operator=(const Parser &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; a Parser object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Simply copies all the data in the Parser object to another.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parser myParse(&quot;5^(-1)&quot;);<br />
+<br />
+Parser myP2;<br />
+myP2=myParse;<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other FunctionsaddGlobalVar'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void addGlobalVar(std::string name, double value);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+name--&gt; the variable string name<br />
+value--&gt; the new value for the variable<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This function will add a variable to the GLOBAL variable set if it is not present. If the variable exsists already it will simply replace the value. <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parser myParse;<br />
+<font color='#006600'>//add a var</font><br />
+myParse.addGlobalVar(&quot;s&quot;, 3);<br />
+myParse.parse(&quot;23*s&quot;);<br />
+<br />
+<font color='#006600'>//these 2 do the same thing</font><br />
+<font color='#006600'>//should print '69 69'</font><br />
+cout&lt;&lt;myParse.evaluate()&lt;&lt;&quot; &quot;&lt;&lt;myParse()&lt;&lt;endl;<br />
+<br />
+<font color='#006600'>//This adds a LOCAL variable 'r'</font><br />
+myParse.addVar(&quot;r&quot;, 34);<br />
+<br />
+<font color='#006600'>//reevalutate the expression</font><br />
+<font color='#006600'>// this will print '782 782'</font><br />
+cout&lt;&lt;myParse.evaluate()&lt;&lt;&quot; &quot;&lt;&lt;myParse()&lt;&lt;endl;<br />
+<br />
+<font color='#006600'>//create another object</font><br />
+Parser myParse2;<br />
+<font color='#006600'>//uses the global 's' variable</font><br />
+myParse2.parse(&quot;s+4&quot;);<br />
+<br />
+<font color='#006600'>//this will print '7 7'</font><br />
+cout&lt;&lt;myParse.evaluate()&lt;&lt;&quot; &quot;&lt;&lt;myParse()&lt;&lt;endl;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsaddVar'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void addVar(std::string name, double value);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+name--&gt; the variable strign name<br />
+value--&gt; the new value for the variable<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This function will add a variable to the LOCAL variable set if it is not present in EITHER the local or global variable set.  If the variable exsists it will simply replace the value. If the variable exsists in the global set, it will replace the value there.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parser myParse;<br />
+<font color='#006600'>//add a var</font><br />
+myParse.addVar(&quot;s&quot;, 3);<br />
+myParse.parse(&quot;23*s&quot;);<br />
+<br />
+<font color='#006600'>//these 2 do the same thing</font><br />
+cout&lt;&lt;myParse.evaluate()&lt;&lt;&quot; &quot;&lt;&lt;myParse()&lt;&lt;endl;<br />
+<br />
+<font color='#006600'>//update the variable 's'</font><br />
+myParse.addVar(&quot;s&quot;, 34);<br />
+<br />
+<font color='#006600'>//reevalutate the expression</font><br />
+cout&lt;&lt;myParse.evaluate()&lt;&lt;&quot; &quot;&lt;&lt;myParse()&lt;&lt;endl;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionsgetVar'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double getVar(std::string name);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+name--&gt; the variable name<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This returns the value of the variable (if present).  It will return 0 and print a warning if the variable is NOT present.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parser myParse;<br />
+<font color='#006600'>//add a var</font><br />
+myParse.addVar(&quot;s&quot;, 3);<br />
+<font color='#006600'>//prints '3'</font><br />
+cout&lt;&lt;myParse.getVar(&quot;s&quot;); <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsoperator()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double operator()();<br />
+double evalutate();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This evalulates the expression which 'parse' parsed up into the stack.  At this point the variables are expressed if any are present.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parser myParse;<br />
+myParse.addVar(&quot;s&quot;, 3);<br />
+myParse.parse(&quot;23*s&quot;);<br />
+<br />
+<font color='#006600'>//these 2 do the same thing</font><br />
+cout&lt;&lt;myParse.evaluate()&lt;&lt;&quot; &quot;&lt;&lt;myParse()&lt;&lt;endl;<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsparse'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool parse(std::string inExpr);<br />
+bool parse(const char *inExpr);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+inExpr--&gt; a valid input math expression string<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Parses an expression.  It does not evaluate any variables until 'operator()' is called, it simply creats the stack operations. If the parse operation fails it returns false, otherwise it returns true.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parser myP;<br />
+myP.parse(&quot;34*cos(pi)&quot;);<br />
+<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

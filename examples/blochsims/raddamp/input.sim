@@ -1,0 +1,38 @@
+#----------------------INput File-----------
+#parameter file for a simple Radation Damping example
+
+dim 1,1,2
+min -0.5,-0.5,-0.5
+max 0.5, 0.5, 0.5
+
+#fid pieces
+npts 1024
+tf 2
+
+#the pulse bits
+pulseangle 180  
+pulsephase 270
+pulseamp 80000
+
+#basic spin parameters
+Bo 11
+temperature 300
+offset 32
+
+T2 0.0
+T1 0.0
+
+spintype 1H
+moles 1
+
+#the Radation Damping strength in seconds
+tr 0.1
+
+
+#file output names for the data
+fidout data
+magout mag
+trajectories traj
+
+
+#----------------------end INput File-----------

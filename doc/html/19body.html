@@ -1,0 +1,1070 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("19menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("19menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("19menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("19title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("19");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Engine_t&gt;<br />
+class Grid : public Engine_t{....<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<ul>Accepted Template Params 
+<ul>
+<li><B>Engine_t</B> --> another class...THE main driver for the Grid...contains the shapes, points, (and basically everything about the Grid)
+</li>
+<li> 
+The main 'Grid' class acts as a global container for all the various grid Engines...the functions described below have are identified by their Engine_t name 
+
+</li>
+</ul></ul>
+<ul>
+<li>Inside the Grid classes are hidden all sorts of optimizations to save both memory space AND speed. The memory space is managed by minizing the amount of stored data points in the grid. For instance a Cube grid needs only ONE Vector of data going from min--max. The entire 3D cube can be expressed as combinations of elements from this list. The acsess to the points of the Grid is maintained by extraction operators. 
+</li>
+<li>The <B>UniformGrid</B> is the most up-to-date and functional. The others are less so (becuase they are quite specialized for each shape furthermore the UniformGrid has been choosen as the Master Shape Grid Base Engine (see 'Shape') 
+</li></ul>
+
+<ul>Grid Engines...The Main Driver sets
+<ul><li><a name=&quot;nullg&quot;></a><B>NullGrid</B> 
+<ul>
+  <li>Nothing, has nothing, is nothing but a name and a place 
+    for empty sets</li>
+</ul>
+</li>
+<li><B><a name=&quot;unigrid&quot;></a>UniformGrid</B> 
+<ul>
+  <li>A Rectangular 3D grid. The uniform implies a constant step 
+    size between each point...each direction (x,y,z) can have 
+    a different step size</li>
+</ul>
+</li>
+<li><a name=&quot;surfcgrid&quot;></a><B>SurfCubeGrid</B> 
+<ul>
+  <li>Creates a cube in 3D that is NOT filled, only the surface 
+    is populated with points</li>
+</ul>
+</li>
+<li><a name=&quot;fcubegrid&quot;></a><B>FullCubeGrid</B> 
+<ul>
+  <li>creates a simple filled cube. All steps sizes are the same 
+    along each x,y,z driection</li>
+</ul>
+</li>
+<li><a name=&quot;surfsgrid&quot;></a><B>SurfSphereGrid</B> 
+<ul>
+  <li>Creats a Surface Sphere (NOT FILLED) in polar corrdinates. 
+    (If you wish a sphere in Cartesian coords use the 'Shape' 
+    class) </li>
+</ul>
+</li>
+<li><a name=&quot;fullsgrid&quot;></a><B>FullSphereGrid</B> 
+<ul>
+  <li>Creats a Filled Sphere in polar corrdinates. (If you wish 
+    a sphere in Cartesian coords use the 'Shape' class) </li>
+</ul>
+</li>
+</ul>
+</ul></blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+See the 'Looping' Example for important Info.</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Global Constants'></a>Global Constants</font>
+</td></tr></table>
+<tr><td>
+<a name='Global Constantsiterator'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+typedef Engine_tIter iterator <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The Grid Iterator Type <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; myG;<br />
+Grid&lt;UniformGrid&gt;::iterator myIt(myG);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Grid()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Null Contructor<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;NullGrid&gt; moo;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Grid(Grid &cp);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp--&gt; a grid with the SAME ENGINE_T<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+the copy constructor. It will copy the 'Engine_t' class as well.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;SurfSphereGrid&gt; sg(2,0, PI2, 0,PI2,100);<br />
+Grid&lt;SurfSphereGrid&gt; sg2(sg); <font color='#006600'>//okay to copy</font><br />
+Grid&lt;UniformGrid&gt; ug1(sg); <font color='#006600'>//WILL FAIL incompatable engines</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Grid(Engine_t &cp) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp--&gt; an Engine_t object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+will create a Grid from a previously decalred Engine_t<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SurfSphereGrid myE(2,0, PI2, 0,PI2, 100); <br />
+Grid&lt;SurfSphereGrid&gt; sg(myE);<br />
+Grid&lt;UniformGrid&gt; ug1(myE); <font color='#006600'>//WILL FAIL incompatable engines</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Grid(coord&lt;&gt; &min, coord&lt;&gt; &max, coord&lt;int,3&gt; &dim)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The grids Engine_t handling<br />
+UniformGrid--&gt;uses all pts<br />
+[(xmin, ymin, zmin), (xmax, ymax, zmax), (dimx, dimy, dimz)]<br />
+SurfSphereGrid--&gt;(only the first 'dims' entry will be used from 'dims', both 'Rmin' and 'Rmax' will be set to max[0])<br />
+[(Rmax, minTheta, minPhi), (Rmax, maxTheta, maxPhi), (Dim, Dim, Dim)]<br />
+FullSphereGrid--&gt;(only the first 'dims' entry will be used from 'dims')<br />
+[(Rmin, minTheta, minPhi), (Rmax, maxTheta, maxPhi), (Dim, Dim, Dim)] <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+min--&gt; the (x,y,z) minima<br />
+max--&gt; the (x,y,z) maxima<br />
+dim--&gt; number of divisions along each direction<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates a Grid ASSUMING that the Engine_t can take the inputs (coord&lt;&gt; &min, coord&lt;&gt; &max, coord&lt;int,3&gt; &dim)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; mins(-1,-1,-1), maxs(1,1,1);<br />
+coord&lt;int, 3&gt; dims(10,10,10);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims); <font color='#006600'>//a ready to be used grid</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Grid(double min, double max, int dim)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Engine_t Handleing<br />
+<br />
+SurfCubeGrid--&gt;uses all pts<br />
+[min=xmin, ymin, zmin; max=xmax, ymax, zmax; dim=xdim, ydim, zdim]<br />
+FullCubeGrid--&gt;uses all pts<br />
+[min=xmin, ymin, zmin; max=xmax, ymax, zmax; dim=xdim, ydim, zdim]<br />
+SurfSphereGrid--&gt;uses all pts<br />
+[min=Max Theta...min theta assumed to be 0; max=Max Phi..min phi assumed to be 0; dim=theta dim, phi dim; R is assumed to be 1]<br />
+FullSphereGrid--&gt;uses all pts<br />
+[min=min R; max=max R; Theta assumed to go from 0--Pi; Phi assumed to go from 0--2Pi; dim=Rdim, Theta dim, Phi dim]<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+min--&gt;a single minimum value<br />
+max--&gt;a single maximum value<br />
+dim--&gt;a single dimension<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates a grid object assuming all 3 (x,y,z) directions have the same min, max, and dim<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;SurfSphereGrid&gt; sg(Pi/2, Pi/4, 10);<br />
+Grid&lt;UniformGrid&gt; ug(1.,2.,3); <font color='#006600'>//WILL FAIL</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Grid(double xmax, double ymax, double zmax, int dim)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Engine_t Handeling<br />
+<br />
+UniformGrid--&gt;uses all pts<br />
+[xmax=max X...min X assumed to be 0; ymax=max Y...min Y assumed to be 0; zmax=max z...min Z assumed to be 0; dim=dimx, dimy, dimz]<br />
+SurfSphereGrid --&gt; uses all pts<br />
+[xmax=Max R; ymax=Theta Max...min theta assumed to be 0; zmax=Phi Max...min phi assumed to be 0; dim=theta dim, phi dim]<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+xmax--&gt; maximum X (or R)<br />
+ymax--&gt; maximum Y (or theta)<br />
+zmax--&gt; maximum Z (or Phi)<br />
+dim--&gt; dimensions for each allowable direction<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A Sub constructor for a few Engines...simplifies some intialization<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;SurfSphereGrid&gt; sg(4.0,Pi/2, Pi/4, 10);<br />
+Grid&lt;UniformGrid&gt; ug(2.0, 3.0, 2.0, 100); <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Grid(double xmin, double xmax, double ymin, double ymax, double zmin, double zmax, int dimx, int dimy, int dimz)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Engine_t Handeling<br />
+<br />
+UniformGrid--&gt;uses all pts<br />
+[xmin=min X; xmax=max X; ymin=min Y; ymax=max Y; minz=Min Z; zmax=max z; dimx=X dim; dimy=Y dim; dimz= Z dim]<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+xmin--&gt; minimum X (or R)<br />
+xmax--&gt; maximum X (or R)<br />
+ymin --&gt; minimum Y (or theta)<br />
+ymax--&gt; maximum Y (or theta)<br />
+zmin--&gt; minimum Z (or phi)<br />
+zmax--&gt; maximum Z (or Phi)<br />
+dimx--&gt; dimensions for the X direction<br />
+dimy --&gt; dimensions for the Y direction<br />
+dimz --&gt; dimentions for the Z direction<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A Sub constructor for a few Engines...simplifies some intialization<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;SurfSphereGrid&gt; sg(-1.0, 2.0, -2.0, 3.0, -2.0, 2.0, 10, 10,10); <font color='#006600'>//WILL FAIL</font><br />
+Grid&lt;UniformGrid&gt; ug(-1.0, 2.0, -2.0, 3.0, -2.0, 2.0, 10, 10,10); <font color='#006600'>//GOOD</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractiondim'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; dim();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the dimensions along al three directions<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;int&gt; dims(5,5,5);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+myG.dim(); <font color='#006600'>//will be [5,5,5]</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractiondr'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; dr(); --&gt; FOR ITERATORS<br />
+coord&lt;&gt; dr(int i); --&gt; FOR ENGINES<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for UNIFORMGRID ONLY<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the point index<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the steps along each direction.  <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; mins(0,0,0), maxs(5,5,5);<br />
+coord&lt;int&gt; dims(5,5,5);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+myG.dr(0); <font color='#006600'>//will be (1,1,1)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractiondx,dy,dz'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double dx(); --&gt; FOR ITERATORS<br />
+double dy(); --&gt; FOR ITERATORS<br />
+double dz(); --&gt; FOR ITERATORS<br />
+<br />
+double dx(int i); --&gt; FOR ENGINES<br />
+double dy(int i); --&gt; FOR ENGINES<br />
+double dz(int i); --&gt; FOR ENGINES<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for only 'UniformGrid'<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+for iterators --&gt; nothing<br />
+i--&gt; for engines..the index of the point<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the step size at point 'i'.  Most likely this number is a constant for any direction.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; mins(-1, -2, -3), masx(1,2,3); <br />
+coord&lt;int&gt; dims(2,2,2);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims); <br />
+double dx=myG.dx(0); <font color='#006600'>//will return 1.0</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionmin, max'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; min();<br />
+coord&lt;&gt; max();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the min or max along all 3 direction in a coord&lt;double, 3&gt;<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; mins(-1, -2, -3), masx(1,2,3); <br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims); <br />
+coord&lt;&gt; mins=myG.Min(); <font color='#006600'>//will return (-1,-2,-3)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionoperator()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; operator(int xd, int ys, int zd); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Will work for the iterators also and all Engine_t<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+xd--&gt;element of the X list<br />
+yd--&gt; element of the Y list<br />
+zd--&gt; element of the Z list<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns a coordinate from the grid at (xd, yd, zd)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; mins(-1,-1,-1), maxs(1,1,1);<br />
+coord&lt;int, 3&gt; dims(10,10,10);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims); <br />
+coord&lt;&gt; pt=myG(1,2,3); <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionPoint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; Point(); --&gt; FOR ITERATORS<br />
+coord&lt;&gt; Point(double t); --&gt;FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+For ITERATORS only<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the current point in the iteration loop for ITERATORS. Use 't' for time depedant Grids (you will need to write your own, or look to the 'RotatingGrid')<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims); <br />
+Grid&lt;UniformGrid&gt;::iterator git(myG);<br />
+coord&lt;&gt; pt=git.Point(); <font color='#006600'>//will return the (0,0,0) element without looping </font><br />
+pt=git.Point(1.0); <font color='#006600'>//same as above for UniformGrid</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionx(),y(),z()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double x(int i); (also r(i)) --&gt; for Engines<br />
+double y(int i); (also theta(i))  --&gt; for Engines<br />
+double z(int i); (also phi(i)) --&gt; for Engines<br />
+<br />
+double x(); (also r()) --&gt; FOR ITERATORS<br />
+double y(); (also theta())  --&gt; FOR ITERATORS<br />
+double z(); (also phi())  --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+nothing for Iterators<br />
+i--&gt; an intege<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the current point in the iteration loop along a specific direction<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims); <br />
+Grid&lt;UniformGrid&gt;::iterator git(myG);<br />
+double pt=git.z(); <font color='#006600'>//will return the 0th Z element without looping </font><br />
+pt=myG.z(0);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionx(t), y(t), z(t)'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double x(double t); --&gt; FOR ITERATORS<br />
+double y(double t); --&gt; FOR ITERATORS<br />
+double z(double t); --&gt; FOR ITERATORS<br />
+<br />
+double x(int i, double t); --&gt; FOR ENGINES<br />
+double y(int i, double t); --&gt; FOR ENGINES<br />
+double z(int i, double t); --&gt; FOR ENGINES<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+for UNIFORGRID only<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the point index<br />
+t--&gt; a time<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the grid value along the direction (x,y,z) assuming that the grid is TIME DEPENDANT. For the UniformGrid this function points back to x(i).  It is designed to allow you to write your own time dependant engine.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;int&gt; dims(5,5,5);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+myG.x(2, 1.0); <font color='#006600'>//get the second x value at time t=1.0</font><br />
+myG.x(2); <font color='#006600'>//will be the same as above for UniformGrid</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractionXdim, Ydim, Zdim'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int Xdim();<br />
+int Ydim();<br />
+int Zdim(); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the number of steps for each direction.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;int&gt; dims(5,5,5);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+myG.Xdim(); <font color='#006600'>//will be 5</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionXmin,Ymin,Zmin,<br />Xmax, Ymax, Zmax'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double Xmin(); (also Rmin();)<br />
+double Ymin(); (also Thetamin();) <br />
+double Zmin(); (also Phimin();) <br />
+<br />
+double Xmax(); (also Rmax()) <br />
+double Ymax(); (also Thetamax()) <br />
+double Zmax(); (also Phimax()) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the smallest (min) or largest (max) value along the spcific Direction (X,Y,Z) in the Grid;<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; mins(-1, -2, -3), masx(1,2,3); <br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims); <br />
+double pt=myG.Ymax(); <font color='#006600'>//will return 2</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='Assignmentsdim'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void dim(coord&lt;int&gt; newDims); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformGrid--&gt; changes X, Y, and Z<br />
+FullSphereGrid--&gt; changes X<br />
+FullCubeGrid--&gt; changes X<br />
+SurfCubeGrid--&gt; changes X<br />
+SurfSphereGrid--&gt; changes Y<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newYdim--&gt; the new dimension of all three dimensions<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+recalculates the grid components with the new dimensions<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;int&gt; dims(5,5,5);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+coord&lt;int&gt; newdims(10,10,10);<br />
+myG.dim(newdims); <font color='#006600'>//x,y,z dims are all now 10 </font><br />
+Grid&lt;SurfSphereGrid&gt; myG1(mins, maxs, dims);<br />
+myG1.dim(newdims); <font color='#006600'>//changes The Y value of the dims (the master </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentsMin, Max'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Min(coord&lt;&gt; newMin);<br />
+void Max(coord&lt;&gt; newMin);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformGrid--&gt; changes the (X,Y,Z) value<br />
+FullSphereGrid--&gt; changes the (r,Theta,Phi) value<br />
+FullCubeGrid--&gt; changes the (X,Y,Z) value<br />
+SurfCubeGrid--&gt; changes the (X,Y,Z) value<br />
+SurfSphereGrid--&gt; changes the (R, theta,phi) value<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newMin--&gt; a new coord&lt;&gt;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+set the new minimal or maxial values along each three directions<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;int&gt; dims(5,5,5);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+coord&lt;&gt; newMax(10,10,10);<br />
+myG.Max(newMax); <font color='#006600'>//The (X,Y,Z) max is now (10,10,10)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Grid operator=(Grid &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; A Grid WITH THE SAME ENGINE!<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+assigns one grid from another...THe Engine of the 'rhs' must be the same as the 'lhs'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;int&gt; dims(5,5,5);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+Grid&lt;UniformGrid&gt; myG2=myG; <font color='#006600'>//okay assignment</font><br />
+Grid&lt;SurfCubeGrid&gt; myG3=myG; <font color='#006600'>//WILL FAIL (not compile) </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentsXdim,Ydim, Zdim'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Xdim(int newdim); <br />
+void Ydim(int newdim); <br />
+void Zdim(int newdim); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformGrid--&gt; changes only the X dimension<br />
+FullSphereGrid--&gt; changes ALL three dimensions!<br />
+FullCubeGrid--&gt; changes ALL three dimensions!<br />
+SurfCubeGrid--&gt; changes only the X dimension<br />
+SurfSphereGrid--&gt; changes NOTHING!!<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newdim--&gt; the new value of the dimension<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the dimention along each direction.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;int&gt; dims(5,5,5);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+myG.Xdim(10); <font color='#006600'>//The X dim is now 10</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentsXmin,Ymin,Zmin,<br />Xmax, Ymax, Zmax'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Xmin(double newMin);<br />
+void Ymin(double newMin);<br />
+void Zmin(double newMin);<br />
+<br />
+void Xmax(double newMin);<br />
+void Ymax(double newMin);<br />
+void Zmax(double newMin);<br />
+<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformGrid--&gt; changes only the X,Y,Z minimum value<br />
+FullSphereGrid--&gt; changes the minium R value<br />
+FullCubeGrid--&gt; changes the minimum X,Y value<br />
+SurfCubeGrid--&gt; changes the min X,Y,Z value<br />
+SurfSphereGrid--&gt; changes the min AND max R,Theta,Phi value <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newMin--&gt; the new minimal or maximal value <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the min or max of the grid and recalculates the entire grid.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;int&gt; dims(5,5,5);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+myG.Zmin(-5); <font color='#006600'>//The Z min is now -5</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other FunctionscellVolume'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double cellVolume()<br />
+double cellVolume(int i)<br />
+double cellVolume(int i, double t)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+for UniformGrid ONLY<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the point index<br />
+t--&gt; a time value<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns 'dx*dy*dz' for a given index i...or for uniform grids no index is required.  The 'double t' is used if you desire to create an engine where the grid points are time dependant.  For the Engine_t stated here, this simply points to CellVolume(i)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;int&gt; dims(5,5,5);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+myG.CellVoume(); <font color='#006600'>//get the voxel volume size</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsCenter'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Center(coord&lt;&gt; Cs); <br />
+void Center(double xC, double yC, double zC);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Supported Engines...<br />
+<br />
+UniformGrid--&gt;full support<br />
+SurfCubeGrid--&gt;full support<br />
+FullCubeGrid--&gt;full support<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Cs--&gt; a coord with the values (xC, yC, zC)<br />
+xC--&gt; The X center position<br />
+yC--&gt; The Y center position<br />
+zC--&gt; The Z center position=<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+recalculates the Grid upon a recentering..simply moves the center of the grid to 'Cs'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+recalculates the Grid upon a recentering..simply moves the center of the grid to 'Cs'<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionsScale'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Scale(coord&lt;&gt; mulBy); <br />
+void Scale(double xmul, double ymul, double zmul);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Supported Engines...<br />
+<br />
+UniformGrid--&gt;full support<br />
+SurfCubeGrid--&gt;full support<br />
+FullCubeGrid--&gt;full support<br />
+FullSphereGrid--&gt;Uses ONLY the first entry (can only scale 'R')<br />
+SurfSphereGrid--&gt;Uses ONLY the first entry (can only scale 'R') <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+mulBy--&gt; a coord with the values (xmul, ymul, zmul)<br />
+xmove--&gt; amount to move in X direction<br />
+ymove--&gt; amount to move in the Y direction<br />
+zmove--&gt;amount to move in the Z direction<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+recalculates the Grid upon a a scaling factor..IF the the multipliers are negative then the inverse of the numbers are taken (multipliers can really only be positive)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+  Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+myG.Scale(4,4,4); <font color='#006600'>//grid is now 4 times the size it was at the start (same dims however)</font><br />
+myG.Scale(-2,-2,-2); <font color='#006600'>//shrink the total grid by 1/2 (same dims however) </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionssize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int size();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the TOTAL number of points in the grid (dimx*dimy*dimz)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;int&gt; dims(5,5,5);<br />
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+double s=myG.size(10); <font color='#006600'>//the size is 125</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionsTranslate'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Translate(coord&lt;&gt; moveBy); <br />
+void Translate(double xmove, double ymove, double zmove);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for Engines...<br />
+<br />
+UniformGrid--&gt;full support<br />
+SurfCubeGrid--&gt;full support<br />
+FullCubeGrid--&gt;full support<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+moveBy--&gt; a coord with the values (xmove, ymove, zmove)<br />
+xmove--&gt; amount to move in X direction<br />
+ymove--&gt; amount to move in the Y direction<br />
+zmove--&gt;amount to move in the Z direction<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+recalculates the Grid upon a translate by some vector (xmove, ymove, zmove)<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; myG(mins, maxs, dims);<br />
+myG.Translate(4,4,4); <font color='#006600'>//grid has been moved by (4,4,4) in each direction</font><br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

@@ -1,0 +1,153 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Functional Mode<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+FUNCTIONAL MODE:: The second Mode, to me, is much more useful, because one can develop more complex programs, where minimization is only part of the total program...and not be a slave to the input file...however, it does require a bit of knowledge of the function available to you...which is why you should look at CERN's documentation. However, here is the same line fitting example, except using the function calls...there are numerous ways to write this program , this is just one of them.....<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+#include&nbsp;&quot;minuit/minuit.h&quot;&nbsp;<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<br />
+/*<br />
+<font color='#006600'>//A&nbsp;simple&nbsp;example&nbsp;on&nbsp;the&nbsp;Functional&nbsp;mode&nbsp;of&nbsp;the&nbsp;fitting&nbsp;function&nbsp;&quot;MINUIT&quot;</font><br />
+<font color='#006600'>//here&nbsp;we&nbsp;fit&nbsp;a&nbsp;line&nbsp;to&nbsp;random&nbsp;data&nbsp;(generated&nbsp;on&nbsp;the&nbsp;fly)</font><br />
+<font color='#006600'>//in&nbsp;this&nbsp;directory&nbsp;that&nbsp;you&nbsp;will&nbsp;need&nbsp;to&nbsp;input&nbsp;pipe&nbsp;into&nbsp;stdin&nbsp;via</font><br />
+<br />
+<font color='#006600'>//&quot;&lt;progname&gt;&nbsp;&lt;query&nbsp;options&gt;&quot;</font><br />
+<br />
+<font color='#006600'>//here&nbsp;the&nbsp;'&lt;query&nbsp;options&gt;'&nbsp;are&nbsp;the&nbsp;options&nbsp;that&nbsp;the</font><br />
+<font color='#006600'>//C++&nbsp;part&nbsp;of&nbsp;the&nbsp;program&nbsp;asks&nbsp;you&nbsp;for&nbsp;upon&nbsp;start&nbsp;up</font><br />
+*/<br />
+<br />
+<font color='#006600'>//a&nbsp;line...</font><br />
+double&nbsp;lineFunc(double&nbsp;m,&nbsp;double&nbsp;b,&nbsp;double&nbsp;x)<br />
+{&nbsp;return&nbsp;m*x+b;&nbsp;}<br />
+<br />
+<font color='#006600'>//the&nbsp;data&nbsp;vector&nbsp;declared&nbsp;GLOBAL</font><br />
+Vector&lt;double&gt;&nbsp;data(50);<br />
+<br />
+<font color='#006600'>//the&nbsp;master&nbsp;MINUIT&nbsp;function</font><br />
+void&nbsp;fcn&nbsp;(int&nbsp;npar,&nbsp;double*&nbsp;grad,&nbsp;double*&nbsp;fcnval,&nbsp;double*&nbsp;xval,&nbsp;int&nbsp;iflag,&nbsp;void*&nbsp;futil)<br />
+{<br />
+<font color='#006600'>//NOTE:&nbsp;there&nbsp;is&nbsp;no&nbsp;iflag&nbsp;buisness&nbsp;here</font><br />
+<font color='#006600'>//&nbsp;do,&nbsp;that&nbsp;is&nbsp;to&nbsp;calculate&nbsp;'chi-square'&nbsp;or&nbsp;fill&nbsp;out&nbsp;'fcnval'</font><br />
+<font color='#006600'>//&nbsp;here&nbsp;we&nbsp;take&nbsp;x=1...50&nbsp;as&nbsp;out&nbsp;independant&nbsp;var</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;*fcnval=0;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;i=0;i&lt;data.size();++i)&nbsp;*fcnval+=pow(lineFunc(xval[0],&nbsp;xval[1],&nbsp;i)-data[i],&nbsp;2.0);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;*fcnval=std::sqrt(*fcnval);<br />
+<br />
+}<br />
+<br />
+int&nbsp;main(int&nbsp;argc,&nbsp;char&nbsp;**argv)<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;ss=50;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;query_parameter(argc,&nbsp;argv,&nbsp;1,&nbsp;&quot;Enter&nbsp;data&nbsp;length:&nbsp;&quot;,&nbsp;ss);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;data.resize(ss);<br />
+<font color='#006600'>//a&nbsp;random&nbsp;number&nbsp;generator&nbsp;will&nbsp;generate&nbsp;from&nbsp;3&nbsp;to&nbsp;10</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Random&lt;UniformRandom&lt;&gt;&nbsp;&gt;&nbsp;myR(3,10);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Range&nbsp;All(Range::Start,&nbsp;Range::End);<br />
+<br />
+<font color='#006600'>//initialize&nbsp;our&nbsp;data,</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;data.apply(myR,&nbsp;All);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;err;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char&nbsp;*moo=NULL;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MNINIT(5,6,7);&nbsp;<font color='#006600'>//first&nbsp;we&nbsp;must&nbsp;initialize&nbsp;minuit</font><br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;final&nbsp;params</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;char&nbsp;*name1=&quot;m&quot;,&nbsp;*name2=&quot;b&quot;;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;startv[2]={1.0,&nbsp;1.0};<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;stepv[2]={1.0,1.0};<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;lb=0.0,&nbsp;ub=0.0;<br />
+<br />
+<font color='#006600'>//set&nbsp;the&nbsp;two&nbsp;fitting&nbsp;parmeters</font><br />
+<font color='#006600'>//&nbsp;NOTE&nbsp;THEY&nbsp;START&nbsp;AT&nbsp;1&nbsp;NOT&nbsp;0&nbsp;(silly&nbsp;fortran&nbsp;things)</font><br />
+<font color='#006600'>//&nbsp;&lt;number&gt;&nbsp;&lt;name&gt;&nbsp;&lt;start&nbsp;guess&gt;&nbsp;&lt;start&nbsp;step&nbsp;size&gt;&nbsp;&lt;loer&nbsp;bound&gt;&nbsp;&lt;upper&nbsp;bound&gt;&nbsp;&lt;error&nbsp;flag&gt;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;MNPARM(1,name1,&nbsp;startv[0],&nbsp;stepv[0],&nbsp;lb,&nbsp;ub,&nbsp;err);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MNPARM(2,name2,&nbsp;startv[1],&nbsp;stepv[1],&nbsp;lb,&nbsp;ub,&nbsp;err);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;MAXLINE=256;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char&nbsp;*command;&nbsp;command=new&nbsp;char[MAXLINE];<br />
+&nbsp;&nbsp;&nbsp;&nbsp;snprintf&nbsp;(command,&nbsp;MAXLINE,&nbsp;&quot;MIGRAD&quot;);<br />
+<br />
+<font color='#006600'>//minimize&nbsp;using&nbsp;the&nbsp;MIGRAD&nbsp;minimization&nbsp;type</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;MNCOMD&nbsp;(minuitfcn,&nbsp;command,&nbsp;err,&nbsp;NULL);<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;final&nbsp;data&nbsp;fitted&nbsp;parameters</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;char&nbsp;dm[10];<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MNPOUT(1,&nbsp;dm,&nbsp;startv[0],&nbsp;stepv[0],&nbsp;lb,&nbsp;ub,&nbsp;err);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MNPOUT(2,&nbsp;dm,&nbsp;startv[1],&nbsp;stepv[1],&nbsp;lb,&nbsp;ub,&nbsp;err);<br />
+<br />
+<font color='#006600'>//dump&nbsp;out&nbsp;the&nbsp;data&nbsp;when&nbsp;finished</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::ofstream&nbsp;oo(&quot;fitdat.m&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;&quot;vdat=[&quot;&lt;&lt;data&lt;&lt;&quot;];&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;&quot;m=&quot;&lt;&lt;startv[0]&lt;&lt;&quot;;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;&quot;b=&quot;&lt;&lt;startv[1]&lt;&lt;&quot;;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;&quot;rr=1:&quot;&lt;&lt;data.size()&lt;&lt;&quot;;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;&quot;fitted=rr*m+b;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;&quot;plot(rr,&nbsp;vdat,&nbsp;'ko',&nbsp;rr,&nbsp;fitted,&nbsp;'b-');&quot;&lt;&lt;std::endl;<br />
+}<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

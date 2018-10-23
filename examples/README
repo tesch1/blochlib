@@ -1,0 +1,28 @@
+BlochLib Examples
+
+--Found here are a variety of examples designed to show you both examples of
+  specific classes, some are quite simple, others a bit more complex
+  
+ 
+ --blochsims/ --> simulations or programs that use the Classical drivers from the lib
+              --> Magnetic Field Calculations are also in here
+
+ --classes/   -->Here are the generic 'background' class demonstrations
+ --data_readers/  --> VNMR (Varian) binary (1D or 2D data), SpinSight 1D binary, a matlab binary 
+ --diffusion/ --> a simple 1D diffusion example
+
+ --minuit/ --> very simple examples on how to use the MINUIT minimizer in both
+ 		interactive and functional modes
+ --mpiplay/ --> testing and demonstrations of the MPI functionality
+ 
+ --qmsims/ --> simulations or programs that use the Quantum Mechanincal drivers from the lib
+
+ --solid-1.6/ --> a LARGE solid-state simulation package that allows for easy propogation
+                and fid generation of most all solid state sequences (it is a rival to SIMPSON)
+                this package has its own chunk of documentation and syntax
+                there is a 'configure' file for this package
+                also included here is 'Scripto' a VERY simple scripting language to used
+                as the input file generators for 'solid' it is written for parrellel integration
+                of powder angles using MPI
+ 
+ 

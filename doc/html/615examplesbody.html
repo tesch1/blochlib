@@ -1,0 +1,125 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+The reconstruct function<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+how to use the reconstruct function<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+to compile, do this (assuming you have done a 'make install')::<br />
+<br />
+blcc -mpi test.cc -o test<br />
+<br />
+<br />
+to run, do this::<br />
+<br />
+mpirun -np 2 ./test<br />
+<br />
+<br />
+expected output would be<br />
+<br />
+waugh.cchem.berkeley.edu::0/2<br />
+Original rank: 0 [ 0 1 2 3 4 5 6 7 8 9 ]<br />
+Split Parameters: Begin: 0 End: 5 data size: 10<br />
+After Addtion: rank: 0 [ 100 101 102 103 104 5 6 7 8 9 ]<br />
+waugh.cchem.berkeley.edu::1/2<br />
+Original rank: 1 [ 0 1 2 3 4 5 6 7 8 9 ]<br />
+Split Parameters: Begin: 5 End: 10 data size: 10<br />
+After Addtion: rank: 1 [ 0 1 2 3 4 205 206 207 208 209 ]<br />
+After Reconstruct: rank: 1 [ 0 1 2 3 4 205 206 207 208 209 ]<br />
+After Reconstruct: rank: 0 [ 100 101 102 103 104 205 206 207 208 209 ]<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+int&nbsp;main(int&nbsp;argc,char*&nbsp;argv[])<br />
+{&nbsp;<br />
+&nbsp;&nbsp;MPIworld.start(argc,&nbsp;argv);<br />
+&nbsp;&nbsp;std::cout&lt;&lt;MPIworld.name()&lt;&lt;&quot;::&quot;&lt;&lt;MPIworld.rank()&lt;&lt;&quot;/&quot;&lt;&lt;MPIworld.size()&lt;&lt;std::endl;<br />
+<br />
+&nbsp;&nbsp;Vector&lt;double&gt;&nbsp;CCvec(10);<br />
+&nbsp;&nbsp;for(int&nbsp;i=0;i&lt;10;++i)&nbsp;CCvec[i]=i;<br />
+&nbsp;&nbsp;int&nbsp;b=0,&nbsp;e=10,&nbsp;div=1;<br />
+<br />
+<font color='#006600'>//split&nbsp;the&nbsp;procedure</font><br />
+&nbsp;&nbsp;Range&nbsp;toadd=MPIworld.splitLoop(b,e,div);<br />
+&nbsp;&nbsp;cout&lt;&lt;&quot;Original&nbsp;rank:&nbsp;&quot;&lt;&lt;MPIworld.rank()&lt;&lt;&quot;&nbsp;[&nbsp;&quot;&lt;&lt;CCvec&lt;&lt;&quot;]&quot;&lt;&lt;endl;<br />
+&nbsp;&nbsp;cout&lt;&lt;&quot;&nbsp;Split&nbsp;Parameters:&nbsp;Begin:&nbsp;&quot;&lt;&lt;b&lt;&lt;&quot;&nbsp;End:&nbsp;&quot;&lt;&lt;e&lt;&lt;&quot;&nbsp;data&nbsp;size:&nbsp;&quot;&lt;&lt;CCvec.size()&lt;&lt;endl;<br />
+<br />
+<font color='#006600'>//add&nbsp;distinguishing&nbsp;features&nbsp;from&nbsp;each&nbsp;proc</font><br />
+&nbsp;&nbsp;CCvec(toadd)+=(MPIworld.rank()+1)*100;<br />
+&nbsp;&nbsp;cout&lt;&lt;&quot;After&nbsp;Addtion:&nbsp;rank:&nbsp;&quot;&lt;&lt;MPIworld.rank()&lt;&lt;&quot;&nbsp;[&nbsp;&quot;&lt;&lt;CCvec&lt;&lt;&quot;]&quot;&lt;&lt;endl;<br />
+<br />
+<font color='#006600'>//reconstruct&nbsp;the&nbsp;data,&nbsp;will&nbsp;only&nbsp;be&nbsp;Reconstructed&nbsp;on&nbsp;the&nbsp;masterproc=0&nbsp;</font><br />
+&nbsp;&nbsp;MPIworld.reconstruct(CCvec,&nbsp;b,e);<br />
+&nbsp;&nbsp;cout&lt;&lt;&quot;After&nbsp;Reconstruct:&nbsp;rank:&nbsp;&quot;&lt;&lt;MPIworld.rank()&lt;&lt;&quot;&nbsp;[&nbsp;&quot;&lt;&lt;CCvec&lt;&lt;&quot;]&quot;&lt;&lt;endl;<br />
+<br />
+&nbsp;&nbsp;MPIworld.end();<br />
+}<br />
+<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

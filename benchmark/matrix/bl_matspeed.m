@@ -1,0 +1,10 @@
+Infinity=Inf;
+R=[0x3dfcf0 ];
+bllib_prop=[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  ];
+bllib_mul1=[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  ];
+bllib_mul2=[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  ];
+semilogx(R, bllib_prop,'r');
+title('propagator(c=a*b*adjoint(a)) 700 MHz Pentium III Xeon');
+xlabel('log(N)');
+ylabel('MFLOPS');
+legend('BlochLib 1.0--ATLAS-prop','BlochLib 1.0--ATLAS-C=A*B','BlochLib 1.0--ATLAS-C*=A');

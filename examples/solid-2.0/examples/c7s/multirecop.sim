@@ -1,0 +1,135 @@
+#performs multiple 
+# recoupling types
+spins{	
+#the global options
+	numspin 2
+	T 13C 0
+	T 13C 1
+	#T 1H 2
+	D -2000 0 1	
+}
+
+parameters{	
+	powder1{
+		aveType zcw
+		thetaStep 233
+		phiStep 144
+	}
+	
+	powder2{
+		aveType ../../../../crystals/ZCW_3_3722
+	}		
+	
+#the intergrator step size	
+	maxtstep=1e-6
+#number of 1D fid points	
+	npts1D=256	
+	roeq= Iz_0+Iz_1	
+	detect=Iz_0+Iz_1	
+}
+
+pulses{
+#set the spinning	
+	wr=5000
+	rotor=rad2deg*acos(1/sqrt(3))
+	idealAmp=1e8
+#drama
+	sub1{	
+		t90=1/idealAmp/4
+		tr2=1/wr/2-t90
+		tr4=1/wr/4-t90/2
+		sw=wr/2
+		ph=0
+		
+		13C:delay(tr4)
+		13C:pulse(t90, ph,idealAmp) 
+		13C:delay(tr2)
+		13C:pulse(t90, ph+180,idealAmp) 
+		13C:delay(tr4)		
+	}
+
+#draws
+	sub2{	
+		amp=8*wr
+		amplitude(amp)
+		phst=90
+		xph=0
+		sw=wr/2
+		t360=1/amp
+		
+		13C:pulse(t360, phst) 
+		13C:pulse(t360, phst+180) 		
+		13C:pulse(1/idealAmp/4, xph, idealAmp)
+		13C:pulse(t360, phst) 
+		13C:pulse(t360, phst+180) 
+		13C:pulse(t360, phst+180) 
+		13C:pulse(t360, phst)
+		13C:pulse(1/idealAmp/4, xph, idealAmp)
+		13C:pulse(t360, phst+180) 
+		13C:pulse(t360, phst) 
+	}
+
+#horror
+	sub3{	
+		sw=wr/2
+		amp=wr/2
+		amplitude(amp)
+		ph=0
+	#pulse times
+		t360=1/amp/2
+		
+		13C:pulse(t360, ph) 
+	}
+
+#c7
+	sub4{	
+		sw=wr/4
+		amp=7*wr
+		amplitude(amp)
+		stph=0
+		phst=360/7
+		t360=1/amp
+		
+		13C:pulse(2*t360, phst*0) 
+		13C:pulse(2*t360, phst*1) 
+		13C:pulse(2*t360, phst*2) 
+		13C:pulse(2*t360, phst*3) 
+		13C:pulse(2*t360, phst*4) 
+		13C:pulse(2*t360, phst*5) 
+		13C:pulse(2*t360, phst*6) 
+	}
+
+	
+#a single fid is concidered point to point
+#show()	
+	ptop()
+	i=4
+
+#for i==1, i==2, the powder must be the ZCW_3_3722
+# as the spectra are gamma angles depant
+# for i==3 and i==4 the normal zxw will function
+	if(i==1)
+		ro(Ix)
+		detect(Ix)
+		reuse(sub1)
+		fid()
+	else if(i==2)
+		ro(Ix)
+		detect(Ix)
+		reuse(sub2)
+		fid()
+	else if(i==3)
+		ro(Ix)
+		detect(Ix)
+		reuse(sub3)
+		fid()
+	else if(i==4)
+		ro(Iz)
+		detect(Iz)
+		reuse(sub4)
+		fid()
+	end
+	savefidtext(simpC7) #save tas a text file
+}
+
+	

@@ -1,0 +1,22 @@
+
+#a simple parameter input file for the HamilGen
+# fid maker
+
+npts 512
+sw 20000
+wr 0
+rotor 54.7
+aveType zcw
+thetaSteps 616
+phiSteps 377
+
+numspins 2
+
+#simple dipole
+
+hamil 2000*pi*2*0.41*(A2m1*T22_0,1-A21*T2m2_0,1)
+#hamil 2000*A20*T20_0,1
+
+detect Iz
+roeq Iz
+

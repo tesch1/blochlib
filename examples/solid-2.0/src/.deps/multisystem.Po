@@ -1,0 +1,886 @@
+multisystem.o multisystem.o: multisystem.cc multisystem.h \
+  /usr/local/include/blochlib/blochlib.h \
+  /usr/local/include/blochlib/blochconfig.h \
+  /usr/local/include/blochlib/mpi/mpi_config.h \
+  /usr/include/gcc/darwin/3.3/c++/new \
+  /usr/include/gcc/darwin/3.3/c++/cstddef /usr/include/stddef.h \
+  /usr/include/machine/types.h /usr/include/ppc/types.h \
+  /usr/include/sys/cdefs.h /usr/include/machine/ansi.h \
+  /usr/include/ppc/ansi.h /usr/include/gcc/darwin/3.3/c++/exception \
+  /usr/include/gcc/darwin/3.3/c++/string \
+  /usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/c++config.h \
+  /usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/os_defines.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stringfwd.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/char_traits.h \
+  /usr/include/gcc/darwin/3.3/c++/cstring /usr/include/string.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/fpos.h \
+  /usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/c++io.h \
+  /usr/include/gcc/darwin/3.3/c++/cstdio /usr/include/stdio.h \
+  /usr/include/sys/types.h /usr/include/sys/appleapiopts.h \
+  /usr/include/machine/endian.h /usr/include/ppc/endian.h \
+  /usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/gthr.h \
+  /usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/gthr-default.h \
+  /usr/include/pthread.h /usr/include/pthread_impl.h /usr/include/errno.h \
+  /usr/include/sys/errno.h /usr/include/sched.h /usr/include/time.h \
+  /usr/include/gcc/darwin/3.3/machine/limits.h /usr/include/ppc/limits.h \
+  /usr/include/unistd.h /usr/include/sys/unistd.h /usr/include/signal.h \
+  /usr/include/sys/signal.h /usr/include/machine/signal.h \
+  /usr/include/ppc/signal.h /usr/include/limits.h \
+  /usr/include/sys/syslimits.h /usr/include/mach/mach_types.h \
+  /usr/include/gcc/darwin/3.3/stdint.h /usr/include/mach/host_info.h \
+  /usr/include/mach/vm_statistics.h /usr/include/mach/machine/vm_types.h \
+  /usr/include/mach/ppc/vm_types.h /usr/include/mach/machine.h \
+  /usr/include/mach/boolean.h /usr/include/mach/machine/boolean.h \
+  /usr/include/mach/ppc/boolean.h /usr/include/mach/time_value.h \
+  /usr/include/mach/memory_object_types.h /usr/include/mach/port.h \
+  /usr/include/mach/vm_types.h /usr/include/mach/exception_types.h \
+  /usr/include/mach/machine/exception.h /usr/include/mach/ppc/exception.h \
+  /usr/include/mach/thread_status.h \
+  /usr/include/mach/machine/thread_status.h \
+  /usr/include/mach/ppc/thread_status.h \
+  /usr/include/mach/machine/thread_state.h \
+  /usr/include/mach/ppc/thread_state.h /usr/include/mach/processor_info.h \
+  /usr/include/mach/machine/processor_info.h \
+  /usr/include/mach/ppc/processor_info.h /usr/include/mach/task_info.h \
+  /usr/include/mach/policy.h /usr/include/mach/task_policy.h \
+  /usr/include/mach/task_special_ports.h /usr/include/mach/thread_info.h \
+  /usr/include/mach/thread_policy.h \
+  /usr/include/mach/thread_special_ports.h \
+  /usr/include/mach/clock_types.h /usr/include/mach/vm_attributes.h \
+  /usr/include/mach/vm_inherit.h /usr/include/mach/vm_behavior.h \
+  /usr/include/mach/vm_prot.h /usr/include/mach/vm_sync.h \
+  /usr/include/mach/vm_region.h /usr/include/mach/kmod.h \
+  /usr/include/mach/kern_return.h /usr/include/mach/machine/kern_return.h \
+  /usr/include/mach/ppc/kern_return.h /usr/include/mach/std_types.h \
+  /usr/include/sys/time.h /usr/include/gcc/darwin/3.3/c++/cwchar \
+  /usr/include/gcc/darwin/3.3/c++/ctime \
+  /usr/include/gcc/darwin/3.3/c++/memory \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_algobase.h \
+  /usr/include/gcc/darwin/3.3/c++/climits \
+  /usr/include/gcc/darwin/3.3/c++/cstdlib /usr/include/stdlib.h \
+  /usr/include/gcc/darwin/3.3/c++/iosfwd \
+  /usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/c++locale.h \
+  /usr/include/gcc/darwin/3.3/c++/clocale /usr/include/locale.h \
+  /usr/include/gcc/darwin/3.3/c++/cctype /usr/include/ctype.h \
+  /usr/include/runetype.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/functexcept.h \
+  /usr/include/gcc/darwin/3.3/c++/exception_defines.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_pair.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/type_traits.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_iterator_base_types.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_iterator_base_funcs.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/concept_check.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_iterator.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_alloc.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_threads.h \
+  /usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/atomicity.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_construct.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_uninitialized.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_raw_storage_iter.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_function.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/basic_string.h \
+  /usr/include/gcc/darwin/3.3/c++/algorithm \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_algo.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_heap.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_tempbuf.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/basic_string.tcc \
+  /usr/local/include/blochlib/container/containers.h \
+  /usr/local/include/blochlib/container/complex.h /usr/include/math.h \
+  /usr/include/architecture/ppc/math.h \
+  /usr/include/gcc/darwin/3.3/c++/fstream \
+  /usr/include/gcc/darwin/3.3/c++/istream \
+  /usr/include/gcc/darwin/3.3/c++/ios \
+  /usr/include/gcc/darwin/3.3/c++/bits/localefwd.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/ios_base.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/locale_classes.h \
+  /usr/include/gcc/darwin/3.3/c++/streambuf \
+  /usr/include/gcc/darwin/3.3/c++/bits/streambuf.tcc \
+  /usr/include/gcc/darwin/3.3/c++/bits/basic_ios.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/streambuf_iterator.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/locale_facets.h \
+  /usr/include/gcc/darwin/3.3/c++/cwctype \
+  /usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/ctype_base.h \
+  /usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/ctype_inline.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/codecvt.h \
+  /usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/time_members.h \
+  /usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/messages_members.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/basic_ios.tcc \
+  /usr/include/gcc/darwin/3.3/c++/limits \
+  /usr/include/gcc/darwin/3.3/c++/bits/istream.tcc \
+  /usr/include/gcc/darwin/3.3/c++/locale \
+  /usr/include/gcc/darwin/3.3/c++/bits/locale_facets.tcc \
+  /usr/include/gcc/darwin/3.3/c++/cerrno \
+  /usr/include/gcc/darwin/3.3/c++/cmath \
+  /usr/include/gcc/darwin/3.3/c++/bits/cmath.tcc \
+  /usr/include/gcc/darwin/3.3/c++/typeinfo \
+  /usr/include/gcc/darwin/3.3/c++/ostream \
+  /usr/include/gcc/darwin/3.3/c++/bits/ostream.tcc \
+  /usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/basic_file.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/fstream.tcc \
+  /usr/include/gcc/darwin/3.3/c++/iostream \
+  /usr/local/include/blochlib/utils/blassert.h \
+  /usr/local/include/blochlib/container/rankType.h \
+  /usr/local/include/blochlib/container/grids/coords.h \
+  /usr/local/include/blochlib/container/Vector/Vector.h \
+  /usr/local/include/blochlib/container/MemChunk.h \
+  /usr/include/gcc/darwin/3.3/c++/iomanip \
+  /usr/include/gcc/darwin/3.3/c++/functional \
+  /usr/local/include/blochlib/container/operations.h \
+  /usr/local/include/blochlib/container/range.h \
+  /usr/local/include/blochlib/container/Vector/Vectoraux.h \
+  /usr/local/include/fftw3.h \
+  /usr/local/include/blochlib/container/matrix/matrix.h \
+  /usr/local/include/blochlib/container/matrix/_matrix.h \
+  /usr/local/include/blochlib/container/matrix/imatrix.h \
+  /usr/local/include/blochlib/container/matrix/genmatrix.h \
+  /usr/local/include/blochlib/container/matrix/matrixconfig.h \
+  /usr/local/include/blochlib/container/matrix/dmatrix.h \
+  /usr/local/include/blochlib/container/matrix/fmatrix.h \
+  /usr/local/include/blochlib/container/matrix/smatrix.h \
+  /usr/local/include/blochlib/container/matrix/hmatrix.h \
+  /usr/local/include/blochlib/container/matrix/trimatrix.h \
+  /usr/local/include/blochlib/container/matrix/matmatmul.h \
+  /usr/local/include/blochlib/container/matrix/matvec.h \
+  /usr/local/include/blochlib/container/matrix/matmat.h \
+  /usr/local/include/blochlib/container/matrix/matfft.h \
+  /usr/local/include/blochlib/utils/utils.h \
+  /usr/local/include/blochlib/utils/constants.h \
+  /usr/local/include/blochlib/container/matrix/matdiagonalize.h \
+  /usr/local/include/blochlib/container/matrix/matexp.h \
+  /usr/local/include/blochlib/container/matrix/LU.h \
+  /usr/local/include/blochlib/container/matrix/matassign.h \
+  /usr/local/include/blochlib/container/matrix/matqr.h \
+  /usr/local/include/blochlib/container/grids/grids.h \
+  /usr/local/include/blochlib/container/grids/gengrid.h \
+  /usr/local/include/blochlib/container/grids/unigrid.h \
+  /usr/local/include/blochlib/container/grids/fullspheregrid.h \
+  /usr/local/include/blochlib/container/grids/surfspheregrid.h \
+  /usr/local/include/blochlib/container/grids/surfcubegrid.h \
+  /usr/local/include/blochlib/container/grids/fullcubegrid.h \
+  /usr/local/include/blochlib/container/grids/xyzshape.h \
+  /usr/local/include/blochlib/container/grids/xyzgenshape.h \
+  /usr/local/include/blochlib/container/grids/xyzshapeparts.h \
+  /usr/local/include/blochlib/mpi/mpi_packer.h \
+  /usr/local/include/blochlib/mpi/mpi_tools.h \
+  /usr/local/include/blochlib/mpi/mpi_controller.h \
+  /usr/local/include/blochlib/version.h \
+  /usr/local/include/blochlib/utils/plotter.h \
+  /usr/local/include/blochlib/utils/random.h \
+  /usr/local/include/blochlib/utils/params.h \
+  /usr/include/gcc/darwin/3.3/c++/list \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_list.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/list.tcc \
+  /usr/include/gcc/darwin/3.3/c++/map \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_tree.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_map.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_multimap.h \
+  /usr/local/include/blochlib/utils/matlab5.h \
+  /usr/local/include/blochlib/utils/endians.h \
+  /usr/local/include/blochlib/utils/vnmrstream.h \
+  /usr/local/include/blochlib/utils/xwinnmr.h \
+  /usr/local/include/blochlib/utils/wavestream.h \
+  /usr/include/gcc/darwin/3.3/c++/stack \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_deque.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_stack.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/deque.tcc \
+  /usr/include/gcc/darwin/3.3/c++/vector \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_vector.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/stl_bvector.h \
+  /usr/include/gcc/darwin/3.3/c++/bits/vector.tcc \
+  /usr/local/include/blochlib/utils/spinsight.h \
+  /usr/local/include/blochlib/utils/parser.h \
+  /usr/local/include/blochlib/utils/scriptparse.h \
+  /usr/local/include/blochlib/container/grids/edgedetect.h \
+  /usr/local/include/blochlib/driver/bs.h \
+  /usr/local/include/blochlib/driver/basicODE.h \
+  /usr/local/include/blochlib/driver/bs_meth.h \
+  /usr/local/include/blochlib/driver/stiffbs.h \
+  /usr/local/include/blochlib/driver/stiffbs_meth.h \
+  /usr/local/include/blochlib/driver/ckrk.h \
+  /usr/local/include/blochlib/driver/ckrk_meth.h \
+  /usr/local/include/blochlib/driver/gear.h \
+  /usr/local/include/blochlib/driver/gear_meth.h \
+  /usr/local/include/blochlib/driver/integrate.h \
+  /usr/local/include/blochlib/QMspins/spinsys.h \
+  /usr/local/include/blochlib/QMspins/multispinop.h \
+  /usr/local/include/blochlib/QMspins/singlespinop.h \
+  /usr/local/include/blochlib/QMspins/spinsyspars.h \
+  /usr/local/include/blochlib/bloch/Isotope.h \
+  /usr/local/include/blochlib/QMspins/spin_ten.h \
+  /usr/local/include/blochlib/QMspins/space_ten.h \
+  /usr/local/include/blochlib/QMspins/j.h \
+  /usr/local/include/blochlib/QMspins/csa.h \
+  /usr/local/include/blochlib/QMspins/dip.h \
+  /usr/local/include/blochlib/QMspins/qua.h \
+  /usr/local/include/blochlib/QMspins/sys.h \
+  /usr/local/include/blochlib/QMspins/driver/powder.h \
+  /usr/local/include/blochlib/QMspins/driver/ham_gen.h \
+  /usr/local/include/blochlib/QMspins/driver/compute.h \
+  /usr/local/include/blochlib/QMspins/driver/oneFID.h \
+  /usr/local/include/blochlib/timetrain/timetrain.h \
+  /usr/local/include/blochlib/timetrain/consttrain.h \
+  /usr/local/include/blochlib/timetrain/gentrain.h \
+  /usr/local/include/blochlib/timetrain/consttrain_meth.h \
+  /usr/local/include/blochlib/timetrain/unitrain.h \
+  /usr/local/include/blochlib/timetrain/filetrain.h \
+  /usr/local/include/blochlib/timetrain/timetrain_meth.h \
+  /usr/local/include/blochlib/stencils/stencilexpr.h \
+  /usr/local/include/blochlib/stencils/stencilprep.h \
+  /usr/local/include/blochlib/stencils/stencilextent.h \
+  /usr/local/include/blochlib/stencils/stencilvector.h \
+  /usr/local/include/blochlib/stencils/stencilprep_func.h \
+  /usr/local/include/blochlib/stencils/boundary_condition.h \
+  /usr/local/include/blochlib/stencils/boundary_general.h \
+  /usr/local/include/blochlib/stencils/boundary_dirichlet.h \
+  /usr/local/include/blochlib/stencils/boundary_neumann.h \
+  /usr/local/include/blochlib/stencils/boundary_extrap.h \
+  /usr/local/include/blochlib/stencils/boundary_edgeblend.h \
+  /usr/local/include/blochlib/stencils/boundary_cornerblend.h \
+  /usr/local/include/blochlib/bloch/blochParamsBasic.h \
+  /usr/local/include/blochlib/bloch/blochParams.h \
+  /usr/local/include/blochlib/bloch/pulse.h \
+  /usr/local/include/blochlib/bloch/listblochpars.h \
+  /usr/local/include/blochlib/bloch/gradientgrid.h \
+  /usr/local/include/blochlib/bloch/listblochpars_meth.h \
+  /usr/local/include/blochlib/bloch/rotating_grid.h \
+  /usr/local/include/blochlib/bloch/bloch_basic.h \
+  /usr/local/include/blochlib/bloch/bloch.h \
+  /usr/local/include/blochlib/bloch/bloch_interac.h \
+  /usr/local/include/blochlib/bloch/bloch_interac_meth.h \
+  /usr/local/include/blochlib/bloch/blochsolver.h \
+  /usr/local/include/blochlib/bloch/lyapunov.h \
+  /usr/local/include/blochlib/bloch/bloch_int_dipdip.h \
+  /usr/local/include/blochlib/bloch/scalefunc.h \
+  /usr/local/include/blochlib/bloch/bloch_int_raddamp.h \
+  /usr/local/include/blochlib/bloch/bloch_int_bulks.h \
+  /usr/local/include/blochlib/bloch/bloch_int_relax.h \
+  /usr/local/include/blochlib/bloch/bloch_int_offset.h \
+  /usr/local/include/blochlib/bloch/biot.h \
+  /usr/local/include/blochlib/bloch/biot_basic.h \
+  /usr/local/include/blochlib/bloch/biot_meth.h \
+  /usr/local/include/blochlib/bloch/mag_fields.h \
+  /usr/local/include/blochlib/bloch/bloch_int_bfield.h \
+  /usr/local/include/blochlib/bloch/bloch_int_demag.h \
+  /usr/local/include/blochlib/bloch/bloch_int_dimlessdemag.h \
+  /usr/local/include/blochlib/bloch/bloch_int_demagmodulate.h \
+  /usr/local/include/blochlib/bloch/bloch_int_dimlessdip.h \
+  /usr/local/include/blochlib/bloch/gradfunc.h \
+  /usr/local/include/blochlib/bloch/gradimps.h
+
+multisystem.h:
+
+/usr/local/include/blochlib/blochlib.h:
+
+/usr/local/include/blochlib/blochconfig.h:
+
+/usr/local/include/blochlib/mpi/mpi_config.h:
+
+/usr/include/gcc/darwin/3.3/c++/new:
+
+/usr/include/gcc/darwin/3.3/c++/cstddef:
+
+/usr/include/stddef.h:
+
+/usr/include/machine/types.h:
+
+/usr/include/ppc/types.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/machine/ansi.h:
+
+/usr/include/ppc/ansi.h:
+
+/usr/include/gcc/darwin/3.3/c++/exception:
+
+/usr/include/gcc/darwin/3.3/c++/string:
+
+/usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/c++config.h:
+
+/usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/os_defines.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stringfwd.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/char_traits.h:
+
+/usr/include/gcc/darwin/3.3/c++/cstring:
+
+/usr/include/string.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/fpos.h:
+
+/usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/c++io.h:
+
+/usr/include/gcc/darwin/3.3/c++/cstdio:
+
+/usr/include/stdio.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/sys/appleapiopts.h:
+
+/usr/include/machine/endian.h:
+
+/usr/include/ppc/endian.h:
+
+/usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/gthr.h:
+
+/usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/gthr-default.h:
+
+/usr/include/pthread.h:
+
+/usr/include/pthread_impl.h:
+
+/usr/include/errno.h:
+
+/usr/include/sys/errno.h:
+
+/usr/include/sched.h:
+
+/usr/include/time.h:
+
+/usr/include/gcc/darwin/3.3/machine/limits.h:
+
+/usr/include/ppc/limits.h:
+
+/usr/include/unistd.h:
+
+/usr/include/sys/unistd.h:
+
+/usr/include/signal.h:
+
+/usr/include/sys/signal.h:
+
+/usr/include/machine/signal.h:
+
+/usr/include/ppc/signal.h:
+
+/usr/include/limits.h:
+
+/usr/include/sys/syslimits.h:
+
+/usr/include/mach/mach_types.h:
+
+/usr/include/gcc/darwin/3.3/stdint.h:
+
+/usr/include/mach/host_info.h:
+
+/usr/include/mach/vm_statistics.h:
+
+/usr/include/mach/machine/vm_types.h:
+
+/usr/include/mach/ppc/vm_types.h:
+
+/usr/include/mach/machine.h:
+
+/usr/include/mach/boolean.h:
+
+/usr/include/mach/machine/boolean.h:
+
+/usr/include/mach/ppc/boolean.h:
+
+/usr/include/mach/time_value.h:
+
+/usr/include/mach/memory_object_types.h:
+
+/usr/include/mach/port.h:
+
+/usr/include/mach/vm_types.h:
+
+/usr/include/mach/exception_types.h:
+
+/usr/include/mach/machine/exception.h:
+
+/usr/include/mach/ppc/exception.h:
+
+/usr/include/mach/thread_status.h:
+
+/usr/include/mach/machine/thread_status.h:
+
+/usr/include/mach/ppc/thread_status.h:
+
+/usr/include/mach/machine/thread_state.h:
+
+/usr/include/mach/ppc/thread_state.h:
+
+/usr/include/mach/processor_info.h:
+
+/usr/include/mach/machine/processor_info.h:
+
+/usr/include/mach/ppc/processor_info.h:
+
+/usr/include/mach/task_info.h:
+
+/usr/include/mach/policy.h:
+
+/usr/include/mach/task_policy.h:
+
+/usr/include/mach/task_special_ports.h:
+
+/usr/include/mach/thread_info.h:
+
+/usr/include/mach/thread_policy.h:
+
+/usr/include/mach/thread_special_ports.h:
+
+/usr/include/mach/clock_types.h:
+
+/usr/include/mach/vm_attributes.h:
+
+/usr/include/mach/vm_inherit.h:
+
+/usr/include/mach/vm_behavior.h:
+
+/usr/include/mach/vm_prot.h:
+
+/usr/include/mach/vm_sync.h:
+
+/usr/include/mach/vm_region.h:
+
+/usr/include/mach/kmod.h:
+
+/usr/include/mach/kern_return.h:
+
+/usr/include/mach/machine/kern_return.h:
+
+/usr/include/mach/ppc/kern_return.h:
+
+/usr/include/mach/std_types.h:
+
+/usr/include/sys/time.h:
+
+/usr/include/gcc/darwin/3.3/c++/cwchar:
+
+/usr/include/gcc/darwin/3.3/c++/ctime:
+
+/usr/include/gcc/darwin/3.3/c++/memory:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_algobase.h:
+
+/usr/include/gcc/darwin/3.3/c++/climits:
+
+/usr/include/gcc/darwin/3.3/c++/cstdlib:
+
+/usr/include/stdlib.h:
+
+/usr/include/gcc/darwin/3.3/c++/iosfwd:
+
+/usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/c++locale.h:
+
+/usr/include/gcc/darwin/3.3/c++/clocale:
+
+/usr/include/locale.h:
+
+/usr/include/gcc/darwin/3.3/c++/cctype:
+
+/usr/include/ctype.h:
+
+/usr/include/runetype.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/functexcept.h:
+
+/usr/include/gcc/darwin/3.3/c++/exception_defines.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_pair.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/type_traits.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_iterator_base_types.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_iterator_base_funcs.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/concept_check.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_iterator.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_alloc.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_threads.h:
+
+/usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/atomicity.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_construct.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_uninitialized.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_raw_storage_iter.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_function.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/basic_string.h:
+
+/usr/include/gcc/darwin/3.3/c++/algorithm:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_algo.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_heap.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_tempbuf.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/basic_string.tcc:
+
+/usr/local/include/blochlib/container/containers.h:
+
+/usr/local/include/blochlib/container/complex.h:
+
+/usr/include/math.h:
+
+/usr/include/architecture/ppc/math.h:
+
+/usr/include/gcc/darwin/3.3/c++/fstream:
+
+/usr/include/gcc/darwin/3.3/c++/istream:
+
+/usr/include/gcc/darwin/3.3/c++/ios:
+
+/usr/include/gcc/darwin/3.3/c++/bits/localefwd.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/ios_base.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/locale_classes.h:
+
+/usr/include/gcc/darwin/3.3/c++/streambuf:
+
+/usr/include/gcc/darwin/3.3/c++/bits/streambuf.tcc:
+
+/usr/include/gcc/darwin/3.3/c++/bits/basic_ios.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/streambuf_iterator.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/locale_facets.h:
+
+/usr/include/gcc/darwin/3.3/c++/cwctype:
+
+/usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/ctype_base.h:
+
+/usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/ctype_inline.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/codecvt.h:
+
+/usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/time_members.h:
+
+/usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/messages_members.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/basic_ios.tcc:
+
+/usr/include/gcc/darwin/3.3/c++/limits:
+
+/usr/include/gcc/darwin/3.3/c++/bits/istream.tcc:
+
+/usr/include/gcc/darwin/3.3/c++/locale:
+
+/usr/include/gcc/darwin/3.3/c++/bits/locale_facets.tcc:
+
+/usr/include/gcc/darwin/3.3/c++/cerrno:
+
+/usr/include/gcc/darwin/3.3/c++/cmath:
+
+/usr/include/gcc/darwin/3.3/c++/bits/cmath.tcc:
+
+/usr/include/gcc/darwin/3.3/c++/typeinfo:
+
+/usr/include/gcc/darwin/3.3/c++/ostream:
+
+/usr/include/gcc/darwin/3.3/c++/bits/ostream.tcc:
+
+/usr/include/gcc/darwin/3.3/c++/ppc-darwin/bits/basic_file.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/fstream.tcc:
+
+/usr/include/gcc/darwin/3.3/c++/iostream:
+
+/usr/local/include/blochlib/utils/blassert.h:
+
+/usr/local/include/blochlib/container/rankType.h:
+
+/usr/local/include/blochlib/container/grids/coords.h:
+
+/usr/local/include/blochlib/container/Vector/Vector.h:
+
+/usr/local/include/blochlib/container/MemChunk.h:
+
+/usr/include/gcc/darwin/3.3/c++/iomanip:
+
+/usr/include/gcc/darwin/3.3/c++/functional:
+
+/usr/local/include/blochlib/container/operations.h:
+
+/usr/local/include/blochlib/container/range.h:
+
+/usr/local/include/blochlib/container/Vector/Vectoraux.h:
+
+/usr/local/include/fftw3.h:
+
+/usr/local/include/blochlib/container/matrix/matrix.h:
+
+/usr/local/include/blochlib/container/matrix/_matrix.h:
+
+/usr/local/include/blochlib/container/matrix/imatrix.h:
+
+/usr/local/include/blochlib/container/matrix/genmatrix.h:
+
+/usr/local/include/blochlib/container/matrix/matrixconfig.h:
+
+/usr/local/include/blochlib/container/matrix/dmatrix.h:
+
+/usr/local/include/blochlib/container/matrix/fmatrix.h:
+
+/usr/local/include/blochlib/container/matrix/smatrix.h:
+
+/usr/local/include/blochlib/container/matrix/hmatrix.h:
+
+/usr/local/include/blochlib/container/matrix/trimatrix.h:
+
+/usr/local/include/blochlib/container/matrix/matmatmul.h:
+
+/usr/local/include/blochlib/container/matrix/matvec.h:
+
+/usr/local/include/blochlib/container/matrix/matmat.h:
+
+/usr/local/include/blochlib/container/matrix/matfft.h:
+
+/usr/local/include/blochlib/utils/utils.h:
+
+/usr/local/include/blochlib/utils/constants.h:
+
+/usr/local/include/blochlib/container/matrix/matdiagonalize.h:
+
+/usr/local/include/blochlib/container/matrix/matexp.h:
+
+/usr/local/include/blochlib/container/matrix/LU.h:
+
+/usr/local/include/blochlib/container/matrix/matassign.h:
+
+/usr/local/include/blochlib/container/matrix/matqr.h:
+
+/usr/local/include/blochlib/container/grids/grids.h:
+
+/usr/local/include/blochlib/container/grids/gengrid.h:
+
+/usr/local/include/blochlib/container/grids/unigrid.h:
+
+/usr/local/include/blochlib/container/grids/fullspheregrid.h:
+
+/usr/local/include/blochlib/container/grids/surfspheregrid.h:
+
+/usr/local/include/blochlib/container/grids/surfcubegrid.h:
+
+/usr/local/include/blochlib/container/grids/fullcubegrid.h:
+
+/usr/local/include/blochlib/container/grids/xyzshape.h:
+
+/usr/local/include/blochlib/container/grids/xyzgenshape.h:
+
+/usr/local/include/blochlib/container/grids/xyzshapeparts.h:
+
+/usr/local/include/blochlib/mpi/mpi_packer.h:
+
+/usr/local/include/blochlib/mpi/mpi_tools.h:
+
+/usr/local/include/blochlib/mpi/mpi_controller.h:
+
+/usr/local/include/blochlib/version.h:
+
+/usr/local/include/blochlib/utils/plotter.h:
+
+/usr/local/include/blochlib/utils/random.h:
+
+/usr/local/include/blochlib/utils/params.h:
+
+/usr/include/gcc/darwin/3.3/c++/list:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_list.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/list.tcc:
+
+/usr/include/gcc/darwin/3.3/c++/map:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_tree.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_map.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_multimap.h:
+
+/usr/local/include/blochlib/utils/matlab5.h:
+
+/usr/local/include/blochlib/utils/endians.h:
+
+/usr/local/include/blochlib/utils/vnmrstream.h:
+
+/usr/local/include/blochlib/utils/xwinnmr.h:
+
+/usr/local/include/blochlib/utils/wavestream.h:
+
+/usr/include/gcc/darwin/3.3/c++/stack:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_deque.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_stack.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/deque.tcc:
+
+/usr/include/gcc/darwin/3.3/c++/vector:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_vector.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/stl_bvector.h:
+
+/usr/include/gcc/darwin/3.3/c++/bits/vector.tcc:
+
+/usr/local/include/blochlib/utils/spinsight.h:
+
+/usr/local/include/blochlib/utils/parser.h:
+
+/usr/local/include/blochlib/utils/scriptparse.h:
+
+/usr/local/include/blochlib/container/grids/edgedetect.h:
+
+/usr/local/include/blochlib/driver/bs.h:
+
+/usr/local/include/blochlib/driver/basicODE.h:
+
+/usr/local/include/blochlib/driver/bs_meth.h:
+
+/usr/local/include/blochlib/driver/stiffbs.h:
+
+/usr/local/include/blochlib/driver/stiffbs_meth.h:
+
+/usr/local/include/blochlib/driver/ckrk.h:
+
+/usr/local/include/blochlib/driver/ckrk_meth.h:
+
+/usr/local/include/blochlib/driver/gear.h:
+
+/usr/local/include/blochlib/driver/gear_meth.h:
+
+/usr/local/include/blochlib/driver/integrate.h:
+
+/usr/local/include/blochlib/QMspins/spinsys.h:
+
+/usr/local/include/blochlib/QMspins/multispinop.h:
+
+/usr/local/include/blochlib/QMspins/singlespinop.h:
+
+/usr/local/include/blochlib/QMspins/spinsyspars.h:
+
+/usr/local/include/blochlib/bloch/Isotope.h:
+
+/usr/local/include/blochlib/QMspins/spin_ten.h:
+
+/usr/local/include/blochlib/QMspins/space_ten.h:
+
+/usr/local/include/blochlib/QMspins/j.h:
+
+/usr/local/include/blochlib/QMspins/csa.h:
+
+/usr/local/include/blochlib/QMspins/dip.h:
+
+/usr/local/include/blochlib/QMspins/qua.h:
+
+/usr/local/include/blochlib/QMspins/sys.h:
+
+/usr/local/include/blochlib/QMspins/driver/powder.h:
+
+/usr/local/include/blochlib/QMspins/driver/ham_gen.h:
+
+/usr/local/include/blochlib/QMspins/driver/compute.h:
+
+/usr/local/include/blochlib/QMspins/driver/oneFID.h:
+
+/usr/local/include/blochlib/timetrain/timetrain.h:
+
+/usr/local/include/blochlib/timetrain/consttrain.h:
+
+/usr/local/include/blochlib/timetrain/gentrain.h:
+
+/usr/local/include/blochlib/timetrain/consttrain_meth.h:
+
+/usr/local/include/blochlib/timetrain/unitrain.h:
+
+/usr/local/include/blochlib/timetrain/filetrain.h:
+
+/usr/local/include/blochlib/timetrain/timetrain_meth.h:
+
+/usr/local/include/blochlib/stencils/stencilexpr.h:
+
+/usr/local/include/blochlib/stencils/stencilprep.h:
+
+/usr/local/include/blochlib/stencils/stencilextent.h:
+
+/usr/local/include/blochlib/stencils/stencilvector.h:
+
+/usr/local/include/blochlib/stencils/stencilprep_func.h:
+
+/usr/local/include/blochlib/stencils/boundary_condition.h:
+
+/usr/local/include/blochlib/stencils/boundary_general.h:
+
+/usr/local/include/blochlib/stencils/boundary_dirichlet.h:
+
+/usr/local/include/blochlib/stencils/boundary_neumann.h:
+
+/usr/local/include/blochlib/stencils/boundary_extrap.h:
+
+/usr/local/include/blochlib/stencils/boundary_edgeblend.h:
+
+/usr/local/include/blochlib/stencils/boundary_cornerblend.h:
+
+/usr/local/include/blochlib/bloch/blochParamsBasic.h:
+
+/usr/local/include/blochlib/bloch/blochParams.h:
+
+/usr/local/include/blochlib/bloch/pulse.h:
+
+/usr/local/include/blochlib/bloch/listblochpars.h:
+
+/usr/local/include/blochlib/bloch/gradientgrid.h:
+
+/usr/local/include/blochlib/bloch/listblochpars_meth.h:
+
+/usr/local/include/blochlib/bloch/rotating_grid.h:
+
+/usr/local/include/blochlib/bloch/bloch_basic.h:
+
+/usr/local/include/blochlib/bloch/bloch.h:
+
+/usr/local/include/blochlib/bloch/bloch_interac.h:
+
+/usr/local/include/blochlib/bloch/bloch_interac_meth.h:
+
+/usr/local/include/blochlib/bloch/blochsolver.h:
+
+/usr/local/include/blochlib/bloch/lyapunov.h:
+
+/usr/local/include/blochlib/bloch/bloch_int_dipdip.h:
+
+/usr/local/include/blochlib/bloch/scalefunc.h:
+
+/usr/local/include/blochlib/bloch/bloch_int_raddamp.h:
+
+/usr/local/include/blochlib/bloch/bloch_int_bulks.h:
+
+/usr/local/include/blochlib/bloch/bloch_int_relax.h:
+
+/usr/local/include/blochlib/bloch/bloch_int_offset.h:
+
+/usr/local/include/blochlib/bloch/biot.h:
+
+/usr/local/include/blochlib/bloch/biot_basic.h:
+
+/usr/local/include/blochlib/bloch/biot_meth.h:
+
+/usr/local/include/blochlib/bloch/mag_fields.h:
+
+/usr/local/include/blochlib/bloch/bloch_int_bfield.h:
+
+/usr/local/include/blochlib/bloch/bloch_int_demag.h:
+
+/usr/local/include/blochlib/bloch/bloch_int_dimlessdemag.h:
+
+/usr/local/include/blochlib/bloch/bloch_int_demagmodulate.h:
+
+/usr/local/include/blochlib/bloch/bloch_int_dimlessdip.h:
+
+/usr/local/include/blochlib/bloch/gradfunc.h:
+
+/usr/local/include/blochlib/bloch/gradimps.h:

@@ -1,0 +1,70 @@
+
+#
+# a simple MAS collection
+# using the basic algorithms
+
+spins{
+	
+	#the global options
+	numspin 2
+	T 1H 0
+	T 1H 1
+	#csa <iso> <del> <eta> <spin>
+	C 5000  2134 0 0
+	C -5000 2789 0.5 1
+}
+
+parameters{	
+
+	powder1{
+		aveType ../../../../crystals/rep256
+		thetaStep 233
+		phiStep 144
+		gammaStep 0
+	}		
+
+#the intergrator step size	
+	maxtstep=5e-6
+
+#number of 1D fid points	
+	npts1D=256	
+
+#sweepwidth
+	sw=50000
+
+#the eq matrix
+	roeq=Ix
+}
+
+
+pulses{
+
+#our 2D points
+	fidpts=128
+	2D()
+	#show()
+#set the spinning	
+	wr=2000
+#set the rotor
+	rotor=rad2deg*acos(1/sqrt(3))
+	
+#set the detection matrix
+	detect(Ip)
+#set our initial matrix
+	ro(Ix)
+	dwell2D=0.00002
+#set the inital matrix
+	loop(i=0:fidpts-1)	
+
+	#collect the fid 
+		fid(i)
+	#do not need to prop the last point
+		if(i!=(fidpts-1))
+		#a delay for the second dim
+			1H:delay(dwell2D)	
+		end
+	end
+	savefidmatlab(2dmas) #save tas a matlab file
+}
+
+	

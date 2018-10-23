@@ -1,0 +1,60 @@
+MyCoil{
+    subcoil1{
+        type helmholtz
+        loops 25
+        amps -4
+        numpts 4000
+        R 2
+        length 3
+        axis z
+    }
+    
+    subcoil2{
+        type Dcircle
+        loops 1
+        amps 2
+        
+        numpts 2000
+        R 2
+        
+        #start theta of line section
+        theta1 0
+        theta2 180        
+        
+        axis z
+        center 0,-.6,5
+    }
+    
+    subcoil3{
+        type Dcircle
+        loops 1
+        amps 2
+        
+        numpts 2000
+        R 2
+        
+        #start theta of line section
+        theta1 0
+        theta2 180        
+        axis z
+        center 0,-.6,-5
+    }
+}
+
+# Cube 
+grid{
+	min -1,-1,-1
+	max 1,1,1
+	dim 10,10,10
+}
+
+params{
+	#which magnetic field section to use
+	section  MyCoil	
+	
+	#output text file name
+	textout shape.biot
+	#output matlab file name
+	matout field.mat
+	
+}

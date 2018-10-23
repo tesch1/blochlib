@@ -1,0 +1,120 @@
+
+
+splitsolonoid{
+	subcoil1{
+		type truehelmholtz
+		loops 1
+		amps 3
+		numpts 8000
+
+		# radius (cm)
+		R 0.3175
+
+		#distance b/w the two coils (cm)
+		length 1.09
+
+		#width between 2 helix layers
+		layerwidth 0.161
+		
+		#height between 2 turns in a heliz layer 
+		# if not present will default to layerwidth
+		layerheight 0.161
+
+		#number of helix turns
+		turns 3
+
+		#number of helix layers
+		numlayers 1
+		
+		axis x
+		rotangle 90
+		rotaxis 1,0,0
+	}
+	
+	subcoil2{
+		type line
+		loops 1
+		amps 3
+		numpts 4000
+		
+		#begin 0.3175,-0.3841,  0
+		#end 0.2230,0.3175, 0			
+		begin -0.3841, 0.1729, -0.2663
+		end 0.2230, 0.1729, -0.2663
+	}
+
+	subcoil3{
+		type line
+		loops 1
+		amps 3
+		numpts 4000
+		
+		#begin -0.8670,0.3175,  0
+		#end -0.257,1.3375, 0		
+		begin -0.8670, 0.1792, -0.2663
+		end -0.257,0.1792, -1.2863
+	}
+	subcoil4{
+		type line
+		loops 1
+		amps 3
+		numpts 4000
+
+		#begin  0.7059,0.3175,0
+		#end -0.0959,1.3375, 0	
+		begin  0.7059,0.1723, -0.2667
+		end 0.257, 0.1792, -1.2863	
+	}
+
+}	
+
+solonoid{
+	subcoil1{
+		type helix
+		loops 1
+		amps 0.5
+		numpts 16000
+		R 0.3175
+		Z 1.09
+		turns 10
+		axis x
+	}
+}
+
+
+fileinput{
+	type file
+	filename field_sol.biot
+}
+
+grid{
+	#for split solinoid
+	#min 0.15, -.4,  -0.15
+	#max -0.28, .4, 0.25
+	#dim 10,10,10
+	
+	#for solonoid
+	min -0.4, -0.15, -0.15
+	max 0.4, 0.15, 0.15
+	dim 10,10,10  
+}
+
+parameters{
+	#section splitsolonoid
+	section solonoid
+	
+	spintype 1H
+	offset 0
+	
+	npts 512
+	tf 0.006
+	
+	pulse -90,90
+	
+	matout field.mat
+	textout field.biot
+	
+	fout data
+	mout mag
+}
+	

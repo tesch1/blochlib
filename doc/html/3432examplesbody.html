@@ -1,0 +1,92 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Using the Spacial Tensors<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Demonstration of using the Spacial rotation tensors and the Rotation class.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+&nbsp;<font color='#006600'>//A10=sqrt(3/4)*cos(theta)--&gt;&nbsp;first&nbsp;rank&nbsp;m=0,&nbsp;m'=0</font><br />
+double&nbsp;a1=A1(34*Pi/180,&nbsp;45*PI/180,&nbsp;0);<br />
+<font color='#006600'>//A20=1/2*(3cos(theta)^2-1)&nbsp;--&gt;&nbsp;second&nbsp;rank&nbsp;m=0,&nbsp;m'=0</font><br />
+double&nbsp;a2=A2(34*Pi/180,&nbsp;45*PI/180,&nbsp;0);&nbsp;<br />
+<br />
+double&nbsp;alpha=89*Pi/180,&nbsp;beta=23*PI/180,&nbsp;gamma=89/180;<br />
+<font color='#006600'>//The&nbsp;first&nbsp;rank&nbsp;wigner&nbsp;rotation&nbsp;matrix&nbsp;element&nbsp;'1,0'</font><br />
+double&nbsp;w1=wigner1(alpha,&nbsp;beta,&nbsp;gamma,&nbsp;1,0);&nbsp;<br />
+<font color='#006600'>//The&nbsp;second&nbsp;rank&nbsp;wigner&nbsp;rotation&nbsp;matrix&nbsp;element&nbsp;'1,-2'</font><br />
+double&nbsp;w1=wigner2(alpha,&nbsp;beta,&nbsp;gamma,&nbsp;1,-2);&nbsp;<br />
+<br />
+<font color='#006600'>//The&nbsp;rotation&nbsp;class&nbsp;is&nbsp;used&nbsp;throughout&nbsp;the&nbsp;'specific'&nbsp;interaction&nbsp;(Dip,&nbsp;Quad,&nbsp;J,&nbsp;CSA)</font><br />
+<font color='#006600'>//TO&nbsp;generate&nbsp;the&nbsp;hamiltonians&nbsp;fast&nbsp;and&nbsp;efficiently...</font><br />
+<font color='#006600'>//&nbsp;things&nbsp;like&nbsp;the&nbsp;powder&nbsp;angles&nbsp;and&nbsp;spinner&nbsp;angle&nbsp;rotations&nbsp;are&nbsp;the&nbsp;same</font><br />
+<font color='#006600'>//&nbsp;for&nbsp;each&nbsp;interaction...this&nbsp;class&nbsp;acts&nbsp;as&nbsp;the&nbsp;container&nbsp;to&nbsp;pass&nbsp;these&nbsp;values&nbsp;around</font><br />
+Rotation&nbsp;Rots;&nbsp;<font color='#006600'>//set&nbsp;up&nbsp;a&nbsp;'rotation&nbsp;class'</font><br />
+Rots.setPowderAngles(alpha,&nbsp;beta,&nbsp;gamma);&nbsp;<font color='#006600'>//set&nbsp;up&nbsp;the&nbsp;powder&nbsp;angle&nbsp;rotations&nbsp;matrix</font><br />
+<br />
+double&nbsp;wr=5000,&nbsp;t=1e-3,&nbsp;magang=54.7*PI/180.<br />
+<font color='#006600'>//set&nbsp;the&nbsp;spinner&nbsp;rotation&nbsp;vector&nbsp;</font><br />
+Rots.setRotorAngles(wr*t*PI2,&nbsp;magang);&nbsp;<br />
+<br />
+<font color='#006600'>//get&nbsp;one&nbsp;of&nbsp;the&nbsp;rotation&nbsp;bits...</font><br />
+double&nbsp;pA12=Rots.powderAs(1,2);&nbsp;<br />
+<font color='#006600'>//get&nbsp;the&nbsp;A20&nbsp;part&nbsp;of&nbsp;the&nbsp;spinning&nbsp;Rotation&nbsp;elements</font><br />
+double&nbsp;sA20=Rots.spinnerAs(2);&nbsp;<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

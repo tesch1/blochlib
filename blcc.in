@@ -1,0 +1,210 @@
+#! /bin/sh
+#
+# A little script that allows for easier compilation of code
+# that uses the 'blochlib'
+# all it does is slap the lib location
+# and include path into the 
+
+usage()
+{
+  [ "$1" ] && ( echo $* ; echo "" )
+
+  cat <<!
+  BlochLib Version @VERSION@  Compile Script Usage
+    standard C++ optimizations and other parameters are allowed
+    theses options below make easy flags to compile using the most
+    common methods.
+    NOTE:: the options begining with '-n' refer to the LOCAL/untared 
+           directory (typically the root of the compilation set)
+
+     <option>           <meaning>
+  	?, -h, --help   this message
+  	-v, --version   version  info
+  	-g              compile using INSTALLED debug version (libbloch_g)
+  	-p, -pg         compile using profiled INSTALLED version (libbloch_pg)
+   	-m              compile using MINIMAL optimizations for INSTALLED version
+  	                (fast compile for syntax debugging)
+  	-mpi            compile using FULL optimizations for INSTALLED version
+  	                that has been compiled with MPI
+ 	-n              compile using MINIMAL optimizations for LOCAL version
+  	                (fast compile for syntax debugging)
+ 	-nf             compile using FULL optimizations for LOCAL version
+   	-ng             compile using LOCAL debug lib version
+   	-np             compile using LOCAL profiled lib version
+   	-nmpi           compile using LOCAL lib version with MINIMAL optimizations
+   	                and that was compiled with MPI
+  	                (fast compile for syntax debugging)
+   	-nfmpi          compile using LOCAL lib version with FULL optimizations
+   	                and that was compiled with MPI
+   	-ngmpi          compile using LOCAL lib version with DEBUGGING optimizations
+   	                and that was compiled with MPI
+ 	     
+!
+  exit 4
+}
+
+
+##version printing
+if [ "$1" = "-v" ]
+then
+  echo "BlochLib compile script Version @VERSION@"
+  exit
+fi
+
+if [ "$1" = "--version" ]
+then
+  echo "BlochLib compile script Version @VERSION@"
+  exit
+fi
+
+##version printing
+if [ "$1" = "?" ]
+then
+ usage
+  exit
+fi
+
+if [ "$1" = "--help" ]
+then
+ usage
+  exit
+fi
+
+if [ "$1" = "-h" ]
+then
+ usage
+  exit
+fi
+
+## path to the include files
+
+INC_PATH="@INST@/include/blochlib/"
+
+##lib path
+
+LIB_PATH="@INST@/lib/"
+LD_LIBRARY_PATH="$LD_LIBRARY_PATH $LIB_PATH"
+
+## the extra compile args if using as a 'shared' lib
+SHARED_ARGS="-Wl,--rpath -Wl,$LIB_PATH"
+
+## any Aux BLAS lib to use
+
+## for INtel, it autothreads the BlasLib, this
+## keeps it at 1
+export OMP_NUM_THREADS=1
+BLASLIB="@BLASLIB@"
+
+## compiler options
+
+#out put object name
+NAME=""
+#the compiler
+CXX="@CXX@"
+
+#compiler falgs
+CXXFLAGS="@CXXFLAGMAXOPT@"
+MAXOPT="@CXXFLAGMAXOPT@"
+#other needed libs
+SLIB="-lm"
+#other compiler flags the uses wishes to send to the compiler
+ARG=""
+#strip the 
+STRIP="-s"
+
+MPI_INCPATH="@MPI_PREFIX@/include"
+MPI_LIBPATH="@MPI_PREFIX@/lib"
+MPI_LNAME="@MPILIBS@"
+
+#FFTW libs and paths
+FFTW_INCPATH="@FFTW_PREFIX@/include"
+FFTW_LIBPATH="@FFTW_PREFIX@/lib"
+FFTW_LNAME="@FFTWLIBS@"
+
+
+BL_LIB="@BASELIBNAME@"
+FORTRAN_LIB="@FORTLIB@"
+
+#get any other use inputs
+
+MYPATH="@LOCALPATH@/";
+AUXPATH="-I./";
+USENOLIBS=0;
+
+## assigned to $SHARED_ARGS if using 'the -shared option'
+TO_SHARE=""
+
+
+while [ "$1" != "" ]
+do
+  case "$1" in
+  -g)		  GPROF="-g"; CXXFLAGS=" -Wall -ftemplate-depth-40"; BL_LIB="@DEBUGNAME@"
+	  ;;
+  -ng)		   GPROF="-g"; CXXFLAGS="-Wall -ftemplate-depth-40 -DVBoundCheck -DMatDeBug"; BL_LIB="bloch_g"; INC_PATH="${MYPATH}src/"; LIB_PATH="${MYPATH}src/.libs";  MPI_LNAME=""
+	  ;;
+  -np)		   GPROF="-pg"; CXXFLAGS="-O2 -Wall -ftemplate-depth-40 "; BL_LIB="@PROFILENAME@"; INC_PATH="${MYPATH}src/"; LIB_PATH="${MYPATH}src/.libs";  MPI_LNAME=""
+	  ;;
+  -m)   	CXXFLAGS=" -Wall -ftemplate-depth-40";  MPI_LNAME="";
+  	;;
+  -o)             NAME="$1 $2";
+                  shift;
+          ;;
+  -c)            USENOLIBS="yes";
+          ;;
+  -pg)	          GPROF="-pg"; CXXFLAGS=" -O2 -Wall -ftemplate-depth-40 -DVBoundCheck -DMatDeBug"; BL_LIB="@PROFILENAME@";  MPI_LNAME=""
+          ;;
+  -p)	          GPROF="-pg"; CXXFLAGS=" -O2 -Wall -ftemplate-depth-40 "; BL_LIB="@PROFILENAME@";  MPI_LNAME=""
+          ;;
+  -mpi)	     GPROF="-DHAVE_MPI"; BL_LIB="bloch"; AUXPATH="${AUXPATH} -I${MPI_INCPATH} "; LIB_PATH="${LIB_PATH} -L${MPI_LIBPATH} " 
+          ;;
+  -n)		  GPROF=""; CXXFLAGS="-Wall -ftemplate-depth-40"; BL_LIB="bloch"; INC_PATH="${MYPATH}src/"; LIB_PATH="${MYPATH}src/.libs";  MPI_LNAME=""; SHARED_ARGS="-Wl,--rpath -Wl,$LIB_PATH"
+     	;;
+  -nf) 		CXXFLAGS=${MAXOPT};  BL_LIB="bloch"; INC_PATH="${MYPATH}src/"; LIB_PATH="${MYPATH}src/.libs"; MPI_LNAME=""; SHARED_ARGS="-Wl,--rpath -Wl,$LIB_PATH"
+	  ;;
+  -nmpi)   GPROF="-DHAVE_MPI"; CXXFLAGS="-ftemplate-depth-40 "  BL_LIB="bloch"; INC_PATH="${MYPATH}src/ ";  AUXPATH="${AUXPATH} -I${MPI_INCPATH} "; LIB_PATH="${MYPATH}src/.libs -L${MPI_LIBPATH} ";  SHARED_ARGS="-Wl,--rpath -Wl,$LIB_PATH"
+  	;;
+ -ngmpi)   GPROF="-g -DHAVE_MPI"; CXXFLAGS="-ftemplate-depth-40 "  BL_LIB="bloch_g"; INC_PATH="${MYPATH}src/ "; AUXPATH="${AUXPATH} -I${MPI_INCPATH}  "; LIB_PATH="${MYPATH}src/.libs -L${MPI_LIBPATH} "; SHARED_ARGS="-Wl,--rpath -Wl,$LIB_PATH"
+  	;;
+ -nfmpi)  GPROF="-DHAVE_MPI";  BL_LIB="bloch"; INC_PATH="${MYPATH}src/"; AUXPATH="${AUXPATH} -I${MPI_INCPATH}  "; LIB_PATH="${MYPATH}src/.libs -L${MPI_LIBPATH}"; SHARED_ARGS="-Wl,--rpath -Wl,$LIB_PATH"
+	  ;;	
+ -shared)  TO_SHARE="${SHARED_ARGS} -shared";
+	  ;;
+ -static)  TO_SHARE="-static";
+	  ;;
+ *)	  ARG="$ARG $1";
+	  ;;
+  esac
+  shift
+done
+
+
+#inlcude FFTW paths in 'AUXPATH'
+AUXPATH="${FFTW_INCPATH} ${AUXPATH}";
+LIB_PATH="${LIB_PATH} -L${FFTW_LIBPATH}";
+
+####### Main runner
+
+if [ -d ${INC_PATH} ]
+then
+   if [ "$USENOLIBS" = "yes" ]
+   then
+   	echo ${CXX} -c ${CXXFLAGS} ${GPROF} -I${INC_PATH} -I${AUXPATH}  ${ARG}  ${NAME}  
+   	 ${CXX} -c ${CXXFLAGS} ${GPROF} -I${INC_PATH} -I${AUXPATH}  ${ARG}  ${NAME} ;
+  else
+   	echo ${CXX} ${CXXFLAGS} ${GPROF} -I${INC_PATH} -I${AUXPATH}  -L${LIB_PATH} ${ARG}  ${NAME}  -l${BL_LIB} ${MPI_LNAME} ${FFTW_LNAME} ${BLASLIB} ${FORTRAN_LIB} -lm  ${TO_SHARE};
+   	
+   	 ${CXX} ${CXXFLAGS} ${GPROF} -I${INC_PATH} -I${AUXPATH} -L${LIB_PATH}  ${ARG}  ${NAME} -l${BL_LIB} ${MPI_LNAME} ${FFTW_LNAME} ${BLASLIB} ${FORTRAN_LIB} -lm ${TO_SHARE};
+   fi  	
+else
+  echo ""
+  echo "Apparently You Do Not Have A Proper Path Set To BlochLib......"
+  echo "Please Set The Variable INC_PATH in this file ('blcc')"
+  echo "to the correct directory....'/usr/local/include/blochlib/' for example"
+  echo "Current dir--> ${INC_PATH}"
+  echo "";
+  echo " Type 'blcc ?' for help "
+  echo "";
+fi
+
+
+

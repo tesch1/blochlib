@@ -1,0 +1,123 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+A simple Integration usage example.<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+The code below ouputs the data shown in the below figure
+<BR>
+<img src='integrate.gif'>
+<BR>
+Remeber that the integration is valid up to a constant (and that constant cannot be known without some other parameters).  So the figure is showning the correct integration 'functional form' upto an addative constant.  Also note that I added '2' to the vector data so it is visible.</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<font color='#006600'>//the&nbsp;required&nbsp;2&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<font color='#006600'>//a&nbsp;function&nbsp;class&nbsp;to&nbsp;integrate&nbsp;(here&nbsp;it&nbsp;is&nbsp;sin(x))</font><br />
+<font color='#006600'>//NOTE::&nbsp;you&nbsp;need&nbsp;to&nbsp;define&nbsp;the&nbsp;&quot;double&nbsp;operator(double)&quot;&nbsp;function</font><br />
+class&nbsp;F<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;public:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F(){}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;operator()(double&nbsp;x)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;sin(x);&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+};<br />
+<br />
+<br />
+<br />
+int&nbsp;main()<br />
+{<br />
+<br />
+<font color='#006600'>//declare&nbsp;the&nbsp;Integrate&nbsp;object&nbsp;first&nbsp;and&nbsp;then&nbsp;reuse&nbsp;it&nbsp;as&nbsp;nesseasry</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Integrate&lt;F&gt;&nbsp;myint;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ofstream&nbsp;out(&quot;out&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//first&nbsp;out&nbsp;spread&nbsp;in&nbsp;time</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;dt=.1,&nbsp;a=0,&nbsp;b=20,&nbsp;integ=0;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Vector&lt;double&gt;&nbsp;ts(Spread&lt;double&gt;(a,b,dt));<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//we&nbsp;could&nbsp;integrate&nbsp;this&nbsp;way</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//using&nbsp;a&nbsp;spread&nbsp;of&nbsp;values</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Vector&lt;double&gt;&nbsp;intV=myint.integrate(ts);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;i=0;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//here&nbsp;we&nbsp;integrate&nbsp;F&nbsp;from&nbsp;t=0..20&nbsp;in&nbsp;step&nbsp;sizes&nbsp;of&nbsp;dt=0.1</font><br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;F&nbsp;myF;&nbsp;<font color='#006600'>//so&nbsp;we&nbsp;can&nbsp;get&nbsp;the&nbsp;unintegrated&nbsp;values</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(i&lt;ts.size()-1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+<br />
+<font color='#006600'>//to&nbsp;Integrate&nbsp;from&nbsp;t1&nbsp;to&nbsp;t2&nbsp;simply&nbsp;use&nbsp;the&nbsp;&quot;operator(t1,&nbsp;t2)&quot;&nbsp;function</font><br />
+<font color='#006600'>//or&nbsp;use&nbsp;the&nbsp;function&nbsp;&quot;integrate(t1,&nbsp;t2)&quot;</font><br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//integ+=myint(a,&nbsp;a+dt);&nbsp;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//or&nbsp;supplimentary</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;integ+=myint.integrate(a,&nbsp;a+dt);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//print&nbsp;&quot;&lt;time&gt;&nbsp;&lt;orig&gt;&nbsp;&lt;integ1&gt;&nbsp;&lt;intV&gt;&quot;&nbsp;to&nbsp;file</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//we&nbsp;add&nbsp;'2'&nbsp;to&nbsp;see&nbsp;the&nbsp;two&nbsp;integrations&nbsp;at&nbsp;the&nbsp;same&nbsp;time&nbsp;on</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//&nbsp;a&nbsp;graph</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out&lt;&lt;ts[i]&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;myF(ts[i]+dt/2.0)&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;integ&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;intV[i++]+2&lt;&lt;endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a+=dt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;1;<br />
+}<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

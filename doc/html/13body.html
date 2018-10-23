@@ -1,0 +1,169 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("13menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("13menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("13menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("13title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("13");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Getting OPTIMIZED BLAS routines on your system<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+**********<br />
+**** Getting OPTIMIZED BLAS routines on your system<br />
+**** (also getting BlochLib to work fast as well)<br />
+****** <br />
+*****<br />
+<br />
+author: Bo Blanton<br />
+last update: 04.23.02<br />
+email: bo@theaddedones.com<br />
+<br />
+<br />
+<br />
+<br />
+------------------ATLAS - Fast AutoMatic BLAS-------------<br />
+----------------------------------------------------------<br />
+*BLAS (Basic Linear Algebra) tend to be the backbone of most<br />
+ numerical computations, and tend to be where most of the <br />
+ CPU time is spent.  Each Processor type has its own set of<br />
+ optimizations (things like L1 cach sizes, alignments, L2 size, etc)<br />
+ Becuase of each processor's different optimizations, creating highly<br />
+ optimizied numerical routines is a difficult task...for instance<br />
+ unoptimized (yet simply coded) matrix multiplications can take up<br />
+ to 10-20 longer then the optimized versions...the optimized versions, however, <br />
+ are very hard to write...<br />
+*ATLAS is a project designed to create FAST BLAS on most CPU<br />
+ archetictures.  Using several timers and outcode generation<br />
+ it should find you some of the best routines around.<br />
+*NOTE::If the vendor has created its own set of BLAS libs, then they CAN <br />
+ be faster then ATLAS's, but i have found for INTEL systems ATLAS is better.  <br />
+<br />
+*Getting ATLAS:<br />
+  1) go here: http:<font color='#006600'>//math-atlas.sourceforge.net/</font><br />
+  2) download the latest version (i used 3.3.14)<br />
+  <br />
+*The Set UP::<br />
+  --This assumes that the Cygwin is installed on Windows<br />
+    or that you are using gcc of some kind<br />
+  -- if you are using this on windows<br />
+  <br />
+  1) Open up a  shell<br />
+  2) down load atlas<br />
+  3) untar the file &quot;tar -zxvf atlas.3.3.14.tar.gz&quot;<br />
+  4) cd into &quot;ATALAS&quot;<br />
+  5) type 'make'<br />
+  ---<br />
+  tar -zxvf atlas.3.3.14.tar.gz<br />
+  cd ATLAS<br />
+  make<br />
+  ---<br />
+  <br />
+* This will then take you to the interactive ATLAS questions<br />
+*  Below you will find the 'good' answers' to the <br />
+*  ALTAS set up, everything that i do not tell you an answer here, <br />
+*  simply choose the default<br />
+<br />
+--choose your OS to be what ever it is<br />
+--and your appropriate processor<br />
+--to &quot;enable Posix threads support?&quot; say NO<br />
+--choose *NOT* to use &quot;express Set up&quot;<br />
+--at the &quot;Enter Maximum cache size(KB):&quot; question<br />
+  enter 2 times the 'default' amount!!<br />
+--For the Fortran compiler enter &quot;g77&quot;<br />
+  do NOT use the default &quot;/usr/bin/g77.exe&quot;<br />
+--For the C compiler enter &quot;gcc&quot;<br />
+  do NOT use the default &quot;/usr/bin/gcc.exe&quot;<br />
+--For the C compiler for generated code enter &quot;gcc&quot;<br />
+  do NOT use the default &quot;/usr/bin/gcc.exe&quot;<br />
+--For &quot;Enter Ranlib&quot; : enter in &quot;ranlib&quot;<br />
+<br />
+****REALLY IMPORTANT (see will be compromised)***<br />
+--for the question &quot;Use supplied default values for install&quot; say *NO*<br />
+   <br />
+--After the configuration has been done type<br />
+	<br />
+	make install arch=&lt;your arch here&gt;<br />
+<br />
+    where &lt;your arch here&gt; for a Pentium III on windows would be something <br />
+    like &quot;WinNT_PIII&quot;<br />
+    <br />
+    and wait a long while (~hour or more even 7 for AMD chips) <br />
+    as it goes through the testing and creation<br />
+    <br />
+--when it is finished go to the 'ATLAS/lib/&quot; directory<br />
+---find the directory with your &lt;arch&gt; name<br />
+   something like &quot;ATLAS/lib/WinNT_PIII/&quot;<br />
+<br />
+<br />
+**You need to use 2 libs to get the linking to function properly<br />
+**Within 'blochlib' and associated compilations IN THIS ORDER!!<br />
+<br />
+to use in BlochLib you need to use the quotes<br />
+	--with-blas=&quot;&lt;prepath&gt;/ATLAS/lib/&lt;arch&gt;/libcblas.a &lt;prepath&gt;/ATLAS/lib/&lt;arch&gt;/libatlas.a&quot;<br />
+	<br />
+**OR** the simpler one<br />
+	--with-atlas=&quot;&lt;prepath&gt;/ATLAS/lib&quot;<br />
+<br />
+<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

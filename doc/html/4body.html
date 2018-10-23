@@ -1,0 +1,256 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("4menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("4menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("4menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("4title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("4");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class Timer {...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This small class acts as a small simple timer for programs...<br />
+it is not terribly precise (i.e. the smallest resolvable division is ~10e-6 seconds)...<br />
+<br />
+it has 2 modes a 'HighRes' timer which has a resolution of ~1 micro second, but this timer can 'overflow' (meaning it cannot keep track for too long) after about an hour (depending on the MHz of your machine)<br />
+<br />
+the second mode 'LowRes' has a resolution of only 1 second, but can be track of time for many days/months/years without overflow.<br />
+<br />
+it usage is quite simple...<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constants'></a>Constants</font>
+</td></tr></table>
+<tr><td>
+<a name='Constantsresolution'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+timer_type resolution<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The timer's resolution can be either<br />
+<br />
+timer::HighRes (for ~1e-6 sec res, but only for ~1 hour)<br />
+timer::LowRes (for 1 sec res, but no oeverflow)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+timer myT;<br />
+myT.resolution=timer::LowRes;<br />
+myT.reset();<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='Constructorstimer()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+timer()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+constructor...<br />
+<br />
+sets the default Resolution to 'HighRes'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+timer stopwatch; <font color='#006600'>//make the timer global...as soon as you declare it...it starts recording the time..</font><br />
+<br />
+int main(int argc,char* argv[]){<br />
+  initialization stuff....<br />
+  ....<br />
+stopwatch.reset(); <font color='#006600'>//resets the timer to 0 so we can time the hard calculation rather then the intialization</font><br />
+  ...begin Hard calcualtion...<br />
+  ...end Hard caclualtion...<br />
+<br />
+cout&lt;&lt;&quot;Time Taken: &quot;&lt;&lt;stopwatch()*1e3&lt;&lt;&quot; ms &quot;&lt;&lt;endl; <font color='#006600'>//print out the time...</font><br />
+} <br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Constructorstimer()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+timer(timer::timer_type myRes)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+myRes--&gt; the timer resolution (timer::HigRes, timer::LowRes)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A constructor that give you the ability to set the timer resolution at its creation<br />
+<br />
+myRes can be<br />
+<br />
+timer::HighRes, or timer::LowRes<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+timer stopwatch(timer::LowRes); <font color='#006600'>//make the timer global...as soon as you declare it...it starts recording the time..</font><br />
+<br />
+int main(int argc,char* argv[]){<br />
+initialization stuff....<br />
+....<br />
+stopwatch.reset(); <font color='#006600'>//resets the timer to 0 so we can time the hard calculation rather then the intialization</font><br />
+...begin Hard calcualtion...<br />
+...end Hard caclualtion...<br />
+<br />
+<font color='#006600'>//print out the time...</font><br />
+cout&lt;&lt;&quot;Time Taken: &quot;&lt;&lt;stopwatch()&lt;&lt;&quot; s&quot;&lt;&lt;endl; <br />
+} <br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractionoperator()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double operator()() const <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the &quot;current&quot; time<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+timer stopwatch; <font color='#006600'>//make the timer global...as soon as you declare it...it starts recording the time..</font><br />
+<br />
+int main(int argc,char* argv[]){<br />
+ <font color='#006600'>// initialization stuff....</font><br />
+ <font color='#006600'>// ....</font><br />
+stopwatch.reset(); <font color='#006600'>//resets the timer to 0 so we can time the hard calculation rather then the intialization</font><br />
+ <font color='#006600'>// ...begin Hard calcualtion...</font><br />
+ <font color='#006600'>// ...end Hard caclualtion...</font><br />
+<br />
+cout&lt;&lt;&quot;Time Taken: &quot;&lt;&lt;stopwatch()*1e3&lt;&lt;&quot; ms &quot;&lt;&lt;endl; <font color='#006600'>//print out the time...</font><br />
+} <br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionsreset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void reset()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+resets the internal clock to 0<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+stopwatch.reset();<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

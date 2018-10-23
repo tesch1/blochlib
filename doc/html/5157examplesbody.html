@@ -1,0 +1,296 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+The dipolar instabilites<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This is a replication of Jeener's simulation paper in PRL (&quot;Dynamical effects of the dipolar field inhomogeneities in high-resolution NMR: Spectral clustering and instabilities&quot;, Jeener J, PHYSICAL REVIEW LETTERS, 82 (8): 1772-1775 FEB 22 1999).
+<BR><BR>
+Here he explores the dipolar instabilites as a function of pulse angle of a cube (8) of spins.  For angles between 0..45 we see 'spectral clustering' where eventhough we have many dipolar frequencies present, the dynamics seem to indicate a single evolution frequency, however for angles 45..125 we see instabilites, from 125..180 we see the spectral clustering again.  The simulation below shows this effect in the frequencies of the simulation for each pulse angle.<BR>
+<img src='jeener.gif'>
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#--------------&nbsp;The&nbsp;Input&nbsp;File&nbsp;------------<br />
+#parameter&nbsp;file&nbsp;for&nbsp;2&nbsp;pulse&nbsp;sequences<br />
+<br />
+dim&nbsp;2,2,2<br />
+min&nbsp;-0.5,-0.5,-0.5<br />
+max&nbsp;0.5,&nbsp;0.5,&nbsp;0.5<br />
+<br />
+#fid&nbsp;pieces<br />
+npts&nbsp;4096<br />
+tf&nbsp;1<br />
+<br />
+#the&nbsp;pulse&nbsp;bits<br />
+pulseangle&nbsp;0<br />
+pulsephase&nbsp;270<br />
+pulseamp&nbsp;100000<br />
+pulsesteps&nbsp;&nbsp;41<br />
+pulsestepsize&nbsp;4.5<br />
+<br />
+#basic&nbsp;spin&nbsp;parametesr<br />
+Bo&nbsp;11<br />
+temperature&nbsp;300<br />
+offset&nbsp;0<br />
+T2&nbsp;0<br />
+T1&nbsp;0<br />
+spintype&nbsp;1H<br />
+moles&nbsp;.2<br />
+<br />
+#the&nbsp;extra&nbsp;interactions&nbsp;parts<br />
+dipole_str&nbsp;50<br />
+<br />
+#calculate&nbsp;lypuvnovs[1]&nbsp;or&nbsp;not[0]<br />
+lyps&nbsp;0<br />
+lypout&nbsp;lyps<br />
+<br />
+#file&nbsp;output&nbsp;names&nbsp;for&nbsp;the&nbsp;data<br />
+fidout&nbsp;data<br />
+<br />
+#------------end&nbsp;InputFile&nbsp;---------------<br />
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//the&nbsp;required&nbsp;2&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<br />
+/*<br />
+<br />
+loops&nbsp;through&nbsp;various&nbsp;pulse&nbsp;angles<br />
+on&nbsp;a&nbsp;dipole-dipole&nbsp;coupled&nbsp;system&nbsp;using&nbsp;the&nbsp;DimLessDipole&nbsp;object<br />
+offsets,&nbsp;and&nbsp;relaxation&nbsp;parmeters<br />
+<br />
+*/<br />
+<br />
+timer&nbsp;stopwatch;<br />
+void&nbsp;printTime(int&nbsp;nrounds=1){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cout&nbsp;&lt;&lt;std::endl&lt;&lt;&nbsp;&quot;Time&nbsp;taken:&nbsp;&quot;&nbsp;&lt;&lt;&nbsp;(stopwatch()/nrounds)&nbsp;&lt;&lt;&nbsp;&quot;&nbsp;seconds&quot;;<br />
+}<br />
+<br />
+void&nbsp;Info(std::string&nbsp;mess)<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;mess&lt;&lt;endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout.flush();<br />
+}<br />
+<br />
+int&nbsp;main(int&nbsp;argc,char*&nbsp;argv[])<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;fn;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;query_parameter(argc,argv,1,&nbsp;&quot;Enter&nbsp;file&nbsp;to&nbsp;parse:&nbsp;&quot;,&nbsp;fn);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Parameters&nbsp;pset(fn);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;nsteps=pset.getParamI(&quot;npts&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;tf=pset.getParamD(&quot;tf&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;offset=pset.getParamD(&quot;offset&quot;)*PI2;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;inBo=pset.getParamD(&quot;Bo&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;inTemp=pset.getParamD(&quot;temperature&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;spintype=pset.getParamS(&quot;spintype&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;detsp=spintype;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;t2s=pset.getParamD(&quot;T2&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;t1s=pset.getParamD(&quot;T1&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;moles=pset.getParamD(&quot;moles&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;dipstr=pset.getParamD(&quot;dipole_str&quot;)*PI2;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;fout=pset.getParamS(&quot;fidout&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;coord&lt;int&gt;&nbsp;dims(pset.getParamCoordI(&quot;dim&quot;));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;coord&lt;&gt;&nbsp;mins(pset.getParamCoordD(&quot;min&quot;));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;coord&lt;&gt;&nbsp;maxs(pset.getParamCoordD(&quot;max&quot;));<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;cv=pset.getParamI(&quot;lyps&quot;);<br />
+<br />
+<br />
+<font color='#006600'>//&nbsp;Bloch&nbsp;set&nbsp;up&nbsp;testing</font><br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;XYZfull&nbsp;TheShape;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;XYZshape&lt;TheShape&gt;&nbsp;TheGrid;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Creating&nbsp;grid....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Grid&lt;UniformGrid&gt;&nbsp;gg(mins,&nbsp;maxs,&nbsp;dims);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Creating&nbsp;inital&nbsp;shape....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TheShape&nbsp;tester;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Creating&nbsp;total&nbsp;shape-grid....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TheGrid&nbsp;jj(&nbsp;gg,&nbsp;tester);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;ListBlochParams&lt;&nbsp;TheGrid,&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BPoptions::Particle&nbsp;|&nbsp;BPoptions::HighField,&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;&gt;&nbsp;MyPars;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;nsp=jj.size();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Creating&nbsp;entire&nbsp;spin&nbsp;parameter&nbsp;list&nbsp;for&nbsp;&quot;+itost(nsp)+&quot;&nbsp;spins....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MyPars&nbsp;mypars(nsp,&nbsp;&quot;1H&quot;,&nbsp;jj);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;nsp=mypars.size();<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Setting&nbsp;spin&nbsp;parameter&nbsp;offsets....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;j=0;j&lt;nsp;j++){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mypars(j)=spintype;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mypars(j).moles(moles);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mypars(j).Bo(inBo);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mypars.temperature(inTemp);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;mypars.calcTotalMo();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;mypars.print(cout);<br />
+<br />
+<font color='#006600'>//time&nbsp;train&nbsp;testing</font><br />
+<br />
+<br />
+<font color='#006600'>//Extra&nbsp;ineractions</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;TanhScale&nbsp;Scaler;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;Interactions&lt;Offset&lt;&gt;,&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Relax&lt;&gt;,&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DimLessDipole&lt;TheGrid&gt;&nbsp;&gt;&nbsp;MyInteractions;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Setting&nbsp;Interactions....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Offset&lt;&gt;&nbsp;myOffs(mypars,&nbsp;offset);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Relax&lt;&gt;&nbsp;myRels(mypars,&nbsp;(!t2s)?0.0:1.0/t2s,&nbsp;(!t1s)?0.0:1.0/t1s);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DimLessDipole&lt;TheGrid&gt;&nbsp;DipDip(jj,&nbsp;dipstr);<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MyInteractions&nbsp;MyInts(myOffs,&nbsp;myRels,&nbsp;&nbsp;DipDip);<br />
+<br />
+<br />
+<font color='#006600'>//the&nbsp;pulse&nbsp;object</font><br />
+<font color='#006600'>//The&nbsp;pulse&nbsp;list&nbsp;for&nbsp;a&nbsp;real&nbsp;pulse&nbsp;on&nbsp;protons..</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;pang=pset.getParamD(&quot;pulseangle&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;pstep=pset.getParamD(&quot;pulsestepsize&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;numP=pset.getParamI(&quot;pulsesteps&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;amp=pset.getParamD(&quot;pulseamp&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;phase=pset.getParamD(&quot;pulsephase&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Creating&nbsp;real&nbsp;pulse&nbsp;lists...&quot;);<br />
+<br />
+<font color='#006600'>//&nbsp;(spin,&nbsp;amplitude,&nbsp;phase,&nbsp;offset)</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Pulse&nbsp;PP1(spintype,&nbsp;amp*PI2,&nbsp;phase*DEG2RAD);&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PP1.print(cout);<br />
+<br />
+<font color='#006600'>//data&nbsp;FID</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;FIDs(numP,&nbsp;nsteps);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;kk=0;kk&lt;numP;++kk)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;tpulse=PP1.timeForAngle((pang+double(kk)*pstep)*Pi/180.,&nbsp;spintype);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cout&lt;&lt;std::endl&lt;&lt;&quot;On&nbsp;Pulse&nbsp;Angle:&nbsp;&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;(pang+double(kk)*pstep)&lt;&lt;&quot;&nbsp;degrees&nbsp;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Initializing&nbsp;Time&nbsp;train&nbsp;for&nbsp;first&nbsp;Pulse....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TimeTrain&lt;UniformTimeEngine&nbsp;&gt;&nbsp;P1(UniformTimeEngine(0.,&nbsp;tpulse,&nbsp;10,100));<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Initializing&nbsp;Time&nbsp;train&nbsp;for&nbsp;FID....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TimeTrain&lt;UniformTimeEngine&nbsp;&gt;&nbsp;F1(UniformTimeEngine(tpulse,&nbsp;tpulse+tf,&nbsp;nsteps,20));<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//typedefs&nbsp;for&nbsp;Bloch&nbsp;parameter&nbsp;sets</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;Bloch&lt;&nbsp;MyPars,&nbsp;Pulse,&nbsp;MyInteractions&gt;&nbsp;PulseBloch;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;Bloch&lt;&nbsp;MyPars,&nbsp;NoPulse,&nbsp;MyInteractions&gt;&nbsp;NoPulseBloch;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//THis&nbsp;is&nbsp;the&nbsp;BLoch&nbsp;solve&nbsp;to&nbsp;perform&nbsp;a&nbsp;pulse</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Initializing&nbsp;total&nbsp;parameter&nbsp;list&nbsp;with&nbsp;a&nbsp;pulse....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PulseBloch&nbsp;myparspulse(mypars,&nbsp;PP1,&nbsp;MyInts);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(cv)&nbsp;myparspulse.calcVariational();<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(dipstr==0)&nbsp;DipDip.Off();<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//This&nbsp;is&nbsp;the&nbsp;Bloch&nbsp;solver&nbsp;to&nbsp;Collect&nbsp;the&nbsp;FID&nbsp;(i.e.&nbsp;has&nbsp;no&nbsp;pusles...FASTER)</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Initializing&nbsp;total&nbsp;parameter&nbsp;list&nbsp;for&nbsp;FID&nbsp;collection....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NoPulseBloch&nbsp;me;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;me=(myparspulse);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Integrating&nbsp;first&nbsp;Pulse....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vector&lt;coord&lt;&gt;&nbsp;&gt;&nbsp;tm=me.currentMag();<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stopwatch.reset();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlochSolver&lt;PulseBloch&nbsp;&gt;&nbsp;drivP(myparspulse,&nbsp;tm);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drivP.setCollectionPolicy(FinalPoint);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drivP.setWritePolicy(Hold);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!drivP.solve(P1)){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;&nbsp;ERROR!!..could&nbsp;not&nbsp;integrate&nbsp;pulse&nbsp;P1....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;-1;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlochSolver&lt;NoPulseBloch&nbsp;&gt;&nbsp;driv(me,&nbsp;drivP.lastPoint());<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Integrating&nbsp;FID&nbsp;....&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;lypname=&quot;lyps&quot;;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drivP.setCollectionPolicy(MagAndFID);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;driv.setWritePolicy(Hold);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;driv.setDetect(detsp);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(cv)&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;driv.setLyapunovPolicy(LypContinous);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;driv.setLypDataFile(lypname);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(driv.solve(F1)){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FIDs.putRow(kk,&nbsp;driv.FID());<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;matstream&nbsp;matout(fout);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;matout.put(&quot;vdat&quot;,&nbsp;FIDs);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Vector&lt;double&gt;&nbsp;pangs(Spread&lt;double&gt;(pang,&nbsp;pang+(numP*pstep),&nbsp;pstep));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;matout.put(&quot;pangs&quot;,&nbsp;pangs);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;matout.close();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;printTime();<br />
+<br />
+}<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

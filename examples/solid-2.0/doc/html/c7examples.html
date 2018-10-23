@@ -1,0 +1,764 @@
+
+	<html>
+	<head>
+	
+	<title>Solid-2.0::C7 Examples</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+	  <tr>
+		<td>&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	   <tr> 
+		
+    <td class="head" width="59%"> &nbsp;&nbsp;Solid-2.0 Documentation---Static 
+      Examples</td>
+	  </tr>
+	</table>
+
+
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+	  <tr>
+		<td>&nbsp;</td>
+	  </tr>
+	</table>
+		
+<br>
+<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		
+<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td halign='left' valign='top' width="22%"> 
+      <table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left class='normalText'>
+        <tr> 
+          <td bgcolor='#aaaaaa'>&nbsp; </td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><b> <a href='index.html'>home </a> </b></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><b> Sections</b></td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'> <a href="index.html#spins">-Spins</a> </td>
+        </tr>
+        <tr> 
+          <td class='sidemenu' height="14"><a href="index.html#params">-Parameters</a></td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'><a href="index.html#pulses">-Pulses</a></td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'><a href="index.html#funcs">---Function List---</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="index.html#ff">-file formats</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><b> Examples</b></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html">-Static</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#basic">---basic</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#d2">---2D</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#alter">---alterSys</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#dc">---decouple</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html">-Mas</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html#basic">---basic</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html#d2">---2D</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html#ptop">---ptop</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html">-C7s</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#basic">---basic</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#d2">---2D</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#explict">---explicit</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#rotor">---rotor</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#transfer">---transfer</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="quadexamples.html">-Quadrupoles</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td>---<a href="quadexamples.html#centrans">central Trans</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td>&nbsp;</td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td bgcolor='#aaaaaa'>&nbsp; </td>
+        </tr>
+        <tr> 
+          <td class='sidemenu' bgcolor='#cccccc'> </td>
+        </tr>
+      </table>
+    </td>
+    <td width="78%" valign='top' class='normalText'> 
+      <blockquote> 
+        <p><br>
+          Below are several examples of performing the good old recoupling sequence 
+          'post-C7.' This sequence is a fine example demonstrating all the various 
+          techniqes and pulse sequences that exsist that are rotor syncronized.</p>
+      </blockquote>
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td class="importantText2"> <a name="basic"></a>Basic</td>
+        </tr>
+        <tr> 
+          <td class="normalText"> 
+            <ul>
+              <li>Below is an input file the a basic MAS simulation of 2 CSAs...the 
+                crystal file came from the BlochLib distribution.</li>
+              <blockquote> <span class="codecomment"># preforms a simple point-to-point 
+                C7 (a 1D FID)</span><br>
+                <br>
+                spins{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<span class="codecomment">&nbsp;&nbsp;#the global 
+                options</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;numspin 2<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 1H 0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 1H 1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;D 1500 0 1&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                }<br>
+                <br>
+                parameters{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;powder{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aveType zcw<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thetaStep 233<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phiStep 144<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                <span class="codecomment">#the intergrator step size&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;maxtstep=1e-6<br>
+                <br>
+                <span class="codecomment">#number of 1D fid points</span>&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;npts1D=512&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;roeq= Iz&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;detect=Ip&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;filesave=data&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                }<br>
+                <br>
+                <br>
+                pulses{<br>
+                <br>
+                <span class="codecomment">#our post-C7 sub pulse section</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;sub1{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<span class="codecomment">&nbsp;&nbsp;#set the rotor 
+                angle to the global var</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotor=rad2deg*acos(1/sqrt(3))<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#post C7 pulse 
+                amplitude</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amp=7*wr<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amplitude(amp)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#phase stepers</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stph=0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phst=360/7<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#pulse times</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t90=1/amp/4<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t270=3/amp/4<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t360=1/amp<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#post C7 loop</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loop(k=1:7)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t90, 
+                stph) <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t360, 
+                stph+180) <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t270, 
+                stph)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stph=stph+phst<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                <br>
+                <span class="codecomment">#a single fid is concidered point to 
+                point</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ptop()<br>
+                <br>
+                <span class="codecomment">#set the spinning&nbsp;&nbsp;&nbsp;</span>&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;wr=5000<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;rotor=rad2deg*acos(1/sqrt(3))<br>
+                <br>
+                <span class="codecomment">#set the detection matrix</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;detect(Iz)<br>
+                <br>
+                <span class="codecomment">#can use 'reuse' as things parameters 
+                are set once <br>
+                # in our subsection</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;reuse(sub1)<br>
+                <br>
+                <span class="codecomment">#collect the fid</span> <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;fid()<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;savefidtext(simpC7)<span class="codecomment"> 
+                #save as a text file</span><br>
+                }<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+              </blockquote>
+            </ul>
+            <blockquote> 
+              <p>Here is the generated spectrum<br>
+                <img src="c7basic.gif" width="333" height="209"> </p>
+            </blockquote>
+          </td>
+        </tr>
+      </table>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td class="importantText2"> <br>
+            <hr size="1">
+            <br>
+            <a name="d2"></a> The real 2D experiment</td>
+        </tr>
+        <tr> 
+          <td class="normalText"> 
+            <ul>
+              <li>In reality it is hard to collect 'one-point' of an fid and have 
+                everything function properly, soa basic post-C7 experiment is 
+                performed in a 2D fashion</li>
+              <blockquote> <br>
+                <span class="codecomment"># preforms a 'real' experiment <br>
+                # for the post-C7 (a series of 2D fids are collected)</span><br>
+                <br>
+                spins{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#the global 
+                options</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;numspin 2<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 1H 0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 1H 1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;C 5000 2134 0 0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;C -5000 2789 0.5 1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;D 1500 0 1&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                }<br>
+                <br>
+                parameters{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;powder{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aveType zcw<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thetaStep 233<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phiStep 144<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                <span class="codecomment">#the intergrator step size&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;maxtstep=1e-6<br>
+                <br>
+                <span class="codecomment">#number of 1D fid points&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;npts1D=512&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                }<br>
+                <br>
+                <br>
+                pulses{<br>
+                <br>
+                <span class="codecomment">#our post-C7 sub pulse section</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;sub1{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#set the rotor 
+                angle to the global var</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotor=rad2deg*acos(1/sqrt(3)))<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#post C7 pulse 
+                amplitude</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amp=7*wr<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amplitude(amp)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#phase stepers</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stph=0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phst=360/7<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#pulse times</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t90=1/amp/4<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t270=3/amp/4<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t360=1/amp<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#post C7 loop</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loop(k=1:7)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t90, 
+                stph) <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t360, 
+                stph+180) <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t270, 
+                stph)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stph=stph+phst<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                <br>
+                <span class="codecomment">#number of 2D points</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;fidpt=128<br>
+                <br>
+                <span class="codecomment">#collection a matrix of data&nbsp;&nbsp;&nbsp;</span>&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;2D()<br>
+                <br>
+                <span class="codecomment">#set the spinning&nbsp;</span>&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;wr=5000<br>
+                <br>
+                <span class="codecomment">#the basic rotor angle</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;rotor=rad2deg*acos(1/sqrt(3)))<br>
+                <br>
+                <span class="codecomment">#set the detection matrix</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;detect(Ip)<br>
+                <span class="codecomment">#reset the ro back to the eq</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ro(Iz)<br>
+                <br>
+                <span class="codecomment">#90 time ampltiudes</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;amp=150000<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;t90=1/amp/4<br>
+                <br>
+                <span class="codecomment">#loop over the fids</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;loop(m=0:fidpt-1)<br>
+                &nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#may use 'reuse' 
+                as everything is static in sub1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# must be repeat m times to advance the 
+                desity matrix<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# for each fdi (the first fid gets no 
+                c7)</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reuse(sub1, m)<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#pulse the IZ 
+                down to the xy plane for detection</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t90, 
+                270, amp)<br>
+                &nbsp;&nbsp;<span class="codecomment"> #collect the fid at the 
+                'mth' position</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fid(m)<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#reset the ro 
+                back to the eq</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ro(Iz)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;savefidmatlab(2dc7) <span class="codecomment">#save 
+                the matlab file</span><br>
+                }<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+              </blockquote>
+            </ul>
+            <blockquote> 
+              <p>Here is the generated spectra<br>
+                <img src="c72d.gif" width="536" height="417"> </p>
+            </blockquote>
+          </td>
+        </tr>
+      </table>
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td class="importantText2"> <br>
+            <hr size="1">
+            <br>
+            <a name="explict"></a> doing a post-C7 explicitly</td>
+        </tr>
+        <tr> 
+          <td class="normalText"> 
+            <ul>
+              <li>This performs the point-to-point by hand rather then using the 
+                internal loop for the ptop...it will be slower then the 'basic' 
+                one above</li>
+              <blockquote> <span class="codecomment"># preforms a simple point-to-point 
+                C7 (a 1D FID)<br>
+                # put rather letting the program do the ptop<br>
+                # it does the point collection explicitly<br>
+                # this will be slower then simply setting the ptop<br>
+                # flag becuase it relies on non-compile code<br>
+                # to do the loop....</span><br>
+                <br>
+                spins{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#the global 
+                options</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;numspin 2<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 1H 0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 1H 1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;D 1500 0 1&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                }<br>
+                <br>
+                parameters{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                <span class="codecomment">#our basic powder average</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;powder{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aveType zcw<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thetaStep 233<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phiStep 144<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                <span class="codecomment">#the intergrator step size&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;maxtstep=1e-6<br>
+                <br>
+                <span class="codecomment">#number of 1D fid points</span>&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;npts1D=256&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                }<br>
+                <br>
+                <br>
+                pulses{<br>
+                <br>
+                <span class="codecomment">#our post-C7 sub pulse section</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;sub1{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#set the rotor 
+                angle </span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotor=rad2deg*acos(1/sqrt(3))<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#post C7 pulse 
+                amplitude</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amp=7*wr<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amplitude(amp)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#phase stepers</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stph=0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phst=360/7<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#pulse times</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t90=1/amp/4<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t270=3/amp/4<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t360=1/amp<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#post C7 loop</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loop(k=1:7)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t90, 
+                stph) <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t360, 
+                stph+180) <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t270, 
+                stph)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stph=stph+phst<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                <br>
+                <span class="codecomment">#a single fid is concidered point to 
+                point</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ptop()<br>
+                <br>
+                <span class="codecomment">#set the spinning</span>&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;wr=5000<br>
+                <br>
+                <span class="codecomment">#set the detection matrix</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;detect(Iz)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <span class="codecomment">#set the density matrix</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ro(Iz)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;loop(i=0:npts1D-1)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#collect the 
+                fid at point i</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fid(i)&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#can use 'reuse' 
+                as things need to be set only once <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# in our subsection</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reuse(sub1)<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment"># do NOT set 
+                ro back to equilibrium as<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# we want the last ro to be used for the 
+                next point</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;savefidtext(simpC7ex) <span class="codecomment">#save 
+                as a text file</span><br>
+                }<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+              </blockquote>
+            </ul>
+            <blockquote> 
+              <p>Here is the generated spectrum<br>
+                <img src="c7ex.gif" width="333" height="204"> <br>
+              </p>
+            </blockquote>
+          </td>
+        </tr>
+      </table>
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td class="importantText2"> 
+            <hr size="1">
+            <br>
+            <br>
+            <a name="rotor"></a> post-C7 dependance on rotor angles...</td>
+        </tr>
+        <tr> 
+          <td class="normalText"> 
+            <ul>
+              <li>this simply collects a bunch of post-C7s at different rotor 
+                angles </li>
+              <blockquote> <br>
+                <span class="codecomment">#the multplit spin list<br>
+                # preforms a simple post-C7 over <br>
+                # different rotor angles</span><br>
+                <br>
+                spins{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#the global 
+                options</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;numspin 2<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 1H 0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 1H 1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;D 1500 0 1&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                }<br>
+                <br>
+                parameters{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;powder{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aveType zcw<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thetaStep 233<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phiStep 144<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                <span class="codecomment">#the intergrator step size&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;maxtstep=1e-6<br>
+                <br>
+                <span class="codecomment">#number of 1D fid points&nbsp;&nbsp;</span>&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;npts1D=512&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                }<br>
+                <br>
+                <br>
+                pulses{<br>
+                <br>
+                <span class="codecomment">#our post-C7 sub pulse section</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;sub1{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#set the rotor 
+                angle to the global var</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotor=myR<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#post C7 pulse 
+                amplitude</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amp=7*wr<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amplitude(amp)<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#phase stepers</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stph=0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phst=360/7<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#pulse times</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t90=1/amp/4<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t270=3/amp/4<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t360=1/amp<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#post C7 loop</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loop(k=1:7)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t90, 
+                stph) <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t360, 
+                stph+180) <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t270, 
+                stph)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stph=stph+phst<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;fidpt=32<br>
+                <br>
+                <span class="codecomment">#collection a matrix of data&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;2D()<br>
+                <br>
+                <span class="codecomment"># concidered point to point</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ptop()<br>
+                <br>
+                <span class="codecomment">#set the spinning&nbsp;&nbsp;</span>&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;wr=5000<br>
+                <span class="codecomment"># set the rotor angle steps</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;rotst=90/fidpt<br>
+                <span class="codecomment">#the basic rotor angle</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;myR=0<br>
+                <br>
+                <span class="codecomment">#set the detection matrix</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;detect(Iz)<br>
+                <br>
+                <span class="codecomment">#loop over the rotor steps</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;loop(m=0:fidpt-1)<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#must use 'use' 
+                as the rotor angle changes</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use(sub1)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#collect the 
+                fid at the 'mth' position</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fid(m)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;<span class="codecomment">&nbsp;&nbsp;&nbsp;#advance the 
+                rotor angle</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myR=myR+rotst<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#reset the ro 
+                back to the eq</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ro(Iz)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;savefidmatlab(c7rotor) <span class="codecomment">#save 
+                the matlab file</span><br>
+                }</blockquote>
+            </ul>
+            <blockquote>
+<p>Here are the generated spectra<br>
+                <img src="c7rotor.gif" width="425" height="184"> </p>
+            </blockquote>
+          </td>
+        </tr>
+      </table>
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td class="importantText2"> <br>
+            <hr size="1">
+            <br>
+            <a name="ptop"></a> post-C7 coherence transfer</td>
+        </tr>
+        <tr> 
+          <td class="normalText"> 
+            <ul>
+              <li>post-C7 is also know for its ability to tranfer coherences between 
+                spins. To show this transfer, we simply detect the amount of signal 
+                generated on the oposing spin starting when we started with none.</li>
+              <blockquote> <br>
+                <br>
+                <span class="codecomment">#the multplit spin list<br>
+                # preforms a simple point-to-point C7 (a 1D FID)<br>
+                # and observers the coherence transfer<br>
+                # between the two spins...<br>
+                </span><br>
+                spins{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#the global 
+                options</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;numspin 2<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 1H 0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 13C 1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;D 1500 0 1&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                }<br>
+                <br>
+                parameters{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;powder{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aveType ../../../../crystals/rep678<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                <span class="codecomment">#the intergrator step size&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;maxtstep=5e-6<br>
+                <br>
+                <span class="codecomment">#number of 1D fid points&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;npts1D=256&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;roeq=Iz<br>
+                }<br>
+                <br>
+                <br>
+                pulses{<br>
+                <br>
+                <span class="codecomment">#our post-C7 sub pulse section</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;sub1{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#set the rotor 
+                angle to the global var</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotor=rad2deg*acos(1/sqrt(3))<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#post C7 pulse 
+                amplitude</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amp=7*wr<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amplitude(amp)<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#phase stepers</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stph=0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phst=360/7<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#pulse times</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t90=1/amp/4<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t270=3/amp/4<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t360=1/amp<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#post C7 loop</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loop(k=1:7)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t90, 
+                stph) | 13C:pulse(t90, stph) <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t360, 
+                stph+180) |13C:pulse(t360, stph+180) <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(t270, 
+                stph)| 13C:pulse(t270, stph)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stph=stph+phst<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                <br>
+                <br>
+                <span class="codecomment">#a single fid is concidered point to 
+                point</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ptop()<br>
+                <br>
+                <span class="codecomment">#set the spinning</span>&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;wr=5000<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;rotor=rad2deg*acos(1/sqrt(3))<br>
+                <br>
+                <span class="codecomment">#set the ro to all Iz_1 and no Iz_0</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ro(Iz_0)<br>
+                <br>
+                <span class="codecomment">#set the detection matrix<br>
+                # just detect the first spins<br>
+                # increase in its coherence</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;detect(-Iz_1)<br>
+                <br>
+                <span class="codecomment">#can use 'reuse' as things parameters 
+                are set once <br>
+                # in our subsection</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;reuse(sub1)<br>
+                <br>
+                <span class="codecomment">#collect the fid </span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;fid()<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;savefidtext(transC7) #save tas a text 
+                file<br>
+                }<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+              </blockquote>
+            </ul>
+            <blockquote> 
+              <p>Here is the generated transfer<br>
+                <img src="c7transfer.gif" width="331" height="234"> </p>
+            </blockquote>
+          </td>
+        </tr>
+      </table>
+      <p><br>
+      </p>
+    </td>
+  </tr>
+</table>
+<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

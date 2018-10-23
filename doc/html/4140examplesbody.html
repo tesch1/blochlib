@@ -1,0 +1,184 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Collect FIDs based on an input Hamiltonian String<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This program generates FID from an input Hamiltonian.  It takes in a Parameter Set file like so<br />
+<br />
+------------------in.sim-------------<br />
+#a simple parameter input file for the HamilGen<br />
+# fid maker<br />
+<br />
+npts 512<br />
+sw 20000<br />
+aveType zcw<br />
+thetaSteps 616<br />
+phiSteps 233<br />
+<br />
+numspins 2<br />
+<br />
+#simple dipole<br />
+hamil 2000*A20*T20_01<br />
+<br />
+detect Ip<br />
+roeq Ix<br />
+-------------------End in.sim-----------------<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+<br />
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<br />
+<font color='#006600'>//This&nbsp;extends&nbsp;the&nbsp;SolidSys&nbsp;class</font><br />
+<font color='#006600'>//&nbsp;and&nbsp;overwrites&nbsp;the&nbsp;two&nbsp;</font><br />
+<font color='#006600'>//&nbsp;Hamiltonian&nbsp;Functions&nbsp;required&nbsp;by&nbsp;</font><br />
+<font color='#006600'>//&nbsp;the&nbsp;'oneFID'&nbsp;object..</font><br />
+<font color='#006600'>//it&nbsp;simply&nbsp;returns&nbsp;the&nbsp;matrix&nbsp;generated&nbsp;from&nbsp;</font><br />
+<font color='#006600'>//&nbsp;the&nbsp;input&nbsp;hamiltonian</font><br />
+class&nbsp;HamilSys:&nbsp;public&nbsp;SolidSys<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;public:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;hamil;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HamiltonianGen&nbsp;myGen;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HamilSys(int&nbsp;nspins,&nbsp;std::string&nbsp;Hamil=&quot;&quot;):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SolidSys(nspins),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hamil(Hamil),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myGen(Hamil)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hmatrix&nbsp;Hamiltonian(double&nbsp;t1,&nbsp;double&nbsp;t2,&nbsp;double&nbsp;wr=0.0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SpinSys&nbsp;&&nbsp;tm=(SpinSys&nbsp;&)(*this);&nbsp;<font color='#006600'>//cast&nbsp;a&nbsp;ptr&nbsp;back&nbsp;to&nbsp;SPinSys</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;myGen.Hamiltonian(tm,&nbsp;hamil,&nbsp;theRotations.theta,&nbsp;theRotations.phi);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hmatrix&nbsp;Hamiltonian(double&nbsp;wr,&nbsp;double&nbsp;rot,&nbsp;double&nbsp;alpha,&nbsp;double&nbsp;beta,&nbsp;double&nbsp;t1,&nbsp;double&nbsp;t2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SpinSys&nbsp;&&nbsp;tm=(SpinSys&nbsp;&)(*this);&nbsp;<font color='#006600'>//cast&nbsp;a&nbsp;ptr&nbsp;back&nbsp;to&nbsp;SPinSys</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;myGen.Hamiltonian(tm,&nbsp;hamil,&nbsp;alpha,&nbsp;beta);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+};<br />
+<br />
+<br />
+int&nbsp;main(int&nbsp;argc,char*&nbsp;argv[]){<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//start&nbsp;MPI</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;MPIworld.start(argc,&nbsp;argv);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;inf=&quot;&quot;;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(MPIworld.master())&nbsp;query_parameter(argc,argv,1,&nbsp;&quot;InputFile::&nbsp;&quot;,&nbsp;inf);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MPIworld.scatter(inf);<br />
+<br />
+&nbsp;&nbsp;<font color='#006600'>//make&nbsp;a&nbsp;parameter&nbsp;set</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Parameters&nbsp;pset(inf);<br />
+&nbsp;&nbsp;<font color='#006600'>//decalare&nbsp;our&nbsp;'HamilSys'</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;HamilSys&nbsp;mysys(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pset.getParamI(&quot;numspins&quot;),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pset.getParamS(&quot;hamil&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br />
+<br />
+&nbsp;&nbsp;<font color='#006600'>//nnum&nbsp;points&nbsp;in&nbsp;fid</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;npts=pset.getParamI(&quot;npts&quot;);<br />
+&nbsp;&nbsp;<font color='#006600'>//the&nbsp;sweep&nbsp;width</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;sw=pset.getParamD(&quot;sw&quot;);<br />
+&nbsp;&nbsp;<font color='#006600'>//our&nbsp;detection&nbsp;matrix</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;detectST=pset.getParamS(&quot;detect&quot;);<br />
+&nbsp;&nbsp;<font color='#006600'>//our&nbsp;starting&nbsp;matrix</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;roeqST=pset.getParamS(&quot;roeq&quot;);<br />
+&nbsp;&nbsp;<font color='#006600'>//powder&nbsp;average&nbsp;type</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;aveType=pset.getParamS(&quot;aveType&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;thetaStep=pset.getParamI(&quot;thetaSteps&quot;,&nbsp;&quot;&quot;,&nbsp;false);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;phiStep=pset.getParamI(&quot;phiSteps&quot;,&nbsp;&quot;&quot;,&nbsp;false);<br />
+<br />
+&nbsp;&nbsp;<font color='#006600'>//decalre&nbsp;our&nbsp;powder</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;powder&nbsp;zcw(aveType,&nbsp;thetaStep,&nbsp;phiStep);<br />
+<br />
+&nbsp;&nbsp;<font color='#006600'>//using&nbsp;this&nbsp;hamiltonianGen&nbsp;to&nbsp;create&nbsp;the</font><br />
+&nbsp;&nbsp;<font color='#006600'>//detect&nbsp;and&nbsp;roeq&nbsp;matrices</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;HamiltonianGen&nbsp;mygen;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;detect=mygen.Hamiltonian(mysys,&nbsp;detectST);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;roeq=mygen.Hamiltonian(mysys,&nbsp;roeqST);<br />
+<br />
+&nbsp;&nbsp;<font color='#006600'>//our&nbsp;fid&nbsp;vector</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Vector&lt;complex&gt;&nbsp;fid(npts,&nbsp;0);<br />
+&nbsp;&nbsp;<font color='#006600'>//decalre&nbsp;an&nbsp;'oneFID'&nbsp;object</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;oneFID&lt;HamilSys&gt;&nbsp;myfid(mysys,&nbsp;npts,&nbsp;sw);<br />
+<br />
+&nbsp;&nbsp;<font color='#006600'>//set&nbsp;the&nbsp;MPI&nbsp;controller&nbsp;of&nbsp;the&nbsp;oneFID</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;myfid.Controller=MPIworld;<br />
+<br />
+&nbsp;&nbsp;<font color='#006600'>//collect&nbsp;the&nbsp;FID</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;fid=myfid.FID(zcw,&nbsp;roeq,&nbsp;detect);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;complex&nbsp;sm=0;<br />
+&nbsp;&nbsp;<font color='#006600'>//dc&nbsp;offset&nbsp;correct&nbsp;it</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;sm=sum(fid(Range(npts/2,&nbsp;npts)))/double(npts/2.0);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fid-=sm;<br />
+&nbsp;&nbsp;<font color='#006600'>//print&nbsp;out&nbsp;the&nbsp;data</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(MPIworld.master())&nbsp;plotterFID(fid,&nbsp;&quot;fid&quot;,&nbsp;1.0/myfid.sw());<br />
+<br />
+&nbsp;&nbsp;<font color='#006600'>//end&nbsp;MPI</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;MPIworld.end();<br />
+}<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

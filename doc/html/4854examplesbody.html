@@ -1,0 +1,257 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+How to extend this class to use for your own special functions<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This example creats a class based on ScriptParse that will perform more tasks given an input script.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+<br />
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//the&nbsp;required&nbsp;2&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<br />
+<font color='#006600'>//&nbsp;As&nbsp;simple&nbsp;on&nbsp;how-to&nbsp;extend&nbsp;the&nbsp;ScriptParse&nbsp;class</font><br />
+<br />
+class&nbsp;myScriptClass:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;ScriptParse<br />
+{<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;private:<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//these&nbsp;functions&nbsp;are&nbsp;the&nbsp;actuall&nbsp;'dooers'&nbsp;of</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//the&nbsp;script&nbsp;when&nbsp;the&nbsp;script&nbsp;hits&nbsp;these&nbsp;things</font><br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//this&nbsp;performs&nbsp;a&nbsp;more&nbsp;complex&nbsp;print&nbsp;operation&nbsp;with</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//&nbsp;the&nbsp;input...uses&nbsp;the&nbsp;'myPrint'&nbsp;keyword</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;domyPrint(std::string&nbsp;inSqe);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//this&nbsp;dumps&nbsp;a&nbsp;matrix&nbsp;out&nbsp;to&nbsp;the&nbsp;screen</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//&nbsp;uses&nbsp;the&nbsp;key&nbsp;word&nbsp;'makematrix'</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;doMakeMatrix(std::string&nbsp;inSqe);<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;public:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//wrap&nbsp;the&nbsp;basic&nbsp;constructos&nbsp;back&nbsp;to&nbsp;the</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//script&nbsp;parse&nbsp;class</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myScriptClass():<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ScriptParse()<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myScriptClass(Parameters&nbsp;&pset):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ScriptParse(pset)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myScriptClass(const&nbsp;Vector&lt;std::string&gt;&nbsp;&in):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ScriptParse()<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//this&nbsp;is&nbsp;the&nbsp;new&nbsp;decide&nbsp;function</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool&nbsp;decide(std::string&nbsp;inSqe);<br />
+};<br />
+<br />
+<font color='#006600'>//create&nbsp;the&nbsp;functions</font><br />
+<br />
+<font color='#006600'>//first&nbsp;create&nbsp;our&nbsp;new&nbsp;decide&nbsp;function</font><br />
+bool&nbsp;myScriptClass::decide(std::string&nbsp;inSqe)<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(inSqe.find(&quot;makematrix(&quot;)&lt;inSqe.size()){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doMakeMatrix(inSqe);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}else&nbsp;if(inSqe.find(&quot;myPrint(&quot;)&lt;inSqe.size()){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;domyPrint(inSqe);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//wrap&nbsp;any&nbsp;other&nbsp;input&nbsp;back&nbsp;to&nbsp;the</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//&nbsp;base&nbsp;class&nbsp;so&nbsp;that&nbsp;loop&nbsp;and&nbsp;assignments</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//and&nbsp;if's&nbsp;work&nbsp;as&nbsp;well</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;ScriptParse::decide(inSqe);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;true;<br />
+}<br />
+<br />
+<br />
+<font color='#006600'>//this&nbsp;parse&nbsp;the&nbsp;'myPrint'&nbsp;statment</font><br />
+<font color='#006600'>//&nbsp;simply&nbsp;prints&nbsp;out&nbsp;what&nbsp;is&nbsp;given&nbsp;to&nbsp;it</font><br />
+<font color='#006600'>//(DOES&nbsp;NOT&nbsp;evalute&nbsp;the&nbsp;expression)</font><br />
+<font color='#006600'>//the&nbsp;syntax::&nbsp;myprint(monkey)</font><br />
+<font color='#006600'>//&nbsp;will&nbsp;print&nbsp;'monkey'&nbsp;to&nbsp;cout</font><br />
+void&nbsp;myScriptClass::domyPrint(std::string&nbsp;inSqe)<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(inSqe.find(&quot;myPrint(&quot;)&lt;inSqe.size())<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;tmS=getInside(inSqe);&nbsp;<font color='#006600'>//get&nbsp;the&nbsp;stuff&nbsp;inside&nbsp;the&nbsp;'('&nbsp;')'</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(tmS.size()==0&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cerr&lt;&lt;&quot;error:&nbsp;&nbsp;myScriptClass::domyPrint&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cerr&lt;&lt;&quot;&nbsp;Bad&nbsp;'on'&nbsp;usage&nbsp;for&nbsp;&quot;&quot;&lt;&lt;inSqe&lt;&lt;&quot;&quot;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cerr&lt;&lt;&quot;&nbsp;should&nbsp;be&nbsp;&quot;myprint(thing)&quot;&nbsp;&quot;&lt;&lt;endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw&nbsp;BL_exception(__FILE__,&nbsp;__LINE__);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//just&nbsp;dump&nbsp;the&nbsp;input&nbsp;to&nbsp;the&nbsp;screen</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cout&lt;&lt;tmS&lt;&lt;endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+}<br />
+<br />
+<br />
+<font color='#006600'>//this&nbsp;parse&nbsp;the&nbsp;'makematrix'&nbsp;statment</font><br />
+<font color='#006600'>//&nbsp;creates&nbsp;a&nbsp;real&nbsp;matrix,&nbsp;then&nbsp;prints&nbsp;it&nbsp;to&nbsp;the&nbsp;screen</font><br />
+<font color='#006600'>//the&nbsp;syntax::&nbsp;makematrix(3,3)</font><br />
+<font color='#006600'>//&nbsp;creates&nbsp;a&nbsp;3x3&nbsp;real&nbsp;matrix&nbsp;filled&nbsp;with&nbsp;0's</font><br />
+<font color='#006600'>//the&nbsp;syntax::&nbsp;makematrix(3,3,5)</font><br />
+<font color='#006600'>//&nbsp;creates&nbsp;a&nbsp;3x3&nbsp;real&nbsp;matrix&nbsp;filled&nbsp;with&nbsp;5's</font><br />
+void&nbsp;myScriptClass::doMakeMatrix(std::string&nbsp;inSqe)<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Vector&lt;std::string&gt;&nbsp;ps;<br />
+<font color='#006600'>//remove&nbsp;any&nbsp;white&nbsp;spaces&nbsp;in&nbsp;the&nbsp;input</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;tmS=removeWhite(inSqe);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(tmS.find(&quot;makematrix(&quot;)&lt;tmS.size())<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmS=getInside(tmS);&nbsp;<font color='#006600'>//get&nbsp;the&nbsp;stuff&nbsp;inside&nbsp;the&nbsp;'('&nbsp;')'</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps=parseComma(tmS);&nbsp;<font color='#006600'>//split&nbsp;the&nbsp;commas&nbsp;in&nbsp;the&nbsp;function</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(ps.size()&lt;=1&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cerr&lt;&lt;&quot;error:&nbsp;&nbsp;myScriptClass::doMakeMatrix&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cerr&lt;&lt;&quot;&nbsp;Bad&nbsp;'on'&nbsp;usage&nbsp;for&nbsp;&quot;&quot;&lt;&lt;inSqe&lt;&lt;&quot;&quot;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cerr&lt;&lt;&quot;&nbsp;should&nbsp;be&nbsp;&quot;makematrix(rows,&nbsp;cols)&quot;&nbsp;&quot;&lt;&lt;endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cerr&lt;&lt;&quot;&nbsp;or&nbsp;&quot;makematrix(rows,&nbsp;cols,&nbsp;filler)&quot;&nbsp;&quot;&lt;&lt;endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw&nbsp;BL_exception(__FILE__,&nbsp;__LINE__);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//our&nbsp;matrix&nbsp;object</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rmatrix&nbsp;mymat;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//the&nbsp;input&nbsp;parameters&nbsp;could&nbsp;be&nbsp;expression</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//so&nbsp;we&nbsp;need&nbsp;to&nbsp;parse&nbsp;them&nbsp;up&nbsp;using&nbsp;the&nbsp;'myParse'&nbsp;object</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myParse.parse(ps[0]);&nbsp;<font color='#006600'>//the&nbsp;rows</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;rows=int(myParse());<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myParse.parse(ps[1]);&nbsp;<font color='#006600'>//the&nbsp;cols</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;cols=int(myParse());<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;filler=0;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//get&nbsp;the&nbsp;filler&nbsp;if&nbsp;any</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(ps.size()&gt;2){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myParse.parse(ps[2]);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filler=myParse();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//resize&nbsp;the&nbsp;matrix</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mymat.resize(rows,&nbsp;cols,&nbsp;filler);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//just&nbsp;dump&nbsp;the&nbsp;matrix&nbsp;to&nbsp;the&nbsp;screen</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cout&lt;&lt;mymat;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+}<br />
+<br />
+/*<br />
+#----&nbsp;an&nbsp;example&nbsp;input&nbsp;file&nbsp;----<br />
+<br />
+A=2;<br />
+loop(i=1:3)<br />
+&nbsp;&nbsp;&nbsp;myPrint(on&nbsp;the&nbsp;matrix&nbsp;tonight&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;print(A)<br />
+&nbsp;&nbsp;&nbsp;if(i==2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;makematrix(i,A+3,&nbsp;5)<br />
+&nbsp;&nbsp;&nbsp;else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;makematrix(i,A)<br />
+&nbsp;&nbsp;&nbsp;end<br />
+end<br />
+<br />
+<br />
+#------end&nbsp;example&nbsp;input&nbsp;file-----<br />
+<br />
+------&nbsp;THe&nbsp;EXPCETED&nbsp;OUTPUT<br />
+Here&nbsp;is&nbsp;the&nbsp;output<br />
+<br />
+----------------------------<br />
+on&nbsp;the&nbsp;matrix&nbsp;tonight&nbsp;<br />
+A=2<br />
+Full&nbsp;matrix:&nbsp;1x2<br />
+[&nbsp;[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;]<br />
+&nbsp;]<br />
+on&nbsp;the&nbsp;matrix&nbsp;tonight&nbsp;<br />
+A=2<br />
+Full&nbsp;matrix:&nbsp;2x5<br />
+[&nbsp;[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;]<br />
+[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;]<br />
+&nbsp;]<br />
+on&nbsp;the&nbsp;matrix&nbsp;tonight&nbsp;<br />
+A=2<br />
+Full&nbsp;matrix:&nbsp;3x2<br />
+[&nbsp;[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;]<br />
+[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;]<br />
+[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;]<br />
+&nbsp;]<br />
+<br />
+------------------------<br />
+*/<br />
+<br />
+int&nbsp;main(int&nbsp;argc,&nbsp;char&nbsp;**argv)<br />
+{<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;fname;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;query_parameter(argc,argv,1,&nbsp;&quot;Input&nbsp;File&nbsp;Name:&nbsp;&quot;,&nbsp;fname);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Parameters&nbsp;pset(fname);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;myScriptClass&nbsp;myScr;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;myScr.parse(pset);<br />
+}<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

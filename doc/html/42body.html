@@ -1,0 +1,328 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("42menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("42menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("42menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("42title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("42");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class HamilGen_t&gt;<br />
+class compute { ...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This class encompasses the algorithm called gamma-compute (M. Hohwy, H. Bildsoe, H. J. Jakobsen, and N. C. Nielsen, J. Magn. Reson. 136, 6 (1999)). <br />
+<br />
+This algorithm greatly speeds up the calculation of FIDs for time dependant periodic Hamiltonians (i.e. spinning Hamiltonians) for equally spaced time steps. The algorithm can be roughly thought of as performing a Fourier Transform of propagator space. Thus it only works for equally spaced time steps and periodic time dependences.  <br />
+<br />
+It also performs an additional speed up in terms of elimination of the gamma powder angle.  This powder angle can be related to various permutations on the time evolution propagators, thus eliminating the need to calculate those propagators for additional gamma angles.<br />
+<br />
+It does have some constraints which are embedded in the algorithm itself.  The algorithm divides a single period (usually a rotor cycle) into N segments.  It calculates a propagator for each of the time segments. The number of segments is directly related to the sweep width of the simulation.  In order for the algorithm to work the spinning speed must be some integer divisor of the sweep width and the sweep width must be larger then the spinning speed.  So if I spin at 5 kHz then the only allowed sweep widths would be 5 kHz, 10 kHz, 15 kHz, etc.  The large the sweep with, as compared to the spinning speed the longer the algorithm takes to calculate the FID because there are more segments. <br />
+<br />
+This class will automatically adjust the sweep width in accordance to the entered spinning speed and sweep width.  After you use the algorithm to calculate an FID, you should use the sweep width and time steps from this class to get the accurate frequency and time of each point.<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+It maintains a pointer to a 'HamilGen_t' class that MUST HAVE the function<br />
+<br />
+matrix Hamiltonian(double t1, double t2, double wr);<br />
+<br />
+where t1 is the being time for a given time step, t2 is the end time for a given time step, and wr is the rotor speed The 'SolidSys' class or any other derived class will have this function.  You can (and are encouraged) to write your own Hamiltonian that override the SolidSys classes function.  'compute' maintains a pointer to the previously declared HamilGen_t class, thus IF the HamilGen_t object is destroyed before the compute object, the compute object will FAIL to work and probably crash your machine.<br />
+<br />
+If you need to use the powder angles, then make sure you perform a 'setPowderAngles' BEFORE you use compute.  Also to set the Rotor angle, you MUST call 'setRotorAngles' BEFORE compute is called.<br />
+<br />
+This class is used by 'oneFID' to calculate the general FID. Compute is used to calculate the spinning FIDs, but 'oneFID' can calculate the FID for either static or spinning and integrate over powder angles (and can do it in parallel).  So in short, this class needs to be used only if you wish to devlope another class like 'oneFID.' For most instances I would recommend you use the 'oneFID' class.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='Constructorscompute'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+compute()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Empty constructor. Sets the default values<br />
+spinning speed=0<br />
+sweep width=0<br />
+HamilGen_t *=NULL<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A;<br />
+compute&lt;SolidSys&gt; myCom;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Constructorscompute'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+compute(HamilGen_t &in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a class that contains the function 'Hamiltonian(t1, t2,wr)'<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The constructor that sets the pointer to the Hamiltonian Generation class.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(2);<br />
+A.addCsa(Csa(100, 0,0,1));<br />
+compute&lt;SolidSys&gt; myC(A); <font color='#006600'>//sets the ptr to A</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Constructorscompute'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+compute(HamilGen_t &in, double wr,double sw, double tminin, double tmaxin)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; a class to generate the Hamiltonina via the function 'Hamiltonian(double t1, double t2, double wr).'<br />
+wr--&gt; the rotor speed in Hz<br />
+sw--&gt; the desired sweep width in Hz<br />
+tminin--&gt; the start time for the rotor cycle<br />
+tmaxin--&gt; the end time, typically tminin+1.0/wr<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The basic constructor that sets the pointer to the HamilGen_t class, sets the rotor speed (wr) and the sweep width (sw).  It will automatically calculate the required sweep width required for the input spinning speed. The time 'tminin' is the start time for a rotor cycle and tmaxin is typically the time for ONE rotor cycle (1.0/wr) after tminin (tminin+1.0/wr).  <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double wr=1000.0, sw=30000.0;<br />
+SolidSys A(1);<br />
+A.addCsa(Csa(300, 2000,0, 0));<br />
+compute&lt;SolidSys&gt; myC(A, wr, sw, 0.0, 1.0/wr);<br />
+<br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractionwr, sweepWidth'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double wr();<br />
+double sweepWidth();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the current values for the Rotor Speed (wr()) and the Sweep width (sweepWidth()).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(1);<br />
+A.addCsa(Csa(300, 4000, 0, 0));<br />
+double wr=5000.0, sw=30000;<br />
+compute&lt;SolidSys&gt; myC(A, wr, sw, 0.0, 1.0/wr);<br />
+cout&lt;&lt;myC.wr(); <font color='#006600'>//prints out '5000'</font><br />
+cout&lt;&lt;myC.sweepWidth(); <font color='#006600'>//prints out '30000'</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentssweepWidth'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void sweepWidth(double in);<br />
+void setSweepWidth(double in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; the new sweep width in Hz<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the sweep width (in Hz). It will then recaculate the nessesary steps and change the sweep width to the closest value to the input.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(1);<br />
+A.addCsa(Csa(300, 4000, 0, 0));<br />
+double wr=5000.0, sw=30000;<br />
+compute&lt;SolidSys&gt; myC(A, wr, sw, 0.0, 1.0/wr);<br />
+myC.sweepWidth(35000.0); <font color='#006600'>//change the sweepwidth</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentswr, setWr'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void wr(double in);<br />
+void setWr(double in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; the new spinning speed in Hz<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the spinnig speed (in Hz). IT will then recaculate the nessesary steps and new sweep width if they need to change.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(1);<br />
+A.addCsa(Csa(300, 4000, 0, 0));<br />
+double wr=5000.0, sw=30000;<br />
+compute&lt;SolidSys&gt; myC(A, wr, sw, 0.0, 1.0/wr);<br />
+myC.wr(6000.0); <font color='#006600'>//change the rotor speed to 6 kHz</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other FunctionsFID'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;complex&gt; FID(matrix_T &ro, matrix &det, int npts);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+ro--&gt; an initial density matrix<br />
+det--&gt; the detect operator<br />
+npts--&gt; the number of points in the FID<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Computes the FID given an input initial density matrix (of any matrix type), a detection matrix and the number of points in the FID requested.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SolidSys A(1);<br />
+A.addCsa(Csa(300, 4000, 0, 0));<br />
+double wr=5000.0, sw=30000;<br />
+compute&lt;SolidSys&gt; myC(A, wr, sw, 0.0, 1.0/wr);<br />
+int npts=512;<br />
+<font color='#006600'>//must set the inital angles</font><br />
+A.setPowderAngles(0.0,0.0,0.0);<br />
+double magA=acos(1.0/sqrt(3.0));<br />
+<br />
+<font color='#006600'>//must set the rotor angle</font><br />
+A.setRotorAngles(0.0, magA);<br />
+<br />
+<font color='#006600'>//the typcall ideal 90 degree pulse</font><br />
+smatrix roeq=A.Ix();<br />
+<font color='#006600'>//the standard detection matrix</font><br />
+matrix detect=A.Ip();<br />
+<br />
+<font color='#006600'>//calculate the FID</font><br />
+Vector&lt;complex&gt; fid=myC.FID(roeq, detect, npts);<br />
+<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

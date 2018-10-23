@@ -1,0 +1,840 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("20menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("20menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("20menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("20title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("20");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Shape_t&gt;<br />
+class XYZshape: public Shape_t, public Grid&lt;UniformGrid&gt;{....<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<ul>Accepted Template Params 
+<ul>
+<li><B>Shape_t</B> --> another class...Like the 'Grid' class, this class uses various Engines as the basic generators for the shapes...For this class we use the UniformGrid as the main Grid generator and the 'Shape_t' as the 'cut-out' from the grid </li>
+</ul>
+Eventually there will be a few types of shapes...for now we have only XYZ shapes meaning they remain in the cartiesian basis (as uposed to the 'spherical' basis)
+</ul> 
+<BR><BR>
+<ul>
+This class is modeled quite closely after the Grid class, the iterator setup is the same as are most of the acsess functions... </li>
+<li>
+This class allows for 2 layers of grid acsess. As i have found from trying to make the Spherical grids 'Translate' and 'Scale' and even create an even volumetric distribution of points, it's really hard (...i know not a real excuse...), not to mention that the equations we are dealing with here in the Land of the Bloch are easily pictured and solved in the Carteisian basis (a better reason really). So here we have 'short-cut' the problem by allowing easily 'cut' out shapes from the main Grid to be utilized as the basic grid. So make cylinders, Spheres, or wacky coils are quite simple to impliment and are volumetrically EVEN (in the X,Y,Z basis, and not counting edge effects) 
+</li>
+<li>
+This class it meant for you TO ADD YOUR OWN SHAPE FUNCTIONS!! rather Create your own 'Shape_t' classes to stick in the XYZshape class...they can be as simple as One function or as complicated as you like. There is no real way for me to come up with all the shapes, so i hopefully made it easy enough for you to write and impliment your own.
+</li> 
+<li>With the proper function (all you need is ONE function defined in your class for the thing to work) everything from this point on should function just as i had created the Shape_t and fully integrated the sucker in the Series...even speed is not an issue as the shapes need only be generated once. </li>
+<li>The Basic Function you input simply takes in a point (x,y,z) that came from the UniformGrid and either Rejects it or Accepts it. (i.e. the point is either outside or inside the funtion)...i call this 'Validation' from here on out </li>
+</ul>
+
+<BR>
+-------------------------------------------------<BR>
+<B>Available Shapes</B>
+<ul>
+<li><a name=&quot;fulls&quot;></a><B>XYZfull</B> 
+<ul>
+  <li>takes the Master Grid, and uses the ENTIRE thing...sort 
+    of a 'dummy' shape (no available parameter settings)</li>
+</ul>
+</li>
+<li><B><a name=&quot;cylinders&quot;></a>XYZcylinder</B> 
+<ul>
+  <li>A Cylinder with the Z-axis as the main axis. You can define 
+    'R', the 'phi' angle distribution andextend of the z axis 
+    <ul>
+      <li>XYZclyinder(coord min, coord max) --> 
+	basic constructor</li>
+      <li>coord min() --> Set the minimum (R, Phi, 
+	Z) that belongs in the shape</li>
+      <li>coord max() --> Set the maximum (R,Phi, Z) 
+	that belong in the shape</li>
+    </ul>
+  </li>
+</ul>
+</li>
+<li><a name=&quot;rects&quot;></a><B>XYZrect</B> 
+<ul>
+  <li>Creates a rectangle inside the grid (this one is a bit silly 
+    becuase the UniformGrid itself is already a rectangle, but 
+    is can be used as a base class for a more complex shape) 
+    <ul>
+      <li>XYZrect(coord min, coord max, coord 
+	center=0) --> basic constructor</li>
+      <li>coord min() --> Set the minimum (X,Y,Z) that 
+	belongs in the shape</li>
+      <li>coord max() --> Set the maximum (X,Y,Z) that 
+	belong in the shape</li>
+      <li>coord center() --> Set the center point (X,Y,Z) 
+	of the shape</li>
+    </ul>
+  </li>
+</ul>
+</li>
+<li><a name=&quot;planeXY&quot;></a><B>XYZplaneXY</B> 
+<ul>
+  <li>A Slice in the XY plane..along an arbitrary line function 
+    y=m x + b... 
+    <ul>
+      <li>XYZplaneXY(double m, double b) --> basic constructor</li>
+      <li>double m() --> Set the slope</li>
+      <li>double b() --> Set the intercept</li>
+      <li>void SetAbove() --> set the accepted points 'Above' 
+	the plane normal</li>
+      <li>void SetBelow() --> set the accepted points 'Below' 
+	the plane normal</li>
+    </ul>
+  </li>
+</ul>
+</li>
+<li><a name=&quot;planeXZ&quot;></a><B>XYZplaneXZ</B> 
+<ul>
+  <li>A Slice in the XZ plane..along an arbitrary line function 
+    y=m x + b... 
+    <ul>
+      <li>XYZplaneXZ(double m, double b) --> basic constructor</li>
+      <li>double m() --> Set the slope</li>
+      <li>double b() --> Set the intercept</li>
+      <li>void SetAbove() --> set the accepted points 'Above' 
+	the plane normal</li>
+      <li>void SetBelow() --> set the accepted points 'Below' 
+	the plane normal</li>
+    </ul>
+  </li>
+</ul>
+</li>
+<li><a name=&quot;planeYZ&quot;></a><B>XYZplaneYZ</B> 
+<ul>
+  <li>A Slice in the YZ plane..along an arbitrary line function 
+    y=m x + b... 
+    <ul>
+      <li>XYZplaneYZ(double m, double b) --> basic constructor</li>
+      <li>double m() --> Set the slope</li>
+      <li>double b() --> Set the intercept</li>
+      <li>void SetAbove() --> set the accepted points 'Above' 
+	the plane normal</li>
+      <li>void SetBelow() --> set the accepted points 'Below' 
+	the plane normal</li>
+    </ul>
+  </li>
+</ul>
+</li>
+<li><a name=&quot;plane3D&quot;></a><B>XYZ3Dplane</B> 
+<ul>
+  <li>A Slice in the 3D plane..along an arbitrary line function 
+    (x,y,z)=(mx,my,mz)*(x,y,z)+ (bx,by,bz)... </li>
+  <li>This one is hard to visiualize in ones head but it allows 
+    for a generic plane slice 
+    <ul>
+      <li>XYZplaneYZ(coord m, coord b) --> 
+	basic constructor</li>
+      <li>coord m() --> Set the slope</li>
+      <li>coord b() --> Set the intercept</li>
+      <li>void SetAbove() --> set the accepted points 'Above' 
+	the plane normal</li>
+      <li>void SetBelow() --> set the accepted points 'Below' 
+	the plane normal</li>
+    </ul>
+  </li>
+</ul>
+</li>
+</ul>
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+PLEASE SEE THE EXAMPLES<BR><BR>
+
+There are 2 basic Ways of Generating complex grid shape patterns. The first is to use the 'XYZblaa' functions above, which is the simplest. However more complex shapes are sometimes desired and are, in fact, combos of the 'XYZblaa' functions above (i.e. a rectangle and a cylinder in one grid array). So i have made a few operators and functions that use the '&&' and '||' (AND and OR) operators to allow you to produce these combo shapes.
+
+<BR><BR>
+NOTE:: THE DOWN SIDE!!-->These expression of multi-shapes CANNOT be declared as a new variable (in order for me to do this i would had to make you make all your shape decalarations global and that is a nasty thing to have to do)...what that means is that you must type out the expression every time you need to use it...as an example... 
+<BR><BR>
+MyShape=XYZrect || XYZcylinder; //This assignment CANNOT BE DONE and will NOT compile 
+
+<BR>
+void {your func name}(XYZrect || XYZcylinder); //this will work fine 
+
+
+<li><b>Examples of the 'Normal/Singluar' Shapes..(in the form of 'code snippit' 
+  and 'picture')</b>
+<ul>
+                  <li ><TT>//set up the 
+                    basic uniform grid layout..<br>
+                    coord&lt;&gt; mins(-1,-1,-1), maxs(1,2,1);<br>
+                    coord&lt;int&gt; dims(30,15,20);<br>
+                    Grid&lt;UniformGrid&gt; BasicG(mins,maxs,dims);<br>
+                    <br>
+                   //set up the XYZshape functions<br>
+                    //default 'full' grid<br>
+                    XYZshape&lt;&gt; MasterGrid(BasicG, XYZfull()); <br>
+                    <img src='full.jpg' ><br>
+                    <br>
+                    <br>
+                    XYZcylinder mys(0,1.0, 0, 3.0*PI/2.0, -2,2);<br>
+                    XYZshape&lt;XYZcylinder&gt; MasterGrid(BasicG,mys); <br>
+                    <img src='cyl.jpg' > <br></TT>
+                  </li>
+                </ul>
+              </li>
+              <li><b> Examples of the 'MULTI' Shapes..(in 
+                the form of 'code snippit' and 'picture')</b> 
+                <ul>
+                  <li>The general syntax for these must be followed..<br>
+                    <br>
+                    <TT>//set up the basic uniform grid 
+                    layout..<br>
+                    coord&lt;&gt; mins(-1,-1,-1), maxs(1,2,1);<br>
+                    coord&lt;int&gt; dims(30,15,20);<br>
+                    Grid&lt;UniformGrid&gt; BasicG(mins,maxs,dims);<br>
+                    <br>
+                    //set up the XYZshape functions<br>
+                    XYZrect rect(coord&lt;&gt;(-1,-3,-1), 
+                    coord&lt;&gt;(0,0,0)); //rectanlg 
+                    shape<br>
+                    XYZplaneXY plane(5, 1);
+                    //an XY plane<br>
+                    plane.SetBelow();<br>
+                    XYZcylinder cyl(0,0.5, 0, PI/2, -2, 2);//a 
+                    cylinder<br>
+                    XYZshape&lt;&gt; MasterGrid(BasicG); //NOTE:: 
+                    no 'XYZshape' placed in here...<br>
+                    <br>
+                    //THIS IS HOW TO CALCULATE 
+                    THE GRIDS....<br>
+                    //the means...&quot;thing in both the rect OR in the cyl&quot;</TT><TT><br>
+                    MasterGrid.calculate(rect || cyl);</TT><br>
+                    <img src='combo1.jpg'> <br>
+                    <br>
+                    <TT>//the means...&quot;thing in both 
+                    the rect AND plane OR in the cyl&quot;<br>
+                    MasterGrid.calculate(plane &amp;&amp; rect || cyl);</TT><br>
+                    <img src='combo2.jpg' > <br>
+                    <br>
+                    <br>
+                  </li>
+                </ul>
+              </li>
+
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsXYZshape'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+XYZshape()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+empty constructor<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;&gt; moo; <font color='#006600'>//this does nothing</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsXYZshape'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+XYZshape(const XYZshape &copy) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp--&gt; another XYZshape of the same shape_t<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+copyies one shape WITH THE SAME 'Shape_t'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZfull&gt; sg();<br />
+XYZshape&lt;XYZfull&gt; sg2(sg); <font color='#006600'>//okay to copy</font><br />
+XYZshape&lt;XYZrect&gt; ug1(sg); <font color='#006600'>//WILL FAIL incompatable engines</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsXYZshape'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+XYZshape(const Shape_t &MyShape, const Grid&lt;UniformGrid&gt; &MyGrid)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+MyShape--&gt;A shape class (a XYXfull, XYZrect, etc)<br />
+MyGrid--&gt; A uniform grid<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This the master constructor<br />
+upon intiailization of this constructor the Shape Grid will acctually be calculated<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; mins(0, 0, 2.1), maxs(1, PI2, 3.0);<br />
+XYZcyclinder myS(mins, maxs); <font color='#006600'>//make the shape</font><br />
+coord&lt;&gt; gmins(-1,-1,-1); gmaxs(4,4,4);<br />
+coord&lt;int&gt; dims(20,20,20);<br />
+Grid&lt;UniformGrid&gt; ug1(gmins, gmaxs, dims); <font color='#006600'>//make the uniform grid</font><br />
+XYZshape&lt;XYZcylinder&gt; MyShape(myS, ugl); <font color='#006600'>//The entire grid and shape are now made</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsXYZshape'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+XYZshape(const Grid&lt;UniformGrid&gt; &MyGrid)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+MyGrid--&gt; A uniform grid<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+sets the master uniform grid to the input, and calculates the shape assuming a default 'Shape_t'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; gmins(-1,-1,-1); gmaxs(4,4,4);<br />
+coord&lt;int&gt; dims(20,20,20);<br />
+Grid&lt;UniformGrid&gt; ug1(gmins, gmaxs, dims); <font color='#006600'>//make the uniform grid</font><br />
+XYZshape&lt;&gt; MyShape( ugl); <font color='#006600'>//The entire grid and shape </font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element ExtractiongridPoint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; gridPoint(int xpos, int ypos, int zpos); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+xpos, ypos, zpos--&gt; the position in the Grid list<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+extracts the Grid Point from the 'Grid&lt;UniformGrid&gt;' under layer...NOT related to the Shape grid points<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+coord&lt;&gt; pt=myG.GridPoint(1,1,1); <font color='#006600'>//extracts the 1,1,1 point from the grid</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionoperator()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; operator(int pos); <br />
+coord&lt;&gt; operator(int xd, int ys, int zd); <br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pos--&gt; the current list position<br />
+xd, yd, zd--&gt; the position of each element desired<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the coord&lt;&gt; at the position 'pos' or at (xd, yd, zd).  Using (xd, yd, zd) is quite slow after many iterations.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+coord&lt;&gt; pt=myG(1,2,3);<br />
+pt=myG(1); <font color='#006600'>//the second shape point extracted</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionoperator(time)'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; &operator()(int i, double t)<br />
+inline coord&lt;&gt; operator()(int i, int j, int k, double t)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i,j,k--&gt; the shape element index<br />
+t--&gt; the time<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+If either the shape or the grid is time dependant, this will return the point at index 'i' at time 't.' Currently there are no Time depdant shapes except fro 'RotatingGrid.'<br />
+if there is not time dependance it will return 'operator(i)'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+coord&lt;&gt; pt=myG(1,5.0); <font color='#006600'>//a point a t=5.0</font><br />
+pt=myG(1); <font color='#006600'>//the same as above</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionPoint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; Point(); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the current point in the iteration loop<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+XYZshape&lt;XYZcylinder&gt;::iterator git(myG);<br />
+coord&lt;&gt; pt=git.Point(); <font color='#006600'>//will return the (0,0,0) element without looping </font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractionPoint(time)'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; Point(double time); --&gt; FOR ITERATORS<br />
+coord&lt;&gt; Point(int i, double t); --&gt; FOR SHAPE<br />
+coord&lt;&gt; Point(int i, int j, int k, double t) --&gt; FOR SHAPE<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i,j,k--&gt; the shape element index<br />
+t--&gt; the time<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+If either the shape or the grid is time dependant, this will return the point at index 'i' (or i,j,k) at time 't.' Currently there are no Time depdant shapes except fro 'RotatingGrid.'<br />
+if there is not time dependance it will return 'operator(i)'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+coord&lt;&gt; pt=myG.Point(1,5.0); <font color='#006600'>//a point a t=5.0</font><br />
+pt=myG.Point(1); <font color='#006600'>//the same as above</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+XYZshape operator=(XYZshape &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; A Shape WITH THE SAME Shape ENGINE!<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+assigns one shape from another...THe ShapeEng of the 'rhs' must be the same as the 'lhs'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+XYZshape&lt;XYZcylinder&gt; myG2=myG; <font color='#006600'>//okay assignment</font><br />
+XYZshape&lt;XYZrect&gt; myG3=myG; <font color='#006600'>//WILL FAIL (not compile) </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setGrid(Grid&lt;UniformGrid&gt; &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; A Uniform Grid<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+this will assign the Uniform grid type (if you wish to change it)<br />
+it will &quot;recalulate&quot; the list inside 'XYZshape' <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+myG.setGrid(MyGrid2); <font color='#006600'>//sets a new uniform grid AND recalcs the shape points</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetShape'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setShape(Shape_t &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; A Shape Engine...must be the same as the XYZshapes Shape type <br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+this will assign a new Shape Engine <br />
+it will &quot;recalulate&quot; the list inside 'XYZshape' <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZcylinder MYshape(0,1,0,PI2, 0, 1), Myshape2(.5,1, 0, PI, 0,1);<br />
+XYZrect Myrect(-1,1,-1,1,-1,1);<br />
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+myG.setShape(Myshape2); <font color='#006600'>//sets a new shape engine AND recalcs the shape points</font><br />
+myG.setShape(Myrect); <font color='#006600'>//This will FAIL</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOprintGrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void printGrid(ostream &out); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; an output stream (a file, a console, etc)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+prints the points valid to the ENTIRE GRID to &quot;out&quot; in the 3 column format ASCII<br />
+&lt;x point&gt; &lt;y point&gt; &lt;z point&gt;<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+ofstream oufile(&quot;lookhere&quot;);<br />
+myG.printGrid(oufile); <font color='#006600'>//will write the grid to the file &quot;lookhere&quot;</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOprintShape'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void printShape(ostream &out); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; an output stream (a file, a console,  etc)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+prints the points valid to the shape to &quot;out&quot; in the 3 column format ASCII<br />
+&lt;x point&gt; &lt;y point&gt; &lt;z point&gt;<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+ofstream oufile(&quot;lookhere&quot;);<br />
+myG.printShape(oufile); <font color='#006600'>//will write the shape to the file &quot;lookhere&quot;</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionscalculate'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void calculate(const ShapeExpr &in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in --&gt; a Shape_t or the multi-combinations of shapes<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+calculates the Points in the shape based on the 'ShapeFunc' inside the 'ShapeExpr'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZcylinder MYshape(0,1,0,PI2, 0, 1), Myshape2(.5,1, 0, PI, 0,1);<br />
+XYZrect Myrect(-1,1,-1,1,-1,1);<br />
+XYZshape&lt;Myrect&gt; myG(MYgrid); <br />
+myG.calculate(Myrect);<br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsempty'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool empty()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+If either 1) the shape has not been calucluated or 2) there are no points in the Shape this will be true<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG; <br />
+myG.empty(); <font color='#006600'>//will be true</font><br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionsgridSize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int gridSize();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the size of the unlying 'Grid&lt;UniformGrid&gt;' not the shape<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+int sizes=myG.gridSize(); <font color='#006600'>//will return the total size of MYgrid</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsinShape'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool inShape(coord&lt;&gt; testpt); <br />
+bool inShape(double x, double y, double z);  <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+testpt--&gt;a point to test weather or not the ShapeEngine will accept this point<br />
+x--&gt; the x position<br />
+y--&gt; the y position<br />
+z--&gt; the z position<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Is simply a linker to the Shape frunctions &quot;ShapeFunc&quot; it will return TRUE if the point is within the shape<br />
+it will return FALSE if the point in NOT within the shape<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+bool sizes=myG.inShape(3,4,5); <font color='#006600'>//is the point (3,4,5) in the shape?</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionssize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int size();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the size of the shape (the number of points that belong inside the shape)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+int sizes=myG.size(); <font color='#006600'>//will return the total size</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsx, y, z'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double x(int i); --&gt; FOR SHAPE<br />
+double y(int i); --&gt; FOR SHAPE<br />
+double z(int i); --&gt; FOR SHAPE<br />
+<br />
+double x(); --&gt; FOR ITERATORS<br />
+double y(); --&gt; FOR ITERATORS<br />
+double z(); --&gt; FOR ITERATORS<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; The i'th element in the z list<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+for SHAPES<br />
+returns the the (X,Y,Z) value at the shape point 'i'<br />
+for ITERATORS<br />
+returns the current Z point in the iteration loop<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+XYZshape&lt;XYZcylinder&gt; myG(MYshape, MYgrid); <br />
+XYZshape&lt;XYZcylinder&gt;::iterator git(myG);<br />
+coord&lt;&gt; pt=git.z(); <font color='#006600'>//will return the (0,0,0) element without looping </font><br />
+double pt=myG.x(3); <font color='#006600'>//will return the 3rd x element </font><br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

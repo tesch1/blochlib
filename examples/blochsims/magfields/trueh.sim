@@ -1,0 +1,50 @@
+
+#the coil section we wish to use...
+section helmz
+
+#our 'split-solonoid'
+helmz{
+	type truehelmholtz
+	loops 1
+	amps 3
+	numpts 8000
+
+	# radius (cm)
+	R 0.3175
+
+	#distance b/w the two coils (cm)
+	length 1.09
+
+	#width between 2 helix layers
+	layerwidth 0.161
+
+	#height between 2 turns in a heliz layer 
+	# if not present will default to layerwidth
+	layerheight 0.161
+
+	#number of helix turns
+	turns 3
+
+	#number of helix layers
+	numlayers 1
+
+	axis z
+}
+
+#number of grids to calculate the field over
+numGrids 2
+
+#our rectangular grid dimensions
+grid1{
+	min -0.125, -0.125, -0.125
+	max 0.125, 0.125, 0.125
+	dim 10, 10, 10
+}
+
+#our rectangular grid dimensions
+grid2{
+	min -1, -1, -1
+	max 1, 1, 1
+	dim 10, 10, 10
+}
+

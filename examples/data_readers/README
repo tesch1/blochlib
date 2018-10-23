@@ -1,0 +1,25 @@
+BlochLib Data Readers and Converters
+
+  
+ --data_readers/
+  --matlab/
+    --matlabreader.cc --> reads the test file 'matlab.mat' 
+                            and extracts certain data from it
+  			    writing out a new file
+  --spinsight/
+    --ssightconvert.cc--> reads a the SPIN SIGHT DIRECTORY structure
+                          to produce a Matlab or Text File of the data
+                           (1D or 2D)
+  --varian/                       
+    --varianconvert.cc--> converts 1D or 2D VNMR DIRECTORY
+                          tructure files to ASCII or matlab files 
+  
+  --burker/
+    --brukerconvert.cc--> reads a XWINNMR DIRECTORY structure
+                          to produce a Matlab or Text File of the data
+                          (1D or 2D)
+  --nmr2wav/
+    --waveconvert.cc--> reads either XWINNMR, SpinSight, or VNMR 
+                        directories to produce BOTH a Matlab file
+                        AND a bunch of .WAV (audio) files
+   

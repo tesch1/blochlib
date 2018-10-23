@@ -1,0 +1,86 @@
+
+#
+# a simple static spectra using 2 differnet spin 
+# systems for each dimension
+# using the basic algorithms
+
+spins{
+	
+	#the global options
+	numspin 2
+	T 1H 0
+	T 1H 1
+	
+	spin1{
+	#csa <iso> <del> <eta> <spin>
+		C 5000  2134 0 0
+		C -5000 2789 0.5 1
+	}
+	
+	spin2{
+		D 1254 0 1
+	}
+}
+
+
+parameters{	
+
+	powder1{
+		aveType ../../../../crystals/rep678
+		thetaStep 233
+		phiStep 144
+		gammaStep 0
+	}		
+
+#the intergrator step size	
+	maxtstep=1e-6
+
+#number of 1D fid points	
+	npts1D=256	
+
+#sweepwidth
+	sw=10000
+
+#the eq matrix
+	roeq=Ix
+}
+
+
+pulses{
+
+#our 2D points
+	fidpts=256
+	2D()
+	#show()
+#set the spinning	
+	wr=0
+#set the rotor
+	rotor(0)
+	
+#set the detection matrix
+	detect(Ip)
+#set our initial matrix
+	ro(Ix)
+	dwell2D=0.00002
+#set the inital matrix
+	loop(i=0:fidpts-1)	
+		
+	#use the second spin system for the direct dim
+		spinsys(spin2)
+	
+	#collect the fid (to get the first point)
+		fid(i)
+	
+	#do not need to propogate the last point
+		if(i!=(fidpts-1))
+		# 'indirect dim'
+			spinsys(spin1)
+
+		#a delay for the second dim
+			1H:delay(dwell2D)	
+		end
+	end
+	savefidmatlab(2dstat) #save as a matlab file
+}
+
+	

@@ -1,0 +1,90 @@
+
+#the multplit spin list
+# preforms a simple post-C7 over 
+# different rotor angles
+
+spins{
+	
+	#the global options
+	numspin 2
+	T 1H 0
+	T 1H 1
+	D 1500 0 1	
+}
+
+parameters{	
+
+	powder{
+		aveType rect
+		thetaStep 20
+		phiStep 20
+	}		
+
+#the intergrator step size	
+	maxtstep=1e-6
+
+#number of 1D fid points	
+	npts1D=256	
+}
+
+
+pulses{
+
+#our post-C7 sub pulse section
+	sub1{	
+	#set the rotor angle to the global var
+		rotor=myR
+	#post C7 pulse amplitude
+		amp=7*wr
+		amplitude(amp)
+	#phse stepers
+		stph=0
+		phst=360/7
+	#pulse times
+		t90=1/amp/4
+		t270=3/amp/4
+		t360=1/amp
+		
+	#post C7 loop
+		loop(k=1:7)
+			1H:pulse(t90, stph) 
+			1H:pulse(t360, stph+180) 
+			1H:pulse(t270, stph)
+			stph=stph+phst
+		end
+	}
+	
+	fidpt=32
+
+#collection a matrix of data	
+	2D()
+
+# concidered point to point
+	ptop()
+
+#show()
+#set the spinning	
+	wr=5000
+# set the rotor angle steps
+	rotst=90/fidpt
+#the basic rotor angle
+	myR=0
+#set the detection matrix
+	detect(Iz)
+
+#loop over the rotor steps
+	loop(m=0:fidpt-1)
+	#must use 'use' as the rotor angle changes
+		use(sub1)
+	#collect the fid at the 'mth' position
+		fid(m)
+		
+	#advance the rotor angle
+		myR=myR+rotst
+	#reset the ro back to the eq
+		ro(Iz)
+	end
+	savefidmatlab(c7rotor) #save the matlab file
+}
+
+	

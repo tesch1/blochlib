@@ -1,0 +1,118 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Iterators::The fast way to do loops<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Here is where the speed arises, and it is also here you need to be careful about which looping method you use. There are two basic types. The iterator is meant for Speed, but it has certain restrictions...<br />
+<br />
+Below is a code snipit example of how to use the iterators.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+The method above uses pointers to the Grid&lt;&gt; and holds a 'coord&lt;&gt;' already intialized so the function &quot;Point()&quot; is only returning the reference to the coord which is smaller in return size AND it avoids 'reinitializing' the return coord&lt;&gt; (which can be quite costly especially after a few million iterations) <br />
+<br />
+NOTE::YOU ACSESS GRID ELEMENTS FROM THE ITERATOR!!!!! <br />
+<br />
+Draw backs--&gt; You are not really sure which direction is being iterated nor the order of the points and returned...I have, in these rectangular, choosen X to be the most varing direction, and Z the slowest varying direction...There are therefor a few 'directional functions' builtin to the iterators...see the example below<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<font color='#006600'>//the&nbsp;two&nbsp;corner&nbsp;points&nbsp;for&nbsp;a&nbsp;uniform&nbsp;rectangular&nbsp;grid</font><br />
+coord&lt;&gt;&nbsp;mins(-1,&nbsp;-1,&nbsp;-1),&nbsp;maxs(1,1,1);&nbsp;<br />
+<font color='#006600'>//the&nbsp;number&nbsp;of&nbsp;steps&nbsp;between&nbsp;the&nbsp;min&nbsp;and&nbsp;max&nbsp;for&nbsp;each&nbsp;direction</font><br />
+coord&lt;int,3&gt;&nbsp;dims(10,10,10);&nbsp;<br />
+<font color='#006600'>//a&nbsp;Uniform&nbsp;Rectangular&nbsp;Grid</font><br />
+Grid&lt;UnifromGrid&gt;&nbsp;myg(mins,&nbsp;maxs,&nbsp;dims);&nbsp;<br />
+<font color='#006600'>//sets&nbsp;up&nbsp;an&nbsp;iterator&nbsp;to&nbsp;loop&nbsp;throught&nbsp;the&nbsp;grid</font><br />
+Grid&lt;UniformGrid&gt;::iterator&nbsp;myIt(myg);<br />
+while(myIt){<br />
+<font color='#006600'>//the&nbsp;&quot;Point()&quot;&nbsp;is&nbsp;a&nbsp;&quot;coord&lt;double&gt;&quot;&nbsp;which&nbsp;prints&nbsp;like&nbsp;&quot;x&nbsp;y&nbsp;z&quot;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;myIt.Point()&lt;&lt;endl;&nbsp;<font color='#006600'>//print&nbsp;the&nbsp;current&nbsp;point&nbsp;to&nbsp;the&nbsp;screen</font><br />
+<font color='#006600'>//you&nbsp;can&nbsp;use&nbsp;&quot;myIt++&quot;&nbsp;but&nbsp;it&nbsp;is&nbsp;slower&nbsp;then&nbsp;the&nbsp;&quot;++myIt&quot;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;++myIt;&nbsp;<font color='#006600'>//advance&nbsp;the&nbsp;iterator</font><br />
+}&nbsp;<br />
+myIt.reset();&nbsp;<font color='#006600'>//reset&nbsp;the&nbsp;iterator&nbsp;to&nbsp;loop&nbsp;again</font><br />
+while(myIt){<br />
+<font color='#006600'>//the&nbsp;&quot;Point()&quot;&nbsp;is&nbsp;a&nbsp;&quot;coord&lt;double&gt;&quot;&nbsp;which&nbsp;prints&nbsp;like&nbsp;&quot;x&nbsp;y&nbsp;z&quot;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;myIt.Point()&lt;&lt;&quot;&nbsp;moo&quot;&lt;&lt;endl;&nbsp;<font color='#006600'>//print&nbsp;the&nbsp;current&nbsp;point&nbsp;to&nbsp;the&nbsp;screen</font><br />
+<font color='#006600'>//you&nbsp;can&nbsp;use&nbsp;&quot;myIt++&quot;&nbsp;but&nbsp;it&nbsp;is&nbsp;slower&nbsp;then&nbsp;the&nbsp;&quot;++myIt&quot;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;++myIt;&nbsp;<font color='#006600'>//advance&nbsp;the&nbsp;iterator</font><br />
+}<br />
+<br />
+<font color='#006600'>//---------------------------------------------------</font><br />
+<font color='#006600'>//reset&nbsp;the&nbsp;xdirection&nbsp;iterator</font><br />
+myIt.Xreset();&nbsp;<br />
+while(myIt.Xend())<br />
+{<br />
+<font color='#006600'>//prints&nbsp;JUST&nbsp;the&nbsp;current&nbsp;'X'</font><br />
+&nbsp;&nbsp;&nbsp;cout&lt;&lt;myIt.x()&lt;&lt;endl;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;<font color='#006600'>//prints&nbsp;the&nbsp;entire&nbsp;Point...only&nbsp;the&nbsp;'x'&nbsp;point&nbsp;will&nbsp;move&nbsp;here</font><br />
+&nbsp;&nbsp;&nbsp;cout&lt;&lt;myIt.Point()&lt;&lt;endl;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;<font color='#006600'>//this&nbsp;advances&nbsp;the&nbsp;x&nbsp;counter&nbsp;until&nbsp;ALL&nbsp;the&nbsp;x's&nbsp;have&nbsp;been&nbsp;displayed</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;myIt.XadvanceGrid();<br />
+}&nbsp;<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

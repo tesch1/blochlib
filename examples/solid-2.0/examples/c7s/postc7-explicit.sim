@@ -1,0 +1,87 @@
+
+# preforms a simple point-to-point C7 (a 1D FID)
+# put rather letting the program do the ptop
+# it does the point collection explicitly
+# this will be slower then simply setting the ptop
+# flag becuase it relies on non-compile code
+# to do the loop....
+
+spins{
+	
+	#the global options
+	numspin 2
+	T 1H 0
+	T 1H 1
+	D 1500 0 1	
+}
+
+parameters{	
+
+#our basic powder average
+	powder{
+		aveType zcw
+		thetaStep 233
+		phiStep 144
+	}		
+
+#the intergrator step size	
+	maxtstep=1e-6
+
+#number of 1D fid points	
+	npts1D=256	
+
+}
+
+
+pulses{
+
+#our post-C7 sub pulse section
+	sub1{	
+	#set the rotor angle to the global var
+		rotor=rad2deg*acos(1/sqrt(3))
+	#post C7 pulse amplitude
+		amp=7*wr
+		amplitude(amp)
+	#phse stepers
+		stph=0
+		phst=360/7
+	#pulse times
+		t90=1/amp/4
+		t270=3/amp/4
+		t360=1/amp
+		
+	#post C7 loop
+		loop(k=1:7)
+			1H:pulse(t90, stph) 
+			1H:pulse(t360, stph+180) 
+			1H:pulse(t270, stph)
+			stph=stph+phst
+		end
+	}
+
+#a single fid is concidered point to point
+	ptop()
+
+#set the spinning	
+	wr=5000
+
+#set the detection matrix
+	detect(Iz)
+	
+#set the density matrix
+	ro(Iz)
+	loop(i=0:npts1D-1)
+	#collect the fid at point i
+		fid(i)	
+	
+	#can use 'reuse' as things need to be set only once 
+	# in our subsection
+		reuse(sub1)
+
+	# do NOT set ro back to equilibrium as
+	# we want the last ro to be used for the next point
+	end
+	savefidtext(simpC7ex) #save tas a text file
+}
+
+	

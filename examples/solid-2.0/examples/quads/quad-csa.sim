@@ -1,0 +1,51 @@
+
+# Combined effect of second-order quadrupolar coupling and
+# chemical shift anisotropy on the central transition in MAS
+# NMR of quadrupolar nuclei. 87Rb MAS NMR of Rb ClO4.
+# T. Vosegaard, J. Skibsted, H. Bildsoe, H. J. Jakobsen
+# J. Phys. Chem. v99, p10731 (1995)
+
+spins{	
+	#the global options
+	numspin 1
+	T 87Rb 0
+	Q 3e6 0.19 0
+	#C -6523 -6822 0.27 0 95 34 63
+}
+
+parameters{	
+
+	powder{
+		aveType ../../../../crystals/ZCW_3_1154
+	}		
+
+#the intergrator step size	
+	maxtstep=1e-6
+
+#number of 1D fid points	
+	npts1D=8192	
+
+#set the spinning	
+	wr=2080
+	
+#sweepwidth
+	sw=41600
+	
+#the magnetic field
+	Bfield=498e6
+}
+
+
+pulses{
+	rotor=rad2deg*acos(1/sqrt(3))	#set the rotor
+	ro(Ix)	#set the inital matrix
+	detect(Ix)	#set the detection matrix
+
+#no pulses nessesary
+
+	fid()	#collect the fid 
+
+	savefidtext(simpQ) #save as a text file
+}
+
+	

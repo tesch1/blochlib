@@ -1,0 +1,603 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("33menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("33menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("33menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("33title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("33");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class Rotations {...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<ul>
+  <li>The idea of the class is to simplify the syntax for multiple tensorial rotation 
+    and/or cartesian of spin interactions.<br>
+    In a High magnetic field we only care about the FINAL m=0 component of the 
+    resulting rotation so<br>
+  </li>
+  <li>Using Spherical Tensors.<br>
+    <ul>
+      <li>For any give Spin interaction in the Solid State we can have up to 3 
+        different rotations going from the crystal frame to the lab frame 
+        <ol>
+          <li>PAS-->Molecule (rotation from principle axis frame to the molecule 
+            frame) 
+            <ul>
+              <li>These rotation are handled by the 'Interaction Class' (Dip, 
+                Quad, J, CSA) and take the static values of 'eta', 'del', 
+                'iso' and rotate them into a '5 vector' i.e. (A-2, A-1, A0, 
+                A1, A2) of the MOLECULE FRAME which will be called &quot;<span class=&quot;exampleCode&quot;>crystalAs</span>.&quot;</li>
+              <li>If there is no relative orientation then this five vector is 
+                typically the coupling value (see the A_Dip_pas, etc as an example)</li>
+            </ul>
+          </li>
+          <li>Molecule-->Rotor (rotation of the molecule into a powder frame with 
+            respect to the rotor) 
+            <ul>
+              <li>If the sample is not physically spinning then we only need the 
+                Final 'A20' term after the rotation and can be represented by 
+                <blockquote> 
+                  <p>A20=Sum_m[ D_0,m * crystalAs[m]]</p>
+                  <p>Where 'D' is the wigner rotation matrix</p>
+                  <p>NOTE:: This 'D' is the same for all Spins and interactions 
+                    for a given powder angle so we need only to calculate it once...the 
+                    Rotations Class calculates it via...</p>
+                  <p><TT>Rotation::setPowderAngles(double phi, double theta, double 
+                    gamma)<br>
+                    </TT>and is stored in the class matrix '<span class=&quot;exampleCode&quot;>powderAs</span>'</p>
+                </blockquote>
+              </li>
+              <li>So our final A20 term is calculated via<br>
+                <br>
+                <TT>A20=Rot.powderAs(0,2)*crystalAs[0] //wigner2(-2,0)*A(-2)<br>
+                +Rot.powderAs(1,2)*crystalAs[1] //wigner2(-1,0)*A(-1)<br>
+                +Rot.powderAs(2,2)*crystalAs[2] //wigner2(0,0)*A(0)<br>
+                +Rot.powderAs(3,2)*crystalAs[3] //wigner2(1,0)*A(1)<br>
+                +Rot.powderAs(4,2)*crystalAs[4]; //wigner2(2,0)*A(-2)</TT> 
+                <p><br>
+                  This term is then used to multiply the T20 spin tensor... and 
+                  our hamiltonian is calculated</p>
+                <blockquote> 
+                  <p>H= A20*T20 (in a High field)</p>
+                </blockquote>
+              </li>
+            </ul>
+          </li>
+          <li>Rotor-->Lab (if the rotor is spinning then each crystallite is also 
+            spinning) 
+            <ul>
+              <li>Here the calculation gets more involved, the Powder wigners 
+                that we could ignore in the last rotation now get mixed into a 
+                NEW A20...but as we are still only interested in the final m=0 
+                part we can write our total rotation as 
+                <blockquote> 
+                  <p>A20=Sum_mp[ D_0,mp(wr, beta)*Sum_m [ D_mp,m(a,b,g) * crystalAs(m)] 
+                    ]</p>
+                </blockquote>
+                <p>To calculate the nessesary Spinning Terms we use</p>
+                <blockquote> 
+                  <p><TT>//set the spinner wigners<br>
+                    Rotation::setSpinnerAngles(double alpha, double theta) </TT><br>
+                    <br>
+                    <TT>alpha</TT> is typically the rotor speed * time (*2Pi)<br>
+                    <TT>beta</TT> is the axis the rotor makes with the B_o field.</p>
+                </blockquote>
+                <p>The above equation can written in the code for is</p>
+                <blockquote> 
+                  <p><TT>A20=Sum_mp [Sum_m [Rot.spinnerAs(mp)*Rot.powerAs(mp,m)*crystalAs(m))]]</TT></p>
+                </blockquote>
+                <p>again out Hamiltonian is This A20*T20...</p>
+              </li>
+              <li>These 'spinnerAs' are also the same for every spin and interaction 
+                (they only depend on the rotor) so this class provides a nice 
+                way to share in the info AND explicitly show people the rotations 
+                you are performing....</li>
+            </ul>
+          </li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li>Using Cartesian Rotations 
+    <ul>
+      <li>As in the Spherical case, we still have 3 different rotations, however, 
+        the rotations are implimented differently. 
+        <ol>
+          <li> PAS-->Molecule (rotation from principle axis frame to the molecule 
+            frame) 
+            <ul>
+              <li>The PAS of the system can now be represented as a 3x3 tensor 
+                (rather then the 5 vector of sphericals tensors)<br>
+                For instance a Quadrupole has a Cartesian PAS frame of<br>
+                <TT>[(eta-1)/2, 0, 0]<br>
+                [0, -(eta+1)/2, 0] <br>
+                [0, 0, 1]</TT> </li>
+              <li>To rotate this intial tensor into the Molecule frame, we simply 
+                need a 3D rotation matrix, called via 
+                <blockquote> 
+                  <p><TT>rmatrix Rot=rotationMatrix3D(alpha, beta, gamma);</TT> 
+                  </p>
+                  <p>This provides a 3x3 rotation matrix, and the new molecule 
+                    frame is just<br>
+                    <br>
+                    <TT>rmatrix Molecule=Rot*PAS*transpose(Rot);</TT></p>
+                </blockquote>
+              </li>
+              <li>These operations are handled INSIDE the Spin-Interaction (Csa, 
+                Quad, Dip, etc) classes, NOT the Rotations class, as they only 
+                need to typically be applied once during an simulation.</li>
+            </ul>
+          </li>
+          <li> Molecule-->Rotor (rotation of the molecule into a powder frame 
+            with respect to the rotor) </li>
+          <ul>
+            <li>This is where the Rotations Class is used.</li>
+            <li>All we need to do is to create a Rotation Matrix from the Molecule 
+              to the Rotor via 
+              <blockquote> 
+                <p><TT>Rotations::setPowderAngles(alpha, beta, gamma).</TT></p>
+                <p>This assumes that you have set the <TT>RotationsType=Rotations::Cartesian, 
+                  </TT>or <TT>Rotations::All.</TT></p>
+              </blockquote>
+            </li>
+            <li>Then we rotate the Molecule via 
+              <blockquote> 
+                <p><tt>rmatrix Rotor=(Rotations::cartPowder)*Molecule*transpose(Rotations::cartPowder);</tt></p>
+              </blockquote>
+            </li>
+            <li>Sould we not need any more Rotations (i.e. not spinning) then 
+              to calculate the hamiltonian, all we need is the final state of 
+              the Z element of the resulting matrix 
+              <blockquote> 
+                <p><tt>H=Rotor(2,2)*{interaction strength}*T20</tt></p>
+              </blockquote>
+            </li>
+          </ul>
+          <li>Rotor-->Lab (if the rotor is spinning then each crystallite is also 
+            spinning) 
+            <ul>
+              <li>Again, we simply need the 3D rotation matrix from the Rotor 
+                to the lab via</li>
+              <blockquote> 
+                <p><tt>Rotations::setRotorAngles(alpha, beta, gamma=0).</tt></p>
+                <p>This assumes that you have set the <tt>RotationsType=Rotations::Cartesian, 
+                  </tt>or <tt>Rotations::All.</tt></p>
+              </blockquote>
+              <li>Then we rotate the Molecule via 
+                <blockquote> 
+                  <p><tt>rmatrix Final=(Rotations::cartSpin)*Rotor*transpose(Rotations::cartSpin);</tt></p>
+                </blockquote>
+              </li>
+              <li>Sould we not need any more Rotations (i.e. not spinning) then 
+                to calculate the hamiltonian, all we need is the final state of 
+                the Z element of the resulting matrix 
+                <blockquote> 
+                  <p><tt>H=Final(2,2)*{interaction strength}*T20</tt></p>
+                </blockquote>
+              </li>
+              <li>For the second order Quadrupole, other matrix elements from 
+                Final are used.</li>
+            </ul>
+          </li>
+        </ol>
+      </li>
+      <li>Some Numerical Notes::
+        <ul>
+          <li>Using the cartesian space rotations is more efficent then the Spherical 
+            rotations in general (i.e. if you are spinning and have powder angles). 
+            But for special cases and interactions (i.e. a non spinning dipole-dipole 
+            interaction) the Hamitonian is faster generated using the spherical 
+            rotations. The Interaction classes (Quad, Dip, Csa) have been tuned 
+            for such optimal performaces</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul></blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+<ul>
+        <li>Things to note:: 
+          <ul>
+            <li>The treatment for second order quadrupoles is different then what 
+              is shown here because we have a mixture of each sub rotation element 
+              for the nasty details look to 'src/QMspins/qua.cc'</li>
+          </ul>
+        </li>
+      </ul></blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Global Functions'></a>Global Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Global FunctionsrotationMatrix3D'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rmatrix rotationMatrix3D(double a, double b, double g);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+a--&gt; the alpha Euler angle in RADIANS<br />
+b--&gt; the beta Euler angle in RADIANS<br />
+g--&gt; the gamma Euler angle in RADIANS<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Return a 3x3 real matrix containing the elements to rotate a 3-vector (or another 3x3 tensor) by the Euler angles [a,b,g].<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+rmatrix myRot=rotationMatrix3D(pi/4, pi/5, 0);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Public Vars'></a>Public Vars</font>
+</td></tr></table>
+<tr><td>
+<a name='Public Varsalpha, beta, chi'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double alpha;<br />
+double beta;<br />
+double chi;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the current Spinner angles.  These are set when 'setPowderAngles' is called.  <br />
+<br />
+alpha is typically {time}*{spinning speed}<br />
+beta is typically the rotor angle (i.e. the MagicAngle)<br />
+chi is almost always 0.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Rotations myRots(Rotations::Spherical);<br />
+myRots.setRotorAngles(0.1*5000*PI2, 54.7*DEG2RAD);<br />
+cout&lt;&lt;myRots.beta;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Public VarscartPowder'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rmatrix cartPowder<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This holds the Cartesian Rotation matrix (a real 3x3 matrix) for rotation of vectors for the Powder Angles.  It is calculated is the RotationType=All, or Cartesian everytime 'setPowderAngles' is called.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Rotations myRots(Rotations::Cartesian);<br />
+myRots.setPowderAngles(45*DEG2RAD, 45*DEG2RAD,45*DEG2RAD);<br />
+coord&lt;&gt; v(1,1,1); <font color='#006600'>//a vector to rotate</font><br />
+v=myRots.cartPowder*v;<font color='#006600'>//rotate the vector</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Public VarscartSpin'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rmatrix cartSpin;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This holds the Cartesian Rotation matrix (a real 3x3 matrix) for rotation of vectors for the Rotor Angles. It is calculated is the RotationType=All, or Cartesian everytime 'setPowderAngles' is called.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Rotations myRots(Rotations::Cartesian);<br />
+myRots.setRotorAngles(45*DEG2RAD, 45*DEG2RAD,45*DEG2RAD);<br />
+coord&lt;&gt; v(1,1,1); <font color='#006600'>//a vector to rotate</font><br />
+v=myRots.cartSpin*v; <font color='#006600'>//rotate the vector</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Public Varsphi, theta, gamma'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double phi;<br />
+double theta;<br />
+double gamma;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Rotations myRots(Rotations::Spherical);<br />
+myRots.setPowderAngles(45*DEG2RAD, 45*DEG2RAD,45*DEG2RAD);<br />
+cout&lt;&lt;myRots.phi;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the current Powder angles.  These are set when 'setPowderAngles' is called.  <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Public VarspowderAs'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+matrix powderAs;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This variable stores the entire Wigner rank 2 matrix (a 5x5 Full matrix). It is calculated is the RotationType=All, or Spherical everytime 'setPowderAngles' is called.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Rotations myRots(Rotations::Spherical);<br />
+myRots.setPowderAngles(45*DEG2RAD, 45*DEG2RAD,45*DEG2RAD);<br />
+myRots.powderAs(2,2); <font color='#006600'>//get the wigner(m=0, mp=0) component</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Public VarsRotationType'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int RotationType;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This stores the selected type of rotations to perform.  Its values can be<br />
+<br />
+Rotations::Spherical<br />
+Rotations::Cartesian<br />
+Rotations::All<br />
+If Rotations::Spherical is selected, then the rotational components 'powderAs' and 'spinnerAs' will be calculated using the Spherical Tenors upon a new input of Euler angles to either 'setPowderAngles' or 'setRotorAngles.<br />
+<br />
+If Rotations::Cartesian is selected, then the rotational components 'cartPowder' and 'cartSpin' will be calculated using the Cartesian Rotation matrices upon a new input of Euler angles to either 'setPowderAngles' or 'setRotorAngles.<br />
+<br />
+If Rotations::All is selected, then both Spherical and Cartesian variables will be calculated. THIS IS THE DEFAULT.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Rotations myRots(Rotations::Cartesian);<br />
+<font color='#006600'>//change the calculation type to spherical</font><br />
+myRots.RotationType=Rotations::Spherical;<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Public VarsspinnerAs'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;complex&gt; spinnerAs;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This variable stores the entire Wigner rank 2 values for <br />
+m=0, mp=-2, -1, 0, 1, 2 in a length 5 Vector. It is calculated is the RotationType=All, or Spherical everytime 'setPowderAngles' is called.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Rotations myRots(Rotations::Spherical);<br />
+myRots.setRotorAngles(45*DEG2RAD, 45*DEG2RAD,45*DEG2RAD);<br />
+myRots.spinnerAs(2); <font color='#006600'>//get the wigner(m=0, mp=0) component</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsRotations'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Rotations(int type=Rotations::All);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+type--&gt; a Rotation Type integer<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is a constructor that requires a rotation type.  The type can be<br />
+<br />
+Rotations::Spherical<br />
+Rotations::Cartesian<br />
+Rotations::All<br />
+<br />
+If Rotations::Spherical is selected, then the rotational components 'powderAs' and 'spinnerAs' will be calculated using the Spherical Tenors upon a new input of Euler angles to either 'setPowderAngles' or 'setRotorAngles.<br />
+<br />
+If Rotations::Cartesian is selected, then the rotational components 'cartPowder' and 'cartSpin' will be calculated using the Cartesian Rotation matrices upon a new input of Euler angles to either 'setPowderAngles' or 'setRotorAngles.<br />
+<br />
+If Rotations::All is selected, then both Spherical and Cartesian variables will be calculated. THIS IS THE DEFAULT.<br />
+<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Rotations AllRots; <font color='#006600'>//the default is Rotations::All</font><br />
+Rotations myRots(Rotations::Cartesian);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other FunctionssetPowderAngles'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setPowderAngles(double phi, double theta, double gamma=0.);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+[alpha, beta, gamma]--&gt; Euler angles in RADIANS<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the rotation variables for the powder rotations. It will only calculate the variables IF the angles 'alpha, beta, gamma' have changed since the function was last called. It will also choose to calculate the variables based on the RotationType.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Rotations myRots(Rotations::Cartesian);<br />
+myRots.setPowderAngles(45*DEG2RAD, 45*DEG2RAD,45*DEG2RAD);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionssetRotorAngles'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setRotorAngles(double alpha, double beta, double gamma=0.0);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+[alpha, beta, gamma]--&gt; Euler angles in RADIANS<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the rotation variables for the rotor rotations.  It will only calculate the variables IF the angles 'alpha, beta, gamma' have changed since the function was last called.  It will also choose to calculate the variables based on the RotationType.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Rotations myRots(Rotations::Cartesian);<br />
+myRots.setRotorAngles(45*DEG2RAD, 45*DEG2RAD,45*DEG2RAD);<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

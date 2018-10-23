@@ -1,0 +1,455 @@
+sequencerun_funcs.o: sequencerun_funcs.cc sequencerun.h \
+ sequenceparse.h /usr/local/include/blochlib/blochlib.h \
+ /usr/local/include/blochlib/blochconfig.h \
+ /usr/local/include/blochlib/mpi/mpi_config.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/new \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/stddef.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/exception \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/string \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/std/bastring.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/cstddef \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/std/straits.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/cctype \
+ /usr/include/ctype.h /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+ /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+ /usr/include/endian.h /usr/include/bits/endian.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/cstring \
+ /usr/include/string.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/alloc.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_config.h \
+ /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/include/bits/wchar.h /usr/include/gconv.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_alloc.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/iostream.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/streambuf.h \
+ /usr/include/libio.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/stdarg.h \
+ /usr/include/stdlib.h /usr/include/sys/types.h /usr/include/time.h \
+ /usr/include/sys/select.h /usr/include/bits/select.h \
+ /usr/include/bits/sigset.h /usr/include/bits/time.h \
+ /usr/include/sys/sysmacros.h /usr/include/alloca.h \
+ /usr/include/assert.h /usr/include/pthread.h /usr/include/sched.h \
+ /usr/include/signal.h /usr/include/bits/initspin.h \
+ /usr/include/bits/sigthread.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/iterator \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_relops.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_iterator.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/std/bastring.cc \
+ /usr/local/include/blochlib/container/containers.h \
+ /usr/local/include/blochlib/container/complex.h /usr/include/math.h \
+ /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h \
+ /usr/include/bits/mathcalls.h /usr/include/bits/mathinline.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/fstream \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/fstream.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/iostream \
+ /usr/include/stdio.h /usr/include/bits/stdio_lim.h \
+ /usr/include/bits/stdio.h \
+ /usr/local/include/blochlib/utils/blassert.h \
+ /usr/include/bits/signum.h /usr/include/bits/siginfo.h \
+ /usr/include/bits/wordsize.h /usr/include/bits/sigaction.h \
+ /usr/include/bits/sigcontext.h /usr/include/asm/sigcontext.h \
+ /usr/include/bits/sigstack.h \
+ /usr/local/include/blochlib/container/rankType.h \
+ /usr/local/include/blochlib/container/grids/coords.h \
+ /usr/local/include/blochlib/container/Vector/Vector.h \
+ /usr/local/include/blochlib/container/MemChunk.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/iomanip \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/iomanip.h \
+ /usr/local/include/blochlib/container/operations.h \
+ /usr/local/include/blochlib/container/range.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/climits \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/limits.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/syslimits.h \
+ /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+ /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/bits/posix2_lim.h \
+ /usr/local/include/blochlib/container/Vector/Vectoraux.h \
+ /usr/local/include/fftw.h \
+ /usr/local/include/blochlib/container/matrix/matrix.h \
+ /usr/local/include/blochlib/container/matrix/_matrix.h \
+ /usr/local/include/blochlib/container/matrix/imatrix.h \
+ /usr/local/include/blochlib/container/matrix/genmatrix.h \
+ /usr/local/include/blochlib/container/matrix/matrixconfig.h \
+ /usr/local/include/blochlib/container/matrix/dmatrix.h \
+ /usr/local/include/blochlib/container/matrix/fmatrix.h \
+ /usr/local/include/blochlib/container/matrix/smatrix.h \
+ /usr/local/include/blochlib/container/matrix/hmatrix.h \
+ /usr/local/include/blochlib/container/matrix/trimatrix.h \
+ /usr/local/include/blochlib/container/matrix/matmatmul.h \
+ /usr/local/include/blochlib/container/matrix/matvec.h \
+ /usr/local/include/blochlib/container/matrix/matmat.h \
+ /usr/local/include/blochlib/container/matrix/matfft.h \
+ /usr/local/include/blochlib/utils/utils.h /usr/include/unistd.h \
+ /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+ /usr/include/getopt.h /usr/local/include/blochlib/utils/constants.h \
+ /usr/local/include/blochlib/container/matrix/matdiagonalize.h \
+ /usr/local/include/blochlib/container/matrix/matexp.h \
+ /usr/local/include/blochlib/container/matrix/LU.h \
+ /usr/local/include/blochlib/container/matrix/matassign.h \
+ /usr/local/include/blochlib/container/matrix/matqr.h \
+ /usr/local/include/blochlib/container/grids/grids.h \
+ /usr/local/include/blochlib/container/grids/gengrid.h \
+ /usr/local/include/blochlib/container/grids/unigrid.h \
+ /usr/local/include/blochlib/container/grids/fullspheregrid.h \
+ /usr/local/include/blochlib/container/grids/surfspheregrid.h \
+ /usr/local/include/blochlib/container/grids/surfcubegrid.h \
+ /usr/local/include/blochlib/container/grids/fullcubegrid.h \
+ /usr/local/include/blochlib/container/grids/xyzshape.h \
+ /usr/local/include/blochlib/container/grids/xyzgenshape.h \
+ /usr/local/include/blochlib/container/grids/xyzshapeparts.h \
+ /usr/local/include/blochlib/mpi/mpi_packer.h \
+ /usr/local/include/blochlib/mpi/mpi_tools.h \
+ /usr/local/include/blochlib/mpi/mpi_controller.h \
+ /usr/local/include/blochlib/version.h \
+ /usr/local/include/blochlib/utils/plotter.h \
+ /usr/local/include/blochlib/utils/random.h \
+ /usr/local/include/blochlib/utils/params.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/list \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_algobase.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_pair.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/type_traits.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/new.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_construct.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_uninitialized.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_list.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/map \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_tree.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_function.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_map.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_multimap.h \
+ /usr/local/include/blochlib/utils/matlab5.h \
+ /usr/local/include/blochlib/utils/endians.h \
+ /usr/local/include/blochlib/utils/vnmrstream.h \
+ /usr/local/include/blochlib/utils/xwinnmr.h \
+ /usr/local/include/blochlib/utils/wavestream.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stack \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_deque.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_stack.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/vector \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_vector.h \
+ /usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_bvector.h \
+ /usr/local/include/blochlib/utils/spinsight.h \
+ /usr/local/include/blochlib/utils/parser.h \
+ /usr/local/include/blochlib/utils/scriptparse.h \
+ /usr/local/include/blochlib/container/grids/edgedetect.h \
+ /usr/local/include/blochlib/driver/bs.h \
+ /usr/local/include/blochlib/driver/basicODE.h \
+ /usr/local/include/blochlib/driver/bs_meth.h \
+ /usr/local/include/blochlib/driver/stiffbs.h \
+ /usr/local/include/blochlib/driver/stiffbs_meth.h \
+ /usr/local/include/blochlib/driver/ckrk.h \
+ /usr/local/include/blochlib/driver/ckrk_meth.h \
+ /usr/local/include/blochlib/driver/gear.h \
+ /usr/local/include/blochlib/driver/gear_meth.h \
+ /usr/local/include/blochlib/driver/integrate.h \
+ /usr/local/include/blochlib/QMspins/spinsys.h \
+ /usr/local/include/blochlib/QMspins/multispinop.h \
+ /usr/local/include/blochlib/QMspins/singlespinop.h \
+ /usr/local/include/blochlib/QMspins/spinsyspars.h \
+ /usr/local/include/blochlib/bloch/Isotope.h \
+ /usr/local/include/blochlib/QMspins/spin_ten.h \
+ /usr/local/include/blochlib/QMspins/space_ten.h \
+ /usr/local/include/blochlib/QMspins/j.h \
+ /usr/local/include/blochlib/QMspins/csa.h \
+ /usr/local/include/blochlib/QMspins/dip.h \
+ /usr/local/include/blochlib/QMspins/qua.h \
+ /usr/local/include/blochlib/QMspins/sys/sys.h \
+ /usr/local/include/blochlib/QMspins/driver/powder.h \
+ /usr/local/include/blochlib/QMspins/driver/ham_gen.h \
+ /usr/local/include/blochlib/QMspins/driver/compute.h \
+ /usr/local/include/blochlib/QMspins/driver/oneFID.h \
+ /usr/local/include/blochlib/timetrain/timetrain.h \
+ /usr/local/include/blochlib/timetrain/consttrain.h \
+ /usr/local/include/blochlib/timetrain/gentrain.h \
+ /usr/local/include/blochlib/timetrain/consttrain_meth.h \
+ /usr/local/include/blochlib/timetrain/unitrain.h \
+ /usr/local/include/blochlib/timetrain/filetrain.h \
+ /usr/local/include/blochlib/timetrain/timetrain_meth.h \
+ /usr/local/include/blochlib/stencils/stencilexpr.h \
+ /usr/local/include/blochlib/stencils/stencilprep.h \
+ /usr/local/include/blochlib/stencils/stencilextent.h \
+ /usr/local/include/blochlib/stencils/stencilvector.h \
+ /usr/local/include/blochlib/stencils/stencilprep_func.h \
+ /usr/local/include/blochlib/stencils/boundary_condition.h \
+ /usr/local/include/blochlib/stencils/boundary_general.h \
+ /usr/local/include/blochlib/stencils/boundary_dirichlet.h \
+ /usr/local/include/blochlib/stencils/boundary_neumann.h \
+ /usr/local/include/blochlib/stencils/boundary_extrap.h \
+ /usr/local/include/blochlib/stencils/boundary_edgeblend.h \
+ /usr/local/include/blochlib/stencils/boundary_cornerblend.h \
+ /usr/local/include/blochlib/bloch/blochParamsBasic.h \
+ /usr/local/include/blochlib/bloch/blochParams.h \
+ /usr/local/include/blochlib/bloch/pulse.h \
+ /usr/local/include/blochlib/bloch/listblochpars.h \
+ /usr/local/include/blochlib/bloch/gradientgrid.h \
+ /usr/local/include/blochlib/bloch/listblochpars_meth.h \
+ /usr/local/include/blochlib/bloch/rotating_grid.h \
+ /usr/local/include/blochlib/bloch/bloch_basic.h \
+ /usr/local/include/blochlib/bloch/bloch.h \
+ /usr/local/include/blochlib/bloch/bloch_interac.h \
+ /usr/local/include/blochlib/bloch/bloch_interac_meth.h \
+ /usr/local/include/blochlib/bloch/blochsolver.h \
+ /usr/local/include/blochlib/bloch/lyapunov.h \
+ /usr/local/include/blochlib/bloch/bloch_int_dipdip.h \
+ /usr/local/include/blochlib/bloch/scalefunc.h \
+ /usr/local/include/blochlib/bloch/bloch_int_raddamp.h \
+ /usr/local/include/blochlib/bloch/bloch_int_bulks.h \
+ /usr/local/include/blochlib/bloch/bloch_int_relax.h \
+ /usr/local/include/blochlib/bloch/bloch_int_offset.h \
+ /usr/local/include/blochlib/bloch/biot.h \
+ /usr/local/include/blochlib/bloch/biot_basic.h \
+ /usr/local/include/blochlib/bloch/biot_meth.h \
+ /usr/local/include/blochlib/bloch/mag_fields.h \
+ /usr/local/include/blochlib/bloch/bloch_int_bfield.h \
+ /usr/local/include/blochlib/bloch/bloch_int_demag.h \
+ /usr/local/include/blochlib/bloch/bloch_int_dimlessdemag.h \
+ /usr/local/include/blochlib/bloch/bloch_int_demagmodulate.h \
+ /usr/local/include/blochlib/bloch/bloch_int_dimlessdip.h \
+ /usr/local/include/blochlib/bloch/gradfunc.h \
+ /usr/local/include/blochlib/bloch/gradimps.h paramset.h multipowder.h \
+ pulsedata.h multisystem.h propogation.h
+sequencerun_funcs.cc :
+sequencerun.h :
+sequenceparse.h :
+/usr/local/include/blochlib/blochlib.h :
+/usr/local/include/blochlib/blochconfig.h :
+/usr/local/include/blochlib/mpi/mpi_config.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/new :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/stddef.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/exception :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/string :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/std/bastring.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/cstddef :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/std/straits.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/cctype :
+/usr/include/ctype.h :
+/usr/include/features.h :
+/usr/include/sys/cdefs.h :
+/usr/include/gnu/stubs.h :
+/usr/include/bits/types.h :
+/usr/include/bits/pthreadtypes.h :
+/usr/include/bits/sched.h :
+/usr/include/endian.h :
+/usr/include/bits/endian.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/cstring :
+/usr/include/string.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/alloc.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_config.h :
+/usr/include/_G_config.h :
+/usr/include/wchar.h :
+/usr/include/bits/wchar.h :
+/usr/include/gconv.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_alloc.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/iostream.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/streambuf.h :
+/usr/include/libio.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/stdarg.h :
+/usr/include/stdlib.h :
+/usr/include/sys/types.h :
+/usr/include/time.h :
+/usr/include/sys/select.h :
+/usr/include/bits/select.h :
+/usr/include/bits/sigset.h :
+/usr/include/bits/time.h :
+/usr/include/sys/sysmacros.h :
+/usr/include/alloca.h :
+/usr/include/assert.h :
+/usr/include/pthread.h :
+/usr/include/sched.h :
+/usr/include/signal.h :
+/usr/include/bits/initspin.h :
+/usr/include/bits/sigthread.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/iterator :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_relops.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_iterator.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/std/bastring.cc :
+/usr/local/include/blochlib/container/containers.h :
+/usr/local/include/blochlib/container/complex.h :
+/usr/include/math.h :
+/usr/include/bits/huge_val.h :
+/usr/include/bits/mathdef.h :
+/usr/include/bits/mathcalls.h :
+/usr/include/bits/mathinline.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/fstream :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/fstream.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/iostream :
+/usr/include/stdio.h :
+/usr/include/bits/stdio_lim.h :
+/usr/include/bits/stdio.h :
+/usr/local/include/blochlib/utils/blassert.h :
+/usr/include/bits/signum.h :
+/usr/include/bits/siginfo.h :
+/usr/include/bits/wordsize.h :
+/usr/include/bits/sigaction.h :
+/usr/include/bits/sigcontext.h :
+/usr/include/asm/sigcontext.h :
+/usr/include/bits/sigstack.h :
+/usr/local/include/blochlib/container/rankType.h :
+/usr/local/include/blochlib/container/grids/coords.h :
+/usr/local/include/blochlib/container/Vector/Vector.h :
+/usr/local/include/blochlib/container/MemChunk.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/iomanip :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/iomanip.h :
+/usr/local/include/blochlib/container/operations.h :
+/usr/local/include/blochlib/container/range.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/climits :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/limits.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/syslimits.h :
+/usr/include/limits.h :
+/usr/include/bits/posix1_lim.h :
+/usr/include/bits/local_lim.h :
+/usr/include/linux/limits.h :
+/usr/include/bits/posix2_lim.h :
+/usr/local/include/blochlib/container/Vector/Vectoraux.h :
+/usr/local/include/fftw.h :
+/usr/local/include/blochlib/container/matrix/matrix.h :
+/usr/local/include/blochlib/container/matrix/_matrix.h :
+/usr/local/include/blochlib/container/matrix/imatrix.h :
+/usr/local/include/blochlib/container/matrix/genmatrix.h :
+/usr/local/include/blochlib/container/matrix/matrixconfig.h :
+/usr/local/include/blochlib/container/matrix/dmatrix.h :
+/usr/local/include/blochlib/container/matrix/fmatrix.h :
+/usr/local/include/blochlib/container/matrix/smatrix.h :
+/usr/local/include/blochlib/container/matrix/hmatrix.h :
+/usr/local/include/blochlib/container/matrix/trimatrix.h :
+/usr/local/include/blochlib/container/matrix/matmatmul.h :
+/usr/local/include/blochlib/container/matrix/matvec.h :
+/usr/local/include/blochlib/container/matrix/matmat.h :
+/usr/local/include/blochlib/container/matrix/matfft.h :
+/usr/local/include/blochlib/utils/utils.h :
+/usr/include/unistd.h :
+/usr/include/bits/posix_opt.h :
+/usr/include/bits/confname.h :
+/usr/include/getopt.h :
+/usr/local/include/blochlib/utils/constants.h :
+/usr/local/include/blochlib/container/matrix/matdiagonalize.h :
+/usr/local/include/blochlib/container/matrix/matexp.h :
+/usr/local/include/blochlib/container/matrix/LU.h :
+/usr/local/include/blochlib/container/matrix/matassign.h :
+/usr/local/include/blochlib/container/matrix/matqr.h :
+/usr/local/include/blochlib/container/grids/grids.h :
+/usr/local/include/blochlib/container/grids/gengrid.h :
+/usr/local/include/blochlib/container/grids/unigrid.h :
+/usr/local/include/blochlib/container/grids/fullspheregrid.h :
+/usr/local/include/blochlib/container/grids/surfspheregrid.h :
+/usr/local/include/blochlib/container/grids/surfcubegrid.h :
+/usr/local/include/blochlib/container/grids/fullcubegrid.h :
+/usr/local/include/blochlib/container/grids/xyzshape.h :
+/usr/local/include/blochlib/container/grids/xyzgenshape.h :
+/usr/local/include/blochlib/container/grids/xyzshapeparts.h :
+/usr/local/include/blochlib/mpi/mpi_packer.h :
+/usr/local/include/blochlib/mpi/mpi_tools.h :
+/usr/local/include/blochlib/mpi/mpi_controller.h :
+/usr/local/include/blochlib/version.h :
+/usr/local/include/blochlib/utils/plotter.h :
+/usr/local/include/blochlib/utils/random.h :
+/usr/local/include/blochlib/utils/params.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/list :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_algobase.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_pair.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/type_traits.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/include/new.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_construct.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_uninitialized.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_list.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/map :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_tree.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_function.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_map.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_multimap.h :
+/usr/local/include/blochlib/utils/matlab5.h :
+/usr/local/include/blochlib/utils/endians.h :
+/usr/local/include/blochlib/utils/vnmrstream.h :
+/usr/local/include/blochlib/utils/xwinnmr.h :
+/usr/local/include/blochlib/utils/wavestream.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stack :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_deque.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_stack.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/vector :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_vector.h :
+/usr/local/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/stl_bvector.h :
+/usr/local/include/blochlib/utils/spinsight.h :
+/usr/local/include/blochlib/utils/parser.h :
+/usr/local/include/blochlib/utils/scriptparse.h :
+/usr/local/include/blochlib/container/grids/edgedetect.h :
+/usr/local/include/blochlib/driver/bs.h :
+/usr/local/include/blochlib/driver/basicODE.h :
+/usr/local/include/blochlib/driver/bs_meth.h :
+/usr/local/include/blochlib/driver/stiffbs.h :
+/usr/local/include/blochlib/driver/stiffbs_meth.h :
+/usr/local/include/blochlib/driver/ckrk.h :
+/usr/local/include/blochlib/driver/ckrk_meth.h :
+/usr/local/include/blochlib/driver/gear.h :
+/usr/local/include/blochlib/driver/gear_meth.h :
+/usr/local/include/blochlib/driver/integrate.h :
+/usr/local/include/blochlib/QMspins/spinsys.h :
+/usr/local/include/blochlib/QMspins/multispinop.h :
+/usr/local/include/blochlib/QMspins/singlespinop.h :
+/usr/local/include/blochlib/QMspins/spinsyspars.h :
+/usr/local/include/blochlib/bloch/Isotope.h :
+/usr/local/include/blochlib/QMspins/spin_ten.h :
+/usr/local/include/blochlib/QMspins/space_ten.h :
+/usr/local/include/blochlib/QMspins/j.h :
+/usr/local/include/blochlib/QMspins/csa.h :
+/usr/local/include/blochlib/QMspins/dip.h :
+/usr/local/include/blochlib/QMspins/qua.h :
+/usr/local/include/blochlib/QMspins/sys/sys.h :
+/usr/local/include/blochlib/QMspins/driver/powder.h :
+/usr/local/include/blochlib/QMspins/driver/ham_gen.h :
+/usr/local/include/blochlib/QMspins/driver/compute.h :
+/usr/local/include/blochlib/QMspins/driver/oneFID.h :
+/usr/local/include/blochlib/timetrain/timetrain.h :
+/usr/local/include/blochlib/timetrain/consttrain.h :
+/usr/local/include/blochlib/timetrain/gentrain.h :
+/usr/local/include/blochlib/timetrain/consttrain_meth.h :
+/usr/local/include/blochlib/timetrain/unitrain.h :
+/usr/local/include/blochlib/timetrain/filetrain.h :
+/usr/local/include/blochlib/timetrain/timetrain_meth.h :
+/usr/local/include/blochlib/stencils/stencilexpr.h :
+/usr/local/include/blochlib/stencils/stencilprep.h :
+/usr/local/include/blochlib/stencils/stencilextent.h :
+/usr/local/include/blochlib/stencils/stencilvector.h :
+/usr/local/include/blochlib/stencils/stencilprep_func.h :
+/usr/local/include/blochlib/stencils/boundary_condition.h :
+/usr/local/include/blochlib/stencils/boundary_general.h :
+/usr/local/include/blochlib/stencils/boundary_dirichlet.h :
+/usr/local/include/blochlib/stencils/boundary_neumann.h :
+/usr/local/include/blochlib/stencils/boundary_extrap.h :
+/usr/local/include/blochlib/stencils/boundary_edgeblend.h :
+/usr/local/include/blochlib/stencils/boundary_cornerblend.h :
+/usr/local/include/blochlib/bloch/blochParamsBasic.h :
+/usr/local/include/blochlib/bloch/blochParams.h :
+/usr/local/include/blochlib/bloch/pulse.h :
+/usr/local/include/blochlib/bloch/listblochpars.h :
+/usr/local/include/blochlib/bloch/gradientgrid.h :
+/usr/local/include/blochlib/bloch/listblochpars_meth.h :
+/usr/local/include/blochlib/bloch/rotating_grid.h :
+/usr/local/include/blochlib/bloch/bloch_basic.h :
+/usr/local/include/blochlib/bloch/bloch.h :
+/usr/local/include/blochlib/bloch/bloch_interac.h :
+/usr/local/include/blochlib/bloch/bloch_interac_meth.h :
+/usr/local/include/blochlib/bloch/blochsolver.h :
+/usr/local/include/blochlib/bloch/lyapunov.h :
+/usr/local/include/blochlib/bloch/bloch_int_dipdip.h :
+/usr/local/include/blochlib/bloch/scalefunc.h :
+/usr/local/include/blochlib/bloch/bloch_int_raddamp.h :
+/usr/local/include/blochlib/bloch/bloch_int_bulks.h :
+/usr/local/include/blochlib/bloch/bloch_int_relax.h :
+/usr/local/include/blochlib/bloch/bloch_int_offset.h :
+/usr/local/include/blochlib/bloch/biot.h :
+/usr/local/include/blochlib/bloch/biot_basic.h :
+/usr/local/include/blochlib/bloch/biot_meth.h :
+/usr/local/include/blochlib/bloch/mag_fields.h :
+/usr/local/include/blochlib/bloch/bloch_int_bfield.h :
+/usr/local/include/blochlib/bloch/bloch_int_demag.h :
+/usr/local/include/blochlib/bloch/bloch_int_dimlessdemag.h :
+/usr/local/include/blochlib/bloch/bloch_int_demagmodulate.h :
+/usr/local/include/blochlib/bloch/bloch_int_dimlessdip.h :
+/usr/local/include/blochlib/bloch/gradfunc.h :
+/usr/local/include/blochlib/bloch/gradimps.h :
+paramset.h :
+multipowder.h :
+pulsedata.h :
+multisystem.h :
+propogation.h :

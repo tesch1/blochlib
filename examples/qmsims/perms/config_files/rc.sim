@@ -1,0 +1,298 @@
+
+
+spins{
+	numspin 2
+	T 13C 0
+	T 1H  1
+	#T 1H 2
+	D 523 0 1 0 0 0
+#	D 523 0 1 0 0 0
+	C 0 1500 0 0
+#	C -1544 8552 0 1
+	#D 10234 0 2
+	#D 7123 1 2
+}
+
+# the parameter sets for the tensor generator
+tensors{
+
+	#order of tensor generation
+	order 2
+	
+	#the 'axis' type
+	#xyz, T1, T2, T1T2, hamiltonians
+	axis T2
+	
+	#Multiplication Type, multiply, commutate, add
+	operator multiply
+	
+	#the spin list options 'single' 'choose' 'all'
+	spinops choose
+	#the 'single spin' index 
+	singlespin 1
+	
+	#the choose index(s)
+	choosespins1 0
+	choosespins2 1	
+	
+	#output file names
+	binout sphere2.bin
+	logout logf
+}
+
+
+
+pulses{
+	#rotor speed and angle
+	#these are the general recopupling sequence
+	wr=10000
+	rotor=54.7356
+	
+	#normal 'R' seqeunce
+	# (360, 360) w/phase (phi, -phi)
+	R{
+		baseSym=7
+		wrFact=2
+		fracSym=1
+		sPhase=0
+		amp=wr*baseSym*(2.0/wrFact)
+		ct=0
+		loop(i=1:2*baseSym)
+			rootPh=(ct*2*pi*fracSym/baseSym+sPhase)*rad2deg;
+			13C:pulse(1/amp, rootPh, amp)
+			13C:pulse(1/amp, -rootPh, amp)
+			ct=ct+1
+		end
+	}
+
+	#normal 'R' seqeunce BARED
+	# (360, 360) w/phase (phi+180, -phi+180)
+	RBar{
+		baseSym=7
+		wrFact=2
+		fracSym=1
+		sPhase=pi
+		amp=wr*baseSym*(2.0/wrFact)
+		ct=0
+		loop(i=1:2*baseSym)
+			rootPh=(ct*2*pi*fracSym/baseSym+sPhase)*rad2deg;
+			13C:pulse(1/amp, rootPh, amp)
+			13C:pulse(1/amp, -rootPh, amp)
+			ct=ct+1
+		end
+	}
+
+	#post 'R' seqeunce
+	# (90, 270, 90, 270) w/phase (phi, phi+180, 360-phi, 360-phi-180)
+	Rp{
+		baseSym=7
+		wrFact=2
+		fracSym=1
+		sPhase=0
+		amp=wr*baseSym*(2.0/wrFact)
+		ct=0
+		loop(i=1:2*baseSym)
+			rootPh=(ct*2*pi*fracSym/baseSym+sPhase)*rad2deg
+			13C:pulse(1/amp/4, rootPh, amp)
+			13C:pulse(3/amp/4, rootPh+180, amp)
+			13C:pulse(1/amp/4, 360-rootPh, amp)
+			13C:pulse(3/amp/4, 360-rootPh-180, amp)
+			ct=ct+1
+		end
+	}
+
+	#post 'R' seqeunce BARED
+	# (90, 270, 90, 270) w/phase (phi+180, phi, 360-phi+180, 360-phi)
+
+	RpBar{
+		baseSym=7
+		wrFact=2
+		fracSym=1
+		sPhase=pi
+		amp=wr*baseSym*(2.0/wrFact)
+		ct=0
+		loop(i=1:wrFact*baseSym)
+			rootPh=(ct*2*pi*fracSym/baseSym+sPhase)*rad2deg
+			13C:pulse(1/amp/4, rootPh, amp)
+			13C:pulse(3/amp/4, rootPh+180, amp)
+			13C:pulse(1/amp/4, 360-rootPh, amp)
+			13C:pulse(3/amp/4, 360-rootPh-180, amp)
+			ct=ct+1
+		end
+	}
+
+	#normal 'C' seqeunce
+	# (360, 360) w/phase (phi, phi+180)
+	C{
+		baseSym=7
+		wrFact=2
+		fracSym=1
+		sPhase=0
+		amp=wr*baseSym*(2.0/wrFact)
+		ct=0
+		loop(i=1:baseSym)
+			rootPh=(ct*2*pi*fracSym/baseSym+sPhase)*rad2deg
+			13C:pulse(1/amp, rootPh, amp)
+			13C:pulse(1/amp, rootPh+180, amp)
+			ct=ct+1
+		end
+	}
+
+	#normal 'C' seqeunce BARRED
+	# (360, 360) w/phase (phi+180, phi)
+	CBar{
+		baseSym=7
+		wrFact=2
+		fracSym=1
+		sPhase=pi
+		amp=wr*baseSym*(2.0/wrFact)
+		ct=0
+		loop(i=1:baseSym)
+			rootPh=(ct*2*pi*fracSym/baseSym+sPhase)*rad2deg
+			13C:pulse(1/amp, rootPh, amp)
+			13C:pulse(1/amp, rootPh+180, amp)
+			ct=ct+1
+		end
+	}
+
+	#post 'C' seqeunce
+	# (90,360, 270) w/phase (phi, phi+180, phi)
+	Cp{
+		baseSym=7
+		wrFact=2
+		fracSym=1
+		sPhase=0
+		amp=wr*baseSym*(2.0/wrFact)
+		ct=0
+		loop(q=1:baseSym)
+			rootPh=(ct*2*pi*fracSym/baseSym+sPhase)*rad2deg
+			13C:pulse(1/amp/4, rootPh, amp)
+			13C:pulse(1/amp, rootPh+180, amp)
+			13C:pulse(3/amp/4, rootPh, amp)
+			ct=ct+1
+		end
+	}
+	
+	#post 'C' seqeunce BARED
+	# (90,360, 270) w/phase (phi+180, phi, phi+180)
+	CpBar{
+		baseSym=7
+		wrFact=2
+		fracSym=1
+		sPhase=pi
+		amp=wr*baseSym*(2.0/wrFact)
+		ct=0
+		loop(i=1:baseSym)
+			rootPh=(ct*2*pi*fracSym/baseSym+sPhase)*rad2deg
+			13C:pulse(1/amp/4, rootPh, amp)
+			13C:pulse(1/amp, rootPh+180, amp)
+			13C:pulse(3/amp/4, rootPh, amp)
+			ct=ct+1
+		end
+	}
+	
+	XiX{
+		n=5		
+		tp=(3*n+1)*(1/wr)/3
+		amp=n*wr
+		print(amp)
+		print(tp)
+		loop(i=1:n)
+			1H:pulse(tp, 0, amp)
+			1H:pulse(tp, 180, amp)
+		end
+	}	
+	XiXBar{
+		n=5		
+		amp=1/(3*n+1)*wr/3
+		loop(i=1:n)
+			1H:pulse(1/amp, 180, amp)
+			1H:pulse(1/amp, 0, amp)
+		end
+	}
+}
+
+permutate{
+	
+	#number of applications of the sequence
+	napps 1
+	
+	#subunit ids define what chars will be used as units below
+	subUnitIds o,O
+	
+	#types associate a 'rtype' with a subunit id
+	# valid types are: R, Rp, RBar, RpBar, 
+	# C, CpBar, CBar, Cpp, CppBar
+	typeIds XiX,XiXBar
+	units o,Oo
+	
+	#the 'longest' list to permute the
+	permutations 12
+}
+
+params{
+
+	#the pregenerated binary tensor file
+	# generated from the 'tensorgen' program
+	#can be more then one file...just separate file names with a comma
+	tensorfile traceMats/sphere2.bin, traceMats/cart2.bin
+	
+	# largest time for a propogator step 
+	maxtimestep 1e-6
+
+	#powder average type	
+	#powder ../../../cyrstals/rep256.cry
+	powder zcw
+	
+	#if the powder is 'liquid'
+	singletheta 68.5.0
+	singlephi 36
+	singlegamma 45.0
+	
+	#for non-iquid powder average types
+	thetasteps 89	
+	phisteps 55
+
+
+	# if this is '-1' all will be calculated
+	# if this is '-2' NONE will be calculated
+	# else if will calculate the trace for that train only
+	traceForIndex -2
+	
+	#matlab file where data is saved
+	# naming is as  "<recouple type>_p<permution length>_n<napps>_<rotorspeed>"
+	# so a sinlge post-C7 sequnce applied 10 time would be
+	# spinning at 10 Khz
+	# "Cp71_p1_n10_10k.mat"
+	#matout Cp71_p1_n32_5k_csa2.mat
+	#matout CpCppBar71_p1_n8_5k_csa2_4c_a.mat
+	#matout Cp71_p1_n20_5k_csa2.mat
+	matout data/matout.mat
+	
+	#output file name for the seqeunce names
+	# should be 'blaaa'.m a simple matlab script file
+	seqout data/seqnames.m
+
+	#this is the name of the matlab file
+	# that makes an array of the names of the tenor types
+	# so that you can load it as a function
+	nameout data/names.m
+
+
+	#if you deisre to collect an fid of a certain train
+	# set to '-1' if no fid desired
+	fidForIndex 5
+	initro Ix_0+Iz_1
+	detect Ip_0
+	npts 512
+	fidout data/dat
+	
+	#debug level (info dumping) level for the program
+	debuglevel 0
+	progress 2
+	
+	#inary output file and options for generation
+	# can be: ReadAndRun, GenerateAndSave, GenerateAndRun
+	generationOps ReadAndRun
+	trainFile permutationTrains/pCy_2x12.bn
+}

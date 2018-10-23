@@ -1,0 +1,43 @@
+BlochSim Examples
+
+--Found here are a variety of examples to show you several simple and complex
+  simulations and programs using the 'Bloch/Classical' part of BlochLib
+  
+  
+ --blochsims/simple90/ --> as expected...performs a simple N degree pulse
+                           on a 'grid' of dipole-dipole spinns...hmmmm i wonder what 
+                           a cube of spins does (see papers by 'Jeener' to figure that out)
+ 
+ --blochsims/relaxcoord/ --> demonstration of an off axis relaction
+ 
+ --blochsims/bulksus/ -->the effect of the nulk suseptibility as a function of the 'D' parameter
+ 
+                           
+ --blochsims/mas/ --> a 'spinning' grid example...here we revolve a grid of dipole-dipole
+                      spins around the magic angle...such lovely strange behavior
+                      ...i believe i will find more...
+
+ --blochsims/EPI/ --> performs an EPI (echo planar Imaging) simulation on a grid
+                      of spins
+                      
+ --blochsims/echo/ --> performs an echo experment under the presence of gradients...
+ 
+ --blochsims/crazed/ --> attempts to simulate a CRAZED (see Warren Warren papers)
+                         experiment on a grid of spins
+
+ --blochsims/magfields/ --> generic magnetic field calulators, fitters, etc..
+                            these programs can get large, but do so much
+                            from rotating calulated 'real' fields over a
+                            large array of spin, to fitting fields to match
+                            certain criteria, to coil design simulations
+                            the config files are large, the number of parameters
+                            is even larger, multi grids an multi coils are used
+                            throughout...interesting experiments about eo be performed i say
+                        
+ --blochsims/yylin/ --> attempt to match the dynamics of the YY Lin 'NMR Chaos'
+                        found when Radiation Damping and the Demagnitizaing Field
+                        are allowed to weild nasty non-linearity on the system
+   
+   
+ 
+  

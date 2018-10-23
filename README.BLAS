@@ -1,0 +1,96 @@
+**********
+**** Getting OPTIMIZED BLAS routines on your system
+**** (also getting BlochLib to work fast as well)
+****** 
+*****
+
+author: Bo Blanton
+last update: 04.23.02
+email: bo@theaddedones.com
+
+
+
+
+------------------ATLAS - Fast AutoMatic BLAS-------------
+----------------------------------------------------------
+*BLAS (Basic Linear Algebra) tend to be the backbone of most
+ numerical computations, and tend to be where most of the 
+ CPU time is spent.  Each Processor type has its own set of
+ optimizations (things like L1 cach sizes, alignments, L2 size, etc)
+ Becuase of each processor's different optimizations, creating highly
+ optimizied numerical routines is a difficult task...for instance
+ unoptimized (yet simply coded) matrix multiplications can take up
+ to 10-20 longer then the optimized versions...the optimized versions, however, 
+ are very hard to write...
+*ATLAS is a project designed to create FAST BLAS on most CPU
+ archetictures.  Using several timers and outcode generation
+ it should find you some of the best routines around.
+*NOTE::If the vendor has created its own set of BLAS libs, then they CAN 
+ be faster then ATLAS's, but i have found for INTEL systems ATLAS is better.  
+
+*Getting ATLAS:
+  1) go here: http://math-atlas.sourceforge.net/
+  2) download the latest version (i used 3.3.14)
+  
+*The Set UP::
+  --This assumes that the Cygwin is installed on Windows
+  -- if you are using this on windows
+  
+  1) Open up a  shell
+  2) down load atlas
+  3) untar the file "tar -zxvf atlas.3.3.14.tar.gz"
+  4) cd into "ATALAS"
+  5) type 'make'
+  ---
+  tar -zxvf atlas.3.3.14.tar.gz
+  cd ATLAS
+  make
+  ---
+  
+* This will then take you to the interactive ATLAS questions
+*  Below you will find the 'good' answers' to the 
+*  ALTAS set up, everything that i do not tell you an answer here, 
+*  simply choose the default
+
+--choose your OS to be what ever it is
+--and your appropriate processor
+--to "enable Posix threads support?" say NO
+--choose *NOT* to use "express Set up"
+--at the "Enter Maximum cache size(KB):" question
+  enter 2 times the 'default' amount!!
+--For the Fortran compiler enter "g77"
+  do NOT use the default "/usr/bin/g77.exe"
+--For the C compiler enter "gcc"
+  do NOT use the default "/usr/bin/gcc.exe"
+--For the C compiler for generated code enter "gcc"
+  do NOT use the default "/usr/bin/gcc.exe"
+--For "Enter Ranlib" : enter in "ranlib"
+
+****REALLY IMPORTANT (see will be compromised)***
+--for the question "Use supplied default values for install" say *NO*
+   
+--After the configuration has been done type
+	
+	make install arch=<your arch here>
+
+    where <your arch here> for a Pentium III on windows would be something 
+    like "WinNT_PIII"
+    
+    and wait a long while (~hour or more even 7 for AMD chips) 
+    as it goes through the testing and creation
+    
+--when it is finished go to the 'ATLAS/lib/" directory
+---find the directory with your <arch> name
+   something like "ATLAS/lib/WinNT_PIII/"
+
+
+**You need to use 2 libs to get the linking to function properly
+**Within 'blochlib' and associated compilations IN THIS ORDER!!
+
+to use in BlochLib you need to use the quotes
+	--with-blas="<prepath>/ATLAS/lib/<arch>/libcblas.a <prepath>/ATLAS/lib/<arch>/libatlas.a"
+	
+**OR** the simpler one
+	--with-atlas="<prepath>/ATLAS/lib"
+
+

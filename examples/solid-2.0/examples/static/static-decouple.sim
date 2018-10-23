@@ -1,0 +1,92 @@
+
+#
+# A static decoupling sim
+# this is by nessescity a point to point
+# as there is apulse during the fid collection
+
+spins{
+	
+	#the global options
+	numspin 2
+	T 1H 0
+	T 13C 1
+	#csa <iso> <del> <eta> <spin>
+	C 5000  2134 0.8 0
+	C 5000 2789 0 1
+	D 8300 0 1
+	
+}
+
+
+parameters{	
+
+	powder1{
+		aveType zcw
+		thetaStep 377
+		phiStep 233
+		gammaStep 0
+	}		
+
+#the intergrator step size	
+	maxtstep=1e-6
+
+#number of 1D fid points	
+	npts1D=256	
+
+}
+
+
+pulses{
+
+
+#a point to point
+	ptop()
+	2D()
+#the number of decouple amplitudes to use
+	dcpts=50
+
+#set the spinning	
+	wr=0
+
+#set the rotor
+	rotor=0
+
+#set the detection matrix
+# detect the 13C
+	detect(Ip_1)
+
+#the decouple amplitude
+	dcamp=0
+	dcstep=150000/dcpts
+	
+#our dwell
+	dwell=1/50000
+
+#NOTE: this would be invalid for 
+# wr>0 as the calulation would require
+# a time dependant propogaor!
+	sub1{
+		1H:pulse(dwell, 0, dcamp) | 13C:delay(dwell)
+	}		
+
+
+	loop(i=0:dcpts-1)	
+	#set the desity matrix to a pulse 13C and 
+	# not pulsed 1H
+		ro(Ix_1+Iz_0)
+
+	#must 'use' the subsection as 
+	# the dcamp changes
+		use(sub1)	
+	
+	#collect the fid 
+		fid(i)
+	
+	#advance the dc amplitude
+		dcamp=dcamp+dcstep
+	
+	end
+	savefidmatlab(decoup) #save as a text file
+}
+
+	

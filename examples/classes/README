@@ -1,0 +1,44 @@
+BlochLib Examples
+
+--Found here are a variety of examples designed to show you both examples of
+  specific classes, some are quite simple, others a bit more complex
+  
+  
+ --exmaples/
+   -Here are the generic 'background' class demonstrations
+
+  
+  --vec_examples.cc--> several Vector operations demonstrated
+  
+  --mat_examples.cc--> matrix utilization example (PLEASE READ THE MATRIX SECTION IN 'doc/')
+  
+  --grid_examples.cc--> an example of using Grids classes
+  
+  --shape_examples.cc--> the XYZshape object and its various creation parts
+  
+  --ode_example.cc--> using the Differential Equation solver
+  
+  --gradfunc_example.cc --> Using the "GradientFunction" Alteration generator on 'ListBlochParams'
+  
+  --fftw_examples.cc --> tests the FFTW library..it will fail without that Lib
+      NOTE:: the matlab file 'makemesh.m' is used to plot the resulting data
+ 
+  --stencil_vector_test.cc --> tests the finite difference operations on vector
+                               (things like Derivates, and such)
+                               these should be quite fast and implimented well
+                               
+
+  --stencil_prep_test.cc --> this designed to test the various aspects
+                              of the Stencils part of the lib
+                              the 'Prep' stage, the implimentation
+                              of finite difference Stencil operations (Lapacians,
+                              Gradients, etc),Edge/Face Detection, and finally
+                              simple implimentation of 'BoundaryConditions'
+                              on GRIDs and the 'SHAPES' (i.e. 3D objects)...
+                              NOTE:: some of these things are still in the 
+                              devel/experimental stage, and thus could crash,
+                              or (even worse) produce wrong results use with caution
+                              
+                              
+  
+  

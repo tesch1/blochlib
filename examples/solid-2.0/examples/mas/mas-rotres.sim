@@ -1,0 +1,55 @@
+# a simple MAS and Static FID collection
+# showing rotational resonance
+
+spins{
+	
+	#the global options
+	numspin 2
+	T 13C 0
+	T 13C 1
+	#csa <iso> <del> <eta> <spin>
+	C 0 6000 1 0
+	C 0 6000 0 1
+	#j coupling <iso> <spin1> <spin2>
+	D -1500 0 1
+}
+
+parameters{	
+#use a file found with the BlochLib distribution
+	powder{
+	#powder file used for the static FID
+		#aveType ../../../../crystals/ZCW_3_1154
+	#powder file used for the spinning FID
+		aveType ../../../../crystals/rep320
+	}
+#number of 1D fid points	
+	npts1D=4096
+	#npts2D=5
+#sweepwidth
+	sw=40000
+}
+
+
+pulses{
+	2D()
+#set the spinning	
+	wr=2000 #set for SPINNING FID
+#set the rotor
+	rotor=acos(1/sqrt(3))*rad2deg #set for SPINNING FID
+
+#set the detection matrix
+	detect(Ip)
+	isoSt=1000
+	curIso=0
+	steps=5
+	loop(j=0:(steps-1))
+		ro(Ix)
+		fid(j)
+		curIso=curIso+isoSt
+		alterSys(C1iso, curIso)		
+	end
+	
+	savefidmatlab(rotres) #save tas a text file
+}
+
+	

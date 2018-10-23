@@ -1,0 +1,907 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("49menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("49menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("49menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("49title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("49");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Grid_t=XYZshape&lt;XYZfull&gt; &gt;<br />
+class MultiBiot{...<br />
+<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+The input file for a MultiBiot look like the one below. You can have as many 'subcoil' 
+sections (up to 100000). If you have a 'grid' section preset, the class will also 
+read that section in order to create the grid. The subcoil sections start at 1. 
+It will stop looking for sections when it cannot find the next subcoil in the 
+master section it will stop looking for subsections (even if there are more present). 
+If you have a subcoil1 and a subcoil3 section with no subcoil2 it will stop reading 
+at subcoil1. 
+<BR><BR>
+<TT>
+MyCoil{
+<br>
+  subcoil1{<br>
+      type line<br>
+      begin 0,3,5<br>
+      end 1,1,1<br>
+       amps 3<br>
+      loops 1<br>
+      numpts 5000<br>
+  }<br>
+<br>
+  subcoil2{<br>
+      type line<br>
+      begin 1,1,1<br>
+      end 2,2,2<br>
+      amps 3<br>
+      loops 1<br>
+      numpts 5000<br>
+     }<br>
+} <br>
+<br>
+grid{<br>
+      min -1,-1,-1<br>
+      max 1,1,1<br>
+      dim 10,10,10<br>
+  }<br>
+</TT></blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Public Vars'></a>Public Vars</font>
+</td></tr></table>
+<tr><td>
+<a name='Public VarsBfield'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;coord&lt;&gt; &gt; Bfield;<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+You must call 'calculateField' or 'read' that has a saved Bfield for this to be of any size.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This holds the calculated magnetic field. Each point matches the order of the Grid Vector in the class.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parameters pset(&quot;myfile&quot;);<br />
+pset.addSection(&quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set up our base rectangular grids</font><br />
+Grid&lt;UniformGrid&gt; g1(coord&lt;&gt;(-1,-1,-1), coord&lt;&gt;(1,1,1), coord&lt;int&gt;(10,10,10));<br />
+<br />
+<font color='#006600'>//set up thte master shape</font><br />
+XYZshape&lt;XYZfull&gt; g2(g1, XYZfull());<br />
+<br />
+<font color='#006600'>//set up our Biot field calculator class</font><br />
+MultiBiot&lt;&gt; mycoil(g2,pset, &quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set the MPIcontroler to be MPIworld</font><br />
+mycoil.Controller=MPIworld;<br />
+<br />
+<font color='#006600'>//calculate the field</font><br />
+mycoil.calculateField();<br />
+<br />
+<font color='#006600'>//print out the grid points and the field</font><br />
+XYZshape&lt;XYZfull&gt;::iterator it(g2);<br />
+while(it){<br />
+cout&lt;&lt;it.Point()&lt;&lt;&quot; &quot;&lt;&lt;mycoil.Bfield[it.curpos()]&lt;&lt;endl;<br />
+}<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Public VarsController'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+MPIcontroller Controller<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the MultiBiot's MPI parallel controller. If this is not set, the magnetic field calculation will NOT be performed in parallel.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parameters pset(&quot;myfile&quot;);<br />
+pset.addSection(&quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set up our base rectangular grids</font><br />
+Grid&lt;UniformGrid&gt; g1(coord&lt;&gt;(-1,-1,-1), coord&lt;&gt;(1,1,1), coord&lt;int&gt;(10,10,10));<br />
+<br />
+<font color='#006600'>//set up thte master shape</font><br />
+XYZshape&lt;XYZfull&gt; g2(g1, XYZfull());<br />
+<br />
+<font color='#006600'>//set up our Biot field calculator class</font><br />
+MultiBiot&lt;&gt; mycoil(g2,pset, &quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set the MPIcontroler to be MPIworld</font><br />
+mycoil.Controller=MPIworld;<br />
+<br />
+<font color='#006600'>//calculate the field</font><br />
+mycoil.calculateField();<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Public Varsgrid'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Grid_t grid;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The grid to calculate the magnetic field.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MultiBiot&lt;&gt; coil;<br />
+<font color='#006600'>//set up our base rectangular grids</font><br />
+Grid&lt;UniformGrid&gt; g1(coord&lt;&gt;(-1,-1,-1), coord&lt;&gt;(1,1,1), coord&lt;int&gt;(10,10,10));<br />
+<br />
+<font color='#006600'>//set up thte master shape</font><br />
+XYZshape&lt;XYZfull&gt; g2(g1, XYZfull());<br />
+<br />
+<font color='#006600'>//set the grid</font><br />
+coil.grid=g2;<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsMultiBiot'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+MultiBiot(Parameters &pset, std::string sec=&quot;coil&quot;);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pset--&gt; a Parameter set<br />
+sec--&gt; the master coil section name<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Attempts to read the coil named 'sec' from the parameters from a file names 'fname.' It also attempts to read the grid. If no grid is present in the Parameter set then you will need to specify one yourself.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//The input file</font><br />
+<font color='#006600'>//</font><br />
+<font color='#006600'>// TheCoil{</font><br />
+<font color='#006600'>// subcoil1{</font><br />
+<font color='#006600'>// type constant</font><br />
+<font color='#006600'>// constField 4,50,8</font><br />
+<font color='#006600'>// }</font><br />
+<font color='#006600'>// subcoil2{</font><br />
+<font color='#006600'>//   type line</font><br />
+<font color='#006600'>//   begin 1,1,1</font><br />
+<font color='#006600'>//   end 2,2,2</font><br />
+<font color='#006600'>//   amps 3</font><br />
+<font color='#006600'>//   loops 1</font><br />
+<font color='#006600'>//   numpts 5000</font><br />
+<font color='#006600'>//  }</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//</font><br />
+<font color='#006600'>// grid{</font><br />
+<font color='#006600'>// min -1, -1, -1</font><br />
+<font color='#006600'>// max 1, 1, 1</font><br />
+<font color='#006600'>// dim 10, 10,10</font><br />
+<font color='#006600'>//}</font><br />
+Parameters pset(&quot;infile&quot;);<br />
+<font color='#006600'>//this will read the 'grid' section as well</font><br />
+MultiBiot&lt;&gt; myField(pset, &quot;TheCoil&quot;);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsMultiBiot'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+MultiBiot(Grid_t &ingrid, Parameters &pset, std::string sec=&quot;coil&quot;);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+ingrid--&gt; the grid<br />
+pset--&gt; the Parameter file<br />
+sec--&gt; the desired master coil section<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Attempts to read the multi-coil named 'sec' from the parameters set 'pset.' It does NOT read the grid from the parameter file.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//The input file</font><br />
+<font color='#006600'>//</font><br />
+<font color='#006600'>// TheCoil{</font><br />
+<font color='#006600'>// subcoil1{</font><br />
+<font color='#006600'>// type constant</font><br />
+<font color='#006600'>// constField 4,50,8</font><br />
+<font color='#006600'>// }</font><br />
+<font color='#006600'>// subcoil2{</font><br />
+<font color='#006600'>// type line</font><br />
+<font color='#006600'>// begin 1,1,1</font><br />
+<font color='#006600'>// end 2,2,2</font><br />
+<font color='#006600'>// amps 3</font><br />
+<font color='#006600'>// loops 1</font><br />
+<font color='#006600'>// numpts 5000</font><br />
+<font color='#006600'>// }</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//</font><br />
+<font color='#006600'>// grid{</font><br />
+<font color='#006600'>// min -1, -1, -1</font><br />
+<font color='#006600'>// max 1, 1, 1</font><br />
+<font color='#006600'>// dim 10, 10,10</font><br />
+<font color='#006600'>//}</font><br />
+<br />
+Parameters pset(&quot;myfile&quot;);<br />
+<br />
+<font color='#006600'>//set up our base rectangular grids</font><br />
+Grid&lt;UniformGrid&gt; g1(coord&lt;&gt;(-1,-1,-1), coord&lt;&gt;(1,1,1), coord&lt;int&gt;(10,10,10));<br />
+<br />
+<font color='#006600'>//set up thte master shape</font><br />
+XYZshape&lt;XYZfull&gt; g2(g1, XYZfull());<br />
+<br />
+<font color='#006600'>//set up our Biot field calculator class</font><br />
+MultiBiot&lt;&gt; mycoil(g2,pset, &quot;TheCoil&quot;);<br />
+<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsMultiBiot'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+MultiBiot()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Empty constructor. Sets all variables to empty or 0.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+MultiBiot&lt;&gt; myCoil;<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void read(Parameters &pset,std::string sec=&quot;&quot;, bool readgrid=true);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+pset--&gt; a previously declared parameter set<br />
+sec--&gt; the MASTER section of the coil<br />
+readgrid--&gt; if tru will try to read a 'grid' section from the Parmaeters<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads a multi coil object from a parameter set. It will attempt to read the section 'grid' as well if 'readgrid' is true.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//The input file</font><br />
+<font color='#006600'>//</font><br />
+<font color='#006600'>// MyCoil{</font><br />
+<font color='#006600'>// subcoil1{</font><br />
+<font color='#006600'>// type line</font><br />
+<font color='#006600'>// begin 0,3,5</font><br />
+<font color='#006600'>// end 1,1,1</font><br />
+<font color='#006600'>// amps 3</font><br />
+<font color='#006600'>// loops 1</font><br />
+<font color='#006600'>// numpts 5000</font><br />
+<font color='#006600'>// }</font><br />
+<font color='#006600'>//</font><br />
+<font color='#006600'>// subcoil2{</font><br />
+<font color='#006600'>// type line</font><br />
+<font color='#006600'>// begin 1,1,1</font><br />
+<font color='#006600'>// end 2,2,2</font><br />
+<font color='#006600'>// amps 3</font><br />
+<font color='#006600'>// loops 1</font><br />
+<font color='#006600'>// numpts 5000</font><br />
+<font color='#006600'>// }</font><br />
+<font color='#006600'>//}</font><br />
+<font color='#006600'>//</font><br />
+<font color='#006600'>// grid{</font><br />
+<font color='#006600'>// min -1, -1, -1</font><br />
+<font color='#006600'>// max 1, 1, 1</font><br />
+<font color='#006600'>// dim 10, 10,10</font><br />
+<font color='#006600'>//}</font><br />
+<br />
+MultiBiot&lt;&gt; coil;<br />
+Parameters pset(&quot;infile);<br />
+coil.read(pset, &quot;MyCoil&quot;); <font color='#006600'>//read the coil and grid</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void read(std::string fname);<br />
+void read(std::fstream &file);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+fname--&gt; the name of the text file<br />
+file--&gt; a previously declared input stream<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads BOTH the shape and the Magnetic Field in the following format...<br />
+<br />
+-------------------------<br />
+START MultiBiotCoil<br />
+START BiotCoil<br />
+amps {num}<br />
+loops {num}<br />
+{x y z}<br />
+{x y z}<br />
+....<br />
+END BiotCoil<br />
+<br />
+START BiotCoil<br />
+amps {num}<br />
+loops {num}<br />
+{x y z}<br />
+{x y z}<br />
+....<br />
+END BiotCoil<br />
+....<br />
+END MultiBiotCoil<br />
+<br />
+START MultiBiotCoilBfield<br />
+{bx by bz}<br />
+....<br />
+END MultiBiotCoilBfield<br />
+<br />
+--------------------<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parameters pset(&quot;myfile&quot;);<br />
+pset.addSection(&quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set up our base rectangular grids</font><br />
+Grid&lt;UniformGrid&gt; g1(coord&lt;&gt;(-1,-1,-1), coord&lt;&gt;(1,1,1), coord&lt;int&gt;(10,10,10));<br />
+<br />
+<font color='#006600'>//set up thte master shape</font><br />
+XYZshape&lt;XYZfull&gt; g2(g1, XYZfull());<br />
+<br />
+<font color='#006600'>//set up our Biot field calculator class</font><br />
+Biot&lt;XYZshape&lt;XYZfull&gt; &gt; mycoil(g2,pset, &quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set the MPIcontroler to be MPIworld</font><br />
+mycoil.Controller=MPIworld;<br />
+<br />
+<font color='#006600'>//calculate the field</font><br />
+mycoil.calculateField();<br />
+<br />
+<font color='#006600'>//write the field out</font><br />
+<font color='#006600'>// in the 'biot' format</font><br />
+ostream out(&quot;outfile.biot&quot;);<br />
+mycoil.write(out);<br />
+<br />
+MultiBiot&lt;&gt; mycoil2;<br />
+ifstream in(&quot;outfile&quot;);<br />
+mycoil2.read(in);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOreadShape'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void readShape(std::string fname);<br />
+void readShape(std::fstream &file);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+fname--&gt; the name of the text file<br />
+file--&gt; a previously declared input stream<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads the shape of the multi-coil from the follow format.<br />
+<br />
+-------------------------<br />
+START MultiBiotCoil<br />
+START BiotCoil<br />
+amps {num}<br />
+loops {num}<br />
+{x y z}<br />
+{x y z}<br />
+....<br />
+END BiotCoil<br />
+<br />
+START BiotCoil<br />
+amps {num}<br />
+loops {num}<br />
+{x y z}<br />
+{x y z}<br />
+....<br />
+END BiotCoil<br />
+END MultiBiotCoil<br />
+--------------------<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parameters pset(&quot;myfile&quot;);<br />
+pset.addSection(&quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set up our base rectangular grids</font><br />
+Grid&lt;UniformGrid&gt; g1(coord&lt;&gt;(-1,-1,-1), coord&lt;&gt;(1,1,1), coord&lt;int&gt;(10,10,10));<br />
+<br />
+<font color='#006600'>//set up thte master shape</font><br />
+XYZshape&lt;XYZfull&gt; g2(g1, XYZfull());<br />
+<br />
+<font color='#006600'>//set up our Biot field calculator class</font><br />
+MultiBiot&lt;&gt; mycoil(g2,pset, &quot;mycoil&quot;);<br />
+<font color='#006600'>//write the field out</font><br />
+<font color='#006600'>// in the 'biot' format</font><br />
+ostream out(&quot;outfile.biot&quot;);<br />
+mycoil.writeShape(out);<br />
+<br />
+<font color='#006600'>//read in a new object from the old one</font><br />
+MultiBiot&lt;&gt; mycoil2;<br />
+ifstream in(&quot;outfile.biot&quot;);<br />
+mycoil.readShape(in);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOwrite'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void write(std::string fname);<br />
+void write(std::fstream &file);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+fname--&gt; the name of the text file<br />
+file--&gt; a previously declared output stream<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes BOTH the shape and the Magnetic Field (if calculated or previously read in) in the following format...<br />
+<br />
+-------------------------<br />
+START MultiBiotCoil<br />
+START BiotCoil<br />
+amps {num}<br />
+loops {num}<br />
+{x y z}<br />
+{x y z}<br />
+....<br />
+END BiotCoil<br />
+<br />
+START BiotCoil<br />
+amps {num}<br />
+loops {num}<br />
+{x y z}<br />
+{x y z}<br />
+....<br />
+END BiotCoil<br />
+....<br />
+END MultiBiotCoil<br />
+<br />
+START MultiBiotCoilBfield<br />
+{bx by bz}<br />
+....<br />
+END MultiBiotCoilBfield<br />
+<br />
+--------------------<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parameters pset(&quot;myfile&quot;);<br />
+pset.addSection(&quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set up our base rectangular grids</font><br />
+Grid&lt;UniformGrid&gt; g1(coord&lt;&gt;(-1,-1,-1), coord&lt;&gt;(1,1,1), coord&lt;int&gt;(10,10,10));<br />
+<br />
+<font color='#006600'>//set up thte master shape</font><br />
+XYZshape&lt;XYZfull&gt; g2(g1, XYZfull());<br />
+<br />
+<font color='#006600'>//set up our Biot field calculator class</font><br />
+Biot&lt;XYZshape&lt;XYZfull&gt; &gt; mycoil(g2,pset, &quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set the MPIcontroler to be MPIworld</font><br />
+mycoil.Controller=MPIworld;<br />
+<br />
+<font color='#006600'>//calculate the field</font><br />
+mycoil.calculateField();<br />
+<br />
+<font color='#006600'>//write the field out</font><br />
+<font color='#006600'>// in the 'biot' format</font><br />
+ostream out(&quot;outfile.biot&quot;);<br />
+mycoil.write(out);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOwriteMatlab'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void writeMatlab(std::string fname);<br />
+void writeMatlab(matstream &matout);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Matlab can only plot the data with 'plotmag' if the Grid was RECTANGULAR. It can still read this output file however.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+fname--&gt; an output file name<br />
+out--&gt; a previously declared matlab output stream<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes the data inside the object to several matlab variables to allow the matlab script 'plotmag' (in the folder 'matlabfunc' in the distribution) to plot the magnetic fields and coils. The data format inside this class is not easily transcribed into a plotable matlab format, thus the data is reordered and reorganized as follows.<br />
+<br />
+B0 - the Bx field (a 1xN double array)<br />
+B1 - the By field (a 1xN double array)<br />
+B2 - the Bz field (a 1xN double array)<br />
+<br />
+P0 - the coil's x point (a 1xN array)<br />
+P1 - the coil's y point (a 1xN array)<br />
+P2 - the coil's z point (a 1xN array)<br />
+<br />
+pdiv - the indexs inside (P0,P1,P2) where new coils start<br />
+<br />
+grid0 - the grid's x points (a 1xN array)<br />
+grid1 - the grid's y points (a 1xN array)<br />
+grid2 - the grid's z points (a 1xN array)<br />
+<br />
+N - the number of points total (constant)<br />
+<br />
+r - width of the grid (grid.max-grid-min) (a 1x3 array)<br />
+<br />
+res - the resolution (the dx, dy, dz) (a 1x3 array)<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up our base rectangular grids</font><br />
+Grid&lt;UniformGrid&gt; g1(coord&lt;&gt;(-1,-1,-1), coord&lt;&gt;(1,1,1), coord&lt;int&gt;(10,10,10));<br />
+<br />
+<font color='#006600'>//set up thte master shape</font><br />
+XYZshape&lt;XYZfull&gt; g2(g1, XYZfull());<br />
+<br />
+<font color='#006600'>//set up our Biot field calculator class</font><br />
+MultiBiot&lt;&gt; mycoil(g2,pset, &quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set the MPIcontroler to be MPIworld</font><br />
+mycoil.Controller=MPIworld;<br />
+<br />
+<font color='#006600'>//calculate the field</font><br />
+mycoil.calculateField();<br />
+<br />
+<font color='#006600'>//dump data into a matlab file</font><br />
+mycoil.writeMatlab(&quot;out.mat&quot;); <br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOwriteShape'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void writeShape(std::string out);<br />
+void writeShape(std::fstream &out);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+fname--&gt; the name of the text file<br />
+file--&gt; a previously declared output stream<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes the shape of the multi-coil to the follow format.<br />
+<br />
+-------------------------<br />
+START MultiBiotCoil<br />
+START BiotCoil<br />
+amps {num}<br />
+loops {num}<br />
+{x y z}<br />
+{x y z}<br />
+....<br />
+END BiotCoil<br />
+<br />
+START BiotCoil<br />
+amps {num}<br />
+loops {num}<br />
+{x y z}<br />
+{x y z}<br />
+....<br />
+END BiotCoil<br />
+END MultiBiotCoil<br />
+--------------------<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parameters pset(&quot;myfile&quot;);<br />
+pset.addSection(&quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set up our base rectangular grids</font><br />
+Grid&lt;UniformGrid&gt; g1(coord&lt;&gt;(-1,-1,-1), coord&lt;&gt;(1,1,1), coord&lt;int&gt;(10,10,10));<br />
+<br />
+<font color='#006600'>//set up thte master shape</font><br />
+XYZshape&lt;XYZfull&gt; g2(g1, XYZfull());<br />
+<br />
+<font color='#006600'>//set up our Biot field calculator class</font><br />
+Biot&lt;XYZshape&lt;XYZfull&gt; &gt; mycoil(g2,pset, &quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//write the field out</font><br />
+<font color='#006600'>// in the 'biot' format</font><br />
+ostream out(&quot;outfile.biot&quot;);<br />
+mycoil.writeShape(out);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other FunctionsaverageField'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; averageField(coord&lt;int&gt; which=(1,1,1))<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+which--&gt; a coord&lt;int&gt; the specifies the direction of the max. The default is all directions.<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the average field value along each direction where which[i]!=0. To obtain the maximum field along z only set which=(0,0,1).<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up our Biot field calculator class</font><br />
+Biot&lt;XYZshape&lt;XYZfull&gt; &gt; mycoil(g2,pset, &quot;mycoil&quot;);<br />
+<font color='#006600'>//calculate the field</font><br />
+mycoil.calculateField();<br />
+<br />
+<font color='#006600'>//the max field along all 3 directions</font><br />
+cout&lt;&lt;mycoil.averageField()&lt;&lt;endl;<br />
+<font color='#006600'>//the max field along the z-axis</font><br />
+cout&lt;&lt;mycoil.averageField(coord&lt;int&gt;(0,0,1));<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionscalculateField'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void calculateField();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Calculates the magnetic field at each grid point from the multi-coil set.  If 'Controller' is set then it will calculate it in parallel.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Parameters pset(&quot;myfile&quot;);<br />
+pset.addSection(&quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set up our base rectangular grids</font><br />
+Grid&lt;UniformGrid&gt; g1(coord&lt;&gt;(-1,-1,-1), coord&lt;&gt;(1,1,1), coord&lt;int&gt;(10,10,10));<br />
+<br />
+<font color='#006600'>//set up thte master shape</font><br />
+XYZshape&lt;XYZfull&gt; g2(g1, XYZfull());<br />
+<br />
+<font color='#006600'>//set up our Multi-Biot field calculator class</font><br />
+MultiBiot&lt; &gt; mycoil(g2,pset, &quot;mycoil&quot;);<br />
+<br />
+<font color='#006600'>//set the MPIcontroler to be MPIworld</font><br />
+mycoil.Controller=MPIworld;<br />
+<br />
+<font color='#006600'>//calculate the field</font><br />
+mycoil.calculateField();<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionsmaxField'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; maxField(coord&lt;int&gt; which=(1,1,1))<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+which--&gt; a coord&lt;int&gt; the specifies the direction of the max. The default is all directions.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the maximum field along each direction where which[i]!=0.  To obtain the maximum field along z only set which=(0,0,1).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up our Biot field calculator class</font><br />
+Biot&lt;XYZshape&lt;XYZfull&gt; &gt; mycoil(g2,pset, &quot;mycoil&quot;);<br />
+<font color='#006600'>//calculate the field</font><br />
+mycoil.calculateField();<br />
+<br />
+<font color='#006600'>//the max field along all 3 directions</font><br />
+cout&lt;&lt;mycoil.maxField()&lt;&lt;endl;<br />
+<font color='#006600'>//the max field along the z-axis</font><br />
+cout&lt;&lt;mycoil.maxField(coord&lt;int&gt;(0,0,1));<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

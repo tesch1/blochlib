@@ -1,0 +1,195 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Using the Biot class to calculate the field from a split solonoid<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Here is the field from a split solonoid.  A split solonoid is simply a close view of a true helmholtz pair.  The code calculates 2 different views of the field, one is a larger perspective to show the fringe fields, and another to show the field inside the cavity.
+<br>
+<br>
+
+<BR><BR>
+<li> There is a Matlab Function called <TT><B>plotmag</B></TT> The plots these figures from the generated matlab files.  This file is in the folder 'matlabfunc' in the distribution top directory.</li>
+<li> Here is the generated data from the First Grid</li>
+<ul><li>The Grid and coil<BR><BR><img src='grid1Helm.gif'></li>
+<li> The Magnetic Fields along each axis<BR><BR><img src='grid1Field.jpg'><BR><BR></li>
+<li> Here is the generated data from the Second Grid</li>
+<li>The Grid and coil<BR><BR><img src='grid2Helm.gif'></li>
+<li> The Magnetic Fields along each axis<BR><BR><img src='grid2Field.jpg'></li></ul></blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+<font color='#006600'>//It&nbsp;takes&nbsp;in&nbsp;this&nbsp;as&nbsp;the&nbsp;input&nbsp;file</font><br />
+------------------------truh.sim------------------------<br />
+<br />
+#the&nbsp;coil&nbsp;section&nbsp;we&nbsp;wish&nbsp;to&nbsp;use...<br />
+section&nbsp;helmz<br />
+&nbsp;&nbsp;#our&nbsp;'split-solonoid'<br />
+&nbsp;helmz{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;truehelmholtz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;loops&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;amps&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;numpts&nbsp;8000<br />
+&nbsp;&nbsp;&nbsp;#&nbsp;radius&nbsp;(cm)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;R&nbsp;0.3175<br />
+&nbsp;&nbsp;&nbsp;#distance&nbsp;b/w&nbsp;the&nbsp;two&nbsp;coils&nbsp;(cm)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;length&nbsp;1.09<br />
+&nbsp;&nbsp;&nbsp;#width&nbsp;between&nbsp;2&nbsp;helix&nbsp;layers<br />
+&nbsp;&nbsp;&nbsp;&nbsp;layerwidth&nbsp;0.161<br />
+&nbsp;#height&nbsp;between&nbsp;2&nbsp;turns&nbsp;in&nbsp;a&nbsp;heliz&nbsp;layer&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;if&nbsp;not&nbsp;present&nbsp;will&nbsp;default&nbsp;to&nbsp;layerwidth<br />
+&nbsp;&nbsp;&nbsp;&nbsp;layerheight&nbsp;0.161<br />
+&nbsp;#number&nbsp;of&nbsp;helix&nbsp;turns<br />
+&nbsp;&nbsp;&nbsp;&nbsp;turns&nbsp;3<br />
+&nbsp;#number&nbsp;of&nbsp;helix&nbsp;layers<br />
+&nbsp;&nbsp;&nbsp;&nbsp;numlayers&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;axis&nbsp;z<br />
+&nbsp;&nbsp;}<br />
+#number&nbsp;of&nbsp;grids&nbsp;to&nbsp;calculate&nbsp;the&nbsp;field&nbsp;over<br />
+&nbsp;&nbsp;numGrids&nbsp;2<br />
+#our&nbsp;rectangular&nbsp;grid&nbsp;dimensions<br />
+&nbsp;&nbsp;grid1{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min&nbsp;-0.125,&nbsp;-0.125,&nbsp;-0.125<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max&nbsp;0.125,&nbsp;0.125,&nbsp;0.125<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dim&nbsp;10,&nbsp;10,&nbsp;10<br />
+&nbsp;&nbsp;}<br />
+#our&nbsp;rectangular&nbsp;grid&nbsp;dimensions<br />
+&nbsp;&nbsp;grid2{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min&nbsp;-1,&nbsp;-1,&nbsp;-1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max&nbsp;1,&nbsp;1,&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dim&nbsp;10,&nbsp;10,&nbsp;10<br />
+&nbsp;&nbsp;}<br />
+------------------------truh.sim------------------------<br />
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//the&nbsp;required&nbsp;2&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<br />
+<font color='#006600'>//The&nbsp;main&nbsp;runner&nbsp;for&nbsp;calulating&nbsp;magnetic&nbsp;fields&nbsp;</font><br />
+<font color='#006600'>//over&nbsp;grids&nbsp;a&nbsp;set&nbsp;number&nbsp;of&nbsp;grid&nbsp;points</font><br />
+<br />
+int&nbsp;main(int&nbsp;argc,&nbsp;char&nbsp;**argv)<br />
+{<br />
+<br />
+<font color='#006600'>//start&nbsp;MPI</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;MPIworld.start(argc,&nbsp;argv);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;parse=&quot;&quot;;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;q=1;<br />
+<font color='#006600'>//get&nbsp;the&nbsp;parameter&nbsp;file</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(MPIworld.master())<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;query_parameter(argc,&nbsp;argv,&nbsp;q++,&nbsp;&quot;<br />
+	Enter&nbsp;Parmeter&nbsp;set&nbsp;file&nbsp;name:&quot;,&nbsp;parse);<br />
+<br />
+<font color='#006600'>//distribute&nbsp;the&nbsp;file&nbsp;name&nbsp;to&nbsp;all&nbsp;the&nbsp;nodes</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;MPIworld.scatter(parse);<br />
+<br />
+<font color='#006600'>//decalare&nbsp;our&nbsp;Parameter&nbsp;set</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Parameters&nbsp;pset(parse);<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;desired&nbsp;coil&nbsp;to&nbsp;calculate&nbsp;the&nbsp;field&nbsp;over</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;choose=pset.getParamS(&quot;section&quot;);<br />
+<br />
+<font color='#006600'>//add&nbsp;this&nbsp;section&nbsp;to&nbsp;the&nbsp;parameter&nbsp;set</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;pset.addSection(choose);<br />
+<br />
+<font color='#006600'>//a&nbsp;typdef&nbsp;to&nbsp;make&nbsp;our&nbsp;grid&nbsp;typing&nbsp;easier</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;XYZshape&lt;XYZfull&gt;&nbsp;TheGrid;<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;number&nbsp;of&nbsp;grids&nbsp;we&nbsp;wish&nbsp;to&nbsp;calculate&nbsp;the&nbsp;field&nbsp;over</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;numGrids=pset.getParamI(&quot;numGrids&quot;);<br />
+<br />
+<font color='#006600'>//the&nbsp;grids&nbsp;sectiosn&nbsp;will&nbsp;look&nbsp;like&nbsp;'grid1',&nbsp;'grid2'</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;baseGname=&quot;grid&quot;;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;i=1;i&lt;=numGrids;++i)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;Gname=baseGname+itost(i);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//add&nbsp;the&nbsp;grid&nbsp;section</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pset.addSection(Gname);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//set&nbsp;up&nbsp;our&nbsp;base&nbsp;rectangular&nbsp;grids</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grid&lt;UniformGrid&gt;&nbsp;g1(pset.getParamCoordD(&quot;min&quot;,&nbsp;Gname),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pset.getParamCoordD(&quot;max&quot;,&nbsp;Gname),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pset.getParamCoordI(&quot;dim&quot;,&nbsp;Gname));<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//set&nbsp;up&nbsp;thte&nbsp;master&nbsp;shape</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TheGrid&nbsp;g2(g1,&nbsp;XYZfull());<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//set&nbsp;up&nbsp;our&nbsp;Biot&nbsp;field&nbsp;calculator&nbsp;class</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Biot&lt;TheGrid&gt;&nbsp;mycoil(g2,pset,&nbsp;choose);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//set&nbsp;the&nbsp;MPIcontroler&nbsp;to&nbsp;be&nbsp;MPIworld</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mycoil.Controller=MPIworld;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//calculate&nbsp;the&nbsp;field</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mycoil.calculateField();<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//dump&nbsp;out&nbsp;the&nbsp;info&nbsp;to&nbsp;files</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(MPIworld.master()){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mycoil.writeMatlab(pset.getParamS(&quot;matout&quot;,&nbsp;&quot;params&quot;,&nbsp;false,&nbsp;&quot;field&quot;+itost(i)+&quot;.mat&quot;));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mycoil.write(pset.getParamS(&quot;textout&quot;,&nbsp;&quot;params&quot;,&nbsp;false,&nbsp;&quot;shape&quot;+itost(i)+&quot;.boit&quot;));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+<font color='#006600'>//end&nbsp;out&nbsp;MPI&nbsp;session</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;MPIworld.end();<br />
+<br />
+}<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

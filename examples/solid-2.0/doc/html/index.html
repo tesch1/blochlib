@@ -1,0 +1,720 @@
+
+	<html>
+	<head>
+	
+	<title>Solid-2.0::Documentaion</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+	  <tr>
+		<td>&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	   <tr> 
+		
+    <td class="head" width="59%"> &nbsp;&nbsp;Solid-2.0 Documentation---</td>
+	  </tr>
+	</table>
+
+
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+	  <tr>
+		<td>&nbsp;</td>
+	  </tr>
+	</table>
+		
+<br>
+<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		
+<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td halign='left' valign='top' width="22%"> 
+      <table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left class='normalText'>
+        <tr> 
+          <td bgcolor='#aaaaaa'>&nbsp; </td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><b> <a href='index.html'>home </a> </b></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><b> Sections</b></td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'> <a href="index.html#spins">-Spins</a> </td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'><a href="index.html#params">-Parameters</a></td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'><a href="index.html#pulses">-Pulses</a></td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'><a href="index.html#funcs">---Function List---</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="index.html#ff">-file formats</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><b> Examples</b></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html">-Static</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#basic">---basic</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#d2">---2D</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#alter">---alterSys</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#dc">---decouple</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html">-Mas</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html#basic">---basic</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html#d2">---2D</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html#ptop">---ptop</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html">-C7s</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#basic">---basic</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#d2">---2D</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#explict">---explicit</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#rotor">---rotor</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#transfer">---transfer</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="quadexamples.html">-Quadrupoles</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td>---<a href="quadexamples.html#centrans">central Trans</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td bgcolor='#aaaaaa'>&nbsp; </td>
+        </tr>
+        <tr> 
+          <td class='sidemenu' bgcolor='#cccccc'> </td>
+        </tr>
+      </table>
+    </td>
+    <td width="78%" valign='top' class='normalText'> 
+      <blockquote> 
+        <p><br>
+          Solid-2.0 is a general quantum mechanical NMR simulation package designed 
+          to simulate virtually any pulse sequence NMR performs on up to 10 spins.<br>
+          <br>
+          The distribution is with '<a href="http://waugh.cchem.berkeley.edu/blochlib" target="_new">BlochLib</a>' 
+          (because you need that in order to build solid), in the examples folder.<br>
+          <br>
+          The source code interfaces directly with the BlochLib NMR library and 
+          is greatly simplified over previous versions, that addition of additional 
+          features is very simple...if you have any features that you would like 
+          to see (and have a knack for C++) read the BlochLib documentation first, 
+          then add away. If the feature is potent enough to warrant inclusion 
+          in the main distribution please let me know and i will add it (i'll 
+          even optimize it and extend it if possible)...if you are not so C++ 
+          savvy, then let me know the feature and i could add it...<br>
+          <br>
+          Solid-2.0 is a major revision on the previous solid packages. It includes 
+          an in-house scripting capabilities, easier syntax, arbitrary 2D acquisitions 
+          and arbitrary point-to-point acquisitions, reusable pulse sections, 
+          multiple spin sections, manipulation of spin parameters in the pulse 
+          sequence. All in all, the entire package is much more powerful and useful. 
+          The old version is incompatible with this version.<br>
+          <br>
+          This documentation is highly example driven with a brief description 
+          of each of the available function.</p>
+      </blockquote>
+      <ul>
+        <li><span class="importantText2">To Run In Parallel </span> 
+          <ul>
+            <li>Make sure you compile with MPI</li>
+            <li>It runs on a master/slave model so when you run it make sure you 
+              add one extra processor (the 'master' only gives out work and does 
+              minimal work itself)<br>
+              <br>
+              If you have 4 procs..simply issue this command<br>
+              <br>
+              <span class="ImportantText">mpirun -np 5 solid {config file}</span></li>
+          </ul>
+        </li>
+      </ul>
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td class="importantText2"> The 3 Sections </td>
+        </tr>
+        <tr> 
+          <td class="normalText"> 
+            <ul>
+              <li>Each input file should have these 3 sections with the basic 
+                syntax </li>
+              <blockquote> 
+                <p><tt>spins{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;...<br>
+                  }<br>
+                  <br>
+                  parameters{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;powder{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;...powder options...<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;...other parameters...<br>
+                  } <br>
+                  <br>
+                  pulses{<br>
+                  <span class="codecomment"># if desired use a pulse section via</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;sub1{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...pulses things....<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;} &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;...main sequence running...<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;...and 'fid' collection...<br>
+                  }</tt></p>
+                <p>comments can be made anywhere by beginning a line with '#'</p>
+              </blockquote>
+              <li><a name="spins"></a><span class="subHeads">The <tt>Spins</tt> 
+                Section</span><br>
+                <br>
+                You input file should have this section 
+                <blockquote> 
+                  <p><tt>spins{ <br>
+                    ...<br>
+                    } </tt></p>
+                </blockquote>
+                <p>Inside 'spins' you should obey the syntax as described for 
+                  the input string vector of the 'SolidSys.' Spin indices are 
+                  started at '0' (not 1) An example is given below</p>
+                <blockquote> 
+                  <p><tt>spins{<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;numspins 2<br>
+                    <span class="codecomment">#this defined the nucleous <br>
+                    #T {label} {spin}</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;T 1H 0 <span class="codecomment">#the 
+                    first spin is a proton</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;T 13C 1 <span class="codecomment">#the 
+                    second spin is 13C</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;T 14N 2 <span class="codecomment"># 
+                    a quadrupole spin</span><br>
+                    <br>
+                    <span class="codecomment">#interactions are defined as below<br>
+                    # frequencies are defined in Hz (not rad/sec)<br>
+                    #a CSA<br>
+                    #C {iso} {del} {eta} {spin} {alpha} {beta} {gamma}</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;C 3000 234 0.2 0 <span class="codecomment">#a 
+                    csa on the first spin</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;C 0 4567 0 1 <span class="codecomment">#a 
+                    csa on the second spin</span><br>
+                    <br>
+                    <span class="codecomment">#A Dipole<br>
+                    #D {del} {spin1} {spin2} {alpha} {beta} {gamma}</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;D 3450 0 1 <span class="codecomment"># 
+                    a dipole between spin 1 and 2</span><br>
+                    <br>
+                    <span class="codecomment">#a qudrupole<br>
+                    #Q {Q} {eta} {spin} {alpha} {beta} {gamma} {order}</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Q 1e6 0 2 0 0 0 2<br>
+                    <br>
+                    <span class="codecomment"># scalar coupling<br>
+                    #J {J} {spin1} {spin2}</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;J 500 0 1<br>
+                    }</tt></p>
+                </blockquote>
+              </li>
+            </ul>
+            <hr size="1" noshade>
+            <ul>
+              <li> 
+                <p><a name="params"></a><span class="subHeads">The <tt>parameters</tt> 
+                  Section<br>
+                  <br>
+                  </span>Your input file should have this section </p>
+              </li>
+              <blockquote> 
+                <p><tt>parameters{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;powder{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;...powder options...<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;...other parameters...<br>
+                  } </tt></p>
+              </blockquote>
+              <p>You can define any variable you wish here using the syntax 'A=B' 
+                HOWEVER, there are some basic predefined variables that will be 
+                set regardless of weather or not they are set here. It should 
+                be noted that you can always alter these variables inside the 
+                'pulses' section as well. These variables will be GLOBAL to any 
+                subpulse section and any item in the pulse section<br>
+                <br>
+              </p>
+              <table width="98%" border="0" cellspacing="1" cellpadding="0">
+                <tr> 
+                  <td colspan="2"><b>The Global Variables</b></td>
+                </tr>
+                <tr> 
+                  <td class="ImportantText" width="16%">wr</td>
+                  <td class="normalText" width="84%">the rotor spinning speed 
+                    in Hz (default = 0)</td>
+                </tr>
+                <tr> 
+                  <td class="ImportantText" width="16%">rotor </td>
+                  <td class="normalText" width="84%">the rotor angle in DEGREES 
+                    (default =0 )</td>
+                </tr>
+                <tr> 
+                  <td class="ImportantText" width="16%">maxtstep</td>
+                  <td class="normalText" width="84%">the basic time step for performing 
+                    the dyson time ordering for spinning samples. This value will 
+                    be largest dt for any integration (default 1e-6 seconds)</td>
+                </tr>
+                <tr> 
+                  <td class="ImportantText" width="16%">npts1D</td>
+                  <td class="normalText" width="84%">the number of FID points 
+                    in the first dimension (default= 1)</td>
+                </tr>
+                <tr> 
+                  <td class="ImportantText" width="16%">npts2D</td>
+                  <td class="normalText" width="84%">the number of FID points 
+                    in the seond dimension (default = 1)</td>
+                </tr>
+                <tr> 
+                  <td class="ImportantText" width="16%">sw</td>
+                  <td class="normalText" width="84%">The sweep width in Hz (default 
+                    = 20kHz)</td>
+                </tr>
+                <tr> 
+                  <td class="ImportantText" width="16%">Bfield</td>
+                  <td class="normalText" width="84%">The magnetic Field strength 
+                    in Hz (default 400 Mhz)</td>
+                </tr>
+                <tr> 
+                  <td class="ImportantText" width="16%">roeq</td>
+                  <td class="normalText" width="84%">the Initial Density matrix. 
+                    It can be anything available to HamiltonianGen in BlochLib 
+                    (default =Iz)</td>
+                </tr>
+                <tr> 
+                  <td class="ImportantText" width="16%">detect</td>
+                  <td class="normalText" width="84%">The Detection matrix. It 
+                    can be anything available to HamiltonianGen in BLochLib (default=Ip)</td>
+                </tr>
+                <tr> 
+                  <td class="ImportantText" width="16%">filesave</td>
+                  <td class="normalText" width="84%">The file name to save the 
+                    FIDs in (default=soliddata)</td>
+                </tr>
+                <tr> 
+                  <td class="ImportantText" width="16%">&nbsp;</td>
+                  <td class="normalText" width="84%">&nbsp;</td>
+                </tr>
+              </table>
+              <p>The powder subsection defines the powder average type, or the 
+                input file of angles. It follows the syntax available to the 'powder' 
+                class in BlochLib. Below is an example</p>
+              <blockquote> 
+                <p> <span class="codecomment"># the internal zcw powder average</span><br>
+                  <tt>powder{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;aveType zcw<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;thetaStep 233<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;phiStep 144<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;gammaStep 0<br>
+                  } </tt><br>
+                  <br>
+                  <span class="codecomment"># using an input file</span><br>
+                  <tt>powder{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;aveType /total path to file/filename<br>
+                  } </tt></p>
+                <p>The input file should have 2,3, or 4 columns and all angles 
+                  are in RADIANS<br>
+                  <br>
+                  2-column file:: {phi} {theta}<br>
+                  3-column file:: {phi} {theta} {weight}<br>
+                  4-column file:: {phi} {theta} {gamma} {weight}<br>
+                </p>
+              </blockquote>
+              <p>Below is a typical parameter input example</p>
+              <blockquote> 
+                <p><tt>parameters{<br>
+                  <span class="codecomment"># the internal zcw powder average</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;powder{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aveType zcw<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thetaStep 233<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phiStep 144<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gammaStep 0<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;} <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;wr=3000<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;rotor=acos(1/sqrt(3))*deg2rad <span class="codecomment">#magic 
+                  angle</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;maxtstep=1e-6<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;npts1D=512<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;sw=10*wr<br>
+                  } </tt></p>
+              </blockquote>
+            </ul>
+            <hr size="1" noshade>
+            <ul>
+              <li> <a name="pulses"></a><span class="subHeads">The <tt>pulses</tt> 
+                Section</span> <br>
+                <br>
+                Your input file should have this section 
+                <blockquote> 
+                  <p><tt>pulses{<br>
+                    <span class="codecomment"># if desired use a pulse section 
+                    via</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;sub1{<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...pulses 
+                    things....<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;} &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;...main sequence running...<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;...and 'fid' collection...<br>
+                    }</tt></p>
+                </blockquote>
+                <p>This is the main driver. It performs the propagation, fid collection, 
+                  and file saving. You can alter spin system parameters here, 
+                  and change or define any variable you wish. Any variable you 
+                  set here is GLOBAL to all the sub sections. The subsections 
+                  should start with the 'sub1' and continue to 'subN.' Because 
+                  the usage of this section is highly dependant on what you are 
+                  doing, I'll simply move on to the function list, and let you 
+                  look at the examples for more information.</p>
+              </li>
+            </ul>
+            <p><br>
+            </p>
+            <hr size="1" noshade>
+            <br>
+            <table width="100%" border="1" cellspacing="0" cellpadding="2" bordercolor="#CCCCCC">
+              <tr> 
+                <td colspan="2"><a name="funcs"></a><span class="subHeads">The 
+                  Pulse Section Function List....</span></td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">ro(matrix)</td>
+                <td width="71%" class="normalText">sets the current density matrix 
+                  to the input....thing can be of the syntax as HamiltonianGen 
+                  in BlochLib</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">detect(matrix)</td>
+                <td width="71%" class="normalText">sets the detection matrix to 
+                  the input....thing can be of the syntax as HamiltonianGen in 
+                  BlochLib</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">amplitude(#)</td>
+                <td width="71%" class="normalText">Sets the default pulse amplitude 
+                  (in Hz) the default will remain in effect until you call this 
+                  function to set it again. The input can be any valid expression 
+                  to Parser in BlochLib.</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">offset(#)</td>
+                <td width="71%" class="normalText">Sets the default pulse offset 
+                  (in Hz) the default will remain in effect until you call this 
+                  function to set it again. The input can be any valid expression 
+                  to Parser in BlochLib.</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">ptop()</td>
+                <td width="71%" class="normalText">Sets the type of FID to a point 
+                  to Point experiment. You must set this ANYTIME you want to use 
+                  the fid() command to collect only ONE point. It performs a trace 
+                  of the current evolved 'ro' with the detection matrix. You must 
+                  declare this BEFORE the 'fid' command is used.</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">2D()</td>
+                <td width="71%" class="normalText">If you are collecting ANY TYPE 
+                  of 2D data, you must set this flag so the data get handled properly. 
+                  You must declare this BEFORE the 'fid' command is used.</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">use(subsect)</td>
+                <td width="71%" class="normalText">This tells the program to use 
+                  a subsection defined as a 'sub1'..'subN' section. It will RECALCULATE 
+                  it propagator every time it sees this function. You should use 
+                  this function (as aposed to 'reuse') if there is a variable 
+                  inside the subsection that gets updated OUTSIDE the subsection 
+                  which would cause the previously calculated propagator to be 
+                  invalid (things like changing the rotor angle, or a pulse amplitude)</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">reuse(subsect)</td>
+                <td width="71%" class="normalText">This tells the program to use 
+                  a subsection defined as a 'sub1'..'subN' section. It will CALCULATE 
+                  the propagator ONLY ONCE. You should use this function when 
+                  the propagator will remain the same regardless of the time, 
+                  or any other variables. For example a C7 uses a single 2 rotor 
+                  cycle that does not change the propagator for each time incremented. 
+                  This saved you valuable computation time when used properly.</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">use(subsect, repeat<br>
+                  use(subsect, repeat, hold)<br>
+                  <br>
+                  reuse(subsect, repeat)<br>
+                  reuse(subsect, repeat, hold)</td>
+                <td width="71%" class="normalText">Performs the same things as 
+                  the use or reuse command above, except that if the subsection 
+                  is a time periodic, then you can save computational time by 
+                  simply 'repeating' the propagator rather then recalculating 
+                  the entire thing. The parameter 'repeat' should evaluate to 
+                  a number &gt;=0. If '0' it will NOT be applied at that time.<br>
+                  <br>
+                  The hold command is useful when doing 2D type experiments (either 
+                  a ptop or a full 2D collection). The propagator will only be 
+                  applied at the FIRST point in any fid. Things like cross-polarization 
+                  (CP) fit into this category where one only CP's at the beginning 
+                  of the sequence.</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">cycler(matrix)</td>
+                <td width="71%" class="normalText">This command enables you to 
+                  do 'fictitious' phase cycling. Whenever this command is implemented 
+                  the current propagated density matrix will be 'traced' with 
+                  the input matrix such that the resulting density matrix becomes 
+                  <br>
+                  <br>
+                  ro=trace(adjoint(cycler), ro)*cycler/trace(cycler, adjoint(cycler))<br>
+                  <br>
+                  For example a z-filter (used commonly to remove unwanted X and 
+                  Y coherences would be implemented by 'cycler(Iz).' The matrix 
+                  can be of the syntax as HamiltonianGen in BlochLib.</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">fid()</td>
+                <td width="71%" class="normalText">Collects an ENTIRE fid of the 
+                  length of the 'npts1D' variable, weather that be a point to 
+                  point experiment, static FIDs, or spinning FIDs.</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">fid(int)</td>
+                <td width="71%" class="normalText">This is an extension that give 
+                  you the ability to specify what fid point you are collecting. 
+                  To use this for 1D FIDs you must have set the ptop flag using 
+                  'ptop().' To use this for 2D fids you must use the '2D()' flag. 
+                  For Point-To-Point 1D experiments a single complex value is 
+                  added to the data vector, for 2D data an FID of length npts1D 
+                  is computed (either in the normal static, spinning approach 
+                  or the Point To Point approach (if the ptop() command was used)).</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">alterSys(what, num)</td>
+                <td width="71%" class="normalText">This allows you to alter a 
+                  parameter in the SpinSystem. The 'what' is of the syntax<br>
+                  <br>
+                  D01del --&gt; alters the dipolar coupling between 0 and 1<br>
+                  C1iso --&gt; alters the isotropic shift of spin 1<br>
+                  C0eta --&gt; alters the eta of spin 0<br>
+                  Q0del --&gt; alters the quad coupling on spin 0<br>
+                  D01alpha --&gt; changes the orientation angle of the dipole 
+                  between 0 and 1<br>
+                  <br>
+                  The couplings MUST be defined in the 'spins' section before 
+                  you can alter them...num can be of any expression valid to the 
+                  Parser class in BlochLib</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">savefid()<br>
+                  savefid(name)<br>
+                  savefid(name, which)</td>
+                <td width="71%" class="normalText">This will save the fid AFTER 
+                  the ENTIRE powder average has been calculated. It will automatically 
+                  determine the save type. If the spectra is 1D it will save it 
+                  as a 'text' file (see below). If the data is 2D it will save 
+                  it as a matlab binary file (see below).<br>
+                  <br>
+                  If 'name' is not present it will use the variable 'filesave' 
+                  as the file name. <br>
+                  <br>
+                  If 'which' is present it will save a 2D fid in its 1D components 
+                  adding the number 'num' to the end of the file name to distinguish 
+                  it from the rest...this is only valid for 2D data.</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">savefidtext()<br>
+                  savefidtext(name)<br>
+                  savefidtext(name, which)</td>
+                <td width="71%" class="normalText">Does the same as the above 
+                  function except forces it to save the data as an ASCII file 
+                  (for both 1 and 2Ds)</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">savefidmatlab()<br>
+                  savefidmatlab(name)<br>
+                  savefidmatlab(name, which)</td>
+                <td width="71%" class="normalText">Does the same as the above 
+                  function except forces it to save the data as a matlab file 
+                  (for both 1 and 2Ds)</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">savefidbinary()<br>
+                  savefidbinary(name)<br>
+                  savefidbinary(name, which)</td>
+                <td width="71%" class="normalText">Does the same as the above 
+                  function except forces it to save the data as a binary file 
+                  (for both 1 and 2Ds)</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">show()</td>
+                <td width="71%" class="normalText">This command DISPLAYS what 
+                  the simulator 'would be doing' if you do not call this function. 
+                  It dumps a LARGE variety of information to the screen and can 
+                  be useful for debugging you pulse sequences. You should set 
+                  this at the beginning of the pulses section such that everything 
+                  is displayed. It does NOT calculate anything (except the variables 
+                  and inputs)</td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">{spin}:pulse(time, phase, 
+                  amp, offset)</td>
+                <td width="71%" class="normalText"> 
+                  <p>This produces a pulse on spin {spin} for the time {time} 
+                    in seconds, amplitude {amp} in Hz, phase {phase} in DEGREES, 
+                    and offset {offset} in Hz...some examples<br>
+                  </p>
+                  <p>a 90 pulse on proton<br>
+                    1H:pulse(1/15000/4, 90, 15000, 0)<br>
+                    <br>
+                    uses the default offset (by 'offset(#)')<br>
+                    1H:pulse(1/15000/4, 90, 15000)<br>
+                    <br>
+                    uses the default amplitude (by 'amplitude(#)') and offset<br>
+                    1H:pulse(1/15000/4, 90) <br>
+                    <br>
+                    To perform multiple pulse on different spins simply use the 
+                    '|'<br>
+                    <br>
+                    a 90 pulse on both carbon and 1H<br>
+                    amplitude(15000)<br>
+                    1H:pulse(1/15000/4,90) | 13C:pulse(1/15000/4,90)<br>
+                    <br>
+                    if there are more then one spin type in the system, and no 
+                    pulse is specified for it at that time, a DELAY is assumed...</p>
+                </td>
+              </tr>
+              <tr> 
+                <td width="29%" class="ImportantText">{spin}:delay(time)</td>
+                <td width="71%" class="normalText">This produces a delay (simple 
+                  evolution under the current Hamiltonian) for a time {time} in 
+                  seconds Some examples<br>
+                  <br>
+                  1H:delay(0.001)<br>
+                  <br>
+                  1H:pulse(1/15000/4,90) | 13C:delay(1/15000/4)</td>
+              </tr>
+            </table>
+            <p>&nbsp; </p>
+            <ul>
+            </ul>
+            <hr size="1" noshade>
+            <p><br>
+              <a name="funcs"></a><span class="subHeads">File Formats...</span> 
+            </p>
+            <ul>
+              <li><span class="importantText2">Text</span> <br>
+                <br>
+                For all 1D data, the output file will contain these columns<br>
+                <br>
+                <span class="ImportantText"> {time} {frequency} {real fid} {imag 
+                fid} {real fft} {imag fft} {power fft}</span><br>
+                <br>
+                For all 2D data, the file will contain<br>
+                <br>
+                <span class="ImportantText">npts1 = {npts1D}<br>
+                npts2 = {npts2D}<br>
+                {matrix row index} {matrix col index} {real part} {imag part}<br>
+                ...<br>
+                <br>
+                </span></li>
+              <li><span class="importantText2">Binary</span><br>
+                <br>
+                For all 1D data, the ouput will be<br>
+                <br>
+                <span class="ImportantText">npts1={npts1D}<br>
+                {real val 0}{imag val 0}...{real val N}{imag val N}<br>
+                </span><br>
+                the 'real val ' and 'imag val' are in binary<br>
+                <br>
+                For all 2D data, the output will be<br>
+                <br>
+                <span class="ImportantText">npts1={npts1D}<br>
+                npts2={npts2D}<br>
+                {real val row=0, col=0}{imag val row=0, col=0}...<br>
+                {real val row0, col=npts2}{imag val row=0, col=npts2}<br>
+                ...<br>
+                {real val row=npts1, col=0}{imag val row=npts1, col=0}...<br>
+                {real val row=npts1, col=npts2}{imag val row=npts1, col=npts2}</span><br>
+                <br>
+                the 'real val ' and 'imag val' are in binary<br>
+                <br>
+              </li>
+              <li><span class="importantText2">Matlab</span><br>
+                <br>
+                <span class="ImportantText">For both 1D and 2D data, a data matrix 
+                (or vector) will be saved in matlab format with the name &quot;vdat&quot; 
+                (so that it interfaced directly with 'solidplotter')<br>
+                </span></li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+      <p><br>
+      </p>
+    </td>
+  </tr>
+</table>
+<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

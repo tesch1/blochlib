@@ -1,0 +1,141 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("12menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("12menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("12menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("12title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("12");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Getting BlochLib To work On Windows<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+********<br />
+**** Getting BlochLib To work On Windows<br />
+**** Getting OPTIMIZED BLAS routines on Windows<br />
+**** (also getting BlochLib to work as well)<br />
+****** <br />
+*****<br />
+<br />
+author: Bo Blanton<br />
+last update: 06.20.02<br />
+email: bo@theaddedones.com<br />
+<br />
+*This document will hopefully show you how to create a highly <br />
+ optimized set of BLAS libraies for the CYGWIN and MINGW environments.<br />
+<br />
+------------------Note for Visual C++ --------------------<br />
+----------------------------------------------------------<br />
+!!THIS DISTRIBUTION IS NOT SET UP TO COMPILE ON ViSuAl Cpp!!<br />
+(it should, i just do not have it to try it)<br />
+If you are using Visual C++ then INTEL has already created<br />
+a very fast set of BLAS routines optimized for each Processor type.<br />
+Go here to get the DLL and static libs..<br />
+http:<font color='#006600'>//developer.intel.com/software/products/mkl/index.htm </font><br />
+the linking directions are in that distribution<br />
+<br />
+<br />
+------------------CYGWIN & MINGW -------------------------<br />
+----------------------------------------------------------<br />
+*CYGWIN and MINGW are unix emulation layers over Windows that allow<br />
+ folks to write code that will copmile on Linux, Unix, and Windows<br />
+ with minimal effort.  <br />
+<br />
+*CYGWIN & MINGW--&gt; CYGWIN provides a POSIX emulation layer over windows<br />
+ so one can use all the good UNIX command line tools and scripting<br />
+ capabilities (like bash, perl, etc)...it provide the GCC compiler<br />
+ suite as well.  However, all programs and/or libaraies are dependant<br />
+ on the Cygwin Run time DLL...meaning 'double cliking' on a program<br />
+ will typically result in an error becuase it cannot find the cygwin dll<br />
+ thus to run the program you must have cygwin installed...which is not <br />
+ bad so long as you are not going to distribute the programs.  MingW solves<br />
+ this problem, by linking 'reverting' the basic cygwin dependancies on to <br />
+ the Windows Sub System (the OS).  MINGW is simply a new set of libraries and<br />
+ includes to replace the Cygwin ones...cygwin, however, allows the usual make<br />
+ and bulid process to happen flawlessly...so you need both...<br />
+<br />
+*Getting CYGWIN::<br />
+  1) go here: http:<font color='#006600'>//cygwin.com</font><br />
+  2) run the 'setup.exe' program and read the directions to install<br />
+     (i think that is easy enough)<br />
+  3) the installation will typically be in &quot;C:cygwin&quot; but you <br />
+     can change it...<br />
+<br />
+*Getting MINGW runtime libs<br />
+  1) go here: https:<font color='#006600'>//sourceforge.net/projects/mingw/</font><br />
+  2) get the newest release (as of this writing it was &quot;mingw-1.1&quot;)<br />
+  3) open the Cygwin Bash Shell....<br />
+  3) create a sub directory &quot;C:cygwinmingw&quot;<br />
+  4) copy &quot;MinGW-1.1.tar.gz&quot; to &quot;C:cygwinmingw&quot;<br />
+  5) untar the dist. &quot;tar -zxvf MinGW-1.1.tar.gz&quot;<br />
+  ---below the copiable commands<br />
+  <br />
+  mkdir /mingw<br />
+  cp MinGW-1.1.tar.gz /mingw<br />
+  tar -zxvf MinGW-1.1.tar.gz<br />
+  <br />
+*You should now have everything you need to start compiling things<br />
+ in any way, shape, or form you desire.<br />
+ <br />
+<br />
+now Read the &quot;README.BLAS&quot; for getting really fast BLAS<br />
+routines on your particular system....<br />
+</blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

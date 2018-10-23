@@ -1,0 +1,102 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Rotating Grid example<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Simpley sets up a Rotating Grid.  It behaves exactly as the static grids do except that the grid points are now a function of time. This class is meant to emulate a MAS type experiment.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+<font color='#006600'>//some&nbsp;typedefs&nbsp;to&nbsp;make&nbsp;typeing&nbsp;easier</font><br />
+typedef&nbsp;XYZfull&nbsp;TheShape;<br />
+typedef&nbsp;XYZshape&lt;TheShape&gt;&nbsp;TheGrida;	<font color='#006600'>//our&nbsp;shape</font><br />
+typedef&nbsp;RotatingGrid&lt;TheGrida&gt;&nbsp;TheGrid;&nbsp;<font color='#006600'>//spinning&nbsp;grid</font><br />
+<br />
+<font color='#006600'>//this&nbsp;is&nbsp;our&nbsp;ListBlochParams&nbsp;typedef</font><br />
+typedef&nbsp;ListBlochParams&lt;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TheGrid,&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BPoptions::Particle&nbsp;|&nbsp;BPoptions::HighField,&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;&gt;&nbsp;MyPars;<br />
+<br />
+coord&lt;&gt;&nbsp;myAxis(1,1,1);&nbsp;<font color='#006600'>//the&nbsp;magic&nbsp;angle&nbsp;axis</font><br />
+double&nbsp;rate=2000.0*PI2;&nbsp;<font color='#006600'>//the&nbsp;spinning&nbsp;rate&nbsp;in&nbsp;radians</font><br />
+<br />
+Grid&lt;UniformGrid&gt;&nbsp;gg(mins,&nbsp;maxs,&nbsp;dims);&nbsp;<font color='#006600'>//the&nbsp;basic&nbsp;grid</font><br />
+<br />
+TheShape&nbsp;tester;&nbsp;<font color='#006600'>//the&nbsp;basic&nbsp;shape</font><br />
+TheGrida&nbsp;jja(gg,&nbsp;tester);&nbsp;<font color='#006600'>//the&nbsp;XYZshape</font><br />
+TheGrid&nbsp;jj(jja,&nbsp;myAxis,&nbsp;rate);&nbsp;<font color='#006600'>//The&nbsp;Rotating&nbsp;grid</font><br />
+<br />
+<font color='#006600'>//an&nbsp;initial&nbsp;condition</font><br />
+int&nbsp;IC=InitialCondition::Random;<br />
+<font color='#006600'>//create&nbsp;a&nbsp;parameter&nbsp;set</font><br />
+<font color='#006600'>//with&nbsp;the&nbsp;same&nbsp;number&nbsp;of&nbsp;spins&nbsp;as</font><br />
+<font color='#006600'>//&nbsp;grid&nbsp;points,&nbsp;all&nbsp;protons.&nbsp;</font><br />
+<font color='#006600'>//&nbsp;with&nbsp;our&nbsp;rotating&nbsp;grids</font><br />
+<font color='#006600'>//&nbsp;and&nbsp;a&nbsp;random&nbsp;initialcondition</font><br />
+MyPars&nbsp;mypars(jj.size(),&nbsp;&quot;1H&quot;,&nbsp;jj,&nbsp;IC);<br />
+<font color='#006600'>//set&nbsp;some&nbsp;properties&nbsp;of&nbsp;the&nbsp;params</font><br />
+for(int&nbsp;j=0;j&lt;mypars.size();j++){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;mypars.temperature(300.0);<br />
+}<br />
+<br />
+<font color='#006600'>//recalc&nbsp;the&nbsp;total&nbsp;Mo</font><br />
+mypars.calcTotalMo();<br />
+<br />
+<font color='#006600'>//use&nbsp;the&nbsp;parameters&nbsp;as&nbsp;your&nbsp;wish.....</font><br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

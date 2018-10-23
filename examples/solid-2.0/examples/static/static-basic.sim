@@ -1,0 +1,53 @@
+
+
+spins{
+	
+	#the global options
+	numspin 2
+	T 1H 0
+	T 1H 1
+#csa <iso> <del> <eta> <spin>
+	C 5000  2134 0 0
+	C -5000 2789 0.5 1
+}
+
+parameters{	
+
+	powder{
+		aveType ../../../../crystals/rep2000
+	}		
+
+#the intergrator step size	
+	maxtstep=5e-6
+
+#number of 1D fid points	
+	npts1D=512	
+
+#sweepwidth
+	sw=40000
+	
+	roeq= Iz	
+	detect=Ip	
+	filesave=data	
+}
+
+
+pulses{
+
+#set the spinning	
+	wr=0
+#set the rotor
+	rotor=0
+#set the detection matrix
+	detect(Ip)
+#set the inital matrix
+	ro(Ix)
+
+#no pulses nessesary for ro=Ix
+
+#collect the fid 
+	fid()
+	savefidtext(simpSTA) #save as a text file
+}
+
+	

@@ -1,0 +1,100 @@
+
+
+spins{
+	numspin 1
+#	T 27Al 0
+#	T 27Al 1
+	T 11B 0
+#	T 11B 1
+	
+	#Q <coupl Hz> <eta> <spin> <a> <b> <g> <order>
+	Q 3e6 1 0 0 0 0 2
+#	Q 3e6 0 1 0 0 0 2
+	
+	#J <coupl Hz> <spin1> <spin2> <strong>
+#	J 20 0 1 1
+	
+	#D <del> <on1> <on2> <si> <chi> <psi> 
+
+}
+
+params{
+	#experiment type can be
+	# mqmas--> for the choerence transfers
+	# centralTrans --> to observe the 2nd order quad only
+	expType centralTrans
+	
+	wr 20000
+	rotor 54.73
+	
+	Bfield 1200
+	
+	sw 100000
+	npts 1024
+	
+	avetype ZCW_3_3722.dat
+	thetasteps 233
+	phisteps 144
+	gammasteps 5
+	
+	
+	maxtstep 1e-7
+	
+##### SPIN 3/2	
+#for spin 3/2 3-->1 sim
+#	extent 7
+#	baseSym 9	
+# single spin:: for Central Trans
+	FromElement 1,2
+	ToElement  1,2
+# single spin:: for 3Q Trans
+#	FromElement 0,3
+#	ToElement  0,3
+# single spin::for spin 3/2 3-->1 sim
+#	FromElement 0,3
+#	ToElement 1,2
+
+
+##### SPIN 5/2	
+# single spin:: for Central Trans
+#	FromElement 2,3
+#	ToElement  2,3
+
+#for spin 5/2 3-->-1 sim
+#	extent 19
+#	baseSym 12	
+# single spin:: for Central Trans
+#	FromElement 2,3
+#	ToElement  2,3
+# single spin::for spin 5/2 3-->-1 sim
+#	FromElement 1,4
+#	ToElement 3,2
+
+#for spin 5/2 5-->1 sim
+#	extent 25
+#	baseSym 12	
+# single spin::for spin 5/2 5-->1 sim
+#	FromElement 0,5
+#	ToElement 2,3
+
+#for spin 5/2 5-->3 sim
+#	extent 25
+#	baseSym 19	
+# single spin::for spin 5/2 5-->3 sim
+#	FromElement 0,5
+#	ToElement 1,4
+	
+##### SPIN 7/2	
+#for spin 7/2 5-->3 sim
+#	extent 55
+#	baseSym 101	
+# single spin::for spin 7/2 5-->3 sim
+#	FromElement 1,6
+#	ToElement 5,2
+	
+	
+	
+	dataout fid
+	
+}
+

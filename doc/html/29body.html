@@ -1,0 +1,999 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("29menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("29menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("29menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("29title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("29");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class Pulse{<br />
+... <br />
+<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+ <ul>
+              <li>Like GradientGrid, this class acts as a parameter container 
+                for other classes (namely the class 'bloch'). It stores the list 
+                of amplitudes, phases, offsets, and pulse times, and spin types, 
+                and calculates the desired B1 (pulse field strength) at for a 
+                give time</li>
+              
+            </ul></blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+<li><B>NOTE::</B>there is a 'data-element' 
+                class called 'SPulse' can contains individual spin's pulse parameters...below 
+                in the function descriptions for 'Pulse' you will find the compatable 
+                functions with 'SPulse'</li>
+              <li><B>NOTE</B>:: all units should be 
+                entered as Radains/s NOT Hz (i.e. multiply everything by a 2Pi..a 
+                40kHz B1 field would have an inputted amplitude of 40000*2*pi)</li></blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Public Vars'></a>Public Vars</font>
+</td></tr></table>
+<tr><td>
+<a name='Public VarsSPulse::End'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+SPulse::End<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A time flag to tell the class that the time domain for the pulse is anywhere AFTER the start time. Using &lt;SPulse::Start...SPulse::End&gt;, means ALL time is available to the pulse.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Public VarsSPulse::Start'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+SPulse::Start<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Time flag to tell the class that the time domain for the pulse is anywhere BEFORE the 'end.' <br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsPulse'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Pulse()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+empty constructor--&gt; Sets up the default Pulse<br />
+The Default isotope is &quot;1H&quot;<br />
+The Default amplitude=0.0 rad/s<br />
+The Default phase=0.0<br />
+The Default offset=0.0<br />
+The Default beginTime=SPulse::Start<br />
+The Default endTime=SPulse::End<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo; <font color='#006600'>//a pulse that is on 1H for any time (but no amplitude)</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsPulse'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Pulse(std::string symbol, double amp=0.0, double phase=0.0, double offset=0.0, double tbegin=SPulse::Start, double tend=SPulse::End)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+This is also the same constructor for 'SPulse.'<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+symbol--&gt; the name of the atom...in the format &quot;&lt;atomic mass&gt;&lt;periodic label&gt;&quot; like &quot;1H&quot;, &quot;2H&quot;, &quot;7Li&quot;...etc<br />
+amp--&gt; the input amplitude (default will be 0)<br />
+phase--&gt;the input pulse phase IN RADIANS (default 0.0)<br />
+offset--&gt;input offset (default is 0.0)<br />
+tbegin--&gt;begin time for the pulse (default is SPulse::Start)<br />
+tend--&gt;end time for the pulse (default is SPulse::End)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a SINGLE entry in the pulse list for the nucleus with symbol.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//a 40 kHz pulse on proton</font><br />
+<font color='#006600'>// to be applied at all times</font><br />
+Pulse moo(&quot;1H&quot;, 40000.0*PI2); <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsPulse'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Pulse(const Pulse &cp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp--&gt; an existing Pulse to copy..<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Copy constructor.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//a 40 kHz pulse on proton</font><br />
+<font color='#006600'>// to be applied at all times</font><br />
+Pulse moo(&quot;1H&quot;, 40000.0*PI2); <br />
+Pulse loo(moo);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractionamplitude'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double amplitude(int i)<br />
+double amplitude(std::string sym)<br />
+double amplitude(double time, int i) <br />
+double amplitude(double time, std::string sym) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SPulse has these functions...amplitude() and amplitude(double time)<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element number in the list<br />
+sym--&gt;will find the amplitude for this atomic symbol (i.e. '1H')<br />
+time--&gt;will find the amplitude for the given index or symbol if time is between begining and end times<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the amplitude inside the list, will return 0 if not found.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo(&quot;13C&quot;, 30000, PI/2. ); <br />
+cout&lt;&lt;moo.amplitude(0); <font color='#006600'>//returns 30000</font><br />
+cout&lt;&lt;moo.amplitude(&quot;13C&quot;); <font color='#006600'>//returns 30000</font><br />
+cout&lt;&lt;moo.amplitude(&quot;1H&quot;); <font color='#006600'>//returns 0</font><br />
+cout&lt;&lt;moo.amplitdue(1e-3, &quot;13C&quot;); <font color='#006600'>//returns 30000 (as all time is </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionbeginTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double beginTime(int i)<br />
+double beginTime(std::string sym)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SPulse has this function...beginTime()<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element number in the list<br />
+sym--&gt;will find the begin time for this atomic symbol (i.e. '1H')<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the begining time for a symbol of the element in the list.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo(&quot;13C&quot;, 30000, PI/2., 50.0, 0.001, 0.002); <br />
+cout&lt;&lt;moo.endTime(&quot;13C&quot;); <font color='#006600'>//returns 0.002</font><br />
+cout&lt;&lt;moo.endTime(&quot;1H&quot;); <font color='#006600'>//returns 0.0 (not present)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractioncoordPulse'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; coordPulse(double time, std::string sym)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SPulse has these functions...CoordPulse(double time)<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+sym--&gt;will find the magnetic field for this atomic symbol (i.e. '1H')<br />
+time--&gt;will find the magnetic field for the given index or symbol if time is between begining and end times<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the 3-vector of the Magnetic B1 field if there is any pulse specified in the time 'time.'<br />
+<br />
+x=amplitude*sin(phase)<br />
+y=amplitude*cos(phase)<br />
+z=offset<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo(&quot;13C&quot;, 30000, PI/2., 50.0); <br />
+cout&lt;&lt;moo.CoordPulse(0, &quot;13C&quot;); <font color='#006600'>//returns[ 30000*sin(PI/2) 30000*cos(PI/2) 50]</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionendTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double endTime(int i)<br />
+double endTime(std::string sym)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SPulse has this function...endTime()<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element number in the list<br />
+sym--&gt;will find the end time for this atomic symbol (i.e. '1H')<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the end time for a symbol of the element in the list.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo(&quot;13C&quot;, 30000, PI/2., 50.0, 0.001, 0.002); <br />
+cout&lt;&lt;moo.endTime(&quot;13C&quot;); <font color='#006600'>//returns 0.002</font><br />
+cout&lt;&lt;moo.endTime(&quot;1H&quot;); <font color='#006600'>//returns 0.0 (not present)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionoffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double offset(int i)<br />
+double offset(std::string sym)<br />
+double offset(double time, int i) <br />
+double offset(double time, std::string sym) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SPulse has these functions...offset() and offset(double time)<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element number in the list<br />
+sym--&gt;will find the offset for this atomic symbol (i.e. '1H')<br />
+time--&gt;will find the offset for the given index or symbol if time is between begining and end times<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the pusle offset inside the list, will returns 0 if not found.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo(&quot;13C&quot;, 30000, PI/2., 50.0); <br />
+cout&lt;&lt;moo.offset(0); <font color='#006600'>//returns 50</font><br />
+cout&lt;&lt;moo.offset(&quot;13C&quot;); <font color='#006600'>//returns 50</font><br />
+cout&lt;&lt;moo.offset(&quot;1H&quot;); <font color='#006600'>//returns 0</font><br />
+cout&lt;&lt;moo.offset(1e-3, &quot;13C&quot;); <font color='#006600'>//returns 50 (as all time is allowed)</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionoperator[i]'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+SPulse &operator[int i],<br />
+Spulse &operator(int i)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element number in the list<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the single Pulse element in the list .<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo(&quot;13C&quot;, 30000, PI/2., 50.0, 0.001, 0.002);<br />
+cout&lt;&lt;moo[0].endTime(); <font color='#006600'>//returns 0.002</font><br />
+cout&lt;&lt;moo[1].endTime(); <font color='#006600'>//ACKK will crash the machine...</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionphase'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double phase(int i)<br />
+double phase(std::string sym)<br />
+double phase(double time, int i) <br />
+double phase(double time, std::string sym) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element number in the list<br />
+sym--&gt;will find the phase for this atomic symbol (i.e. '1H')<br />
+time--&gt;will find the phase for the given index or symbol if time is between begining and end times<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the phase (in radians) inside the list, will return 0 if not found.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo(&quot;13C&quot;, 30000, PI/2. ); <br />
+cout&lt;&lt;moo.phase(0); <font color='#006600'>//returns Pi/2</font><br />
+cout&lt;&lt;moo.phase(&quot;13C&quot;); <font color='#006600'>//returns Pi/2</font><br />
+cout&lt;&lt;moo.phase(&quot;1H&quot;); <font color='#006600'>//returns 0</font><br />
+cout&lt;&lt;moo.phase(1e-3, &quot;13C&quot;); <font color='#006600'>//returns Pi/2 (as all time is allowed)</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionsymbol'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+std::string symbol(int i)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element number in the list<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the symbol name of the ith element in the list...will return a NULL string (&quot;&quot;) if there is no i'th element.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo(&quot;13C&quot;, 30000*PI2, PI/2. ); <br />
+std::string sys=moo.symbol(0); <font color='#006600'>//returns &quot;13C&quot;</font><br />
+sys=moo.symbol(1); <font color='#006600'>//returns &quot;&quot; (a NULL string)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractionXpart, Ypart, Zpart'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double Xpart(double time, std::string sym),<br />
+double Ypart(double time, std::string sym),<br />
+double Zpart(double time, std::string sym)<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SPulse has these functions...Xpart(double time),Ypart(double time),Zpart(double time)<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+sym--&gt;will find the magnetic field for this atomic symbol (i.e. '1H')<br />
+time--&gt;will find the magnetic field for the given index or symbol if time is between begining and end times<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the Magnetic B1 field along the respective axis. If there is any pulse specified in the time 'time'<br />
+<br />
+Xpart=amplitude*sin(phase)<br />
+Ypart=amplitude*cos(phase)<br />
+Zpart=offset<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo(&quot;13C&quot;, 30000, PI/2., 50.0); <br />
+cout&lt;&lt;moo.Xpart(0, &quot;13C&quot;); <font color='#006600'>//returns 30000*sin(PI/2) </font><br />
+cout&lt;&lt;moo.Ypart(4,&quot;1H&quot;); <font color='#006600'>//returns 0 (no 1H preset</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Pulse &operator=(const Pulse &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; the item you wish to copy<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns one Pulse from another.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo(&quot;27Al&quot;, 30000);<br />
+Pulse koo;<br />
+koo=moo; <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Pulse &operator=(const SPulse & singlepulse);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+singlepulse--&gt; A SPulse data element<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns a pullse list to the SINGLE pulse. It will make the list size 1.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo=SPulse(&quot;1H&quot;, 40000*PI2, PI);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetAmplitude'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setAmplitude(double newin, int i)<br />
+void setAmplitude(double newin, std::string sym) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ SPulse has this function...setAmplitude(double) <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newin--&gt;the new value <br />
+i--&gt;the element in the list<br />
+sym--&gt; a symbol name (i.e. '1H', '13C' ...)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the amplitude of the i'th element in the list or the element with the symbol 'sym.'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse koo;<br />
+koo.setAmplitude( 50000,0);<br />
+koo[0].setAmpltidue(50000); <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetBeginTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setBeginTime(double newin, int i)<br />
+void setBeginTime(double newin, std::string sym)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SPulse has this function...setBeginTime(double) <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newin--&gt;the new value <br />
+i--&gt;the element in the list<br />
+sym--&gt; a symbol name (i.e. '1H', '13C' ...)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the begining time of the i'th element in the list or the element with the symbol 'sym.'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse koo;<br />
+koo.setBeginTime(0.0, 0);<br />
+koo[0].setBeginTime(0.0); <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetEndTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setEndTime(double newin, int i)<br />
+void setEndTime(double newin, std::string sym)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SPulse has this function...setEndTime(double)<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newin--&gt;the new value <br />
+i--&gt;the element in the list<br />
+sym--&gt; a symbol name (i.e. '1H', '13C' ...)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the ending time of the i'th element in the list or the element with the symbol 'sym.'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse koo;<br />
+koo.setEndTime(1.0, 0);<br />
+koo[0].setEndTime(1.0); <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetOffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setOffset(double newin, int i)<br />
+void setOffset(double newin, std::string sym<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SPulse has this function...setOffset(double) <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newin--&gt;the new value <br />
+i--&gt;the element in the list<br />
+sym--&gt; a symbol name (i.e. '1H', '13C' ...)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the offset of the i'th element in the list or the element with the symbol 'sym.'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse koo;<br />
+koo.setOffset( 400.0, 0);<br />
+koo[0].setOffset(400.0); <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetPhase'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setPhase(double newin, int i)<br />
+void setPhase(double newin, std::string sym) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SPulse has this function...setPhase(double) <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newin--&gt;the new value <br />
+i--&gt;the element in the list<br />
+sym--&gt; a symbol name (i.e. '1H', '13C' ...)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the phase of the i'th element in the list or the element with the symbol 'sym.'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse koo;<br />
+koo.setPhase( PI/2,0);<br />
+koo[0].setPhase(PI/2);  <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetSymbol'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setSymbol(std::string sym,int i) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SPulse has this function...setSymbol(string) <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt;the element in the list<br />
+sym--&gt; a symbol name (i.e. '1H', '13C' ...)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the symbol of the i'th element in the list.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse koo;<br />
+koo.setSymbol(0, &quot;1H&quot;);<br />
+koo[0].setSymbol(&quot;1H&quot;); <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setTime(double begin,double end,int i)<br />
+void setTime(double begin, double end, std::string sym)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SPulse has this function...setTime(double, double) <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+begin--&gt;the new being value <br />
+end--&gt;the new end value<br />
+i--&gt;the element in the list<br />
+sym--&gt; a symbol name (i.e. '1H', '13C' ...)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the begining and ending time of the i'th element in the list or the element with the symbol 'sym.'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse koo;<br />
+koo.setTime(0.0, 1.0, &quot;1H&quot;);<br />
+koo[0].setTime(0.0, 1.0); <br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOoperator<<'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ostream &operator&lt;&lt;(ostream &oo, Pulse &out)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an output ASCII stream you wish to output the data<br />
+out--&gt; the Pulse you wish to output<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes the string....<br />
+<br />
+&quot;Pulse on {symbol} B1: {ampltude} phase: {phase} offset: {offset} begin {btime} end: {endt}&quot;<br />
+<br />
+to the ostream.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse PP1(&quot;1H&quot;, 80000, 0.); <font color='#006600'>// (spin, amplitude, phase)</font><br />
+cout&lt;&lt;PP1&lt;&lt;endl; <font color='#006600'>//prints &quot;Pulse on 1H B1: 80000 phase: 0&quot; to the console</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOprint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void print(ostream &oo=cout)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an output ASCII stream you wish to output the data<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes the string....<br />
+<br />
+&quot;Pulse on {symbol} B1: {ampltude} phase: {phase} offset: {offset} begin {btime} end: {endt}&quot;<br />
+<br />
+to the ostream.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse PP1(&quot;1H&quot;, 80000, 0.); <font color='#006600'>// (spin, amplitude, phase)</font><br />
+<font color='#006600'>//prints &quot;Pulse on 1H B1: 80000 phase: 0&quot; to the console</font><br />
+PP1.print(cout); <br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functions+, +='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Pulse operator+(const Pulse &rhs);<br />
+Pulse operator+=(const Pulse &rhs);<br />
+<br />
+Pulse operator+(const SPulse &rhs);<br />
+Pulse operator+=(const SPulse &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; another Pulse<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Adds an existing Pulse or SPulse to the current Pulse<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse moo(&quot;1H&quot;, 20000), loo(&quot;13C&quot;, 80000);<br />
+loo+=moo; <font color='#006600'>//both 1H and 13C are present</font><br />
+Pulse koo=loo+moo; <font color='#006600'>//both 1H and 13C are present</font><br />
+loo=moo+SPulse(&quot;13C&quot;, 40000, Pi/2);<br />
+moo+=SPulse(&quot;13C&quot;, 40000, Pi/2);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionssize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int size()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the number of Pulses in the Pulse list.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse PP1(&quot;1H&quot;, 80000, 0.); <font color='#006600'>// (spin, amplitude, phase)</font><br />
+PP1.size(); <font color='#006600'>//length=1</font><br />
+PP1+=SPulse(&quot;13C&quot;, 50000, 0.); <br />
+PP1.size(); <font color='#006600'>//length=2</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionstimeForAngle'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double timeForAngle(double angle, string symbol) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+angle--&gt; the desired angle you wish to pulse IN RADIANS!!<br />
+symbol--&gt; the spin symbol<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the time for a given pulse angle (in radians) for the spin 'symbol' calculated by angle/amplitude.<br />
+Returns 1e-30 if spin Not found or angle/ampltiude &lt; 0<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Pulse PP1(&quot;1H&quot;, 80000, 0.); <font color='#006600'>// (spin, amplitude, phase)</font><br />
+<font color='#006600'>//figure out how long a '90 degree pulse' will take for the 1H</font><br />
+double tpulse=PP1.timeForAngle(90.0*Pi/180., &quot;1H&quot;);<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

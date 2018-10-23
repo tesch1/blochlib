@@ -1,0 +1,75 @@
+#performs a point-to-point 
+# TEDOR (Transfer-Echo-Double Resonance)
+
+spins{	
+#the global options
+	numspin 2
+	T 15N 0
+	T 13C 1
+	#T 1H 2
+	D 1230 0 1	
+}
+
+parameters{	
+	powder{
+		aveType ../../../../crystals/ZCW_3_1154
+		thetaStep 233
+		phiStep 144
+	}		
+#the intergrator step size	
+	maxtstep=1e-6
+#number of 1D fid points	
+	npts1D=64	
+	roeq= Iz_1
+	detect=Iz_1
+}
+
+pulses{
+show()	
+#set the spinning	
+	wr=3200
+	sw=wr
+	rotor=rad2deg*acos(1/sqrt(3))
+
+	amp=150000
+	amplitude(amp)		
+#pulse times
+	tr=1/wr
+	t180=1/amp/2
+	ph=0
+
+#inital 13C prep part	
+	sub1{	
+		amplitude(amp)
+		13C:delay(tr/4-t180/2)
+		13C:pulse(t180, ph)
+		13C:delay(tr/2-t180)
+		13C:pulse(t180, ph)
+		13C:delay(tr/4-t180/2)
+	}
+
+#15N pump part
+	sub2{
+		amplitude(amp)
+		15N:delay(tr/4-t180/2)
+		15N:pulse(t180, ph)
+		15N:delay(tr/2-t180)
+		15N:pulse(t180, ph)
+		15N:delay(tr/4-t180/2)
+	}
+	
+	nrot=2
+#a single fid is concidered point to point
+	ptop()
+  	ro(Ix_0)
+  	detect(Ip_1)
+	loop(i=0:npts1D-1)		
+		reuse(sub1, nrot, hold)
+		13C:pulse(t180/2, ph) | 15N:pulse(t180/2, ph)
+		reuse(sub2,i)
+		fid(i)
+	end
+	savefidtext(fidtdor) #save tas a text file
+}
+
+	

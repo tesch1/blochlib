@@ -1,0 +1,573 @@
+
+	<html>
+	<head>
+	
+	<title>Solid-2.0::Static Examples</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+	  <tr>
+		<td>&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	   <tr> 
+		
+    <td class="head" width="59%"> &nbsp;&nbsp;Solid-2.0 Documentation---Static 
+      Examples</td>
+	  </tr>
+	</table>
+
+
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+	  <tr>
+		<td>&nbsp;</td>
+	  </tr>
+	</table>
+		
+<br>
+<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		
+<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td halign='left' valign='top' width="22%"> 
+      <table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left class='normalText'>
+        <tr> 
+          <td bgcolor='#aaaaaa'>&nbsp; </td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><b> <a href='index.html'>home </a> </b></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><b> Sections</b></td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'> <a href="index.html#spins">-Spins</a> </td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'><a href="index.html#params">-Parameters</a></td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'><a href="index.html#pulses">-Pulses</a></td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'><a href="index.html#funcs">---Function List---</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="index.html#ff">-file formats</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><b> Examples</b></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html">-Static</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#basic">---basic</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#d2">---2D</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#alter">---alterSys</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#dc">---decouple</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html">-Mas</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html#basic">---basic</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html#d2">---2D</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html#ptop">---ptop</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html">-C7s</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#basic">---basic</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#d2">---2D</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#explict">---explicit</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#rotor">---rotor</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#transfer">---transfer</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="quadexamples.html">-Quadrupoles</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td>---<a href="quadexamples.html#centrans">central Trans</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td bgcolor='#aaaaaa'>&nbsp; </td>
+        </tr>
+        <tr> 
+          <td class='sidemenu' bgcolor='#cccccc'> </td>
+        </tr>
+      </table>
+    </td>
+    <td width="78%" valign='top' class='normalText'> 
+      <blockquote> 
+        <p><br>
+          Below are several examples of performing static simulations (things 
+          where the spinning speed it set to 0). You could easily make these into 
+          spinning by setting the wr!=0.</p>
+      </blockquote>
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td class="importantText2"> <a name="basic"></a>Basic</td>
+        </tr>
+        <tr> 
+          <td class="normalText"> 
+            <ul>
+              <li>Below is an input file the a basic static simulation of 2 CSAs...the 
+                crystal file came from the BlochLib distribution.</li>
+              <blockquote> 
+                <p><br>
+                  <br>
+                  spins{<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;<span class="codecomment">#the global 
+                  options</span><br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;numspin 2<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;T 1H 0<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;T 1H 1<br>
+                  <br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;C 5000 2134 0 0<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;C -5000 2789 0.5 1<br>
+                  }<br>
+                  <br>
+                  parameters{ &nbsp; &nbsp; &nbsp; &nbsp;<br>
+                  <br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;powder{<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;aveType 
+                  ../../../../crystals/rep2000<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	
+                  &nbsp; &nbsp; &nbsp;<br>
+                  <br>
+                  <span class="codecomment">#the intergrator step size</span> 
+                  &nbsp; &nbsp; &nbsp; &nbsp;<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;maxtstep=5e-6<br>
+                  <br>
+                  <span class="codecomment">#number of 1D fid points &nbsp; &nbsp; 
+                  &nbsp; &nbsp;</span><br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;npts1D=512 &nbsp; &nbsp; &nbsp; &nbsp;<br>
+                  <br>
+                  <span class="codecomment">#sweepwidth</span><br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;sw=40000<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;roeq= Iz &nbsp; &nbsp; &nbsp; &nbsp;<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;detect=Ip &nbsp; &nbsp; &nbsp; &nbsp;<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;filesave=data &nbsp; &nbsp; &nbsp;	
+                  &nbsp;<br>
+                  }<br>
+                  <br>
+                  <br>
+                  pulses{<br>
+                  <br>
+                  <span class="codecomment"> #set the spinning &nbsp; &nbsp;</span> 
+                  &nbsp; &nbsp;<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;wr=0<br>
+                  <span class="codecomment">#set the rotor</span><br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;rotor=0<br>
+                  <span class="codecomment">#set the detection matrix</span><br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;detect(Ip)<br>
+                  <span class="codecomment">#set the inital matrix</span><br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;ro(Ix)<br>
+                  <br>
+                  <span class="codecomment">#no pulses nessesary for ro=Ix</span><br>
+                  <br>
+                  <span class="codecomment">#collect the fid</span> <br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;fid()<br>
+                  &nbsp; &nbsp; &nbsp; &nbsp;savefidtext(simpSTA)<span class="codecomment"> 
+                  #save as a text file</span><br>
+                  }</p>
+              </blockquote>
+            </ul>
+            <blockquote> 
+              <p>Here is the generated spectrum<br>
+                <img src="staticbasic.gif" width="280" height="221"> </p>
+            </blockquote>
+          </td>
+        </tr>
+      </table>
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td class="importantText2"> <br>
+            <br>
+            <a name="d2"></a> Basic 2D using multi sections</td>
+        </tr>
+        <tr> 
+          <td class="normalText"> 
+            <ul>
+              <li>Below is an input file the a basic static simulation of '2D' 
+                in the direct dimension we use the Dipole ONLY spin system, and 
+                in the indirect dimension we use the CS spin system....</li>
+              <blockquote> 
+                <p><span class="codecomment"># a simple static spectra using 2 
+                  differnet spin <br>
+                  # systems for each dimension<br>
+                  # using the basic algorithms</span><br>
+                  <br>
+                  spins{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#the global 
+                  options</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;numspin 2<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;T 1H 0<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;T 1H 1<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;spin1{&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C 5000 2134 
+                  0 0<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C -5000 2789 
+                  0.5 1<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;spin2{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D 1254 0 1<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                  }<br>
+                  <br>
+                  <br>
+                  parameters{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;powder{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aveType ../../../../crystals/rep678<br>
+                  &nbsp;&nbsp;&nbsp; }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  <br>
+                  <span class="codecomment">#the intergrator step size&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;maxtstep=1e-6<br>
+                  <br>
+                  <span class="codecomment">#number of 1D fid points&nbsp;&nbsp;</span>&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;npts1D=256&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  <br>
+                  <span class="codecomment">#sweepwidth</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;sw=10000<br>
+                  <br>
+                  <span class="codecomment">#the eq matrix</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;roeq=Ix<br>
+                  }<br>
+                  <br>
+                  <br>
+                  pulses{<br>
+                  <br>
+                  <span class="codecomment"> #our 2D points</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;fidpts=256<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;2D()<br>
+                  <span class="codecomment">#set the spinning&nbsp;&nbsp;&nbsp;</span>&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;wr=0<br>
+                  <span class="codecomment"> #set the rotor</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;rotor=0<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  <span class="codecomment"> #set the detection matrix</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;detect(Ip)<br>
+                  <span class="codecomment">#set our initial matrix</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;ro(Ix)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;dwell2D=0.00002<br>
+                  <span class="codecomment">#set the inital matrix</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;loop(i=0:fidpts-1)&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#use the second 
+                  spin system for the direct dim</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spinsys(spin2)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#collect the 
+                  fid (to get the first point)</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fid(i)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#do not need 
+                  to propogate the last point</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(i!=(fidpts-1))<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;# 
+                  'indirect dim' spin system</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spinsys(spin1)<br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#a 
+                  delay for the second dim</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:delay(dwell2D)&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;savefidmatlab(2dstat) <span class="codecomment">#save 
+                  as a matlab file</span><br>
+                  }<br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                </p>
+              </blockquote>
+            </ul>
+            <blockquote> 
+              <p>Here is the generated spectra<br>
+                <img src="static2d.gif" width="445" height="326"> </p>
+            </blockquote>
+          </td>
+        </tr>
+      </table>
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td class="importantText2"> <br>
+            <br>
+            <a name="alter"></a> a series of 1Ds (a 2D data set)</td>
+        </tr>
+        <tr> 
+          <td class="normalText"> 
+            <ul>
+              <li>An example demonstrating how to use 'alterSys' to collect various 
+                fids for different dipolar couplings on the system</li>
+              <blockquote> 
+                <p><span class="codecomment"># a simple static spectra using that 
+                  loops<br>
+                  # through a bunch of dipole couplings and places them in a 2D 
+                  set</span><br>
+                  <br>
+                  spins{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;<span class="codecomment">&nbsp;&nbsp;#the global 
+                  options</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;numspin 2<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;T 1H 0<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;T 1H 1<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;C 5000 2134 0 0<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;C -5000 2789 0.5 1<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;D 1254 0 1<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  }<br>
+                  <br>
+                  <br>
+                  parameters{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;powder1{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aveType ../../../../crystals/rep678<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thetaStep 233<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phiStep 144<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gammaStep 0<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  <br>
+                  <span class="codecomment">#the intergrator step size&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;maxtstep=1e-6<br>
+                  <br>
+                  <span class="codecomment">#number of 1D fid points&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;npts1D=256&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  <br>
+                  <span class="codecomment">#sweepwidth</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;sw=50000<br>
+                  <br>
+                  <span class="codecomment">#the eq matrix</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;roeq=Ix<br>
+                  }<br>
+                  <br>
+                  <br>
+                  pulses{<br>
+                  <br>
+                  <span class="codecomment">#our 2D points</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;fidpts=128<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;2D()<br>
+                  <br>
+                  <span class="codecomment">#set the spinning&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;wr=0<br>
+                  <br>
+                  <span class="codecomment">#set the rotor</span><br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;rotor=0<br>
+                  <span class="codecomment">#the dipole step</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;dipStep=100<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;dip=100<br>
+                  <br>
+                  <span class="codecomment">#set the detection matrix</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;detect(Ip)<br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;loop(i=0:fidpts-1)&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ro(Ix) <span class="codecomment">#reset 
+                  the desity matrix</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#change the 
+                  dipole copling</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alterSys(D01, 
+                  dip)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dip=dip+dipStep<br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#collect the 
+                  fid </span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fid(i)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;savefidmatlab(2dalter) <span class="codecomment">#save 
+                  as a matlab file</span><br>
+                  }<br>
+                  <br>
+                </p>
+              </blockquote>
+            </ul>
+            <blockquote> 
+              <p>Here are the generated spectra<br>
+                <img src="staticalter.gif" width="477" height="302"> </p>
+            </blockquote>
+          </td>
+        </tr>
+      </table>
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td class="importantText2"> <br>
+            <br>
+            <a name="dc"></a> a 1D decoupling experiment over the the dcoupling 
+            amplitude </td>
+        </tr>
+        <tr> 
+          <td class="normalText"> 
+            <ul>
+              <li>An example demonstrating how to use the fid(i) to collect a 
+                1D fid that demonstrates CW-decoupling between a 1H and 13C. Below 
+                are a series of 1D point-to-point experiments that loop through 
+                a series of dceoupling amplitudes.</li>
+              <blockquote> <span class="codecomment"># A static decoupling sim<br>
+                # this is by nessescity a point to point<br>
+                # as there is a pulse during the fid collection</span><br>
+                <br>
+                spins{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#the global 
+                options</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;numspin 2<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 1H 0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 13C 1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;C 5000 2134 0.8 0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;C 5000 2789 0 1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;D 8300 0 1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                }<br>
+                <br>
+                <br>
+                parameters{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;powder1{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aveType zcw<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thetaStep 377<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phiStep 233<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gammaStep 0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                <br>
+                <span class="codecomment">#number of 1D fid points&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;npts1D=256&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                }<br>
+                <br>
+                <br>
+                pulses{<br>
+                <br>
+                <br>
+                <span class="codecomment">#a point to point</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ptop()<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;2D()<br>
+                <span class="codecomment">#the number of decouple amplitudes to 
+                use</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;dcpts=50<br>
+                <br>
+                <span class="codecomment">#set the spinning&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;wr=0<br>
+                <br>
+                <span class="codecomment">#set the rotor</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;rotor=0<br>
+                <br>
+                <span class="codecomment">#set the detection matrix<br>
+                # detect the 13C</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;detect(Ip_1)<br>
+                <br>
+                <span class="codecomment">#the decouple amplitude</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;dcamp=0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;dcstep=150000/dcpts<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <span class="codecomment">#our dwell</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;dwell=1/50000<br>
+                <br>
+                <span class="codecomment">#NOTE: this would be invalid for <br>
+                # wr>0 as the calulation would require<br>
+                # a time dependant propogaor!</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;sub1{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1H:pulse(dwell, 
+                0, dcamp) | 13C:delay(dwell)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;loop(i=0:dcpts-1)&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#set the desity 
+                matrix to a pulse 13C and <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# not pulsed 1H</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ro(Ix_1+Iz_0)<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#must 'use' 
+                the subsection as <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# the dcamp changes</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use(sub1)&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#collect the 
+                fid </span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fid(i)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#advance the 
+                dc amplitude</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dcamp=dcamp+dcstep<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;savefidmatlab(decoup) <span class="codecomment">#save 
+                as a matlab file</span><br>
+                }<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+              </blockquote>
+            </ul>
+            <blockquote> 
+              <p>Here are the generated spectra<br>
+                <img src="staticdecop.gif" width="477" height="305"> </p>
+            </blockquote>
+          </td>
+        </tr>
+      </table>
+      <p><br>
+      </p>
+    </td>
+  </tr>
+</table>
+<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

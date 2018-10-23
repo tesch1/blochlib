@@ -1,0 +1,502 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td>
+ <blockquote> 
+  <p class='subHeads'>What Is It?</p>
+</blockquote>
+<ul>
+  <ul>
+    <li>An expression template library of generic algorithms to perform large 
+      scale spin simulations...HOWEVER...all the classes up before 'Isotope' 
+      on the side menu are completely generic and form a set of fast data structures....so 
+      you can use them in other apps. The classes after Isotope are a specific 
+      implementation and usage of the base classes (but are sufficiently complex 
+      to warrant there own inclusion here)</li>
+    <li><b>The library's Goal::</b><br>
+      <ul>
+        <li> speed <br>
+        </li>
+        <li> ease of use for many aspects of scientific programing in an object-oriented 
+          framework<br>
+        </li>
+        <li> apply modern algorithmic and programming formalism (Objects, expression 
+          templates, iterators, etc)<br>
+        </li>
+        <li> incorporate existing 'proven' numerical techniques and parallel 
+          structures (<a href='http://www.sgi.com/tech/stl/' target='aux'>STL</a>, 
+          <a href='http://c-minuit.sourceforge.net/' target=&quot;aux&quot;>MINUIT</a>, 
+          <a href='http://www-unix.mcs.anl.gov/mpi/' target='aux'>MPI</a>, 
+          <a href='http://www.fftw.org' target='aux'>FFTW</a>, etc.)<br>
+        </li>
+        <li> to make simulations of spins in unconventional situations possible 
+          in real time.<br>
+        </li>
+        <li> make the documentation a learning tool and a simple, useful interface 
+          to the code.<br>
+        </li>
+        <li> provide a vast array of examples to aid in program creation and understanding 
+          of spin physics</li>
+      </ul>
+    </li>
+    <li>This library is in a CONSTANT state of change, updates, improvements, 
+      etc. The documentation is typically one step BEHIND the current code status 
+      as something may change, or has been well tested...The below 1.0 version 
+      releases are not complete releases, but beta snapshots..with each new increment 
+      closer to achieving the final goals stated above.</li>
+    <li>There are now MANY of examples, ranging from simple class demonstrations 
+      (like &quot;this is how to use the matlab IO class&quot;) to complex simulation packages 
+      (&quot;solid&quot; an application to rival simpson in terms of speed and ease of use), 
+      to single focus programs (the Bloch simulations investigating certain interactions 
+      and other novel ideas)</li>
+  </ul>
+</ul>
+<blockquote> 
+  <p class='subHeads'>Updates and such</p>
+</blockquote>
+<ul>
+  <ul>
+    <li><b>Since 8.22.02 ---(10.18.02)</b> 
+      <ul>
+        <li>Several Improvements and additions (this should technically be called 
+          BlochLib-1.1, but as i am the version control, i care not to alter every 
+          little thing to 1.1)
+          <ul>
+            <li>3 new data readers/writers...
+<br>the XWINNMR--> reads the parameters 
+              and FIDs from an XWINNMR directory structure (both 1and 2Ds), <br> SpinSight--> 
+              reads the parameters and FIDs from a SpinSight directory structure 
+              (both 1 and 2Ds), <br>wavestream --> reads and writes .WAV audio 
+              files from many data types.</li>
+            <li>The Full matrix--matrix multiplication C*=A has been improved 
+              by ~30% IT CALCULATES A DYSON TIME ORDERED product...i.e. C=A*C 
+              (not the usual C=C*A) but is ~30% (depending on the matrix size) 
+              faster then the C=A*C.</li>
+            <li>the Complex Numbers now can have float or double sub precision 
+              (i.e <tt>Complex&lt;float&gt; </tt>and <tt>Complex&lt;double&gt;</tt>) 
+              the old '<tt>complex</tt>' is sitll valid and is only a typedef 
+              of <tt>Complex<double></tt></li>
+            <li>The matrix has a new '<tt>reshape</tt>' function that functions 
+              exactly as the matlab version (e.g. takes a 2x5 matrix to 1x10, 
+              etc)</li>
+            <li>a faster 'copy' and 'assignment' (operator=) for the matrix of 
+              the SAME TYPE and STRUCTURE (uses the 'memcpy' function which is 
+              quite speedy)</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><b>BlochLib 1.0 ---- yippie....</b> 8.22.02 
+      <ul>
+        <li>Several new things have been updated/fixed since the 0.9 version (as 
+          the list below can atest to)</li>
+        <li>1) NAMESPACES 
+          <ul>
+            <li>The advent of making everything gcc 3.1 compatable required me 
+              to do some place the library into a namespace, thus in every source 
+              file you use &quot;blochlib.h&quot;, you will need to include <tt>&quot;using namespace 
+              BlochLib;&quot; </tt> in the file as well.</li>
+          </ul>
+        </li>
+        <li>2) should compile on both gcc 2.95 and gcc 3.1 (DO NOT USE GCC 3.0 
+          it is WAY too slow)</li>
+        <li>3) ModulatedDemagField class fixed.</li>
+        <li>4) Documentation (over 1000 pages) should be complete aside from typos 
+          (which i am sure there are plenty).</li>
+      </ul>
+    </li>
+    <li><b>update 8.2.02</b><br>
+      <ul>
+        <li> The documentation drudges along...many a minor bug fixed...</li>
+        <li>1) fixed a minor problem with the rotations class when the rotor speed 
+          was set to 0 and when the rotor angle was not set to 0 (which thus effected 
+          some of the hamiltonians)</li>
+        <li>2) several enhancements and fixes to the matrix class involving resizing 
+          and other 'alteration' functions (getting rows, columns, etc) have 
+          been repaired. Under odd conditions they would not perform correctly, 
+          and this is now fixed.</li>
+        <li>3) the Relaxation Bloch Interaction has seen many improvement including 
+          the ability to relax off the (0,0,1) axis</li>
+        <li>4) The VNMR class has a 'ProcPar' class reader and the ability to 
+          open a 'directory' (the standard place where VNMR puts the procpar 
+          and the fid).</li>
+        <li>5) exceptions are now implemented over the old 'exit()' routines 
+          so you too can try and catch things.</li>
+        <li>6) a math 'Parser' class has been added which will parse an input 
+          string with the usual mathematical functions (like 2*(5+2)^(2)) that 
+          allows for global and local varaible...the current implementation does 
+          not allow for complex numbers or multi input functions (you cannot do 
+          something like 'moo(9,0)' only 'moo(9)' will work. </li>
+        <li>7) a basic script interpretor ('ScriptParse') that parses variables 
+          assignments (A=B), loops and if/elseif/else statements. It was created 
+          with the ability to let you create your own scripting interface by simply 
+          creating a new class with function that decides (called 'decide') 
+          what to do if it hits one of your own functions....</li>
+        <li>8) with those above new classes and the various bug fixes throughout 
+          the library, the Solid example/program has been DRAMATICALLY altered 
+          (current version...solid-2.0). It does away with the 'scripto' interface 
+          and incorporates its own mild scripting capabilities with dramatically 
+          altered syntax. (solid-1.6 and solid-2.0 files ARE NOT compatible at 
+          all). Currently it is a stripped down version of the old program (solid-1.6). 
+          The scripting interface now allows for dynamic sections, and arbitrary 
+          2D spectra of any type...you can simply change a parameter and recollect 
+          the spectrum and it will be added to a 2D master list which will be 
+          saved as a matlab file. Mutli Spin systems can also be used so you can 
+          change the entire interaction set at any time (this usually needs to 
+          be performed for liquid-crystal DAS experiments). Point-To-Point 3D 
+          experiments are now possible (these really create a 2D data set). The 
+          same capability of pseudo phase cycling is still present. The input 
+          syntax is so much simpler and useful that it is a pitty these things 
+          were not done sooner. It does not, however, perform the 'hamil' or 
+          'fit' types of abilities the old version had before. BUT there is 
+          a stable 'hamil' program in the examples anyway which performs better 
+          anyway, and the fitting was so unreliable in the first place, it really 
+          did not need to be there. The 'bspec', 'opdet', and 'sym' options 
+          are no longer needed, as you can simply use the basic scripting interface 
+          to perform these anyway. The 'jump' type has also removed because 
+          of its complete lack of generality (thus making it not very useful)</li>
+      </ul>
+    </li>
+    <li><b>update 6.30.02</b><br>
+      <ul>
+        <li> The documentation is now databased! soon you will find search functions, 
+          and even other formats other then HTML</li>
+      </ul>
+    </li>
+    <li><b>update 6.15.02<br>
+      </b><br>
+      <ul>
+        <li> the ODE solvers have been updated with a better step size control 
+          (i.e. less silly errors in integrations)<br>
+        </li>
+        <li>an another ODE integrator &quot;stiffbs&quot; has been created to handle STIFF 
+          equations...dare not try the &quot;bs&quot; or &quot;ckrk&quot; methods for stiff eqs as 
+          you will be sitting for a LONG time and the answers you will get will 
+          be full of errors...the &quot;stiffbs&quot; requires the Jacobian of your systems<br>
+        </li>
+        <li>several general improvments and minor fixes to the Matrix class<br>
+          <br>
+        </li>
+      </ul>
+    </li>
+    <li><b>since version 0.9</b> (6.10.02)... slow this is, but found a few bugs 
+      and added a few enhancements<br>
+      <br>
+      <ul>
+        <li> the 'Parameters' has had a bunch of bugs removed..mostly dealing 
+          with multiple sections...the new functions of 'setParam' have also 
+          been added, as well as a few speed improvements in the class<br>
+        </li>
+        <li> there is a 'Magnetic Coil Generator Function Registration' to allow 
+          you to write your own coil functions, and register them so that the 
+          'MultiBiot' class can read them from your parameter files (see <span class=&quot;exampleCode&quot;>examples/blochsims/magfields/exsitu/Dcoil.cc</span> 
+          for an example)<br>
+        </li>
+        <li> RotatingGrids have been implimented (the classical analog of a spinning 
+          MAS experiment)...silly, i could rotate magnetics fields, but forgot 
+          about the spacial part...that should be fixed now (see <span class=&quot;exampleCode&quot;>examples/blochsims/mas/</span> 
+          for an example)<br>
+        </li>
+        <li> the examples should be plenty documented and fairly complete in terms 
+          of rigor<br>
+        </li>
+        <li> the 'StencilPrep' calculation has been parellelized...NOTE:: it 
+          acctually can be slower in parrellel with slow network connections.<br>
+        </li>
+        <li> ListBlochParams now has a better implimentation of the 'calcInitialConditions()' 
+          to allow you to loop through 'random' configs...<br>
+          <br>
+        </li>
+      </ul>
+    </li>
+    <li><b>version 0.9...</b>The end is near...<br>
+      <br>
+      <ul>
+        <li> ALL the main data drivers, containers, and functionality has been 
+          included and implemented...now it is bug testing time and finalization 
+          of 'loose ends'<br>
+          ---What remains...<br>
+          <ul>
+            <li> Documentation...hopefully as all the code design is done, the 
+              documentation can be written..<br>
+            </li>
+            <li> Diffusion? i am still debating to included diffusion in the Bloch_Interactions...it 
+              may be a bit too difficult, and slow for the current version of 
+              the lib...a thing to keep in mind for version 2 perhaps as the grid 
+              class would need to be rewritten.<br>
+            </li>
+            <li> Examples need to be documented better (the code need some comments 
+              as well as updating from the older version of the lib)<br>
+            </li>
+            <li>General bug fishing and testing</li>
+          </ul>
+        </li>
+        <li>updates::<br>
+          <ul>
+            <li> another speed upgrade for the 'prop(matrix, matrix)' function 
+              improved by ~30%<br>
+            </li>
+            <li> a full MPI controller class (instead of the C functions, we have 
+              an object now) with both BLOCKING and NON-BLOCKING commands<br>
+            </li>
+            <li> the 'biot' class has been parallelized for optimum performance<br>
+            </li>
+            <li> the 'solid' program (included in the examples) has been heavily 
+              updated and optimized for parallel running as well a ton of other 
+              speed enhancements and minor bug fixes. <br>
+              <br>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><b>version 0.8...</b> SPEED improved...<br>
+      <br>
+      ---Now allows the <a href='http://www.fftw.org' target='aux'>Fastest 
+      Fourier Transform in the West (FFTW)</a> library to be used as the main 
+      driver for Fourier Transforms of Vectors and Matrices...A very fast implementations 
+      for FFTs...i highly recommend using this library...simply type &quot;--with-fftw=<path to installed fftw>&quot; 
+      in the configure path, and everything will be properly set.<br>
+      <br>
+      ---the matrix Multiply code (for full matrices) has been DRASTICALLY altered. 
+      There are currently 2 setups possible...as we all know, the machine specific 
+      BLAS as ALWAYS much faster then anything a simple one man show can create, 
+      sooo i tries to create some 'okay' optimize code (meaning that if you 
+      do not have a machine specific BLAS package, everything still works, and 
+      with okay speed...ie.. it is still faster then the basic netlib matrix multiply 
+      and many other packages, but compared to what the vendors can give you , 
+      <br>
+      it will be ~2-3 times slower)...so if you want to use a vendor BLAS package, 
+      you will need to 2 things<br>
+      <ul>
+        <li>a) use the '--with-blas=<mylib>' option in the configure </li>
+        <li>b) Edit the top of 'container/matrix/matmatmul.h&quot; to reference the 
+          correct function within the lib<br>
+          <br>
+        </li>
+        <li><b>INTEL (LINUX)::***just so you know, the current set up in 'matmatmul.h' 
+          is for <i>Intel's MKL library and ATLAS libs.</i></b> <br>
+          <b><u><br>
+          ***NOTE***---></u></b>I have found that the <a href='http://math-atlas.sourceforge.net/' target='aux'>ATLAS</a> 
+          tuned libraries can be FASTER than the MKL libs on some Intel machines, 
+          i invite you to try testing them versus each other. Read the README.BLAS 
+          for more info on how to configure and use ATLAS for this library.<br>
+          <br>
+          <a href='http://developer.intel.com/software/products/mkl' target='aux'> 
+          http://developer.intel.com/software/products/mkl</a><br>
+          specific for Pentiums (and it is quite speedy, in fact i think it is 
+          a fast as can one can get) 
+          <ul>
+            <li>DO NOT use the 'lapack' lib or any Shared libs (i.e. no *.so) 
+              here, use either the 'libmkl_p3.a' (for pentium 3's) or 'libmkl_def.a' 
+              for everything else</li>
+            <li>It requires the &quot;pthread lib&quot; on linux so do &quot;--enable-pthread&quot; 
+              in the configure line..... </li>
+            <li>you will need to set &quot;<b>OMP_NUM_THREADS</b>&quot; in your environment 
+              if you have an SMP machine (careful, not setting this can cause 
+              mass havok if you also use MPI)<br>
+            </li>
+          </ul>
+        </li>
+        <li><b>INTEL (CYGWIN/PC)</b>::Read the README.BLAS on how to make the 
+          best BLAS lib and incorporate it into the library. You will need 1) 
+          <a href='http://www.cygwin.com' target='aux'>cygwin</a>, 2) <a href='http://math-atlas.sourceforge.net/' target='aux'>ATLAS</a>...please 
+          read my directions inside the windows readme file when configuring ATLAS...</li>
+        <li><b>SGI</b>:: go here for the lib optimized lib <a href='http://www.sgi.com/software/scsl.html' target='aux'>http://www.sgi.com/software/scsl.html</a> 
+          (this has not yet been implemented in the library yet)<br>
+        </li>
+        <li><b>SUN</b>:: go here for the lib optimized lib <a href='http://docs.sun.com/htmlcoll/coll.118.3/iso-8859-1/PERFLIBUG/plug_bookTOC.html' target='aux'>http://docs.sun.com/htmlcoll/coll.118.3/iso-8859-1/PERFLIBUG/plug_bookTOC.html</a> 
+          (this has not yet been implemented in the library yet, but SUN's library 
+          should come with the OS)<br>
+          <br>
+          ***if anybody sets this little file up for SUNs or SGIs (or anything 
+          else really) and gets it to work for those specific BLAS, then i will 
+          gladly include it in the config script (to differentiate between the 
+          platforms)...i do not have these machines to do this test myself....<br>
+          <br>
+        </li>
+        <li> 1a) Lots of other speed improvements have been made throughout the 
+          code making the Quantum Mechanical type simulation go ~5-10 times faster....(nice 
+          eh?)<br>
+        </li>
+        <li>2) The rotation class has had 'Cartesian' or 'spherical' or 'both' 
+          types of rotations are handled in an optimized way<br>
+        </li>
+        <li>3) a bug fix for the second order Quadrupole interaction<br>
+          <br>
+        </li>
+      </ul>
+    </li>
+    <li><b>Version 0.7</b>...The beginning of the parallel world...some VERY BASIC 
+      <a href='http://www-unix.mcs.anl.gov/mpi/' target='aux'>MPI</a> functions 
+      to allow one to compile code with or without the MPI library present... 
+      <ul>
+        <li>In the works…simple &quot;get&quot; and &quot;put&quot; methods for each container type 
+          (matrix, vectors, coords, etc.) are being written...</li>
+        <li>NOTE:: this MPI implementation is not really designed for massively 
+          parallel systems (i.e. systems of 128 processors) but more the 2-10 
+          processors range where distributing loops is advantageous, the normal 
+          container operations (things like &quot;vector + vector&quot;) will not be parallel 
+          unless you create a specific function to do so (which should be simple 
+          once the main interface is complete)…</li>
+        <li>look to the 'MPI' section of the documentation for more details 
+          and examples, and look to the 'INSTALL' section for the new configure 
+          options for MPI</li>
+        <li>NEW:: a VNMR class called 'VNMRstream' that will read and write 
+          the binary formats (both 1D and 2D) from the VNMR (Varian) spectrometer 
+          system </li>
+        <li>The general solid-state simulation application 'Solid' is now included 
+          as a glorified example in the 'examples' directory</li>
+        <li> The very nice minimization package &quot;MINUIT&quot; from has now been included 
+          in the library using a heavily debugged and reworked '<a href='http://c-minuit.sourceforge.net/' target='aux'>C-MINUIT</a>' 
+          to allow inclusion into the shared lib as well as C++ apps<br>
+          <br>
+        </li>
+      </ul>
+    </li>
+    <li><b>Version 0.6</b>...Ground Planned altered to encompass a more general 
+      approach to high field, low field, density and Particle pictures of the 
+      simulations or Objects within the simulation 
+      <ul>
+        <li>The old techniques will still work from version 0.5...but now you 
+          can/should specify 'What kind' of simulation one is doing &quot;HighField, 
+          Density&quot; or HighField Particle&quot; etc.</li>
+        <li>CHANGED:: 'Offset' and 'Relax' have been added as new Interactions 
+          as they have been taken OUT from the BlochParams</li>
+        <li>NEW Magnetic field calculator from Coil geometry's over the 'XYZshape' 
+          object (class 'Biot') 
+          <ul>
+            <li>TODO:: Some symmetry enhancements (use the symmetry of the coil 
+              if there is one to make the calculation faster..this is now in it 
+              INFANCY stage...(so carfeul using it, it can give you some weird 
+              results)</li>
+          </ul>
+        </li>
+        <li>NEW interactions::Offset, Relax, 
+          <ul>
+            <li>Offset using Bfields calculated from Magnetic Field calculator</li>
+            <li> Dimensionless Dipole -->Quantum Type specification of coupling 
+              (i.e. &quot;200 Hz&quot;) </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><b>Version 0.5</b>...the basic Quantum Mechanical framework to perform 
+      most Solid State simulations 
+      <ul>
+        <li>AS with the rest of this 'document-in-progess' some of the basic 
+          documents have been written..several others need to be written...i am 
+          purposely leave them out as the 'newer features' are not promised 
+          to remain as they are at this point...certain issues may arise later 
+          that require them to be retailored...but you can certainly look at the 
+          examples and source to get an idea of what they do....</li>
+        <li>'non-linked' documents are those that have been written and function...my 
+          documentation skills lack the gusto..to write them with any speed....</li>
+      </ul>
+    </li>
+    <li><b>Version 0.4</b> has been completed...as of yet still not nearly any 
+      final release, but it should be quite stable... 
+      <ul>
+        <li>Updates from version 0.3 
+          <ul>
+            <li>A more generic Shape-Grid Generator (including the ability to 
+              use multiple shapes to create a 'multi-faceted' grid array</li>
+            <li>More XYZshape Functional generators</li>
+            <li>Temperature, Inhomogenaity, and Concentration(Moles) based on 
+              grid position (and those multifaceted shapes)</li>
+            <li>Large Speed improvement to the 'coord' class AND given it the 
+              ability to act as a very fast 'Fixed Sized Vector' for arbitrary 
+              sizes (it can be any size now...not just of length 3)</li>
+            <li>Stencils...the basic algorithms to calculate numerical derivatives 
+              and differential operations on data...ONLY the VECTOR implementations 
+              have been completed</li>
+            <li>Lyapunov Exponent calculator class for generic 'Jacobian' functions 
+              and input data.<br>
+              It has been integrated into the 'BlochSolver' so that you may 
+              calculate Lyapunov exponents for your simulations FOR EVERY item...</li>
+            <li>Dipole-Dipole interaction (the finite-element approximation to 
+              the Spin-Spin Dipole interaction in High fields...)</li>
+            <li>Several improved Output functions for each class...very handy 
+              for debugging code and for visualizing the complex grid patterns/gradient 
+              things...</li>
+          </ul>
+        </li>
+        <li>What remains to be done:: 
+          <ul>
+            <li>Stencil operations for Matrix and The NON-uniform grid arrays 
+              (as of now there are no above 2D array data structures) only Fixed 
+              sized Vectors, Dynamic Vectors, Matrix, Grids, and Parameters.</li>
+            <li>Diffusion...once the stencil operations over the 'non-uniform/non-constant' 
+              grid shapes are completed this will be done</li>
+            <li>Input...this is VERY weak...and without writing specific inputs 
+              for each class as of now, not existent (except for the BlochParams 
+              and ListBlochParams)...this is a secondary concern after the numerics 
+              have been completed</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</ul>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

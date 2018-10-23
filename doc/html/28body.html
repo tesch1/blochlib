@@ -1,0 +1,716 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("28menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("28menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("28menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("28title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("28");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Stencils...Finite differences using grids with data<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Commonly, stencils are applied to data contained on a grid map.  The difference between these stencils and the Stencil-Vector functions are the need for directionality (i.e. take a derivative along the x,y,z directions), and multi-dimensional stencils (Laplacians, Gradients, etc).<br />
+<br />
+The functions are relatively easy to implement over rectangular grid shapes, where the boundaries are easily defined.  However, the XYZshape class does not maintain the grid in a normal 3D array fashion because the shapes do not have to be rectangular.  Thus the edges, faces, corners, etc are not well defined from the start.  There is a need to determine the edges, neighbors, etc before a stencil can be applied.  Because the grid is maintained as a Vector list, the data associated with a grid is also in a Vector format and the indices to the nearest-neighbors and next-nearest-neighbors are not ordered in the list.  To solve these particular problems, a StencilPrep class is created to calculate the indices needed for these stencil operations. <br />
+<br />
+The StencilPrep ‘calculation’ can be quite time consuming for large grids as it must check all grid points for a neighbor and next-nearest neighbor, but it only needs to be calculated ONCE for each grid.  The calculation algorithm has been parallelized, but over relatively slow networks, it can actually take more time.  Thus even if a program is run in parallel, you must explicitly define the StencilPrep object’s MPIcontroller in order to have it run in parallel.  I recommend testing it with and without the controller present to see which one is faster.<br />
+<br />
+The object itself contains many functions and has an iterator, but most of these functions you do not need to know unless you wish to use this object to perform something other then Stencils and Boundary conditions, only the basic necessary functions are described here. If you wish to know more, look to ‘src/stencils/stencil_prep.h’ for more information. <br />
+<br />
+Once you have a StencilPrep object the stencils function require both the StencilPrep object AND the data vector.  <br />
+<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Global Functions'></a>Global Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Global FunctionsDerivative_1_2'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Derivative_1_2(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV, int Direction);<br />
+Derivative_1_2n(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV, int Direction);<br />
+<br />
+void Derivative_1_2(Vector&lt;coord&lt;&gt; &gt; &outV, StencilPrep &sp, Vector&lt;coord&lt;&gt; &gt; &inV, int Direction, int Slice);<br />
+Derivative_1_2n(Vector&lt;coord&lt;&gt; &gt; &outV, StencilPrep &sp, Vector&lt;coord&lt;&gt; &gt; &inV, int Direction, int Slice);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The edges for the Derivative_1_2 will be left untouched.<br />
+The edges and the points next to the edges will be left untouched by Derivative_1_4.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+outV--&gt; the vector you wish the calculated data to go to<br />
+sp--&gt; a StencilPrep object<br />
+inV--&gt; the input data Vector<br />
+Direction--&gt; along which direction to to apply the stencil(0=x, 1=y, 2=z)<br />
+Slice--&gt; the direction within the Data Vector to apply the stencil (0=x, 1=y, 2=z)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Takes the first derivative to second order, of a data vector, inV, whos data corrisponds to the StencilPrep, sp.  The result is placed in outV.  Becuase the grid has three directions you can take the derivative along 3 diractions 0=x, 1=y, 2=z.  <br />
+<br />
+If the Vector is full of coords, then there is an extra dimension (slice) which takes the derivative along direction (0,1,2) of the DATA.<br />
+<br />
+There is a normalized version..Derivative_1_2n<br />
+And a forth order version..Derivative_1_4, Derivative_1_4n<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+see main example.<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsDerivative_2_2'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Derivative_2_2(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV, int Direction);<br />
+Derivative_2_2n(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV, int Direction);<br />
+<br />
+void Derivative_2_2(Vector&lt;coord&lt;&gt; &gt; &outV, StencilPrep &sp, Vector&lt;coord&lt;&gt; &gt; &inV, int Direction, int Slice);<br />
+Derivative_2_2n(Vector&lt;coord&lt;&gt; &gt; &outV, StencilPrep &sp, Vector&lt;coord&lt;&gt; &gt; &inV, int Direction, int Slice);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The edges for the Derivative_2_2 will be left untouched.<br />
+The edges and the points next to the edges will be left untouched by Derivative_2_4.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+outV--&gt; the vector you wish the calculated data to go to<br />
+sp--&gt; a StencilPrep object<br />
+inV--&gt; the input data Vector<br />
+Direction--&gt; along which direction to to apply the stencil(0=x, 1=y, 2=z)<br />
+Slice--&gt; the direction within the Data Vector to apply the stencil (0=x, 1=y, 2=z)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Takes the second derivative to second order, of a data vector, inV, whos data corrisponds to the StencilPrep, sp. The result is placed in outV. Becuase the grid has three directions you can take the derivative along 3 diractions 0=x, 1=y, 2=z. <br />
+<br />
+If the Vector is full of coords, then there is an extra dimension (slice) which takes the derivative along direction (0,1,2) of the DATA.<br />
+<br />
+There is a normalized version..Derivative_2_2n<br />
+And a forth order version..Derivative_2_4, Derivative_2_4n<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+see main example<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global FunctionsDerivative_3_2'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Derivative_3_2(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV, int Direction);<br />
+Derivative_3_2n(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV, int Direction);<br />
+<br />
+void Derivative_3_2(Vector&lt;coord&lt;&gt; &gt; &outV, StencilPrep &sp, Vector&lt;coord&lt;&gt; &gt; &inV, int Direction, int Slice);<br />
+Derivative_3_2n(Vector&lt;coord&lt;&gt; &gt; &outV, StencilPrep &sp, Vector&lt;coord&lt;&gt; &gt; &inV, int Direction, int Slice);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The edges and the points next to the edge for the Derivative_3_2 will be left untouched.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+outV--&gt; the vector you wish the calculated data to go to<br />
+sp--&gt; a StencilPrep object<br />
+inV--&gt; the input data Vector<br />
+Direction--&gt; along which direction to to apply the stencil(0=x, 1=y, 2=z)<br />
+Slice--&gt; the direction within the Data Vector to apply the stencil (0=x, 1=y, 2=z)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Takes the third derivative to second order, of a data vector, inV, whos data corrisponds to the StencilPrep, sp. The result is placed in outV. Becuase the grid has three directions you can take the derivative along 3 diractions 0=x, 1=y, 2=z. <br />
+<br />
+If the Vector is full of coords, then there is an extra dimension (slice) which takes the derivative along direction (0,1,2) of the DATA.<br />
+<br />
+There is a normalized version..Derivative_3_2n<br />
+There is NO forth order version (we would need nextnextneighbor for that one).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+see main example<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsDerivative_4_2'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Derivative_4_2(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV, int Direction);<br />
+Derivative_4_2n(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV, int Direction);<br />
+<br />
+void Derivative_4_2(Vector&lt;coord&lt;&gt; &gt; &outV, StencilPrep &sp, Vector&lt;coord&lt;&gt; &gt; &inV, int Direction, int Slice);<br />
+Derivative_4_2n(Vector&lt;coord&lt;&gt; &gt; &outV, StencilPrep &sp, Vector&lt;coord&lt;&gt; &gt; &inV, int Direction, int Slice);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The edges for the Derivative_4_2 will be left untouched.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+outV--&gt; the vector you wish the calculated data to go to<br />
+sp--&gt; a StencilPrep object<br />
+inV--&gt; the input data Vector<br />
+Direction--&gt; along which direction to to apply the stencil(0=x, 1=y, 2=z)<br />
+Slice--&gt; the direction within the Data Vector to apply the stencil (0=x, 1=y, 2=z)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Takes the forth derivative to second order, of a data vector, inV, whos data corrisponds to the StencilPrep, sp. The result is placed in outV. Becuase the grid has three directions you can take the derivative along 3 diractions 0=x, 1=y, 2=z. <br />
+<br />
+If the Vector is full of coords, then there is an extra dimension (slice) which takes the derivative along direction (0,1,2) of the DATA.<br />
+<br />
+There is a normalized version..Derivative_4_2n<br />
+There is NO forth order version (we would need nextnextneighbor for that one).<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+see main example.<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global FunctionsGradient'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Gradient(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV, int Direction);<br />
+Gradientn(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV, int Direction);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The Edges WILL be altered using a Foward or Backwards difference if possible.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+outV--&gt; the vector you wish the calculated data to go to<br />
+sp--&gt; a StencilPrep object<br />
+inV--&gt; the input data Vector<br />
+Direction--&gt; along which direction to to apply the stencil(0=x, 1=y, 2=z)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Takes the Gradient along a specific direction (0,1,2)<br />
+<br />
+If Direction==0 the stencil takes the form<br />
+v[i]= v[i].nearest(-1,x) - v[i].nearest(1,x)<br />
+<br />
+If Direction==1 the stencil takes the form<br />
+v[i]= v[i].nearest(-1,y) - v[i].nearest(1,y)<br />
+<br />
+If Direction==2 the stencil takes the form<br />
+v[i]= v[i].nearest(-1,z) - v[i].nearest(1,z)<br />
+<br />
+The normalized version which normalizes with respect to the square of the grid spacing (dx, dy, dz).<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+see main example.<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsLaplace2D, Laplace2Dn'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Laplace2D(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV, int Direction);<br />
+Laplace2Dn(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV, int Direction);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The edges will not be altered upon calculation.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+outV--&gt; the vector you wish the calculated data to go to<br />
+sp--&gt; a StencilPrep object<br />
+inV--&gt; the input data Vector<br />
+Direction--&gt; along which direction to to apply the stencil(0=x, 1=y, 2=z)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Takes the 2D Laplacian along a particular Direction (x,y,z).<br />
+<br />
+If Direction==0 then Lapacian2D takes a stencil of the form<br />
+<br />
+v[i]= v[i].nearest(-1,y) -4.0*v[i]+ v[i].nearest(1,y)+<br />
+      v[i].nearest(-1,z) + v[i].nearest(1,z);<br />
+<br />
+If Direction==1 then Lapacian2D takes a stencil of the form<br />
+<br />
+v[i]= v[i].nearest(-1,x) -4.0*v[i]+ v[i].nearest(1,x)+<br />
+      v[i].nearest(-1,z) + v[i].nearest(1,z);<br />
+<br />
+If Direction==2 then Lapacian2D takes a stencil of the form<br />
+<br />
+v[i]= v[i].nearest(-1,x) -4.0*v[i]+ v[i].nearest(1,x)+<br />
+      v[i].nearest(-1,y) + v[i].nearest(1,y);<br />
+<br />
+The normalized version which normalizes with respect to the square of the grid spacing (dx, dy, dz).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+See main example.<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global FunctionsLaplace3D, Laplace3Dn'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Laplace3D(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV);<br />
+Laplace3Dn(Vector&lt;T&gt; &outV, StencilPrep &sp, Vector&lt;T&gt; &inV);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+The edges will not be altered upon calculation.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+outV--&gt; the vector you wish the calculated data to go to<br />
+sp--&gt; a StencilPrep object<br />
+inV--&gt; the input data Vector<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Takes the 3D Laplacian along the entire grid.<br />
+<br />
+v[i]= -6.0v[i]+<br />
+v[i].nearest(-1,x) + v[i].nearest(1,x)+<br />
+v[i].nearest(-1,y) + v[i].nearest(1,y)+<br />
+v[i].nearest(-1,z) + v[i].nearest(1,z);<br />
+<br />
+The normalized version which normalizes with respect to the square of the grid spacing (dx, dy, dz).<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+See main example.<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsStencilPrep'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+StencilPrep&lt;Shape_t&gt;()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The empty constructor.  Requires the shape type as its template parameter.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+StencilPrep&lt;XYZshape&lt;XYZrect &gt; &gt; grid;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsStencilPrep'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+StencilPrep&lt;Shape_t &gt; stprep(Shape_t &grid,MPIcontroller &controller=MPIcontroler())<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+It requires the input shape.  It will maintain a pointer to this shape, so if that shape is destroyed, this object will not function (and if used will probably crash the program).<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+grid--&gt; an XYZshape object<br />
+controller --&gt; an MPIcontroler object (usually 'MPIworld')<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the basic constructor from an XYZshape. If you do not input anything into the MPIcontroller, then it will NOT caculate anything in parallel. <br />
+<br />
+<br />
+It automatically calculates the neighbor information.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; basicgrid(min,max, dims);<br />
+XYZrect rect(min,max)<br />
+XYZshape&lt;XYZrect &gt; grid(basicgrid, rect); <br />
+<font color='#006600'>//not in parallel</font><br />
+StencilPrep&lt;XYZshape&lt;XYZrect &gt; &gt; stprep(grid); <br />
+<font color='#006600'>//in parallel</font><br />
+StencilPrep&lt;XYZshape&lt;XYZrect &gt; &gt; stprepP(grid, MPIworld); <br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsStencilPrep'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class ShapeExpr&gt;<br />
+StencilPrep&lt;Shape_t &gt; stprep(Shape_t &grid, 'ShapeExpr' bounds,MPIcontroller &controller=MPIcontroler())<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+It requires the input shape.  It will maintain a pointer to this shape, so if that shape is destroyed, this object will not function (and if used will probably crash the program).<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+grid--&gt; a Grid&lt;UniformGrid&gt; or XYZshape<br />
+bounds --&gt; a shape epression<br />
+controller --&gt; an MPIcontroler object (usually 'MPIworld')<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the basic constructor from an XYZshape or Grid&lt;UniformGrid&gt;, and the Shape Expression (i.e. XYZrect || XYZcylinder). If you do not input anything into the MPIcontroller, then it will NOT caculate anything in parallel.  <br />
+<br />
+It automatically calculates the neighbor information.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; basicgrid(min,max, dims);<br />
+XYZrect rect(min,max);<br />
+XYZrect anotherRect(min2, max2);<br />
+XYZshape&lt;XYZrect &gt; grid(basicgrid, rect); <br />
+<font color='#006600'>//not in parallel</font><br />
+StencilPrep&lt;XYZshape&lt;XYZrect &gt; &gt; stprep(grid,anotherRect && rect); <br />
+<font color='#006600'>//in parallel</font><br />
+StencilPrep&lt;XYZshape&lt;XYZrect &gt; &gt; stprepP(grid,anotherRect && rect, MPIworld); <br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOoperator<<'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+std::ostream &operator&lt;&lt;(std::ostream &oo, StencilPrep&lt;Shape_t&gt; &out)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an out stream<br />
+out--&gt; a StencilPrep object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Same as 'print(oo).'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+StencilPrep&lt;Shape_t&gt; stprep(grid); <br />
+cout&lt;&lt;stprep&lt;&lt;endl;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOprint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void print(std::ostream &oo)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an ouput stream<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Prints out the grid points in the object to the ostream.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; basicgrid(min,max, dims);<br />
+XYZrect rect(min,max)<br />
+XYZshape&lt;XYZrect &gt; grid(basicgrid, rect); <br />
+<font color='#006600'>//not in parallel</font><br />
+StencilPrep&lt;XYZshape&lt;XYZrect &gt; &gt; stprep(grid); <br />
+stprep.print(cout);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOprintNeighbors'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void printNeighbors(std::ostream &oo)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an ouput stream<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Prints out the neighbor data object points in the object to the ostream.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+StencilPrep&lt;Shape_t&gt; stprep(grid); <br />
+stprep.printNeighbors(cout);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOprintNextNeighbors'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void printNextNeighbors(std::ostream &oo)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an ouput stream<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Prints out the next-neighbor data object points in the object to the ostream.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+StencilPrep&lt;Shape_t&gt; stprep(grid); <br />
+stprep.printNextNeighbors(cout);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionscalculate'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class ShapeExpr&gt;<br />
+bool calculate(Shape_t &ins, ShapeExpr ine)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+ins--&gt; a Grid<br />
+ine --&gt; a Shape Expression (like XZYrect, or XYZrect || XYZplaneXY)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the master calculation funtion.  You would need to call this function again anytime the Grid changes or you wish another Shape Expression to be used. This function can be time consuming for large grids.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; basicgrid(min,max, dims);<br />
+XYZrect rect(min,max)<br />
+XYZshape&lt;XYZrect &gt; grid(basicgrid, rect); <br />
+<font color='#006600'>//not in parallel</font><br />
+StencilPrep&lt;XYZshape&lt;XYZrect &gt; &gt; stprep(grid); <br />
+<font color='#006600'>//in parallel</font><br />
+StencilPrep&lt;XYZshape&lt;XYZrect &gt; &gt; stprepP(grid, MPIworld); <br />
+<font color='#006600'>//calculate using the shape</font><br />
+stprepP.calculate(grid, rect);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsempty'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool empty()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns true if there are NO grid points in the object.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; basicgrid(min,max, dims);<br />
+XYZrect rect(min,max)<br />
+XYZshape&lt;XYZrect &gt; grid(basicgrid, rect); <br />
+<font color='#006600'>//not in parallel</font><br />
+StencilPrep&lt;XYZshape&lt;XYZrect &gt; &gt; stprep(grid); <br />
+<font color='#006600'>//in parallel</font><br />
+StencilPrep&lt;XYZshape&lt;XYZrect &gt; &gt; stprepP(grid, MPIworld); <br />
+bool ee=stprepP.empty(); <font color='#006600'>//false</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionssize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int size()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the size of the point in the stencil prep object.  This can be different then the number of grid points becuase you could have used a different ShapeExpression then the one in the Grid.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Grid&lt;UniformGrid&gt; basicgrid(min,max, dims);<br />
+XYZrect rect(min,max)<br />
+XYZshape&lt;XYZrect &gt; grid(basicgrid, rect); <br />
+<font color='#006600'>//not in parallel</font><br />
+StencilPrep&lt;XYZshape&lt;XYZrect &gt; &gt; stprep(grid); <br />
+<font color='#006600'>//in parallel</font><br />
+StencilPrep&lt;XYZshape&lt;XYZrect &gt; &gt; stprepP(grid, MPIworld); <br />
+int mysiz=stprep.size();<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

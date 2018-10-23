@@ -1,0 +1,98 @@
+
+# preforms a 'real' experiment 
+# for the post-C7 (a series of 2D fids are collected)
+
+spins{
+	
+	#the global options
+	numspin 2
+	T 1H 0
+	T 1H 1
+	C 5000  2134 0 0
+	C -5000 2789 0.5 1
+	D 1500 0 1	
+}
+
+parameters{	
+
+	powder1{
+		aveType zcw
+		thetaStep 233
+		phiStep 144
+	}		
+
+#the intergrator step size	
+	maxtstep=1e-6
+
+#number of 1D fid points	
+	npts1D=512	
+}
+
+
+pulses{
+
+#our post-C7 sub pulse section
+	sub1{	
+	#set the rotor angle to the global var
+		rotor=rad2deg*acos(1/sqrt(3)))
+	#post C7 pulse amplitude
+		amp=7*wr
+		amplitude(amp)
+	#phse stepers
+		stph=0
+		phst=360/7
+	#pulse times
+		t90=1/amp/4
+		t270=3/amp/4
+		t360=1/amp
+		
+	#post C7 loop
+		loop(k=1:7)
+			1H:pulse(t90, stph) 
+			1H:pulse(t360, stph+180) 
+			1H:pulse(t270, stph)
+			stph=stph+phst
+		end
+	}
+
+#number of 2D points
+	fidpt=128
+
+#collection a matrix of data	
+	2D()
+
+#set the spinning	
+	wr=5000
+
+#the basic rotor angle
+	rotor=rad2deg*acos(1/sqrt(3)))
+
+#set the detection matrix
+	detect(Ip)
+#reset the ro back to the eq
+	ro(Iz)
+
+#90 time ampltiudes
+	amp=150000
+	t90=1/amp/4
+
+#loop over the rotor steps
+	loop(m=0:fidpt-1)
+
+	#may use 'reuse' everything is static in sub1
+	# must be repeat m times to advance the desity matrix
+	# for each fid (the first fid gets no c7)
+		reuse(sub1, m)
+
+	#pulse the IZ down to the xy plane for detection
+		1H:pulse(t90, 270, amp)
+
+	#collect the fid at the 'mth' position
+		fid(m)
+	#reset the ro back to the eq
+		ro(Iz)
+	end
+	savefidmatlab(2dc7) #save the matlab file
+}
+
+	

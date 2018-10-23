@@ -1,0 +1,424 @@
+
+coilbasichelm{
+
+#amps set up to produce a magic angle at z-y and z-x
+#	numsec 3
+	subcoil1{
+		type helmholtz
+		loops 25
+		#amps 38.434
+		#for 1MHz
+		#amps -36.618
+		#for 100kHz
+		amps -3.6595
+		numpts 4000
+		
+		#radius in cm
+		R 4
+		length 2.65
+		axis x
+	}
+	
+	subcoil2{
+		type helmholtz
+		loops 30
+		#amps 62.319
+		#for 100kHz
+		amps 6.2352
+		numpts 4000
+		
+		#radius in cm
+		R 9
+		length 3.65
+		axis y
+	}
+	
+	subcoil3{
+		type helmholtz
+		loops 100
+		#amps -22.7395
+		#for 100kHz
+		amps -2.2740
+		numpts 4000
+		
+		#radius in cm
+		R 11
+		length 5.8
+		
+		axis z
+	}
+}
+
+dcoil{
+	numsec 3
+	subcoil3{
+		type Dhelix
+		loops 1
+		amps 2
+		
+		numpts 30000
+		# radius (cm)
+		R 2
+		#start theta of line section
+		theta1 0
+		theta2 180
+		
+		turns 200
+		Z 10
+		axis z
+		center 0,-.6,0
+	}
+	subcoil1{
+		type Dcircle
+		loops 1
+		amps 2
+		
+		numpts 2000
+		# radius (cm)
+		R 2
+		#start theta of line section
+		theta1 0
+		theta2 180		
+		
+		axis z
+		center 0,-.6,5
+	}
+	subcoil2{
+		type Dcircle
+		loops 1
+		amps 2
+		
+		numpts 2000
+		# radius (cm)
+		R 2
+		#start theta of line section
+		theta1 0
+		theta2 180		
+		axis z
+		center 0,-.6,-5
+	}
+}
+		
+		
+
+exsituSol{
+	#left-top corner...top rght corner
+	subcoil1{
+		type line
+		loops 1000
+		amps 2
+		numpts 4000
+		begin 10, -150, -10
+		end 10, 150, -10
+	}
+	#top right corner...bottom right corner
+	subcoil2{
+		type line
+		numpts 2000
+		loops 1000
+		amps 2
+		begin 10, 150, -10
+		end -10, 150, -10
+	}
+	
+	#bottom right corner..bottom left corner
+	subcoil3{
+		type line
+		numpts 4000
+		loops 1000
+		amps 2
+		begin -10, 150, -10
+		end -10, -150, -10
+	}
+	
+	#bottom left corner...top right corner..
+	subcoil4{
+		type line
+		numpts 2000
+		loops 1000
+		amps 2
+		begin -10, -150, -10
+		end 10, -150, -10
+	}
+	
+	subcoil5{
+		type Dhelix
+		loops 1
+		amps 2
+		numpts 30000
+		# radius (cm)
+		R 2
+
+		#length
+		Z 3		
+		theta1 0
+		theta2 180
+		turns 100
+		center 0,0,-2.5
+		axis y
+	}
+
+	subcoil6{
+		type Dcircle
+		loops 2
+		amps 2
+		numpts 2000
+		# radius (cm)
+		R 2
+		theta1 0
+		theta2 180
+		center 0,1.5,-2.5
+		axis y
+	}
+	subcoil7{
+		type Dcircle
+		loops 2
+		amps 2
+		numpts 2000
+		# radius (cm)
+		theta1 0
+		theta2 180
+		R 2	
+		center 0,-1.5,-2.5
+		axis y
+	}
+	
+
+}
+
+myDSol{
+	subcoil1{
+		type Dhelix
+		loops 1
+		amps 2
+		numpts 12000
+		# radius (cm)
+		R 2
+
+		#length
+		Z 10		
+		theta1 0
+		theta2 180
+		turns 100
+		center 0,0,-0.6
+		axis y
+	}
+
+	subcoil2{
+		type Dcircle
+		loops 2
+		amps 2
+		numpts 2000
+		# radius (cm)
+		R 2
+		theta1 0
+		theta2 180
+		center 0,5,-0.6
+		axis y
+	}
+	subcoil3{
+		type Dcircle
+		loops 2
+		amps 2
+		numpts 2000
+		# radius (cm)
+		theta1 0
+		theta2 180
+		R 2	
+		center 0,-5,-0.6
+		axis y
+	}
+}
+
+mySol{
+	numsec 3
+	subcoil1{
+		type helix
+		loops 1
+		amps 2
+		numpts 30000
+		# radius (cm)
+		R 2
+
+		#length
+		Z 10		
+		turns 100
+		center 0,0,-2.5
+		axis y
+	}
+	
+	subcoil2{
+		type circle
+		loops 70
+		amps 1
+		numpts 2000
+		# radius (cm)
+		R 2	
+		center 0,5,-2.5
+		axis y
+	}
+	subcoil3{
+		type circle
+		loops 70
+		amps 1
+		numpts 2000
+		# radius (cm)
+		R 2	
+		center 0,-5,-2.5
+		axis y
+	}
+}	
+
+myLines{
+	#left-top corner...top rght corner
+	subcoil1{
+		type line
+		loops 1000
+		amps 2
+		numpts 4000
+		begin 10, -150, -10
+		end 10, 150, -10
+	}
+	#top right corner...bottom right corner
+	subcoil2{
+		type line
+		numpts 2000
+		loops 1000
+		amps 2
+		begin 10, 150, -10
+		end -10, 150, -10
+	}
+	
+	#bottom right corner..bottom left corner
+	subcoil3{
+		type line
+		numpts 4000
+		loops 1000
+		amps 2
+		begin -10, 150, -10
+		end -10, -150, -10
+	}
+	
+	#bottom left corner...top right corner..
+	subcoil4{
+		type line
+		numpts 2000
+		loops 1000
+		amps 2
+		begin -10, -150, -10
+		end 10, -150, -10
+	}
+}
+
+
+grids{	
+	# Cube 
+	numgrids 1
+	grid1{
+		min -0.5,-0.5,-0.5
+		max 0.5,0.5,0.5
+		dim 2,2,500
+	}
+	
+	# X-Y Plane
+	grid1{
+		min -0.5,-0.5,-0.5
+		max 0.5,0.5,0.5
+		dim 50,50,1
+	}
+	
+	#X-Z plane
+	grid2{
+		min -0.5,-0.5,-0.5
+		max 0.5,0.5,0.5
+		dim 50,1,50
+	}
+	
+	#Y-Z plane
+	grid3{
+		min -0.5,-0.5,-0.5
+		max 0.5,0.5,0.5
+		dim 1,50,50
+	}
+}
+
+# this is the input for the 'MagParams' class
+# That make choosing the 'alterable' parameters
+# of coils much easier
+# the 'alter' types can be 
+#"R", "Z", "turns", "theta1", "theta2",
+#"amps", "loops",
+#"Xcenter", "Ycenter", "Zcenter"
+#
+# multiple pars shouold be labeled "par#" starting at 1
+# where '#' is the parameter number
+fitter{
+	
+	par1{
+		alter amps
+		upperBound 0
+		lowerBound -5
+		start -3.6595
+		error 0
+		coil subcoil1
+	}
+	
+	par2{
+		alter amps
+		upperBound 10
+		lowerBound 3
+		start  6.2352
+		error 0
+		coil subcoil2
+	}
+	par3{
+		alter amps
+		upperBound 0
+		lowerBound -6
+		start  -2.2740
+		#start  -4.2740
+		error 1
+		coil subcoil3
+	}
+}	
+		
+
+params{
+	#which magnetic field section to use
+	section  myLines
+	#myDSol, exsituSol
+	
+	#tells me which coil is 'B0' and which is 'B1'
+	B0 myLines
+	B1 myDSol
+	
+	#what to do either 'fit' to minimize or 'field' to cal the fields
+	# 'sim' to calc fields and do a spin simulation
+	toDo sim
+	
+	#params for SpinSimulations
+	npts 1024
+	sw 100000
+	roeq Ix
+	detect Ip
+	spins{
+		numspin 6
+		C 10000 0 0 0
+		C -10000 0 0 1
+		C 5000 0 0 2
+		C -5000 0 0 3
+		C 2000 0 0 4
+		C -2000 0 0 5
+		#C 1000 0 0 6
+		#C -1000 0 0 7
+	}
+		
+	
+	#output text file name
+	textout shape.biot
+	#output matlab file name
+	matout field.mat
+	
+}
+
+

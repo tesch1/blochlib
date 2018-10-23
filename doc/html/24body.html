@@ -1,0 +1,973 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("24menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("24menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("24menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("24title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("24");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+<br />
+template&lt;class Grid_t=NullGrid,<br />
+   int BPops=BPoptions::Density | BPoptions::HighField,<br />
+   class offset_T=double&gt;<br />
+class ListBlochParams <br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+ <ul>
+<li>This class creates the interface between a 'XYZshape' or Grid 
+and a list of Spin parameters....The 'Grid_t' template parameter 
+is the basic grid class that you wish to use..OR a 'NonGrid' dubbed 
+Null Grid if there is no grid to worry about...This can also take 
+in the 'GradientGrid' grid type whcih changes the definitions 
+of the 'offset' function (noe the offset is position dependant).</li>
+<li><b>Grid_T</b> --> The grid type/name, the default is NO grid 
+(the &quot;NullGrid&quot;)...This can be an 'XYZshape< ... 
+>' type or 'Grid< ... >' type, If you are using gradients, 
+then use the 'GradientGrid< ... >' type</li>
+<li><b>BPops</b>--> This is the BlochParameter Options type...See 
+BlochParameters for the details of 
+these options..Default is BPtoptions::HighField | BPoptions::Density</li>
+<li><b>offset_T</b>--> this specifies weather or not the offset 
+is a 3-vector (i.e. has componenets along (x,y,z)) OR a single 
+direction (i.e. the Z-axis)..the default is 'double' meaning the 
+High field is only along the Z-axis...if offset_T=coord 
+then the High field main axis is NOT along the lab Z-axis, but 
+along an arbitrary axis.</li>
+<li>NOTE: the ListBlochParams<Grid_t> uses ListBLochParams<NullGrid> 
+as its base class....</li>
+</ul></blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsListBlochParams'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ListBlochParams()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+empty constructor--&gt; Sets up the default Parameter for 1 BlochParam<br />
+The Default isotope is &quot;1H&quot;<br />
+The Default Bo_=4.7 tesla<br />
+The Default Temperature=300 K<br />
+The Default offset, T1, T2=0;<br />
+The Default moles=1<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParam&lt;&gt; moo; <br />
+std::string sys=moo.symbol(0); <font color='#006600'>//returns &quot;1H&quot;</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsListBlochParams'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ListBlochParams(int numspins) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+numspins--&gt; the number of spins in the list<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a list of 'numspins' protons.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(5); <br />
+int len=moo.size(); <font color='#006600'>//returns 5</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsListBlochParams'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ListBlochParams(int numspins, std::string spintype)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+numspins--&gt; number of spins in the list<br />
+spintype--&gt; the isotope label for all the spins.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a list o BlochParams 'numspins' long all with the isotope 'spintype.'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams moo(10, &quot;13C&quot;); <br />
+cout&lt;&lt;moo.symbol(3); <font color='#006600'>//prints out &quot;13C&quot; </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsListBlochParams'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ListBlochParams(int numspins, BlochParams &insert) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+numspins--&gt; the number of spins in the list<br />
+insert--&gt; A BlochParams to duplicate numspins times<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates a list of 'numspins' of the 'insert' BlochParams...<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams onebp(&quot;23Na&quot;);<br />
+ListBlochParams&lt;&gt; moo(5, onebp); <br />
+int len=moo.size(); <font color='#006600'>//returns 5</font><br />
+cout&lt;&lt;moo.symbol(3); <font color='#006600'>//prints &quot;23Na&quot; to the screen</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsListBlochParams'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ListBlochParams&lt;NullGrid&gt;(ListBlochParams&lt;NullGrid&gt; &dup) <br />
+ListBlochParams&lt;Grid_t&gt;(ListBlochParams&lt;NullGrid&gt; &dup)<br />
+ListBlochParams&lt;Grid_t&gt;(ListBlochParams&lt;Grid_t&gt; &dup) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NullGrid Types can only dupilcate NullGrid Lists<br />
+Grid_t Types can duplicate any Grid_t type AND the NullGrid Type if copying the NullGrid type, NO grid is set....<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+dup--&gt; the List to duplicate<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Creates a deep copy (different memory space) of the dup.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams onebp(&quot;23Na&quot;);<br />
+ListBlochParams&lt;&gt; moo(5, onebp); <br />
+ListBlochParams&lt;&gt; Cp(moo); <font color='#006600'>//the copy</font><br />
+int len=moo.size(); <font color='#006600'>//returns 5</font><br />
+cout&lt;&lt;moo.symbol(3); <font color='#006600'>//prints &quot;23Na&quot; to the screen</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsListBlochParams'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ListBlochParams(int numspins, std::string spintype, Grid_t &grid)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for every Grid EXCEPT the 'NullGrid'<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+numspins--&gt; number of spins in the list<br />
+spintype--&gt; the isotope label for all the spins...<br />
+grid--&gt; the grid to associate with this list of parameters<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates a list of BlochParams 'numspins' long all with the isotope 'spintype' and an associated grid<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; mins(-1,-1,-1), maxs(1,1,1);<br />
+coord&lt;int&gt; dims(10,10,10);<br />
+<br />
+Grid&lt;UniformGrid&gt; mygrid(mins, macs, dims);<br />
+XYZshape&lt;XYZrect&gt; myshape(mygrid, XYZrect(mins, maxs, dims)); <font color='#006600'>//a rectanglular grid </font><br />
+ListBlochParams&lt;XYZshape&lt;XYZrect&gt; &gt; moo(10, &quot;13C&quot;, myshape); <br />
+cout&lt;&lt;moo.symbol(3); <font color='#006600'>//prints out &quot;13C&quot; </font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsListBlochParams'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ListBlochParams(int numspins, BlochParams &BP, Grid_t &grid)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for every grid EXCEPT the 'NullGrid'<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+numspins--&gt; number of spins in the list<br />
+BP--&gt; a single BlochParams<br />
+grid--&gt; the grid to associate with this list of parameters<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates a list of BlochParams 'numspins' long all with the isotope 'spintype' and an associated grid<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+coord&lt;&gt; mins(-1,-1,-1), maxs(1,1,1);<br />
+coord&lt;int&gt; dims(10,10,10);<br />
+<br />
+Grid&lt;UniformGrid&gt; mygrid(mins, macs, dims);<br />
+XYZshape&lt;XYZrect&gt; myshape(mygrid, XYZrect(mins, maxs, dims)); <font color='#006600'>//a rectanglular grid </font><br />
+BlochParams BP(&quot;23Na&quot;)<br />
+ListBlochParams&lt;XYZshape&lt;XYZrect&gt; &gt; moo(10, BP, myshape); <br />
+cout&lt;&lt;moo.symbol(3); <font color='#006600'>//prints out &quot;23Na&quot; </font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element ExtractionBo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+offset_T &Bo(int i);<br />
+offset_T &Bo(); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using this for assignment..YOU MUST PERFORM a &quot;CalcMo()&quot; in order to get the correct equilibrium magnitization &quot;Mo.&quot; <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element you wish to extract...<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the Magnetic field on that spin (also can be used for assignment).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(15, &quot;27Al&quot;);<br />
+moo.Bo(7)=5; <br />
+moo[7].CalcMo(); <br />
+cout&lt;&lt;moo.Bo(7); <font color='#006600'>//prints out '5'</font><br />
+<br />
+ListBlochParams&lt;&gt;::iterator iter(moo);<br />
+iter.Bo()=9; <font color='#006600'>//in tesla</font><br />
+iter.calcMo(); <font color='#006600'>//recalc the MO after we change Bo</font><br />
+++iter;<br />
+iter.Bo()=8; <font color='#006600'>//in tesla</font><br />
+iter.calcMo(); <font color='#006600'>//recalc the MO after we change Bo</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractiongamma'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double gamma(int i)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element you wish to extract.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+the gamma factor for that spin in units of Hz/Telsa<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(15, &quot;27Al&quot;);<br />
+cout&lt;&lt;moo.gamma(6); <font color='#006600'>//prints out the gamma factor for Al</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractiongammaGauss'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double gammaGauss(int i)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element you wish to extract...<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+the gamma factor for that spin in units of Hz/Gauss<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(15, &quot;27Al&quot;);<br />
+cout&lt;&lt;moo.gammaGauss(6); <font color='#006600'>//prints out the gamma factor for Al</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionmeanMo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double meanMo()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the mean of the total Magnetization.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(15, &quot;27Al&quot;);<br />
+moo.Bo()=4.7; <br />
+moo.calcTotalMo(); <br />
+cout&lt;&lt;moo.Mo(5)&lt;&lt;endl; <font color='#006600'>//prints out the eq magnitization </font><br />
+cout&lt;&lt;moo.totalMo()&lt;&lt;endl;<br />
+cout&lt;&lt;moo.meanMo()&lt;&lt;endl;<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractionMo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+offset_T &Mo(int i);<br />
+offset_T &Mo(); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+This DOES NOT 'back' calculate the Temperature or Bo...in fact this is recommended not to be used unless you really need to (i.e. using BPoptions::Particle)<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element you wish to extract...<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets AND gets the equilibrium magnetization of the spin.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(15, &quot;27Al&quot;);<br />
+moo.Mo(6)=1.05e-6; <br />
+moo.calcTotalMo(); <br />
+cout&lt;&lt;moo.Mo(6); <font color='#006600'>//prints out something ~10E-4 </font><br />
+<br />
+ListBlochParams&lt;&gt;::iterator iter(moo);<br />
+iter.Mo()=1.8e-9; <br />
+++iter;<br />
+iter.Mo()=1.2e-4;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionmoles'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double &moles(int i);<br />
+double &moles(int i); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using this for assignment..YOU MUST PERFORM a &quot;CalcMo()&quot; in order to get the correct equilibrium magnitization &quot;Mo.&quot; <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element you wish to extract<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the number of moles of that spin (also can be used for assignment).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(15, &quot;27Al&quot;);<br />
+moo.Moles(7)=0.5; <br />
+moo[7].CalcMo(); <br />
+cout&lt;&lt;moo.Moles(7); <font color='#006600'>//prints out '0.5'</font><br />
+<br />
+ListBlochParams&lt;&gt;::iterator iter(moo);<br />
+iter.Moles()=0.1; <font color='#006600'>//0.1 moles of spin 1</font><br />
+iter.calcMo(); <font color='#006600'>//recalc the MO after we change the temperature </font><br />
+++iter;<br />
+iter.Moles()=1; <font color='#006600'>// 1 mole of spin 2</font><br />
+iter.calcMo(); <font color='#006600'>//recalc the MO after we change the temperature </font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionoperator[], operator()'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BlochParams &operator[int i]<br />
+BlochParams &operator(int i)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NO Bounds checking for Speed.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element you wish to extract.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the BlochParams At place i.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(15, &quot;27Al&quot;);<br />
+cout&lt;&lt;moo[6].gammaGauss(); <font color='#006600'>//prints out the gamma factor for Al</font><br />
+cout&lt;&lt;moo(6).gamma(); <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionPoint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+coord&lt;&gt; Point() --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Valid for ALL Grid types EXCEPT NullGrid<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the current spin's coordinate.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;XYZShape&lt;XYZfull&gt; &gt; moo(15, &quot;14N&quot;,myshape);<br />
+ListBlochParams&lt;&gt;::iterator iter(moo);<br />
+iter.Point();<font color='#006600'>//spin 1's coordinate</font><br />
+++iter;<br />
+iter.Point(); <font color='#006600'>//spin 2's coordinate</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractiontemperature'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double &temperature(int i);<br />
+double &temperature(); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+If using this for assignment..YOU MUST PERFORM a &quot;CalcMo()&quot; in order to get the correct equilibrium magnitization &quot;Mo.&quot;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the element you wish to extract<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the Temperature of the spin IN KELVIN (also can be used for assignment).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(15, &quot;27Al&quot;);<br />
+moo.Temperature(3)=256.0; <br />
+moo[3].CalcMo(); <br />
+cout&lt;&lt;moo.Temperature(3); <font color='#006600'>//prints out '256'</font><br />
+<br />
+ListBlochParams&lt;&gt;::iterator iter(moo);<br />
+iter.Temperature()=400; <font color='#006600'>//Temp is now 400 K for spin 1</font><br />
+iter.calcMo(); <font color='#006600'>//recalc the MO after we change the temperature </font><br />
+++iter;<br />
+iter.Temperature()=900; <font color='#006600'>//Temp is now 900 K for spin 2</font><br />
+iter.calcMo(); <font color='#006600'>//recalc the MO after we change the temperature </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractiontotalMo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double totalMo();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the total magnetization for the system. <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(15, &quot;27Al&quot;);<br />
+moo.Bo()=4.7; <br />
+moo.calcTotalMo(); <br />
+cout&lt;&lt;moo.Mo(5)&lt;&lt;endl; <font color='#006600'>//prints out the eq magnitization </font><br />
+cout&lt;&lt;moo.totalMo()&lt;&lt;endl;<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ListBlochParams &operator=(const BlochParams &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; a BlochParams<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns the list to 1 BlochParam.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(&quot;27Al&quot;);<br />
+ListBlochParams&lt;&gt; koo;<br />
+koo=moo; <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ListBlochParams &operator=(ListBlochParams &tocopy);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NullGrid Types can only dupilcate NullGrid Lists<br />
+Grid_t Types can duplicate any Grid_t type AND the NullGrid Type if copying the NullGrid type, NO grid is set....<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+tocopy--&gt;Another ListBLochParams<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns one list from another in deep copy (separate memory space) fashion.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(&quot;27Al&quot;);<br />
+ListBlochParams&lt;&gt; koo;<br />
+koo=moo; <br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOoperator<<'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ostream &operator&lt;&lt;(ostream &oo, ListBlochParams &bp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+bp--&gt; the ListBlochParams you wish to output<br />
+oo--&gt; a output stream<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes a 'pretty' string to 'oo.'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(2,&quot;1H&quot;);<br />
+cout&lt;&lt;moo; <font color='#006600'>// will write the string </font><br />
+<font color='#006600'>// &quot;Density BlochParam: moles=1, Spin=1H, momentum=1/2, gamma=2.6752E+8&quot;</font><br />
+<font color='#006600'>// &quot;Density BlochParam: moles=1, Spin=1H, momentum=1/2, gamma=2.6752E+8&quot;</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOprint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void print(ostream &oo=cout)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an output ASCII stream you wish to output the data<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes an ASCII string to the ostream oo.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams moo(2,&quot;1H&quot;);<br />
+moo.print(); <font color='#006600'>// will write the string</font><br />
+<font color='#006600'>// &quot;Density BlochParam: moles=1, Spin=1H, momentum=1/2, gamma=2.6752E+8&quot;</font><br />
+<font color='#006600'>// &quot;Density BlochParam: moles=1, Spin=1H, momentum=1/2, gamma=2.6752E+8&quot;</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void read(fstream &ii)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+ii--&gt; an INPUT BINARY stream you wish to import the data<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads the binary data as<br />
+<br />
+LISTBLOCHPARS<br />
+BP{binary size} {Moles} {Bo} {Temp} {Spin}BP{binary size}{Moles} {Bo} {Temp} {Spin}BP{binary size} {Moles} {Bo} {Temp} {Spin}BP{binary size} {Moles} {Bo} {Temp} {Spin}<br />
+....BP{binary size} {Moles} {Bo} {Temp} {Spin}<br />
+ENDLISTBLOCHPARS<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams moo;<br />
+fstream in(ios::binary | ios::in);<br />
+moo.read(in); <font color='#006600'>// will attempt to READ the Binary Data</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOwrite'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void write(fstream &oo)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an output BINARY stream you wish to output the data<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+writes the binary data as<br />
+<br />
+LISTBLOCHPARS<br />
+BP{binary size} {Moles} {Bo} {Temp} {Spin}BP{binary size}{Moles} {Bo} {Temp} {Spin}BP{binary size} {Moles} {Bo} {Temp} {Spin}BP{binary size} {Moles} {Bo} {Temp} {Spin}<br />
+....BP{binary size} {Moles} {Bo} {Temp} {Spin}<br />
+ENDLISTBLOCHPARS<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams moo(20,&quot;1H&quot;);<br />
+fstream out(ios::binary | ios::out);<br />
+moo.write(out) <font color='#006600'>// will write the Binary data</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functions+, +='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ListBlochParams &operator+(const BlochParams &rhs);<br />
+ListBlochParams &operator+(const ListBlochParams &rhs);<br />
+ListBlochParams &operator+=(const BlochParams &rhs);<br />
+ListBlochParams &operator+=(const ListBlochParams &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; another BlochParams or ListBlochParams<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+addition or self addtion of a single BlochParam, or ListBlochParams. It Adds it to the end of the list, makeing the list longer.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BlochParams joo(&quot;1H&quot;), loo(&quot;13C&quot;);<br />
+ListBlochParams&lt;&gt; moo(4, &quot;14N&quot;);<br />
+moo=moo+loo; <font color='#006600'>//length of 5</font><br />
+moo=moo+joo; <font color='#006600'>//length of 6</font><br />
+moo+=loo; <font color='#006600'>//length of 7</font><br />
+moo+=joo; <font color='#006600'>//length of 8</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionscalcInitialCondition'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void calcInitialCondition();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Recaculates the inital condition assuming you have used 'setInitialCondtion' alreay.  If not, the default is for the list is 'InitialCondtion=InitialCondtion::AllUp.'<br />
+If the InitialCondtion is of a random type, it will re-randomize the list.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(15, &quot;27Al&quot;);<br />
+<font color='#006600'>//set the initial condition to random +1zhat or -1zhat</font><br />
+moo.setInitialCondition(InitialCondition::RandomUpDown);<br />
+moo.calcInitialCondition();<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionscalcTotalMo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void calcTotalMo()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Calculates the initial total magnitization for each spin AND calculates the TOTAl magnitization at equilibrium <br />
+(i.e Sum_i{ Mo[i]})<br />
+<br />
+Each spin has the equilibrium magnitization given by the curie formula <br />
+<br />
+Mo=(gamma()*hbar*tanh(hbar*PI*(Bo()*gamma()/PI2)<br />
+/kb/temperature())*moles()*No*1e3/2.0)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(15, &quot;27Al&quot;);<br />
+moo.Bo()=4.7; <br />
+moo.calcTotalMo(); <br />
+cout&lt;&lt;moo.Mo(5); <font color='#006600'>//prints out the eq magnitization </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsinitialCondition'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int initialCondition()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the 'InitialCondtion' integer flag.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+moo.setInitialCondition(InitialCondition::RandomUpDown);<br />
+moo.calcInitialCondition();<br />
+int IC=moo.initialCondition();<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionssetInitialCondition'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setInitialCondition(int IC);<br />
+void calcInitialCondition(int IC);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+IC --&gt; the initial condition<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Set the initial conditions flag.  It can be<br />
+<br />
+InitialCondition::AllUp --&gt; Mo will be the max along z<br />
+InitialCondition::AllDown --&gt; Mo will be as negative a possible along Z<br />
+InitialCondition::HalfUpHalfDown --&gt; Will be half +Z and half -Z<br />
+InitialCondition::RandomDistribution --&gt; Mo will be randomly distributed along the enitre bloch sphere<br />
+InitialCondition::RandomUp --&gt; Mo will be randomly placed in the Top hemisphere<br />
+InitialCondition::RandomDown --&gt; Mo will be randomly placed in the Bottom hemisphere<br />
+InitialCondition::RandomUpDown --&gt; Mo will be +Z or -Z but randomly (i.e. there is a possiblility for the sample to be more up the down or vice versa)<br />
+<br />
+It will then recaluculat the Mo of each spin. The two functions above do the same thing.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+ListBlochParams&lt;&gt; moo(15, &quot;27Al&quot;);<br />
+<font color='#006600'>//set the initial condition to random +1zhat or -1zhat</font><br />
+moo.setInitialCondition(InitialCondition::RandomUpDown);<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

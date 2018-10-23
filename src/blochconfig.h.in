@@ -1,0 +1,99 @@
+/* config.h.in.  Generated automatically from configure.in by autoheader.  */
+
+/* Define to empty if the keyword does not work.  */
+#undef const
+
+/* Define as __inline if that's what the C compiler calls it.  */
+#undef inline
+
+/* Define if you need to in order for stat and other things to work.  */
+#undef _POSIX_SOURCE
+
+/* Define to `unsigned' if <sys/types.h> doesn't define.  */
+#undef size_t
+
+/* Define if you have the ANSI C header files.  */
+#undef STDC_HEADERS
+
+/* Define if you can safely include both <sys/time.h> and <time.h>.  */
+#undef TIME_WITH_SYS_TIME
+
+/* Define if you have the <sys/time.h> header file.  */
+#undef HAVE_SYS_TIME_H
+
+/* Define if you have the <unistd.h> header file.  */
+#undef HAVE_UNISTD_H
+
+/* Define if you have the <climits> header file.  */
+#undef HAVE_CLIMITS
+
+/* Define if you have the <limits.h> header file.  */
+#undef HAVE_LIMITS_H
+
+/* Define if you have the function isnan.  */
+#undef HAVE_ISNAN
+
+/* Define if you have the function finite.  */
+#undef HAVE_FINITE
+
+/* Name of package */
+#undef PACKAGE
+
+/* Version number of package */
+#undef VERSION
+
+/* Useing minuit or not */
+#undef USE_MINUIT
+
+/* Useing f2c fortran or not */
+#undef f2cFortran
+
+/* do you have the 'getline' function */
+#undef HAVE_GETLINE
+
+/* do you have MPI library */
+#undef HAVE_MPI
+
+/* using an aux illiary BLAS lib for dgemm */
+#undef AUX_BLAS_LIB
+
+/* do we have the max(thing) function */
+#undef HAVE_MAX1
+
+/* do we have the max(thing, thing) function */
+#undef HAVE_MAX2
+
+/* do we have the min(thing) function */
+#undef HAVE_MIN1
+
+/* do we have the min(thing, thing) function */
+#undef HAVE_MIN2
+
+/* do we have the sign(thing) function */
+#undef HAVE_SIGN
+
+/* Use the FFTW fast Fourier Transform Package at all */
+#undef HAVE_FFTW
+
+/* Use the FFTW fast Fourier Transform Package Version 2 */
+#undef HAVE_FFTW_II
+
+/* Use the FFTW v 3 fast Fourier Transform Package */
+#undef HAVE_FFTW_III
+
+/* Are we going to use exceptions? */
+#undef USE_EXCEPTIONS
+
+
+/* Do We have signal.h header */
+#undef HAVE_SIGNAL_H
+
+/* the namespace name */
+#undef BL_NAMESPACE
+
+/* if namespaces are allowed */
+#undef BEGIN_BL_NAMESPACE
+
+/* if namespaces are allowed */
+#undef END_BL_NAMESPACE
+

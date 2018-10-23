@@ -1,0 +1,131 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Performing various Stencil operators on grids and data.<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Goes through the usuall set up to calculate stencils over grid spaces.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+int&nbsp;main(int&nbsp;argc,&nbsp;char&nbsp;**argv)<br />
+{<br />
+<font color='#006600'>//some&nbsp;initial&nbsp;typedefs</font><br />
+&nbsp;&nbsp;&nbsp;typedef&nbsp;XYZrect&nbsp;TheShape;<br />
+&nbsp;&nbsp;&nbsp;typedef&nbsp;XYZshape&lt;TheShape&gt;&nbsp;TheGrid;<br />
+	<br />
+&nbsp;&nbsp;&nbsp;typedef&nbsp;double&nbsp;GradType&nbsp;;<br />
+&nbsp;&nbsp;&nbsp;typedef&nbsp;double&nbsp;FieldType;<br />
+&nbsp;&nbsp;&nbsp;coord&lt;&gt;&nbsp;mins(-1,-1,-1),&nbsp;maxs(1,1,1);<br />
+&nbsp;&nbsp;&nbsp;coord&lt;int&gt;&nbsp;dims(5,5,5);<br />
+<br />
+&nbsp;&nbsp;&nbsp;Grid&lt;UniformGrid&gt;&nbsp;gg(mins,&nbsp;maxs,&nbsp;dims);<br />
+<br />
+&nbsp;&nbsp;&nbsp;TheShape&nbsp;tester(mins,&nbsp;maxs);<br />
+&nbsp;&nbsp;&nbsp;TheGrid&nbsp;jj(gg,tester);<br />
+<br />
+<font color='#006600'>//set&nbsp;up&nbsp;our&nbsp;stencil&nbsp;object</font><br />
+&nbsp;&nbsp;&nbsp;StencilPrep&lt;TheGrid&gt;&nbsp;sp(jj,tester);<br />
+<br />
+<font color='#006600'>//initialize&nbsp;some&nbsp;data&nbsp;vectors</font><br />
+&nbsp;&nbsp;&nbsp;Vector&lt;FieldType&nbsp;&gt;&nbsp;moo(jj.size(),0);<br />
+&nbsp;&nbsp;&nbsp;Vector&lt;GradType&nbsp;&gt;&nbsp;koo(moo.size(),0),&nbsp;koo2(koo),&nbsp;koo3(koo),&nbsp;koo4(koo),&nbsp;koo5(koo);<br />
+&nbsp;&nbsp;&nbsp;TheGrid::iterator&nbsp;It(jj);<br />
+<br />
+<font color='#006600'>//fill&nbsp;our&nbsp;initial&nbsp;data&nbsp;with&nbsp;some&nbsp;function&nbsp;of&nbsp;the</font><br />
+<font color='#006600'>//&nbsp;grid&nbsp;points&nbsp;(x+y^2+z^2)</font><br />
+&nbsp;&nbsp;&nbsp;while(It){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moo[It.curpos()]=It.x()+It.y()*It.y()+It.z()*It.z();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++It;<br />
+&nbsp;&nbsp;&nbsp;}<br />
+<br />
+<font color='#006600'>//to&nbsp;make&nbsp;the&nbsp;directions&nbsp;clearer</font><br />
+&nbsp;&nbsp;&nbsp;int&nbsp;x=0,&nbsp;y=1,&nbsp;z=2;<br />
+<br />
+<font color='#006600'>//take&nbsp;the&nbsp;gradient&nbsp;along&nbsp;the&nbsp;x&nbsp;direction</font><br />
+&nbsp;&nbsp;&nbsp;Gradient(koo,&nbsp;sp,&nbsp;moo,&nbsp;x);<br />
+<font color='#006600'>//take&nbsp;the&nbsp;first&nbsp;derivative&nbsp;along&nbsp;the&nbsp;x&nbsp;direction</font><br />
+&nbsp;&nbsp;&nbsp;Derivative_1_2n(koo2,&nbsp;sp,&nbsp;moo,x);<br />
+<font color='#006600'>//take&nbsp;the&nbsp;first&nbsp;derivative&nbsp;along&nbsp;the&nbsp;y&nbsp;direction</font><br />
+&nbsp;&nbsp;&nbsp;Derivative_1_2n(koo3,&nbsp;sp,&nbsp;moo,y);<br />
+<font color='#006600'>//take&nbsp;the&nbsp;Laplacian&nbsp;along&nbsp;the&nbsp;z&nbsp;direction</font><br />
+&nbsp;&nbsp;&nbsp;Laplace2Dn(koo4,&nbsp;sp,&nbsp;moo,z);<br />
+<font color='#006600'>//take&nbsp;the&nbsp;Laplacian&nbsp;of&nbsp;the&nbsp;entire&nbsp;grid&nbsp;</font><br />
+&nbsp;&nbsp;&nbsp;Laplace3Dn(koo4,&nbsp;sp,&nbsp;moo);<br />
+<br />
+<font color='#006600'>//dump&nbsp;out&nbsp;the&nbsp;data&nbsp;&nbsp;</font><br />
+&nbsp;&nbsp;&nbsp;ofstream&nbsp;oo1(&quot;grad&quot;),&nbsp;oo2(&quot;derivX&quot;),&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oo3(&quot;derivY&quot;),&nbsp;oo4(&quot;lap2D&quot;),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oo5(&quot;lap3D&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;for(int&nbsp;i=0;i&lt;koo.size();++i){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oo1&lt;&lt;jj.Point(i)&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;koo[i]&lt;&lt;endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oo2&lt;&lt;jj.Point(i)&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;koo2[i]&lt;&lt;endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oo3&lt;&lt;jj.Point(i)&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;koo3[i]&lt;&lt;endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oo4&lt;&lt;jj.Point(i)&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;koo4[i]&lt;&lt;endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oo5&lt;&lt;jj.Point(i)&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;koo5[i]&lt;&lt;endl;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;}<br />
+}<br />
+<br />
+		<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

@@ -1,0 +1,312 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+The effect of the Bulk susceptibility <br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This examples simply loops through a series of Bulk susceptibility parameters over a high magnetization (5 moles, Bo=11 Telsa) spin system to see the effect on the offset.  As D increases, the offsets should 'chirp' more and more as they relax to equilibrium.  The below figure is the data generated from the program, and displays the expected result.<BR>
+<img src='bsus.gif'>
+<BR></blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#----------------------INput&nbsp;File-----------<br />
+#parameter&nbsp;file&nbsp;for&nbsp;looping&nbsp;through&nbsp;<br />
+#&nbsp;several&nbsp;BulkSus&nbsp;parameters<br />
+<br />
+dim&nbsp;1,1,1<br />
+min&nbsp;-0.5,-0.5,-0.5<br />
+max&nbsp;0.5,&nbsp;0.5,&nbsp;0.5<br />
+<br />
+#fid&nbsp;pieces<br />
+npts&nbsp;1024<br />
+tf&nbsp;2<br />
+<br />
+#the&nbsp;pulse&nbsp;bits<br />
+pulseangle&nbsp;90&nbsp;&nbsp;<br />
+pulsephase&nbsp;270<br />
+pulseamp&nbsp;80000<br />
+<br />
+#basic&nbsp;spin&nbsp;parameters<br />
+Bo&nbsp;11<br />
+temperature&nbsp;300<br />
+offset&nbsp;0<br />
+<br />
+T2&nbsp;0.1<br />
+T1&nbsp;0.1<br />
+<br />
+spintype&nbsp;1H<br />
+moles&nbsp;5<br />
+<br />
+#the&nbsp;number&nbsp;of&nbsp;D's&nbsp;to&nbsp;loop&nbsp;through<br />
+#for&nbsp;the&nbsp;Bulk&nbsp;Suseptibility<br />
+D&nbsp;0<br />
+Dstep&nbsp;0.05<br />
+numD&nbsp;20<br />
+<br />
+<br />
+#file&nbsp;output&nbsp;names&nbsp;for&nbsp;the&nbsp;data<br />
+fidout&nbsp;data<br />
+<br />
+<br />
+#----------------------end&nbsp;INput&nbsp;File-----------<br />
+<br />
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//the&nbsp;required&nbsp;2&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<br />
+timer&nbsp;stopwatch;<br />
+void&nbsp;printTime(int&nbsp;nrounds=1){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cout&nbsp;&lt;&lt;std::endl&lt;&lt;&nbsp;&quot;Time&nbsp;taken:&nbsp;&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;&nbsp;(stopwatch()/nrounds)&nbsp;&lt;&lt;&nbsp;&quot;&nbsp;seconds&quot;;<br />
+}<br />
+<br />
+void&nbsp;Info(std::string&nbsp;mess)<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;mess&lt;&lt;endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout.flush();<br />
+}<br />
+<br />
+int&nbsp;main(int&nbsp;argc,char*&nbsp;argv[])<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;fn;<br />
+<br />
+<font color='#006600'>//the&nbsp;parameter&nbsp;file</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;query_parameter(argc,argv,1,&nbsp;&quot;Enter&nbsp;file&nbsp;to&nbsp;parse:&nbsp;&quot;,&nbsp;fn);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Parameters&nbsp;pset(fn);<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;basic&nbsp;parameters</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;nsteps=pset.getParamI(&quot;npts&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;tf=pset.getParamD(&quot;tf&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;inTemp=pset.getParamD(&quot;temperature&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;spintype=pset.getParamS(&quot;spintype&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;detsp=spintype;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;t2s=pset.getParamD(&quot;T2&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;t1s=pset.getParamD(&quot;T1&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;moles=pset.getParamD(&quot;moles&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;fout=pset.getParamS(&quot;fidout&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;coord&lt;int&gt;&nbsp;dims(pset.getParamCoordI(&quot;dim&quot;));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;coord&lt;&gt;&nbsp;mins(pset.getParamCoordD(&quot;min&quot;));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;coord&lt;&gt;&nbsp;maxs(pset.getParamCoordD(&quot;max&quot;));<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;dataou=pset.getParamS(&quot;trajectories&quot;,&nbsp;&quot;&quot;,&nbsp;false);<br />
+<br />
+<br />
+<br />
+<font color='#006600'>//&nbsp;Grid&nbsp;Set&nbsp;up</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;XYZfull&nbsp;TheShape;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;XYZshape&lt;TheShape&gt;&nbsp;TheGrid;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Creating&nbsp;grid....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Grid&lt;UniformGrid&gt;&nbsp;gg(mins,&nbsp;maxs,&nbsp;dims);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Creating&nbsp;inital&nbsp;shape....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TheShape&nbsp;tester;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Creating&nbsp;total&nbsp;shape-grid....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TheGrid&nbsp;jj(&nbsp;gg,&nbsp;tester);<br />
+<br />
+<font color='#006600'>//List&nbsp;BlochParameters</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;ListBlochParams&lt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TheGrid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BPoptions::Density&nbsp;|&nbsp;BPoptions::HighField,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;&gt;&nbsp;MyPars;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;nsp=jj.size();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Creating&nbsp;entire&nbsp;spin&nbsp;parameter&nbsp;list&nbsp;for&nbsp;&quot;+itost(nsp)+&quot;&nbsp;spins....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MyPars&nbsp;mypars(nsp,&nbsp;&quot;1H&quot;,&nbsp;jj);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;nsp=mypars.size();<br />
+<br />
+<font color='#006600'>//The&nbsp;pulse&nbsp;list&nbsp;for&nbsp;a&nbsp;real&nbsp;pulse&nbsp;on&nbsp;protons..</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Creating&nbsp;real&nbsp;pulse&nbsp;lists...&quot;);<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;info&nbsp;from&nbsp;the&nbsp;pset</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;pang=pset.getParamD(&quot;pulseangle&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;amp=pset.getParamD(&quot;pulseamp&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;phase=pset.getParamD(&quot;pulsephase&quot;);<br />
+<br />
+<font color='#006600'>//&nbsp;(spin,&nbsp;amplitude,&nbsp;phase,&nbsp;offset)</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Pulse&nbsp;PP1(spintype,&nbsp;amp*PI2,&nbsp;phase*DEG2RAD);<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;Bo</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;inBo=pset.getParamD(&quot;Bo&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Setting&nbsp;spin&nbsp;parameter&nbsp;offsets....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;j=0;j&lt;nsp;j++){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mypars(j)=spintype;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mypars(j).moles(moles);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//set&nbsp;the&nbsp;proper&nbsp;Bo</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mypars(j).Bo(inBo);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mypars.temperature(inTemp);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;mypars.calcTotalMo();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;mypars.print(cout);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PP1.print(cout);<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;time&nbsp;for&nbsp;the&nbsp;90&nbsp;pulse</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;tpulse=PP1.timeForAngle(pang*Pi/180.,&nbsp;spintype);<br />
+<br />
+<font color='#006600'>//the&nbsp;time&nbsp;trains</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Initializing&nbsp;Time&nbsp;train&nbsp;for&nbsp;first&nbsp;Pulse....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TimeTrain&lt;UniformTimeEngine&nbsp;&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P1(UniformTimeEngine(0.,&nbsp;tpulse,&nbsp;10,100));<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Initializing&nbsp;Time&nbsp;train&nbsp;for&nbsp;FID....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TimeTrain&lt;UniformTimeEngine&nbsp;&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F1(UniformTimeEngine(tpulse,&nbsp;tpulse+tf,&nbsp;nsteps,20));<br />
+<br />
+<font color='#006600'>//Extra&nbsp;interactions</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;Interactions&lt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Offset&lt;&gt;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Relax&lt;&gt;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BulkSus&nbsp;&gt;&nbsp;MyInteractions;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Setting&nbsp;Interactions....&quot;);<br />
+<br />
+<font color='#006600'>//the&nbsp;offsets</font><br />
+<font color='#006600'>//get&nbsp;the&nbsp;first&nbsp;offset</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;offset=pset.getParamD(&quot;offset&quot;)*PI2;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Offset&lt;&gt;&nbsp;myOffs(mypars,&nbsp;offset);<br />
+<br />
+<font color='#006600'>//Relaxation</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Relax&lt;&gt;&nbsp;myRels(mypars,&nbsp;(!t2s)?0.0:1.0/t2s,&nbsp;(!t1s)?0.0:1.0/t1s);<br />
+<br />
+<font color='#006600'>//Bulk&nbsp;suseptibility</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;D=pset.getParamD(&quot;D&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;Dstp=pset.getParamD(&quot;Dstep&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;nDs=pset.getParamI(&quot;numD&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BulkSus&nbsp;myBs(D);<br />
+<br />
+<font color='#006600'>//total&nbsp;interaction&nbsp;obect</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;MyInteractions&nbsp;MyInts(myOffs,&nbsp;myRels,&nbsp;myBs);<br />
+<br />
+<font color='#006600'>//typedefs&nbsp;for&nbsp;Bloch&nbsp;parameter&nbsp;sets</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;Bloch&lt;&nbsp;MyPars,&nbsp;Pulse,&nbsp;MyInteractions&gt;&nbsp;PulseBloch;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;Bloch&lt;&nbsp;MyPars,&nbsp;NoPulse,&nbsp;MyInteractions&gt;&nbsp;NoPulseBloch;<br />
+<br />
+<font color='#006600'>//our&nbsp;data&nbsp;matrix</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;FIDs(nDs,&nbsp;nsteps);<br />
+<br />
+<font color='#006600'>//loop&nbsp;over&nbsp;all&nbsp;our&nbsp;D&nbsp;values</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;kk=0;kk&lt;nDs;++kk){<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//THis&nbsp;is&nbsp;the&nbsp;BLoch&nbsp;solve&nbsp;to&nbsp;perform&nbsp;a&nbsp;pulse</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Initializing&nbsp;total&nbsp;parameter&nbsp;list&nbsp;with&nbsp;a&nbsp;pulse....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PulseBloch&nbsp;myparspulse(mypars,&nbsp;PP1,&nbsp;MyInts);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//This&nbsp;is&nbsp;the&nbsp;Bloch&nbsp;solver&nbsp;to&nbsp;Collect&nbsp;the&nbsp;FID&nbsp;(i.e.&nbsp;has&nbsp;no&nbsp;pusles...FASTER)</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Initializing&nbsp;total&nbsp;parameter&nbsp;list&nbsp;for&nbsp;FID&nbsp;collection....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NoPulseBloch&nbsp;me;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;me=(myparspulse);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Integrating&nbsp;first&nbsp;Pulse....&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//out&nbsp;initial&nbsp;condition</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vector&lt;coord&lt;&gt;&nbsp;&gt;&nbsp;tm=me.currentMag();<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stopwatch.reset();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlochSolver&lt;PulseBloch&nbsp;&gt;&nbsp;drivP(myparspulse,&nbsp;tm,&nbsp;&quot;out&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//integrate&nbsp;the&nbsp;Pulse</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drivP.setWritePolicy(Hold);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!drivP.solve(P1)){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;&nbsp;ERROR!!..could&nbsp;not&nbsp;integrate&nbsp;pulse&nbsp;P1....&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;-1;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//the&nbsp;fids&nbsp;initial&nbsp;condition&nbsp;is&nbsp;just&nbsp;the&nbsp;previous</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//&nbsp;integrations&nbsp;last&nbsp;point</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BlochSolver&lt;NoPulseBloch&nbsp;&gt;&nbsp;driv(me,&nbsp;drivP.lastPoint());<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Info(&quot;Integrating&nbsp;FID&nbsp;....&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//set&nbsp;various&nbsp;data&nbsp;collection&nbsp;policies</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::string&nbsp;lypname=&quot;lyps&quot;;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(dataou!=&quot;&quot;){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;driv.setCollectionPolicy(All);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drivP.setCollectionPolicy(MagAndFID);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;driv.setWritePolicy(Hold);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//set&nbsp;the&nbsp;detection&nbsp;spin</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;driv.setDetect(detsp);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//integrate&nbsp;the&nbsp;FID</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(driv.solve(F1)){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FIDs.putRow(kk,&nbsp;driv.FID());<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//update&nbsp;the&nbsp;BulkSus&nbsp;interaction</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myBs.D(myBs.D()+Dstp);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;matstream&nbsp;matout(fout,&nbsp;ios::binary&nbsp;|&nbsp;ios::out);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;matout.put(&quot;vdat&quot;,&nbsp;FIDs);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Vector&lt;double&gt;&nbsp;dlist(Spread&lt;double&gt;(D,&nbsp;(nDs*Dstp)+D,&nbsp;Dstp));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;matout.put(&quot;ds&quot;,&nbsp;dlist);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;matout.close();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;printTime();<br />
+<br />
+}<br />
+<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

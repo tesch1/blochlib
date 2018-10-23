@@ -1,0 +1,406 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("41menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("41menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("41menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("41title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("41");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class powder { ...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This class holds the main functions and iterators to either 1) generate crystal angles from specific algorithms (zcw, alderman, sophie, rectangular, spherical) and 2) read crystal orientations from a file.<br />
+<br />
+The interface is seemless between files and functional forms.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Public Vars'></a>Public Vars</font>
+</td></tr></table>
+<tr><td>
+<a name='Public Varspowder::{type}'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+powder::zcw<br />
+powder::alderman<br />
+powder::sophie<br />
+powder::rect<br />
+powder::sphere<br />
+powder::liquid<br />
+powder::none<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is an enum inside the class to indicate what type of powder average generator you wish to use<br />
+<br />
+powder::zcw--&gt; one of the best for axially symmetric systems (like dipoles)<br />
+powder::alderman--&gt; the alderman octant method<br />
+powder::sophie--&gt; the sophie method of generations<br />
+powder::rect --&gt; a rectangular grid weighted by sin(theta)<br />
+powder::sphere --&gt; a spherical grid<br />
+powder::liquid --&gt; ONE powder angle (typically (0,0,0))<br />
+powder::none--&gt; none, reading from a file<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+powder myPow(powder::zcw, 616, 233);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='Constructorspowder'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+powder(std::string method);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+method--&gt;a string that can be &quot;zcw&quot;, &quot;alderman&quot;, &quot;sophie&quot;, &quot;rect&quot;, &quot;sphere&quot;, &quot;liquid&quot;, or a file name<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Will construct a powder from the known types, if 'method' is not one of the known types it will attempt to read the file of that name.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+powder myPow(&quot;zcw&quot;); <font color='#006600'>//a zcw powder</font><br />
+powder myPow2(&quot;/usr/cyrstals/rep.pow&quot;); <font color='#006600'>//read a file</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Constructorspowder'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+powder(pTypes method);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+method--&gt; a powder function method. it can be <br />
+powder::zcw, powder::alderman, powder::sophie, powder::rect, powder::sphere, powder::liquid, powder::none<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets up a powder object using the 'powder::{type}' enum.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+powder myPow(powder::zcw); <font color='#006600'>//the zcw algorithm</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Constructorspowder'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+powder(std::string method, int tstep, int pstep, int gammast=1);<br />
+		<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Each algorithm requires a different set of tstep and pstep. For zcw they must be Fibonacci numbers and the number of points generated is 'tstep', for alderman the number of points generated is 'tstep*(tstep-1)' and the 'pstep' means nothing.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+method--&gt;a string that can be &quot;zcw&quot;, &quot;alderman&quot;, &quot;sophie&quot;, &quot;rect&quot;, &quot;sphere&quot;, &quot;liquid&quot;, or a file name<br />
+tstep--&gt; number of 'theta' steps<br />
+pstep--&gt; number of 'phi' steps<br />
+gammast--&gt; number of 'gamma' steps<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Constructs a powder object given with the algorithm 'menthod' with the parameters 'tstep' for the number of theta steps, 'pstep' for the number of phi steps, and 'gammast' for the number of gamma steps. If method is a file name the 'tstep', 'pstep', and 'gammast' are ignored<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+powder myPow(&quot;zcw&quot;, 616, 233);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Constructorspowder'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+powder(pTypes method, int tstep, int pstep, int gammast=1);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Each algorithm requires a different set of tstep and pstep. For zcw they must be Fibonacci numbers and the number of points generated is 'tstep', for alderman the number of points generated is 'tstep*(tstep-1)' and the 'pstep' means nothing.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+method--&gt; a pTypes value that can be <br />
+powder::zcw, powder::alderman, powder::sophie, powder::rect, powder::sphere, powder::liquid, powder::none<br />
+tstep--&gt; number of 'theta' steps<br />
+pstep--&gt; number of 'phi' steps<br />
+gammast--&gt; number of 'gamma' steps<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Constructs a powder object given with the algorithm 'menthod' with the parameters 'tstep' for the number of theta steps, 'pstep' for the number of phi steps, and 'gammast' for the number of gamma steps. <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+powder(powder::alderman, 20, 20);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Constructorspowder'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+powder(double oneth, double oneph, double oneg=0.0);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oneth--&gt; a theta value in RADIANS<br />
+oneph--&gt; a phi value in RADIANS<br />
+oneg--&gt; a gamma value in RADIANS<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Constructs a SINGLE crystal point given by the input angles.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+powder myPow(pi/4.0, pi/5.0);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractiontheta, phi, <br />gamma, weight'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double theta(int i)<br />
+double phi(int i);<br />
+double gamma(int i);<br />
+double weight(int i);<br />
+<br />
+double theta(); <font color='#006600'>//FOR ITERATORS</font><br />
+double phi();  <font color='#006600'>//FOR ITERATORS</font><br />
+double gamma();  <font color='#006600'>//FOR ITERATORS</font><br />
+double weight();  <font color='#006600'>//FOR ITERATORS</font><br />
+<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the index of the powder point<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the theta, phi, gamma, or the weight of the cyrstal point, 'i.'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+powder myPow(&quot;zcw&quot;, 616, 23);<br />
+myPow.theta(4);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void read(std::string fname);<br />
+void read(const char *fname);<br />
+void read(std::ifstream &infile);<br />
+<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+fname--&gt; a file name<br />
+infile--&gt; an input stream<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads a file for the powder angles. It will ignore lines that begin with '#' or '%'. The file can must be set up like so<br />
+<br />
+If only a two column file then the file should be<br />
+{phi} {theta}<br />
+<br />
+If only a three column file then the file should be<br />
+{phi} {theta} {weight}<br />
+<br />
+If only a four column file then the file should be<br />
+{phi} {theta} {gamma} {weight}<br />
+<br />
+ALL angles should be in RADIANS<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+powder myPow;<br />
+myPow.read(&quot;/usr/cyrsts/mycrsy.pow&quot;);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other FunctionscalcPow'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void calcPow();<br />
+void calcPow(std::string method, int tstep, int pstep, int gammast=1);<br />
+void calcPow(pTypes method, int tstep, int pstep, int gammast=1);<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+method--&gt; if a string can be  &quot;zcw&quot;, &quot;alderman&quot;, &quot;sophie&quot;, &quot;rect&quot;, &quot;sphere&quot;, &quot;liquid&quot;, or a file name. If it is a pTypes it can be powder::zcw, powder::alderman, powder::sophie, powder::rect, powder::sphere, powder::liquid, powder::none<br />
+<br />
+tstep--&gt; the theta step parameter<br />
+pstep--&gt; the phi step parameter<br />
+gammast--&gt; the gamma step parameter<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Either calculates the powder average lists form previously entered data, OR from the input menthods (as a string or pTypes).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+powder myPow;<br />
+myPow.calcPow(powder::zec, 616, 233);<br />
+myPow.calcPow(&quot;zcw&quot;, 616, 233); <font color='#006600'>//same as above</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionssize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int size()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Return s how many powder points are in the object.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+powder myPow(&quot;zcw&quot;, 616, 233);<br />
+cout&lt;&lt;myPow.size(); <font color='#006600'>//prints our '616'</font><br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

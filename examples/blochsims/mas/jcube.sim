@@ -1,0 +1,43 @@
+
+
+#parameter file for 2 pulse sequences
+
+dim 2,2,2
+min -0.5,-0.5,-0.5
+max 0.5, 0.5, 0.5
+
+#fid pieces
+npts 2048
+tf .1
+
+#the pulse bits
+pulseangle 10
+pulseamp 80000
+pulsesteps  18
+pulsestepsize 10
+
+#basic spin parametesr
+Bo 11
+temperature 300
+offset 1
+T2 0
+T1 0
+spintype 1H
+moles .2
+
+#the extra interactions parts
+dipole_str 1000
+dipsteps 1
+dipstepsize 100
+
+raddamp 0
+bulksus 0
+
+#calculate lypuvnovs[1] or not[0]
+lyps 0
+lypout lyps
+
+#file output names for the data
+fidout data
+magout mag
+trajectories traj

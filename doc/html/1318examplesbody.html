@@ -1,0 +1,198 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+The Lorentz attractor and Lyapunov exponent<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+The Lorentz system is a classical chaotic system. The measure of chaos can be 
+determined from Lyapunov exponents. These measure the deviation in tragectory 
+if the tragectory moves 'dy' away from the current 'y.' To meausre this accuratley, 
+the Jacobian is needed again, except this time not for the integration, and we 
+need to integrate and extra set of equations... <br>
+<br>
+<TT><B>K'(y,t)=df(y,t)/dy*K(y,t)  </B></TT><br>
+<br>
+here K is a matrix that spans each direction in the Function space...to integrate 
+them along with the normal tragectory, we need to flatten them into the Vector<..> 
+format. All of these little things are taken care of by the 'Lorentz' class 
+This uses the &quot;Lyapunov&quot; class (described later)...for now just assume it is a 
+little black box that spits out the exponents.. <br>
+<br>
+<li>This is the data generated from the below code<br>
+                <img src='lor.gif' ></li>
+              <li>The good old standard Lorentz butterfly in its yummy chaotic-ness<br>
+                <br>
+                <img src='lorlyp.gif' ></li>
+              <li>Now We can a sneak peak as to the reasons for the butterfiles 
+                shape.. 
+                <ol>
+                  <li>There is a LARGE negative lyapunov...i.e. One of the 3 'directions' 
+                    in the set of equations shrink VERY rapidly in its size (for 
+                    every time step the approximate that direction collaps to 
+                    a mildly small region of space at ~ Exp(-14)...hits zero real 
+                    quick)</li>
+                  <li>There is a POSTIVE exponent (~1.5)..this means one 'direction' 
+                    EXPLODES after each time step ~Exp(1.5) from its last position...this 
+                    direction explores almost all of its possible phase space..</li>
+                  <li>there is a '0' exponent...or a direction that does not change 
+                    either up or down...but maintains a steady state.</li>
+                </ol>
+              </li>
+              <li>So the 'flatness' is caused by the large negative exponent...the 
+                chaotic behavior is caused by the positive one...the 'bounded' 
+                solution (i.e. the solution does not explode to infinity or DIE 
+                at zero) is caused by the 0 exponent.</li></blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<font color='#006600'>//Below&nbsp;is&nbsp;the&nbsp;'function'&nbsp;class&nbsp;for&nbsp;the&nbsp;</font><br />
+<font color='#006600'>//Lortenz&nbsp;Eq...note&nbsp;that&nbsp;our&nbsp;'function'&nbsp;performs&nbsp;an&nbsp;extra&nbsp;</font><br />
+<font color='#006600'>//step...it&nbsp;calculates&nbsp;the&nbsp;jacobian&nbsp;and&nbsp;assumes&nbsp;that&nbsp;the&nbsp;</font><br />
+<font color='#006600'>//data&nbsp;has&nbsp;enough&nbsp;room&nbsp;to&nbsp;hold&nbsp;the&nbsp;variational&nbsp;equations...&nbsp;</font><br />
+class&nbsp;Lorentz{<br />
+&nbsp;public:<br />
+&nbsp;&nbsp;rmatrix&nbsp;Jacobi;<br />
+&nbsp;&nbsp;double&nbsp;S,&nbsp;R,&nbsp;B;&nbsp;<br />
+Lorentz(){<br />
+&nbsp;&nbsp;Jacobi.resize(3,3);<br />
+&nbsp;&nbsp;S=10;&nbsp;R=28;&nbsp;B=8./3.;<br />
+}<br />
+<br />
+void&nbsp;Jacobian(Vector&lt;coord&lt;&gt;&nbsp;&gt;&nbsp;&iny)<br />
+{<br />
+&nbsp;&nbsp;<font color='#006600'>//&nbsp;Lorentz&nbsp;jacobi&nbsp;</font><br />
+&nbsp;&nbsp;Jacobi(0,0)=-S;<br />
+&nbsp;&nbsp;Jacobi(0,1)=S;<br />
+&nbsp;&nbsp;Jacobi(0,2)=0;<br />
+&nbsp;&nbsp;Jacobi(1,0)=R-iny[0].z();<br />
+&nbsp;&nbsp;Jacobi(1,1)=-1;<br />
+&nbsp;&nbsp;Jacobi(1,2)=-iny[0].x();<br />
+&nbsp;&nbsp;Jacobi(2,0)=iny[0].y();<br />
+&nbsp;&nbsp;Jacobi(2,1)=iny[0].x();<br />
+&nbsp;&nbsp;Jacobi(2,2)=-B;<br />
+}<br />
+<br />
+void&nbsp;function(double&nbsp;t,&nbsp;Vector&lt;coord&lt;&gt;&nbsp;&gt;&nbsp;&iny,&nbsp;Vector&lt;coord&lt;&gt;&nbsp;&gt;&nbsp;&dydt){<br />
+&nbsp;&nbsp;dydt[0].x()=S*(iny[0].y()-iny[0].x());<br />
+&nbsp;&nbsp;dydt[0].y()=R*iny[0].x()-iny[0].y()-iny[0].x()*iny[0].z();<br />
+&nbsp;&nbsp;dydt[0].z()=iny[0].x()*iny[0].y()-B*iny[0].z();<br />
+<br />
+&nbsp;&nbsp;Jacobian(iny);<br />
+&nbsp;&nbsp;dydt.put(1,&nbsp;Jacobi*iny(1));<br />
+&nbsp;&nbsp;dydt.put(2,&nbsp;Jacobi*iny(2));<br />
+&nbsp;&nbsp;dydt.put(3,&nbsp;Jacobi*iny(3));<br />
+&nbsp;}<br />
+};<br />
+<br />
+<font color='#006600'>//Our&nbsp;Main&nbsp;driver&nbsp;now&nbsp;looks&nbsp;like....</font><br />
+<br />
+int&nbsp;main(){<br />
+&nbsp;&nbsp;Lorentz&nbsp;MyDiffs;&nbsp;<br />
+&nbsp;&nbsp;Vector&lt;coord&lt;&gt;&nbsp;&gt;&nbsp;IC(4,&nbsp;1),start(4,&nbsp;0);<br />
+<br />
+<font color='#006600'>//set&nbsp;the&nbsp;variational&nbsp;bits&nbsp;to&nbsp;the&nbsp;</font><br />
+<font color='#006600'>//identity&nbsp;matrix&nbsp;to&nbsp;begin&nbsp;with</font><br />
+&nbsp;&nbsp;start[1].x()=1;<br />
+&nbsp;&nbsp;start[2].y()=1;<br />
+&nbsp;&nbsp;start[3].z()=1;<br />
+<br />
+<font color='#006600'>//time&nbsp;info</font><br />
+&nbsp;&nbsp;double&nbsp;tstep=.01;<br />
+&nbsp;&nbsp;double&nbsp;startT=0.;<br />
+&nbsp;&nbsp;double&nbsp;endT=100.;<br />
+&nbsp;&nbsp;double&nbsp;subst=tstep/10;<br />
+&nbsp;&nbsp;int&nbsp;nsteps=int((endT-startT)/tstep)+1;<br />
+<br />
+&nbsp;&nbsp;bs&lt;Lorentz,&nbsp;coord&lt;&gt;&nbsp;&gt;&nbsp;odes(IC,MyDiffs);<br />
+<br />
+<font color='#006600'>//output&nbsp;data...</font><br />
+&nbsp;&nbsp;string&nbsp;fname=&quot;data&quot;;<br />
+&nbsp;&nbsp;ofstream&nbsp;oo(fname.c_str());<br />
+&nbsp;&nbsp;ofstream&nbsp;lyo(&quot;lyp&quot;);<br />
+&nbsp;&nbsp;Vector&lt;coord&lt;&gt;&nbsp;&gt;&nbsp;*out=odes.get_out();<br />
+&nbsp;<br />
+<font color='#006600'>//some&nbsp;inital&nbsp;condition</font><br />
+&nbsp;&nbsp;start[0].x()=10;<br />
+&nbsp;&nbsp;start[0].y()=5;<br />
+&nbsp;&nbsp;start[0].z()=6;<br />
+<br />
+<font color='#006600'>//A&nbsp;Lyapunov&nbsp;object&nbsp;(there&nbsp;is&nbsp;only&nbsp;1&nbsp;coord&lt;&gt;&nbsp;we&nbsp;care&nbsp;about)</font><br />
+&nbsp;&nbsp;Lyapunov&lt;coord&lt;&gt;&nbsp;&gt;&nbsp;myLyps(1,&nbsp;out);<br />
+<br />
+&nbsp;&nbsp;double&nbsp;tmS=startT;<br />
+&nbsp;&nbsp;IC=start;<br />
+&nbsp;&nbsp;odes.setInitialCondition(IC);<br />
+<br />
+&nbsp;&nbsp;while(tmS&lt;endT)<br />
+&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;odes.odeint(tmS,&nbsp;tmS+tstep);<br />
+&nbsp;&nbsp;&nbsp;oo&lt;&lt;(*out)(0)&lt;&lt;endl;<br />
+&nbsp;&nbsp;&nbsp;myLyps.CalcLyapunov(tmS,&nbsp;tstep);<br />
+&nbsp;&nbsp;&nbsp;lyo&lt;&lt;myLyps;<br />
+&nbsp;&nbsp;&nbsp;tmS+=tstep;<br />
+&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;oo.close();<br />
+&nbsp;&nbsp;printTime();<br />
+}<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

@@ -1,0 +1,197 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("46menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("46menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("46menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("46title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("46");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+blcc, The Compilation shell script<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+    <li>This script makes compilation of your programs using the lib quite simple...it 
+      supports a number of options for different modes and configurations...it 
+      is basically here to save you (and me) from typeing the &quot;c++ -O3 -f...very 
+      long a nasty compile string&quot; into the console everytime you want to 
+      compile something.</li>
+    <li>The script is a standard Shell script and will be installed into &quot;{your install directory}/bin/&quot;<br>
+      <br>
+    </li>
+<li><B> The 'blcc' Options</B><BR>
+  <BR>
+  <TT> BlochLib Version 1.0 Compile Script Usage<br>
+  standard C++ optimizations and other parameters are allowed<br>
+  theses options below make easy flags to compile using the most<br>
+  common methods.<br>
+  NOTE:: using the script with no options will use the maximal<br>
+  optimizations and the INSTALLed version.</TT><TT><br>
+  NOTE:: the options begining with '-n' refer to the LOCAL/untared <br>
+  directory (typically the root of the compilation set) <BR>
+  <BR>
+  {option} ...........{meaning}<br>
+  ?, -h, --help ......this message<br>
+  -v, --version ......version info<br>
+  -g .................compile using INSTALLED debug version (libbloch_g)<br>
+  -p, -pg ............compile using profiled INSTALLED version (libbloch_pg)<br>
+  -m .................compile using MINIMAL optimizations for INSTALLED version<br>
+  .................... (fast compile for syntax debugging)<br>
+  -mpi ...............compile using FULL optimizations for <br>
+  ................... INSTALLED version that has been compiled with MPI<br>
+  -n .................compile using MINIMAL optimizations for LOCAL version<br>
+  .................... (fast compile for syntax debugging)<br>
+  -nf ................compile using FULL optimizations for LOCAL version<br>
+  -ng ................compile using LOCAL debug lib version<br>
+  -np ................compile using LOCAL profiled lib version<br>
+  -nmpi ..............compile using LOCAL lib version with MINIMAL optimizations<br>
+  ..................... and that was compiled with MPI<br>
+  ..................... (fast compile for syntax debugging)<br>
+  -nfmpi ..............compile using LOCAL lib version with FULL optimizations<br>
+  ..................... and that was compiled with MPI<br>
+  -ngmpi ..............compile using LOCAL lib version with DEBUGGING optimizations<br>
+  ..................... and that was compiled with MPI<br>
+  </TT></li>
+<li>Some Examples:: 
+      <ul>
+        <li><br>
+         <TT> blcc {myfile}.cc -o {outname}<br></TT>
+          <br>
+          ---compiles 'myfile.cc' into an executable 'outname' <br>
+          ---this is simplest command to use BUT IT REQUIRES that you have performed 
+          a 'make install' <br>
+          --- This also runs the compilation with the MAXIMAL OPTIMIZATIONS (this 
+          determined based on your machine..)...these optimizations can make your 
+          program run ~10 times faster then the non optimized counter part BUT 
+          it also requires ~10 times long to compile...this library being mostly 
+          header files requires abnormally long compilation times...it is a price 
+          to pay for speed...<br>
+        </li>
+        <li><br>
+         <TT> blcc -m {myfile}.cc -o outname<br></TT>
+          <br>
+          ---compiles 'myfile.cc' into an executable 'outname' <br>
+          --- IT REQUIRES that you have performed a 'make install' (looks for 
+          library files in the installed dir)<br>
+          ---This runs the compilation with the MINIMAL OPTIMIZATION...results 
+          in fast compile but slower code...Useful for initial debugging of code 
+          where speed is not the major concern (getting things to work is...)<br>
+          <br>
+        </li>
+        <li> <br>
+          <TT>blcc -g {myfile}.cc -o {outname}<br></TT>
+          <br>
+          ---compiles 'myfile.cc' into an executable 'outname' <br>
+          --- IT REQUIRES that you have performed a &quot;./configure --enable-debug&quot; 
+          AND 'make install' (looks for library files in the installed dir)<br>
+          ---This runs the compilation with the DEBUGGING INFO...it sets all vector 
+          and matrix bounds checking ON and compiles code so it can be used in 
+          typicall debuggers....<br>
+          <br>
+        </li>
+        <li><br>
+          <TT>blcc -pg {myfile}.cc -o {outname}<br></TT>
+          <br>
+          ---compiles 'myfile.cc' into an executable 'outname' <br>
+          --- IT REQUIRES that you have performed a &quot;./configure --enable-profile&quot; 
+          AND 'make install' (looks for library files in the installed dir)<br>
+          ---This runs the compilation with the DEBUGGING INFO AND PROFILING INFO...it 
+          sets all vector and matrix bounds checking ON and compiles code so it 
+          can be used in typicall debuggers....and with 'gproff'<br>
+          <br>
+        </li>
+        <li> <br>
+          <TT>blcc -mpi {myfile}.cc -o {outname}<br></TT>
+          <br>
+          ---compiles 'myfile.cc' into an executable 'outname' coupling the libraries 
+          of MPI (the Message Passing Interface...make thing parellel) ...<br>
+          ---NOTE:: none of the code in the lib is explictly parellel yet...however 
+          there are certain codes you could write easily to use MPI albility..this 
+          is also here becuase soon there will be mpi built into some of the codes...<br>
+          --- IT REQUIRES that you have performed a 'make install' (looks for 
+          library files in the installed dir) <br>
+          --- IT REQUIRES MPI <br>
+          ---This runs the compilation with MPI libs linked into the file...compiles 
+          at FULL optimizations<br>
+          <br>
+        </li>
+        <li> <br>
+          <TT>blcc -n {myfile}.cc -o {outname}<br>
+          blcc -nf {myfile}.cc -o {outname}<br>
+          blcc -nmpi {myfile}.cc -o {outname} <br>
+          blcc -nfmpi {myfile}.cc -o {outname} <br>
+          blcc -ng {myfile}.cc -o {outname} <br>
+          <br>
+          </TT> ---compiles 'myfile.cc' into an executable 'outname' BUT uses 
+          the initial UNTARED directory as the source for the libraries...<br>
+          <br>
+          &quot;-n&quot; --- MINIMAL OPTIMIZATIONS<br>
+          &quot;-nf&quot; --- FULL OPTS<br>
+          &quot;-nmpi&quot; --- mpi with minimal opts<br>
+          &quot;-nfmpi&quot; --- mpi with full opts<br>
+          &quot;-ng&quot; --- debugging comilation<br>
+          <br>
+          ---this is most usefull mostly for me as to do a make install everytime 
+          just get tedious when writting new things...<br>
+        </li>
+      </ul>
+    </li>
+  
+</blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

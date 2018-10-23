@@ -1,0 +1,1381 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("21menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("21menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("21menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("21title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("21");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class Engine_t&gt;<br />
+class TimeTrain: public Engine_t{....<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<ul>Accepted Template Params 
+
+<ul><li><B>Engine_t</B> --> another class...The distribution engine. This class acts as the generator type for the time Train 
+</li>
+</ul>
+</ul>
+<ul>
+<li>
+You can think of this class a a specialized &quot;Range&quot; container simple stores A Begining-- and End with the appropriate stepsizes 
+</li>
+<li>
+As with &quot;Shape&quot; and &quot;Grid&quot; this too requires a generator engine that generates the train of points 
+</li>
+<li>This is acctually just a nice extension to the Vector class that contains a few more bits of information that are critical to the ODE solvers. 
+</li>
+<li>
+It simply generates a 2 column list
+{time} {step divisions}
+</li>
+<li>
+Each {time} is separated by the Engines criterion, the {step divisions} are for the ODE solver...this is the initial guess as to the number of divisions to chop up {time1}...{time2}. The ODE solver has adaptive step sizes, BUT if the {step divisions} is too large you will get BAD results from the ODEsolver.. 
+</li>
+</ul>
+<BR><BR>
+Builtin Engines...(things that i have written already) 
+<ul><BR><li><B>ConstUniformTimeEngine<int N> </B><BR>
+<ul>Use this when you know the exact number of divisions you wish to chop up the time sequence into. It is faster then the UniforTimeEngine becuase loop unrolling can occur, but it is a specialized Engine (i.e. ou cannot change 'N'). Also all the divisions between time steps ARE THE SAME (hence the 'Uniform') <BR><BR>
+<B>CONSTRUCTOR-->(Start Time, End Time, Num Sub Step Size) </B><BR><BR>
+<TT>//A 128 point time train starting at 0..to 0.2 with a substep size of 100 <BR>
+ConstUniformTimeTrain<128> ct(0, 0.02, 100); <BR>
+</TT>
+</ul></li>
+<li><B>UniformTimeEngine</B> <BR>
+<ul>Like the Const version above accept that you can change and modify its length, divisions, etc at any time. <BR><BR>
+<B>CONSTRUCTOR-->(Start Time, End Time, NumSteps, Num Sub Step Size) </B><BR><BR>
+<TT>//A 100 point time train starting at 0..to 0.2 with a substep size of 128 <BR>
+UniformTimeTrain ct(0, 0.02, 100, 128); <BR>
+</TT>
+</ul>
+</li>
+<li><B>FileTimeEngine </B><BR>
+<ul>Reads in a Two column file 
+{time} {substeps}
+it accepts comment lines either starting with '#' or the matlab comments '%' (so you can read the same file into matlab without any troubles) <BR><BR>
+<B>CONSTRUCTOR-->(File Name) </B><BR><BR>
+<TT>//reads in the file &quot;mytimes&quot; <BR>
+FileTimeEngine myT(&quot;mytimes&quot;); <BR>
+</TT>
+</ul>
+</li>
+</ul>
+
+<B>Writing Your Own Engine</B>
+<BR><BR>
+<ul>
+<li>Building engines are not as easy as building the Shape Engines..becuase 
+there can be a varaity of supplimental functions that you could 
+write...in fact all these 'Assignement' functions and all these 
+'IO' functions need to be written for that class (or not written 
+just do not expect to use them in your code)</li>
+<li>Function you could/should write for Engines 
+<ul>
+  <li>Assignments 
+    <ul>
+      <li>setStep(), setSubStep(), setBeingTime(), setEndTime(), 
+	addStep(), dropStep()</li>
+      <li>Any conversion operators, operator=() (one of the Most 
+	importent ones in the class)</li>
+    </ul>
+  </li>
+  <li>IO function 
+    <ul>
+      <li>read, readASCII, write, writeASCII, print</li>
+    </ul>
+  </li>
+</ul>
+</li>
+<li>Look to the &quot;unitrain.h&quot; and &quot;consttrain.h&quot; 
+files for the methods and set up....<br>
+</li>
+</ul></blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsTimeTrain'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+TimeTrain()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+empty constructor<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; moo(); <font color='#006600'>//this does nothing</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsTimeTrain'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+TimeTrain(const TimeTrain &cp) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp--&gt; another TimeTrain of the same type <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+the copy constructor<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformTimeTrain Eng(0, 1, 10,100);<br />
+TimeTrain&lt;UniformTimeTrain&gt; sg(Eng); <font color='#006600'>//A valid Time train</font><br />
+TimeTrain&lt;UniformTimeTrain&gt; sg2(sg); <font color='#006600'>//okay to copy</font><br />
+TimeTrain&lt;ConstUniformTimeTrain&gt; ug1(sg); <font color='#006600'>//WILL FAIL incompatable engines</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsTimeTrain'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+TimeTrain(const Engine_t &Eng) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Eng--&gt; The Time Triain Engine<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the master constructor.<br />
+Upon intiailization of this constructor the Time Train will acctually be calculated.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//a uniform train starting at t=0, ends at t=1, in 10 step divisions</font><br />
+<font color='#006600'>// with a sub division of 100</font><br />
+UniformTimeTrain Eng(0, 1, 10,100);<br />
+TimeTrain&lt;UniformTimeTrain&gt; sg(Eng); <font color='#006600'>//A valid Time train</font><br />
+<font color='#006600'>//or alternatively..in one line</font><br />
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element ExtractionbeginStepTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double beginStepTime(int i);<br />
+double beginStepTime(); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt;the index from which to grab a time<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the the being time step at the curent iterator position or at index 'i.'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+double t1=sg.beginStepTime(4); <font color='#006600'>//grabs the fifth time</font><br />
+TimeTrain&lt;UniformTimeTrain&gt;::iterator myIt(sg); <br />
+t1=myIt.beginStepTime(); <font color='#006600'>//grabs the First element (here it would be 0) as we have not iterated yet</font><br />
+++myIt;<br />
+t1=myIt.beginStepTime(); <font color='#006600'>//we are now at he second element in the list (which is 0.1)</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionbeginTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double beginTime() <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the begining time<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+double t1=sg.beginTime(); <font color='#006600'>//grabs the begining time (here it is 0)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractiondt'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double dt(int i);<br />
+double dt(); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt;the index from which to grab a time<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the the delta T at index 'i.'<br />
+This is &quot;beginStepTime-endStepTime&quot;.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+double t1=sg.dt(4); <font color='#006600'>//grabs the fifth time</font><br />
+TimeTrain&lt;UniformTimeTrain&gt;::iterator myIt(sg); <br />
+t1=myIt.dt(); <font color='#006600'>//grabs the first element (which is 0.1)</font><br />
+++myIt;<br />
+t1=myIt.dt(); <font color='#006600'>//we are now at he second element in the list (which is still 0.1)</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionendStepTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double endStepTime(int i);<br />
+double endStepTime(); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+This function will ALWAY return one time slot ahead of the 'beginTimeStep(i)'<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt;the index from which to grab a time<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the the end time step at index 'i'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+double t1=sg.endStepTime(4); <font color='#006600'>//grabs the SIXTH time</font><br />
+TimeTrain&lt;UniformTimeTrain&gt;::iterator myIt(sg); <br />
+t1=myIt.endStepTime(); <font color='#006600'>//grabs the second element (here it would be 0.1) as we have not iterated yet</font><br />
+++myIt;<br />
+t1=myIt.endStepTime(); <font color='#006600'>//we are now at he THIRD element in the list (which is 0.2)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractionendTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double endTime();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the end time<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+double t1=sg.endTime(); <font color='#006600'>//grabs the end time (here it is 1)</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionstep'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double step(int i);<br />
+double step(); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt;the index from which to grab a step<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the the 'sub step' size at index 'i' or at current iterator position.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+double t1=sg.step(4); <font color='#006600'>//grabs the fifth slot (here is 100)</font><br />
+TimeTrain&lt;UniformTimeTrain&gt;::iterator myIt(sg); <br />
+t1=myIt.step(); <font color='#006600'>//grabs the first element (which is 100)</font><br />
+++myIt;<br />
+t1=myIt.step(); <font color='#006600'>//we are now at he second element in the list (which is still 100)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionstepsize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double stepsize(int i);<br />
+double stepsize(); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt;the index from which to grab a time<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the the 'sub step' TIME size, &quot;dt()/step()&quot;, at the current iterator position <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+double t1=sg.stepsize(4); <font color='#006600'>//grabs the fifth slot (here is 1e-3)</font><br />
+TimeTrain&lt;UniformTimeTrain&gt;::iterator myIt(sg); <br />
+t1=myIt.stepsize(); <font color='#006600'>//grabs the first element (which is 1e-3)</font><br />
+++myIt;<br />
+t1=myIt.stepsize(); <font color='#006600'>//we are now at he second element in the list (which is still 1e-3)</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractiont'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double t(int i); <br />
+double t(); --&gt; FOR ITERATORS<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt;the index from which to grab a time<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the time at the current iterator position or current index<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+double t1=sg.t(2); <font color='#006600'>//grabs the third element (here it would be 0.2)</font><br />
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+TimeTrain&lt;UniformTimeTrain&gt;::iterator myIt(sg); <br />
+double t1=myIt.t(); <font color='#006600'>//grabs the First element (here it would be 0) as we have not iterated yet</font><br />
+++myIt;<br />
+t1=myIt.t(); <font color='#006600'>//we are now at he second element in the list (which is 0.1)</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentsaddStep'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void addStep();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+These typically are dependant on the ENGINE...if these functions are not defined in the Engine class then these will not work.<br />
+<br />
+UniformTimeEngine--&gt; Valid <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Adds an extra element to the list...that new element will be (EndTime+Dt).<br />
+The new end time them becomes OldEndTime+dt.<br />
+The size of the list increases by 1.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniforTimeEngine myE(0,1,10,100);<br />
+TimeTrain&lt;UniformTimeTrain&gt; sg(myE);<br />
+sg.addStep(); <font color='#006600'>//end time is 1.1 and is '11' in length </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentsdropStep'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void dropStep();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+These typically are dependant on the ENGINE...if these functions are not defined in the Engine class then these will not work.<br />
+<br />
+UniformTimeEngine--&gt; Valid <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Drops the last step in the list.<br />
+New End time becomes OldEndTime-dt.<br />
+List decreases in size by 1.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniforTimeEngine myE(0,1,10,100);<br />
+TimeTrain&lt;UniformTimeTrain&gt; sg(myE);<br />
+sg.dropStep(); <font color='#006600'>//end time is 0.9 and is '9' in length</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+TimeTrain &operator=(const TimeTrain&lt;NewEng&gt; &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+These typically are dependant on the ENGINE...if these functions are not defined in the Engine class then these will not work<br />
+<br />
+UniformTimeEngine--&gt; Valid for Both ConstUniformTimeEngine AND a UniformTimeEngine<br />
+ConstUniformTimeEngine--&gt; Valid only for ConstUniformTimeEngine<br />
+FileTimeEngine --&gt; Valid Only for FileTimeTrain<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; A Engine WITH THE SAME Time ENGINE! OR it can be a different engine IF the 'Engine_t operator=(NewEng)' is defined<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns one TimeTrain from another.<br />
+The 'newEng' of the 'rhs' must be the same as the 'lhs' unless the Engine_t::operator=(newEng) is defined.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniforTimeEngine myE(0,1,10,100); <br />
+ConstUniformTimeEngine&lt;256&gt; meCE(0,10,1); <br />
+TimeTrain&lt;UniformTimeTrain&gt; sg(myE);<br />
+TimeTrain&lt;ConstUniformTimeTrain&lt;256&gt; &gt; sgC(meCE);<br />
+sg=sgC; <font color='#006600'>//This will work </font><br />
+sgC=sg; <font color='#006600'>//This will fail ConstEng=UniEng NOT defined</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+TimeTrain &operator=(const EngType &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+These typically are dependant on the ENGINE...if these functions are not defined in the Engine class then these will not work<br />
+<br />
+UniformTimeEngine--&gt; Valid for Both ConstUniformTimeEngine AND a UniformTimeEngine<br />
+ConstUniformTimeEngine--&gt; Valid only for ConstUniformTimeEngine<br />
+FileTimeEngine --&gt; Valid Only for FileTimeTrain<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; A time engine WITH THE SAME Time ENGINE! OR it can be a different engine IF the 'Engine_t operator=(EngType)' is defined <br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns TimeTrain from an Engine Type...-- THe 'newEng' of the 'rhs' must be the same as the 'lhs' unless the Engine_t::operator=(EngType) is defined.<br />
+The time list is then initialized upon this assignment.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniforTimeEngine myE(0,1,10,100); <br />
+ConstUniformTimeEngine&lt;256&gt; meCE(0,10,1); <br />
+TimeTrain&lt;UniformTimeTrain&gt; sg;<br />
+TimeTrain&lt;ConstUniformTimeTrain&lt;256&gt; &gt; sgC;<br />
+sg=myE; <font color='#006600'>//This will work </font><br />
+sg=myEC; <font color='#006600'>//this will work too</font><br />
+sgC=myE; <font color='#006600'>//This will fail ConstEng=UniEng NOT defined</font><br />
+sgC=myEC; <font color='#006600'>//this will work</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetBeginTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setBeginTime(double newbt);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+These typically are dependant on the ENGINE...if these functions are not defined in the Engine class then these will not work.<br />
+<br />
+UniformTimeEngine--&gt; Valid <br />
+ConstUniformTimeEngine--&gt; Valid <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newbt--&gt;sets the beinging time of the list<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Alters the beinging time of the time list.<br />
+CANNOT be bigger then the end time.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+::  UniforTimeEngine myE(0,1,10,100);<br />
+TimeTrain&lt;UniformTimeTrain&gt; sg(myE);<br />
+sg.setBeginTime(3); <font color='#006600'>//error bigger then the 'end time'</font><br />
+sg.setEndTime(4); <font color='#006600'>//set the end time</font><br />
+sg.setBeginTime(3); <font color='#006600'>//okay </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetEndTime'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setEndTime(double NewEndT);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+These typically are dependant on the ENGINE...if these functions are not defined in the Engine class then these will not work.<br />
+<br />
+UniformTimeEngine--&gt; Valid <br />
+ConstUniformTimeEngine--&gt; Valid <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+NewEndT--&gt;sets the End time of the list<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Alters the end time of the time list.<br />
+CANNOT be smaller then the Begining time.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniforTimeEngine myE(0,1,10,100);<br />
+TimeTrain&lt;UniformTimeTrain&gt; sg(myE);<br />
+sg.setBeginTime(3); <font color='#006600'>//error bigger then the 'end time'</font><br />
+sg.setEndTime(4); <font color='#006600'>//set the end time</font><br />
+sg.setBeginTime(3); <font color='#006600'>//okay</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentsSetEngine'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void SetEngine(const Engine_t &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+These typically are dependant on the ENGINE...if these functions are not defined in the Engine class then these will not work<br />
+<br />
+UniformTimeEngine--&gt; Valid for Both ConstUniformTimeEngine AND a UniformTimeEngine<br />
+ConstUniformTimeEngine--&gt; Valid only for ConstUniformTimeEngine<br />
+FileTimeEngine --&gt; Valid Only for FileTimeTrain <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; A Time ENGINE of the same Type with an 'operator=()' within the engine class....you can use this to convert between engine types IF you have defined an 'operator=()' inside the engine the CAN convert between different engines <br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns the Time Engine to the 'rhs' and reinitializes the Time lists.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniforTimeEngine myE(0,1,10,100); <br />
+ConstUniformTimeEngine&lt;256&gt; meCE(0,10,1);<br />
+TimeTrain&lt;UniformTimeTrain&gt; sg;<br />
+sg.SetEngine(myE); <font color='#006600'>//sets the engine after the declaration</font><br />
+sg.SetEngine(myCE); <font color='#006600'>//this will convert the ConstEng to an Uniform Eng </font><br />
+TimeTrain&lt;ConstUniformTimeTrain&lt;256&gt; &gt; sgN;<br />
+sgN.SetEngine(myCE); <font color='#006600'>//will set the Const Eng</font><br />
+sgN.SetEngine(myE); <font color='#006600'>//This will fail ConstEng=UniEng NOT defined </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetStep'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setStep(int newStep);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+These typically are dependant on the ENGINE...if these functions are not defined in the Engine class then these will not work<br />
+<br />
+UniformTimeEngine--&gt; Valid <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newStep--&gt;the NEW SIZE of the time train<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Makes the Time train longer (or shorter) in the size, but keeps the begining and end Time the same.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniforTimeEngine myE(0,1,10,100);<br />
+TimeTrain&lt;UniformTimeTrain&gt; sg(myE);<br />
+sg.setStep(300); <font color='#006600'>//this is now a 300 point time train going from 0--&gt;1</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentssetSubStep'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setSubStep(int newSubStep);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+These typically are dependant on the ENGINE...if these functions are not defined in the Engine class then these will not work<br />
+<br />
+UniformTimeEngine--&gt; Valid <br />
+ConstUniformTimeEngine--&gt; Valid <br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newSubStep--&gt;the NEW SUB Step Size of the time train<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Alters the SubStep size of the time list<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniforTimeEngine myE(0,1,10,100);<br />
+TimeTrain&lt;UniformTimeTrain&gt; sg(myE);<br />
+sg.setSubStep(300); <font color='#006600'>//subStep is now 300 (it was 100)</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOdisplay'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void display(ostream &out); <br />
+void display();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+All Time Engines.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; an output stream (a file, a console, whatever)<br />
+VOID--&gt; the void argument AUTO displays to the console<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the 'pretty' print option DO NOT USE THIS TO SAVE DATA TO BE READ LATTER...use writeASCII or write...<br />
+Prints the points valid to the time train to &quot;out&quot; in the following format ASCII<br />
+<br />
+&quot;step: &lt;i&gt; beingTime: &lt;beingStepTime&gt; endtime: &lt;endsteptime&gt; substep: &lt;step&gt;&quot;<br />
+<br />
+<br />
+The void argument AUTO displays to the console.<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+ofstream out(&quot;myfile&quot;); <font color='#006600'>//an ofstream</font><br />
+sg.display(out);<br />
+<font color='#006600'>//prints a list that looks like</font><br />
+<font color='#006600'>//step: 0 beginTime: 0 endTime: 0.1 substep: 100</font><br />
+<font color='#006600'>//step: 1 beginTime: 0.1 endTime: 0.2 substep: 100 </font><br />
+<font color='#006600'>//....</font><br />
+<font color='#006600'>//step: 9 beginTime: 0.9 endTime: 1 substep: 100 </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOoperator<<'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ostream &operator&lt;&lt;(ostream &out, TimeTrain &toprint); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+All Time Engines.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; an ostream output buffer<br />
+toprint--&gt; The Timetrain you wish to print<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The is the 'Pretty Print' operator (uses 'display()').<br />
+Prints the points valid to the time train to &quot;out&quot; in the following format ASCII.<br />
+&quot;step: {i} beingTime: {beingStepTime} endtime: {endsteptime} substep: {step}&quot;<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+cout&lt;&lt;sg&lt;&lt;endl;<br />
+<font color='#006600'>//prints a list that looks like to the console</font><br />
+<font color='#006600'>//step: 0 beginTime: 0 endTime: 0.1 substep: 100</font><br />
+<font color='#006600'>//step: 1 beginTime: 0.1 endTime: 0.2 substep: 100 </font><br />
+<font color='#006600'>//....</font><br />
+<font color='#006600'>//step: 9 beginTime: 0.9 endTime: 1 substep: 100 </font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOoperator<<'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ofstream &operator&lt;&lt;(ofstream &out, TimeTrain &toprint); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformTimeEngine--&gt;write to an ASCII written file part<br />
+ConstUniformTimeEngine--&gt;write to an ASCII written file part<br />
+FileTimeEngine--&gt;NOT valid<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; an ofstream output ASCII FILE buffer<br />
+toprint--&gt; The Timetrain you wish to print<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The Overload of this operator...the ofstream is concidered to be an ASCII FILE and so it follows the &quot;writeASCII&quot; rules.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeEngine&gt; sg(UniformTimeEngine(0,1,10,100)); <font color='#006600'>//initialized once</font><br />
+ofstream OUT(&quot;outf&quot;); <font color='#006600'>//open ASCII file for writing</font><br />
+OUT&lt;&lt;sg; <font color='#006600'>//write to a ASCII file (write(OUT) should write the same thing also)</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20&gt; &gt; sgC(ConstUniformTimeEngine&lt;20&gt;(0,1,100)); <font color='#006600'>//initialized once</font><br />
+OUT&lt;&lt;sgC; <font color='#006600'>//write another TimeTrain in the SAME file</font><br />
+OUT.close(); <font color='#006600'>//close the file so we can open it in read mode</font><br />
+<br />
+<font color='#006600'>//now we want to load up the written data...the order of the reads must be the same as the order of the writes..</font><br />
+ifstream INF(&quot;outf&quot;);<br />
+TimeTrain&lt;UniformTimeEngine&gt; rU;<br />
+INF&gt;&gt;rU; <font color='#006600'>//read the Uniform one...this is the same As 'readASCII(ifstream)'</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20 &gt; &gt; rC;<br />
+INF&gt;&gt;rC; <font color='#006600'>//read the Const one..this is the same as 'read(ifstream)'</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOoperator<<'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+fstream &operator&lt;&lt;(fstream &out, TimeTrain &toprint); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformTimeEngine--&gt;write to an BINARY written file part<br />
+ConstUniformTimeEngine--&gt;write to an BINARY written file part<br />
+FileTimeEngine--&gt;NOT valid<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; an fstream output BINARY FILE buffer<br />
+toprint--&gt; The Timetrain you wish to print<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The Overload of this operator...the fstream is concidered to be an BINARY FILE and so it follows the &quot;write&quot; rules.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+  TimeTrain&lt;UniformTimeEngine&gt; sg(UniformTimeEngine(0,1,10,100)); <font color='#006600'>//initialized once</font><br />
+fstream OUT(&quot;outf&quot;, ios::binary | ios::out); <font color='#006600'>//open BINARY file for writing</font><br />
+OUT&lt;&lt;sg; <font color='#006600'>//write to a binary file (write(OUT) should write the same thing also)</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20&gt; &gt; sgC(ConstUniformTimeEngine&lt;20&gt;(0,1,100)); <font color='#006600'>//initialized once</font><br />
+OUT&lt;&lt;sgC; <font color='#006600'>//write another TimeTrain in the SAME file</font><br />
+OUT.close(); <font color='#006600'>//close the file so we can open it in read mode</font><br />
+<br />
+<font color='#006600'>//now we want to load up the written data...the order of the reads must be the same as the order of the writes..</font><br />
+fstream INF(&quot;outf&quot;, ios::binary|ios::in);<br />
+TimeTrain&lt;UniformTimeEngine&gt; rU;<br />
+INF&gt;&gt;rU; <font color='#006600'>//read the Uniform one...this is the same As 'read(ifstream)'</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20 &gt; &gt; rC;<br />
+INF&gt;&gt;rC; <font color='#006600'>//read the Const one..this is the same as 'read(ifstream)' </font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOoperator>>'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ifstream &operator &gt;&gt; (ifstream &InFile, TimeTrain &toRead); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformTimeEngine--&gt;READ from an ASCII file<br />
+ConstUniformTimeEngine--&gt;READ to an ASCII written file part<br />
+FileTimeEngine--&gt;NOT valid<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+InFile--&gt; an ofstream INPUT ASCII FILE buffer<br />
+toread--&gt; The Timetrain you wish to print<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The Overload of this operator...the ifstream is concidered to be an ASCII FILE and so it follows the &quot;readASCII&quot; rules.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeEngine&gt; sg(UniformTimeEngine(0,1,10,100)); <font color='#006600'>//initialized once</font><br />
+ofstream OUT(&quot;outf&quot;); <font color='#006600'>//open ASCII file for writing</font><br />
+OUT&lt;&lt;sg; <font color='#006600'>//write to a ASCII file (write(OUT) should write the same thing also)</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20&gt; &gt; sgC(ConstUniformTimeEngine&lt;20&gt;(0,1,100)); <font color='#006600'>//initialized once</font><br />
+OUT&lt;&lt;sgC; <font color='#006600'>//write another TimeTrain in the SAME file</font><br />
+OUT.close(); <font color='#006600'>//close the file so we can open it in read mode</font><br />
+<br />
+<font color='#006600'>//now we want to load up the written data...the order of the reads must be the same as the order of the writes..</font><br />
+ifstream INF(&quot;outf&quot;);<br />
+TimeTrain&lt;UniformTimeEngine&gt; rU;<br />
+INF&gt;&gt;rU; <font color='#006600'>//read the Uniform one...this is the same As 'readASCII(ifstream)'</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20 &gt; &gt; rC;<br />
+INF&gt;&gt;rC; <font color='#006600'>//read the Const one..this is the same as 'read(ifstream)'</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOoperator>>'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+fstream &operator &gt;&gt; (fstream &InFile, TimeTrain &toRead); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformTimeEngine--&gt; read from a BINARY file<br />
+ConstUniformTimeEngine--&gt;read from a BINARY file<br />
+FileTimeEngine--&gt;NOT valid<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+InFile--&gt; an fstream INput BINARY FILE buffer<br />
+toRead--&gt; The TimeTrain you wish to read<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The Overload of this operator...the fstream is concidered to be an BINARY FILE and so it follows the &quot;read&quot; rules.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeEngine&gt; sg(UniformTimeEngine(0,1,10,100)); <font color='#006600'>//initialized once</font><br />
+fstream OUT(&quot;outf&quot;, ios::binary | ios::out); <font color='#006600'>//open ASCII file for writing</font><br />
+OUT&lt;&lt;sg; <font color='#006600'>//write to a binary file (write(OUT) should write the same thing also)</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20&gt; &gt; sgC(ConstUniformTimeEngine&lt;20&gt;(0,1,100)); <font color='#006600'>//initialized once</font><br />
+OUT&lt;&lt;sgC; <font color='#006600'>//write another TimeTrain in the SAME file</font><br />
+OUT.close(); <font color='#006600'>//close the file so we can open it in read mode</font><br />
+<br />
+<font color='#006600'>//now we want to load up the written data...the order of the reads must be the same as the order of the writes..</font><br />
+fstream INF(&quot;outf&quot;, ios::binary|ios::in);<br />
+TimeTrain&lt;UniformTimeEngine&gt; rU;<br />
+INF&gt;&gt;rU; <font color='#006600'>//read the Uniform one...this is the same As 'read(ifstream)'</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20 &gt; &gt; rC;<br />
+INF&gt;&gt;rC; <font color='#006600'>//read the Const one..this is the same as 'read(ifstream)'</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOprint'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void print(ostream &out); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformTimeEngine--&gt;write to an ASCII to an 'out'<br />
+ConstUniformTimeEngine--&gt;write to an ASCII to an 'out'<br />
+FileTimeEngine--&gt;NOT valid<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; an output stream (a file, a console, etc.)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This another name for the &quot;writeASCII&quot; function...but this will print the data to any &quot;ostream&quot; which is any outputs stream you can think of.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+sg.print(cout); <font color='#006600'>//print the 'writeASCII' contents to the console</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOprintFileTimEngine'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void printFileTimEngine(ostream &out); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+All Time Engines<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; an output stream (a file, a console, etc)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Prints the points valid to the time train that can be read by the &quot;FileTimeTrain&quot; Engine..in the following ASCII format<br />
+{time} {substep}.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+ofstream out(&quot;myfile&quot;); <font color='#006600'>//an ofstream</font><br />
+sg.printFileTimeTrain(out);<br />
+<font color='#006600'>//prints a list that looks like to the console</font><br />
+<font color='#006600'>//0 100</font><br />
+<font color='#006600'>//0.1 100</font><br />
+<font color='#006600'>//...</font><br />
+<font color='#006600'>//1 100</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void read();<br />
+void read(const char *in);<br />
+void read(string in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+These are for FileTimeEngine Only!<br />
+This function ASSUMES that there is ONLY the 'FileTimeEngine' data in the file...this is NOT ment to be any parameter space reader.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; A new file name string<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are for FileTimeEngine Only!<br />
+<br />
+For FileTimeTrain it reads a valid 2 column format<br />
+{time} {substep}<br />
+If will pass this read string (or function) on to ANY engine you create with a read option<br />
+<br />
+If the 'void' read...it will ReRead the the exisiting stored file name you gave it at 'construction'...if the 'string' input it will read the New file name<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;FileTimeEngine&gt; sg(FileTimeTrain(&quot;myfile&quot;)); <font color='#006600'>//initialized once</font><br />
+sg.read(&quot;myNewfile&quot;); <font color='#006600'>//reinistialized use the new file name</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOread'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int read(fstream &ReadFile);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformTimeEngine--&gt;reads A BINARY written file part<br />
+ConstUniformTimeEngine--&gt;read a BINARY written file part<br />
+FileTimeEngine--&gt;NOT valid<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+ReadFile--&gt; A binary file opened using 'fstream' with the ios options as..&quot;ios::binary | ios::in &quot;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Reads from a binary file THE next instance of the Engine Type saved in the file.<br />
+Returns '1' if it worked, '0' if it failed .<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeEngine&gt; sg(UniformTimeEngine(0,1,10,100)); <font color='#006600'>//initialized once</font><br />
+fstream OUT(&quot;outf&quot;, ios::binary|ios::out); <font color='#006600'>//open binary file for writing</font><br />
+sg.write(OUT); <font color='#006600'>//write to a binary file</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20&gt; &gt; sgC(ConstUniformTimeEngine&lt;20&gt;(0,1,100)); <font color='#006600'>//initialized once</font><br />
+sgC.write(OUT); <font color='#006600'>//write another TimeTrain in the SAME file</font><br />
+OUT.close(); <font color='#006600'>//close the file so we can open it in read mode</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOread, readASCII'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int read(ifstream &ReadFile);<br />
+int readASCII(ifstream &ReadFile);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformTimeEngine--&gt;reads A ASCII written file part<br />
+ConstUniformTimeEngine--&gt;read a ASCII written file part<br />
+FileTimeEngine--&gt;NOT valid<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+ReadFile--&gt; A binary file opened using 'ifstream' this ASSUMES an ASCII file reading<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The overloading File Stream types...from the 'read(fstream)' above <br />
+Reads from a ASCII file THE next instance of the Engine Type saved in the file.<br />
+Returns '1' if it worked, '0' if it failed.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeEngine&gt; sg(UniformTimeEngine(0,1,10,100)); <font color='#006600'>//initialized once</font><br />
+ofstream OUT(&quot;outf&quot;); <font color='#006600'>//open ASCII file for writing</font><br />
+sg.writeASCII(OUT); <font color='#006600'>//write to a ASCII file (write(OUT) should write the same thing also)</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20&gt; &gt; sgC(ConstUniformTimeEngine&lt;20&gt;(0,1,100)); <font color='#006600'>//initialized once</font><br />
+sgC.writeASCII(OUT); <font color='#006600'>//write another TimeTrain in the SAME file</font><br />
+OUT.close(); <font color='#006600'>//close the file so we can open it in read mode</font><br />
+<br />
+<font color='#006600'>//now we want to load up the written data...the order of the reads must be the same as the order of the writes..</font><br />
+ifstream INF(&quot;outf&quot;);<br />
+TimeTrain&lt;UniformTimeEngine&gt; rU;<br />
+rU.read(INF); <font color='#006600'>//read the Uniform one...this is the same As 'readASCII(ifstream)'</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20 &gt; &gt; rC;<br />
+rC.readASCII(INF); <font color='#006600'>//read the Const one..this is the same as 'read(ifstream)'</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOwrite'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int write(fstream &OutFile);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformTimeEngine--&gt;writes to A BINARY written file part<br />
+ConstUniformTimeEngine--&gt;writes a BINARY written file part<br />
+FileTimeEngine--&gt;NOT valid<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+OutFile--&gt; A binary file opened using 'fstream' with the ios options as..&quot;ios::binary | ios::in &quot;<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes from a binary file THE next instance of the Engine Type saved in the file.<br />
+Returns '1' if it worked, '0' if it failed.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeEngine&gt; sg(UniformTimeEngine(0,1,10,100)); <font color='#006600'>//initialized once</font><br />
+fstream OUT(&quot;outf&quot;, ios::binary|ios::out); <font color='#006600'>//open binary file for writing</font><br />
+sg.write(OUT); <font color='#006600'>//write to a binary file</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20&gt; &gt; sgC(ConstUniformTimeEngine&lt;20&gt;(0,1,100)); <font color='#006600'>//initialized once</font><br />
+sgC.write(OUT); <font color='#006600'>//write another TimeTrain in the SAME file</font><br />
+OUT.close(); <font color='#006600'>//close the file so we can open it in read mode</font><br />
+<br />
+<font color='#006600'>//now we want to load up the written data...the order of the reads must be the same as the order of the writes..</font><br />
+fstream INF(&quot;outf&quot;, ios::binary|ios::in);<br />
+TimeTrain&lt;UniformTimeEngine&gt; rU;<br />
+rU.read(INF); <font color='#006600'>//read the Uniform one</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20 &gt; &gt; rC;<br />
+rC.read(INF); <font color='#006600'>//read the Const one</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOwrite, writeACSII'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int write(ofstream &WFile);<br />
+int writeASCII(ofstream &WFile);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+UniformTimeEngine--&gt;write to an ASCII written file part<br />
+ConstUniformTimeEngine--&gt;write to an ASCII written file part<br />
+FileTimeEngine--&gt;NOT valid<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+WFile--&gt; A ASCII file opened using 'ofstream' this ASSUMES an ASCII file reading.<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Note the overloading FIle Stream types...from the 'write(fstream).'<br />
+Reads from a ASCII file THE next instance of the Engine Type saved in the file.<br />
+Rturns '1' if it worked, '0' if it failed.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+  TimeTrain&lt;UniformTimeEngine&gt; sg(UniformTimeEngine(0,1,10,100)); <font color='#006600'>//initialized once</font><br />
+ofstream OUT(&quot;outf&quot;); <font color='#006600'>//open ASCII file for writing</font><br />
+sg.writeASCII(OUT); <font color='#006600'>//write to a ASCII file (write(OUT) should write the same thing also)</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20&gt; &gt; sgC(ConstUniformTimeEngine&lt;20&gt;(0,1,100)); <font color='#006600'>//initialized once</font><br />
+sgC.write(OUT); <font color='#006600'>//write another TimeTrain in the SAME file</font><br />
+OUT.close(); <font color='#006600'>//close the file so we can open it in read mode</font><br />
+<br />
+<font color='#006600'>//now we want to load up the written data...the order of the reads must be the same as the order of the writes..</font><br />
+ifstream INF(&quot;outf&quot;);<br />
+TimeTrain&lt;UniformTimeEngine&gt; rU;<br />
+rU.read(INF); <font color='#006600'>//read the Uniform one...this is the same As 'readASCII(ifstream)'</font><br />
+TimeTrain&lt;ConstUniformTimeEngine&lt;20 &gt; &gt; rC;<br />
+rC.readASCII(INF); <font color='#006600'>//read the Const one..this is the same as 'read(ifstream)'</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionssize'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int size(); <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+All Time Engines<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the total number of elements in the time tain<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+TimeTrain&lt;UniformTimeTrain&gt; sg(UniformTimeTrain(0, 1, 10,100));<br />
+int s=sg.size(); <font color='#006600'>//the size here is 10; </font><br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

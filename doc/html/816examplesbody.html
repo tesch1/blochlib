@@ -1,0 +1,159 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Interactive Mode<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+MINUIT has 2 distinct running modes...one is 'configureation-file' based (or 
+interactive) the other is 'functional' based (specific function calls from your 
+program).
+<BR><BR><br>
+  <b>INTERACTIVE MODE</b>:: this mode, you define 'fcn', as above, and simply 
+  call ONE MINUIT function called 'MINUIT' in you main...this will then prompt 
+  you for a command, or you can pipe in a file into its stdin...and example is 
+  given below for fitting a line to RANDOM data in this mode...using this input 
+  set of commands<br>
+<br><br>
+<TT> -----------------<br>
+set title<br>
+test fitting a line with random data <br>
+parameters<br>
+1 'm' 1 1 0 0<br>
+2 'b' 1 1 0 0 <BR>
+<BR>
+minimize 3000<br>
+hesse<br>
+return <BR>
+<BR>
+------------------<br></TT>
+Both the data is printed to the file, and the fitted params are printed to console 
+(via MINUIT)<br><br> <img src='fitrand.gif'>
+ </blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+#include&nbsp;&quot;minuit/minuit.h&quot;&nbsp;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+/*<br />
+<font color='#006600'>//A&nbsp;simple&nbsp;example&nbsp;on&nbsp;the&nbsp;Interactive&nbsp;mode&nbsp;of&nbsp;the&nbsp;fitting&nbsp;function&nbsp;&quot;MINUIT&quot;</font><br />
+<font color='#006600'>//here&nbsp;we&nbsp;fit&nbsp;a&nbsp;line&nbsp;to&nbsp;random&nbsp;data&nbsp;(generated&nbsp;on&nbsp;the&nbsp;fly)</font><br />
+<font color='#006600'>//There&nbsp;is&nbsp;a&nbsp;'fitting&nbsp;file'&nbsp;that&nbsp;MINUIT&nbsp;needs&nbsp;for&nbsp;the&nbsp;input&nbsp;called</font><br />
+<font color='#006600'>//'intomin.min'</font><br />
+<font color='#006600'>//in&nbsp;this&nbsp;directory&nbsp;that&nbsp;you&nbsp;will&nbsp;need&nbsp;to&nbsp;input&nbsp;pipe&nbsp;into&nbsp;stdin&nbsp;via</font><br />
+<br />
+<font color='#006600'>//&quot;&lt;progname&gt;&nbsp;&lt;query&nbsp;options&gt;&nbsp;&lt;&nbsp;intomin.min&quot;</font><br />
+<br />
+<font color='#006600'>//here&nbsp;the&nbsp;'&lt;query&nbsp;options&gt;'&nbsp;are&nbsp;the&nbsp;options&nbsp;that&nbsp;the</font><br />
+<font color='#006600'>//C++&nbsp;part&nbsp;of&nbsp;the&nbsp;program&nbsp;asks&nbsp;you&nbsp;for&nbsp;upon&nbsp;start&nbsp;up</font><br />
+*/<br />
+<br />
+<font color='#006600'>//a&nbsp;line...</font><br />
+double&nbsp;lineFunc(double&nbsp;m,&nbsp;double&nbsp;b,&nbsp;double&nbsp;x)<br />
+{&nbsp;return&nbsp;m*x+b;&nbsp;}<br />
+<br />
+<font color='#006600'>//the&nbsp;master&nbsp;MINUIT&nbsp;function</font><br />
+void&nbsp;fcn&nbsp;(int&nbsp;npar,&nbsp;double*&nbsp;grad,&nbsp;double*&nbsp;fcnval,&nbsp;double*&nbsp;xval,&nbsp;int&nbsp;iflag,&nbsp;void*&nbsp;futil)<br />
+{<br />
+<font color='#006600'>//a&nbsp;random&nbsp;number&nbsp;generator&nbsp;will&nbsp;generate&nbsp;from&nbsp;3&nbsp;to&nbsp;10</font><br />
+&nbsp;&nbsp;static&nbsp;Random&lt;UniformRandom&lt;&gt;&nbsp;&gt;&nbsp;myR(3,10);<br />
+<br />
+<font color='#006600'>//the&nbsp;data&nbsp;vector&nbsp;declared&nbsp;static&nbsp;to&nbsp;be&nbsp;same&nbsp;at&nbsp;every&nbsp;'fcn'&nbsp;call</font><br />
+&nbsp;&nbsp;static&nbsp;Vector&lt;double&gt;&nbsp;data(50);<br />
+&nbsp;&nbsp;static&nbsp;Range&nbsp;All(Range::Start,&nbsp;Range::End);<br />
+<br />
+<font color='#006600'>//In&nbsp;interactive&nbsp;mode,&nbsp;the&nbsp;&quot;iflag&quot;&nbsp;will&nbsp;go&nbsp;between&nbsp;1--4</font><br />
+<font color='#006600'>//&nbsp;if&nbsp;ifgal==1,&nbsp;then&nbsp;it&nbsp;signifies&nbsp;the&nbsp;first&nbsp;time&nbsp;fcn&nbsp;was&nbsp;called,</font><br />
+<font color='#006600'>//&nbsp;and&nbsp;so&nbsp;we&nbsp;should&nbsp;initalize&nbsp;out&nbsp;data</font><br />
+&nbsp;&nbsp;if(iflag==1){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;data.apply(myR,&nbsp;All);&nbsp;<font color='#006600'>//fill&nbsp;the&nbsp;vector&nbsp;with&nbsp;a&nbsp;bunch&nbsp;of&nbsp;random&nbsp;numbers</font><br />
+&nbsp;&nbsp;}<br />
+<font color='#006600'>//if&nbsp;the&nbsp;'iflag'&nbsp;is&nbsp;not&nbsp;1&nbsp;or&nbsp;3,&nbsp;then&nbsp;we&nbsp;will&nbsp;do&nbsp;what&nbsp;we&nbsp;always</font><br />
+<font color='#006600'>//&nbsp;do,&nbsp;that&nbsp;is&nbsp;to&nbsp;calculate&nbsp;'chi-square'&nbsp;or&nbsp;fill&nbsp;out&nbsp;'fcnval'</font><br />
+<font color='#006600'>//&nbsp;here&nbsp;we&nbsp;take&nbsp;x=1...50&nbsp;as&nbsp;out&nbsp;independant&nbsp;var</font><br />
+&nbsp;&nbsp;*fcnval=0;<br />
+&nbsp;&nbsp;for(int&nbsp;i=0;i&lt;data.size();++i)&nbsp;*fcnval+=pow(lineFunc(xval[0],&nbsp;&nbsp;&nbsp;xval[1],&nbsp;i)-data[i],&nbsp;2.0);<br />
+&nbsp;&nbsp;*fcnval=std::sqrt(*fcnval);<br />
+<br />
+<font color='#006600'>//if&nbsp;'iflag'&nbsp;is&nbsp;3,&nbsp;then&nbsp;it&nbsp;signifies&nbsp;the&nbsp;LAST&nbsp;call,&nbsp;and&nbsp;you&nbsp;shold&nbsp;do&nbsp;all</font><br />
+<font color='#006600'>//&nbsp;our&nbsp;data&nbsp;outputting&nbsp;and&nbsp;clean&nbsp;up</font><br />
+&nbsp;&nbsp;if(iflag==3){&nbsp;<font color='#006600'>//here&nbsp;we&nbsp;are&nbsp;just&nbsp;going&nbsp;to&nbsp;dump&nbsp;out&nbsp;to&nbsp;a&nbsp;matlab&nbsp;file</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;std::ofstream&nbsp;oo(&quot;fitdat.m&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;&quot;vdat=[&quot;&lt;&lt;data&lt;&lt;&quot;];&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;&quot;m=&quot;&lt;&lt;xval[0]&lt;&lt;&quot;;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;&quot;b=&quot;&lt;&lt;xval[1]&lt;&lt;&quot;;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;&quot;rr=1:&quot;&lt;&lt;data.size()&lt;&lt;&quot;;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;&quot;fitted=rr*m+b;&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;&quot;plot(rr,&nbsp;vdat,&nbsp;'ko',&nbsp;rr,&nbsp;fitted,&nbsp;'b-');&quot;&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;}<br />
+}<br />
+<br />
+int&nbsp;main(int&nbsp;argc,&nbsp;char&nbsp;*argv)<br />
+{<br />
+<font color='#006600'>//simply&nbsp;call&nbsp;the&nbsp;interactive&nbsp;mode&nbsp;minuit</font><br />
+<font color='#006600'>//'minuitfcn'&nbsp;is&nbsp;the&nbsp;master&nbsp;wrapper&nbsp;between</font><br />
+<font color='#006600'>//&nbsp;the&nbsp;fortran&nbsp;function&nbsp;and&nbsp;C++/C&nbsp;function&nbsp;'fcn'&nbsp;above</font><br />
+<br />
+<font color='#006600'>//The&nbsp;second&nbsp;PArameter&nbsp;would&nbsp;be&nbsp;'futil'&nbsp;in&nbsp;the&nbsp;above&nbsp;'fcn'</font><br />
+<font color='#006600'>//&nbsp;if&nbsp;we&nbsp;needed&nbsp;one</font><br />
+&nbsp;&nbsp;MINUIT(minuitfcn,&nbsp;NULL);<br />
+}<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

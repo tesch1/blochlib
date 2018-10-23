@@ -1,0 +1,13 @@
+Powder Crystal files
+
+these files contain euler anlges (alpha, beta, gamma) and/or a weight
+
+--if the file contains 2 columns then the colums are 'alpha' 'beta' and 'weight'
+
+--the files with the names 'rep' as the prefix are 
+   generated via a "repulsion" algorithm see
+   
+   Mads Bak and Niels Chr. Nielsen, J. Magn. Reson. 124 (1997)
+   
+   for more info
+  -the number flowing each is the number of points in the file

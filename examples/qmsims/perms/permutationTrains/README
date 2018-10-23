@@ -1,0 +1,24 @@
+
+
+These files conatin the permutations
+
+these permutations are hard to calculate for
+large sets simply beecuase there could be many cuplicates
+and we also know that 'mirrors' are to be ommited
+
+the nameing structure is as follows
+
+pCy_<number distinct objected>x<total length of the permutation string>.bn
+
+for example
+pCy_4x8.bn
+
+contains all the unique and non-mirrored permutations like
+	
+	0 0 1 1 2 2 3 3 
+	0 0 1 1 2 3 2 3
+	...
+	3 2 1 0 0 1 2 3
+	
+there are 4 distinct elements in an 8 length permuation string
+

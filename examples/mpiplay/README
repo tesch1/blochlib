@@ -1,0 +1,13 @@
+
+
+---blochlib/examples/mpiplay/
+
+	-- get_put.cc --> simple demonstration of the 'get' and 'put' MPI commands
+		          using the MPI controller
+	
+	-- datatype.cc --> test the get and passing of the oodles of data types
+	                   in blochlib
+	
+	-- reduce.cc --> tests the 'reduce' functions for a simple MPI sum
+	
+	-- reconstruct.cc --> tests the reconstruct functions in the MPI container

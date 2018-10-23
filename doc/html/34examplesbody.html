@@ -1,0 +1,85 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+example usage of the timer class<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Demonstration of how to use the timer class to get times of various things<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<font color='#006600'>//make&nbsp;the&nbsp;timer&nbsp;global...as&nbsp;soon&nbsp;as&nbsp;you&nbsp;declare&nbsp;it...it&nbsp;starts&nbsp;recording&nbsp;the&nbsp;time..</font><br />
+timer&nbsp;stopwatch;&nbsp;<br />
+<br />
+int&nbsp;main(int&nbsp;argc,char*&nbsp;argv[]){<br />
+&nbsp;&nbsp;&nbsp;...put&nbsp;initialization&nbsp;stuff....<br />
+&nbsp;&nbsp;&nbsp;....<br />
+<font color='#006600'>//resets&nbsp;the&nbsp;timer&nbsp;to&nbsp;0&nbsp;so&nbsp;we&nbsp;can&nbsp;time&nbsp;the&nbsp;hard&nbsp;calculation&nbsp;rather&nbsp;then&nbsp;the&nbsp;intialization</font><br />
+&nbsp;&nbsp;&nbsp;stopwatch.reset();&nbsp;<br />
+&nbsp;&nbsp;&nbsp;...begin&nbsp;Hard&nbsp;calcualtion...<br />
+&nbsp;&nbsp;&nbsp;...end&nbsp;Hard&nbsp;caclualtion...<br />
+<br />
+&nbsp;&nbsp;&nbsp;cout&lt;&lt;&quot;Time&nbsp;Taken:&nbsp;&quot;&lt;&lt;stopwatch()*1e3&lt;&lt;&quot;&nbsp;ms&nbsp;&quot;&lt;&lt;endl;&nbsp;<font color='#006600'>//print&nbsp;out&nbsp;the&nbsp;time...</font><br />
+}&nbsp;<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

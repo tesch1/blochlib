@@ -1,0 +1,88 @@
+
+#the multplit spin list
+# preforms a simple point-to-point C7 (a 1D FID)
+# and observers the coherence transfer
+# between the two spins...
+
+spins{
+	
+	#the global options
+	numspin 2
+	T 1H 0
+	T 1H 1
+	D -1500 0 1
+}
+
+parameters{	
+
+	powder{
+		aveType ../../../../crystals/rep320
+		thetaStep 233
+		phiStep 144
+	}		
+
+#the intergrator step size	
+	maxtstep=5e-6
+
+#number of 1D fid points	
+	npts1D=64	
+	roeq=Iz
+}
+
+
+pulses{
+
+#our post-C7 sub pulse section
+	sub1{	
+	#set the rotor angle to the global var
+		rotor=rad2deg*acos(1/sqrt(3))
+	#post C7 pulse amplitude
+		amp=7*wr
+		amplitude(amp)
+	#phse stepers
+		stph=90
+		phst=360/7
+	#pulse times
+		t90=1/amp/4
+		t270=3/amp/4
+		t360=1/amp
+		
+	#post C7 loop
+		loop(k=1:7)
+			1H:pulse(t90, stph)
+			1H:pulse(t360, stph+180)
+			1H:pulse(t270, stph)
+			stph=stph+phst
+		end
+	}
+
+	sub2{
+		1H:pulse(1/150000/4, 0, 150000)
+	}	
+#a single fid is concidered point to point
+	ptop()
+	#show()
+
+#set the spinning	
+	wr=5000
+	rotor=rad2deg*acos(1/sqrt(3))
+
+#set the ro to all Iz_1 and no Iz_0
+	ro(Iz_0)
+
+#set the detection matrix
+# just detect the first spins
+# increase in its coherence
+	detect(-Iz_1)
+
+#can use 'reuse' as things parameters are set once 
+# in our subsection
+	reuse(sub1)
+	#dumpState()
+
+#collect the fid 
+	fid()
+	savefidtext(transC7) #save tas a text file
+}
+
+	

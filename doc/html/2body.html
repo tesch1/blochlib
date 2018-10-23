@@ -1,0 +1,368 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("2menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("2menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("2menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("2title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("2");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class Matlab5{.... <br />
+or<br />
+class matstream{...<br />
+<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This is a general Matlab Version 5 (or greater) Reader and writer....It writes matlab binary files that can be easily read into matlab for further processing...it can also read structures from the matlab v5 or greater files. <br />
+<br />
+I'd like to thank the mathworks (makers of matlab) folks for there nice description of the &quot;MAT-file&quot; and &quot;Gamma&quot; for filling in some tricky 'compression' items... <br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='Constructorsmatstream'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+matstream()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+empty constructor--&gt; Sets up the default matlab stream<br />
+iomode=ios::out | ios::binary<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matstream moo;<br />
+moo.open(&quot;infile&quot;); <font color='#006600'>//opens a file after declaration</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Constructorsmatstream'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+matstream(std::string infile, int iomode=ios::binary | ios::out) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+NOTE: iomode can only be <br />
+ios::binary | ios::in<br />
+ios::binary | ios::out<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+infile--&gt;the file you wish to begin extracting all the matlab<br />
+iomode--&gt; set the input/out mode<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+will either open a file for writing or reading....<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matstream moo(&quot;myfile.txt&quot;, ios::binary | ios::out); <br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractionget'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void get(std::string varname, int &var) <br />
+void get(std::string varname, double &var) <br />
+void get(std::string varname, complex &var) <br />
+void get(std::string varname, Vector&lt;int&gt; &var) <br />
+void get(std::string varname, Vector&lt;double&gt; &var) <br />
+void get(std::string varname, Vector&lt;complex&gt; &var)<br />
+void get(std::string varname, rmatrix &var)<br />
+void get(std::string varname, matrix &var)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+the iomode must be &quot;ios::binary | ios::in&quot;<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+varname--&gt; the name of the variable within a matlab file...<br />
+var--&gt; the variable you wish to fill from the matlab file...the overloades you see aboave are the types allowed<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+fills the &quot;var&quot; from the data in the matlab file...assuming that &quot;varname&quot; exsists inside the file..<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matstream inmat(&quot;data.mat&quot;, ios::binary | ios::in);<br />
+Vector&lt;complex&gt; vdat;<br />
+inmat.get(&quot;vectord&quot;, vdat);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOclose'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void close()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+closes the file...releases the file handel so you can manipulate it elsewhere if you deisre<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matstream myout;<br />
+myout.open(&quot;input.mat&quot;);<br />
+complex num(4,5);<br />
+myout.put(&quot;cpnum&quot;, num);<br />
+myout.close(); <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOis_open'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool is_open()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+none<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns true if the file is open...false if not.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matstream myout;<br />
+myout.open(&quot;input.mat&quot;);<br />
+complex num(4,5);<br />
+myout.put(&quot;cpnum&quot;, num);<br />
+if(myout.is_open()) myout.close();<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOopen'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void open(const std::string fname, int iomode=ios::binary | ios::out)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+fname--&gt; file name to open...<br />
+iomode --&gt; the mode for the opening...<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+reads the file into the object<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matstream myout;<br />
+myout.open(&quot;input.mat&quot;);<br />
+complex num(4,5);<br />
+myout.put(&quot;cpnum&quot;, num);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOput'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void put(std::string varname, int &var) <br />
+void put(std::string varname, double &var) <br />
+void put(std::string varname, complex &var) <br />
+void put(std::string varname, Vector&lt;int&gt; &var) <br />
+void put(std::string varname, Vector&lt;double&gt; &var) <br />
+void put(std::string varname, Vector&lt;complex&gt; &var)<br />
+void put(std::string varname, rmatrix &var)<br />
+void put(std::string varname, matrix &var)<br />
+void put(std::string varname, Vector&lt;coord&lt;Numt, N&gt; &gt; &var) <br />
+void put(std::string varname, _matrix&lt;coord&lt;numt, N&gt;, Strucutre&gt;&var)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+iomode=ios:: binary | ios::out<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+varname--&gt; the variable name you wish to call the out data in MATLAB<br />
+var--&gt; the variable you wish to write to the file...<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+puts the data into the file...<br />
+The &quot;Vector&lt;coord&lt;NumT, N&gt; &gt; and _matrix&lt;coord&lt;NumT, N&gt;, Structure&gt;&quot; get written specially. for each direction (from 1...N) a sepearate Array is written so <br />
+for a Vector&lt;coord&lt;double, 3&gt;&gt;<br />
+there will be three separate vectors in matlab called &quot;varname&quot;+0, &quot;varname&quot;+1, &quot;varname&quot;+2<br />
+the same thing will happen for the matrix brands...<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matstream myout;<br />
+myout.open(&quot;input.mat&quot;);<br />
+complex num(4,5);<br />
+myout.put(&quot;cpnum&quot;, num);<br />
+Vector&lt;complex&gt; outvec(45, num);<br />
+myout.put(&quot;veccpnum&quot;, outvec);<br />
+_matrix&lt;coord&lt;&gt;, FullMatrix&gt; matout(5,5,coord&lt;&gt;(3,2,1));<br />
+myout.put(&quot;coordmat&quot;, matout);<br />
+myout.close(); <br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functionswhos'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void whos(ostream &out=std::cout)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; another output stream to dump the &quot;whos&quot; data to (default=cout)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+prints out the information of the items inside a Matab file exactly like the &quot;whos&quot; command does in matlab itself<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+matstream myout;<br />
+myout.open(&quot;input.mat&quot;);<br />
+complex num(4,5);<br />
+myout.put(&quot;cpnum&quot;, num);<br />
+Vector&lt;complex&gt; outvec(45, num);<br />
+myout.put(&quot;veccpnum&quot;, outvec);<br />
+_matrix&lt;coord&lt;&gt;, FullMatrix&gt; matout(5,5,coord&lt;&gt;(3,2,1));<br />
+myout.put(&quot;coordmat&quot;, matout);<br />
+myout.close(); <br />
+<br />
+myout.open(&quot;input.mat&quot;, ios::binary |ios::in);<br />
+myout.whos();<br />
+<br />
+<font color='#006600'>//this will print</font><br />
+<br />
+<font color='#006600'>//Name     Size      Bytes Class</font><br />
+<font color='#006600'>//cpnum    1x1          16 double precision array (complex)</font><br />
+<font color='#006600'>//veccpnum 45x1        720 double precision array (complex)</font><br />
+<font color='#006600'>//coordmat0 5x5        200 double precision array</font><br />
+<font color='#006600'>//coordmat1 5x5        200 double precision array</font><br />
+<font color='#006600'>//coordmat2 5x5        200 double precision array </font><br />
+<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

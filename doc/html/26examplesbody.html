@@ -1,0 +1,124 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Convert a VNMR file into an acsii or Matlab file<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This sample program converts a VNMR file into a Matlab 5 of text (ASCII) file<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+int&nbsp;main(int&nbsp;argc,&nbsp;char&nbsp;**argv){<br />
+&nbsp;&nbsp;int&nbsp;q=1;<br />
+&nbsp;&nbsp;std::string&nbsp;fname=&quot;&quot;;<br />
+&nbsp;&nbsp;std::string&nbsp;matname;<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;VNMR&nbsp;data&nbsp;file&nbsp;name</font><br />
+&nbsp;&nbsp;query_parameter(argc,&nbsp;argv,&nbsp;q++,&nbsp;&quot;Enter&nbsp;Inova&nbsp;Data&nbsp;file:&nbsp;&quot;,&nbsp;fname);<br />
+<br />
+<font color='#006600'>//get&nbsp;the&nbsp;out&nbsp;put&nbsp;file&nbsp;name</font><br />
+&nbsp;&nbsp;query_parameter(argc,&nbsp;argv,&nbsp;q++,&nbsp;&quot;Enter&nbsp;Output&nbsp;file&nbsp;name:&nbsp;&quot;,&nbsp;matname);<br />
+&nbsp;&nbsp;int&nbsp;ch=0;<br />
+<br />
+<font color='#006600'>//ascii&nbsp;out&nbsp;put&nbsp;or&nbsp;matlab&nbsp;output?</font><br />
+&nbsp;&nbsp;query_parameter(argc,&nbsp;argv,&nbsp;q++,&nbsp;&quot;Output&nbsp;ASCII&nbsp;or&nbsp;matlab&nbsp;binary[0,1]?:&nbsp;&quot;,&nbsp;ch);<br />
+<br />
+<font color='#006600'>//out&nbsp;storage&nbsp;for&nbsp;reading&nbsp;the&nbsp;fids</font><br />
+&nbsp;&nbsp;matrix&nbsp;fids;<br />
+<br />
+<font color='#006600'>//open&nbsp;the&nbsp;VNMR&nbsp;file&nbsp;and&nbsp;read&nbsp;out&nbsp;the&nbsp;fids...</font><br />
+&nbsp;&nbsp;VNMRstream&nbsp;vfile(fname,ios::binary&nbsp;|&nbsp;ios::in);<br />
+&nbsp;&nbsp;vfile.read(fids);<br />
+<br />
+<font color='#006600'>//output&nbsp;matlab&nbsp;if&nbsp;desired</font><br />
+&nbsp;&nbsp;if(ch==1){<br />
+&nbsp;&nbsp;&nbsp;std::string&nbsp;vname=matname;<br />
+&nbsp;&nbsp;&nbsp;if(matname.find(&quot;.mat&quot;)&gt;matname.size()){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matname+=&quot;.mat&quot;;<br />
+&nbsp;&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vname=matname.substr(0,&nbsp;matname.find(&quot;.mat&quot;));<br />
+&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;matstream&nbsp;matout(matname.c_str(),&nbsp;ios::binary&nbsp;|&nbsp;ios::out);<br />
+&nbsp;&nbsp;&nbsp;matout.put(vname,&nbsp;fids);<br />
+&nbsp;&nbsp;&nbsp;matout.close();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::cout&lt;&lt;&quot;&nbsp;Data&nbsp;saved&nbsp;in&nbsp;Matlab&nbsp;file&nbsp;&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;matname&lt;&lt;&quot;&nbsp;under&nbsp;variable&nbsp;'&quot;&lt;&lt;vname&lt;&lt;&quot;'&quot;&lt;&lt;std::endl;<br />
+<font color='#006600'>//or&nbsp;out&nbsp;put&nbsp;ASCII</font><br />
+&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ofstream&nbsp;oo(matname.c_str());<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(!vfile.is2D()){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;i=0;i&lt;fids.rows();++i){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;fids(i,0).Re()&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;fids(i,0).Im()&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;i=0;i&lt;fids.rows();++i){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;j=0;j&lt;fids.cols();++j){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;oo&lt;&lt;i&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;j&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;fids(i,j).Re()&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;fids(i,j).Im()&lt;&lt;std::endl;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;}<br />
+&nbsp;std::cout&lt;&lt;&quot;&nbsp;Data&nbsp;saved&nbsp;in&nbsp;ASCII&nbsp;file&nbsp;&quot;&lt;&lt;matname&lt;&lt;std::endl;<br />
+&nbsp;}<br />
+}&nbsp;<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

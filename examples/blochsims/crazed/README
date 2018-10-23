@@ -1,0 +1,41 @@
+Crazed README
+
+**crazed.cc, crazed.h, crazed2.cc
+this program is a bit strange...sue to 'overloading' of the compiler's memory
+abilities, (basically compiler craps out when trying to perform -O2 or -O3 optimizations)
+
+the -O2, and -O3 optimization provide a dramatic speed enhancemnet, so
+i tries breaking the code up into 2 separate files...sadly this did not solve
+the problem...
+
+it seesm the most difficult part to compile is the ODE solver
+and the 'function' from the 'bloch' class...2 things
+that cannot be separated into separate files...
+
+soo compilation of this set of files will fail...however, the code is good,
+and may serve as a good example
+
+the root of the problem comes from adding the  'GradientGrid' layer to 
+both 'ListBlochParams' and 'Offset' classes...(a nessesary operation
+to include Gradients in pulse sequences)...depending on the number of pulses in the
+sequence and the number of 'BlochSolver.solve()' function called, the 
+template unrolling becomes too memory intensive and the compiler barfs
+
+a possible solution may be to separate the 'BlochSolver.solve()' function
+calls into separate files..however, becuase the solvers rely heaviliy on
+the all the parameter set up variables..the functionalizing may require another
+class construction to act as an interface to the 'BlochSolver'
+
+the design of such an interface has not yet been sovled as 'BlochSolver was 
+designed to be the main interface between the ode solver and parameters 
+as well as the output and data collector...i still ponder this...
+
+
+**crazed_1.cc
+this file will compile using 
+
+blcc -n -O -finline-function -funroll-loops crazed_1.cc
+
+and is the consolidation of the above files into one file...
+
+

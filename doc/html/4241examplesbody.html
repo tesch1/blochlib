@@ -1,0 +1,87 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Using the powder iterator<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This example shows you how to use the powder iterator.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+<br />
+<font color='#006600'>//declare&nbsp;a&nbsp;powder</font><br />
+&nbsp;&nbsp;powder&nbsp;myPow(powder::zcw,&nbsp;616,&nbsp;233);<br />
+<font color='#006600'>//declare&nbsp;the&nbsp;iterator</font><br />
+&nbsp;&nbsp;powder::iterator&nbsp;iter(myPow);<br />
+<br />
+<font color='#006600'>//declare&nbsp;a&nbsp;solid&nbsp;sys&nbsp;</font><br />
+&nbsp;&nbsp;SolidSys&nbsp;A(1);<br />
+<font color='#006600'>//add&nbsp;an&nbsp;interaction</font><br />
+&nbsp;&nbsp;A.addCsa(Csa(4000,&nbsp;2000,&nbsp;0,&nbsp;1));<br />
+<br />
+<font color='#006600'>//loop&nbsp;though&nbsp;the&nbsp;iterator&nbsp;dumping&nbsp;out&nbsp;the&nbsp;</font><br />
+<font color='#006600'>//&nbsp;Hamiltonian&nbsp;at&nbsp;each&nbsp;powder&nbsp;point</font><br />
+double&nbsp;t1=0.0,&nbsp;t2=1.0;<br />
+while(iter)<br />
+{<br />
+&nbsp;&nbsp;A.setPowderAngles(iter.theta(),&nbsp;iter.phi(),&nbsp;iter.gamma());<br />
+&nbsp;&nbsp;cout&lt;&lt;A.Hamiltonian(t1,t2)&lt;&lt;endl;<br />
+&nbsp;&nbsp;++iter;<br />
+}<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

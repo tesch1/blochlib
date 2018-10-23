@@ -1,0 +1,944 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("51menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("51menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("51menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("51title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("51");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+template&lt;class FieldCalc_t=NullBFcalc, class Offset_T=typename FieldCalc_t::Offset_T&gt;<br />
+class Offset;<br />
+<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<tt><B>FieldCalc_t</B></tt> acts as the 'Magnetic Field' class. It can be one of three 
+class types 
+<ul>
+  <li> <b><TT>NullBFcalc</TT></b>…this class is a 'NULL' magnetic field calculator. Meaning 
+    that there is NO built in way to calculate the offsets. You will need to specify 
+    each offset for each spin. The offsets here to not change in time.<br>
+    The master function for the i'th spin returns </li>
+  <blockquote><tt> wx= offset(i)*M[i].y()<br>
+    wy= -offset(i)*M[i].x()<br>
+    wz= 0 </tt></blockquote>
+</ul>
+<blockquote> The <tt>Offset_T</tt> can be set to <tt>coord&lt;&gt;</tt>. This 
+  implies that the magnetic field is not only along the z-axis, and that the <tt>ListBlochParams</tt> 
+  has an offset type =<tt>coord&lt;&gt;</tt> as well, if not the program will 
+  not compile. The simplest way to setup such a offset interaction is via this 
+  syntax </blockquote>
+<ul>
+  <blockquote><tt> Offset&lt;ListBlochParams&lt;Grid_t , BPoptions, coord&lt;&gt; 
+    &gt; myOffs; </tt></blockquote>
+</ul>
+<blockquote> 
+  The master function for the i'th spin returns 
+</blockquote>
+<ul>
+  <blockquote> 
+    <TT>wx= cross(offset(i),M[i]).y()<br>
+      wy= cross(offset(i),M[i]).x()<br>
+      wz= cross(offset(i),M[i]).z()
+</TT>
+  </blockquote>
+  <li> <b><TT>ListBlochParams&lt;GradientGrid&lt;GridEngine_t&gt;... &gt;</TT></b>... 
+    This is a gradient. Here the offsets can be have both a ‘spin_offset’ meaning 
+    a nominal value for the offset, AND an offset due to the gradient applied. 
+    The total offset seen by the integrator is then the sum of the two offsets.<br>
+    The master function for the i'th spin returns </li>
+  <blockquote>
+<TT> 
+    wx= (spin_offset(i)+dot(G, Point(i)))*M[i].y()<br>
+      wy= -(spin_offset(i)+dot(G, Point(i)))*M[i].x()<br>
+      wz= 0
+</TT>
+  </blockquote>
+</ul>
+<blockquote> No offset interaction is defined for <tt>Offset_T=coord&lt;&gt;</tt>, 
+  and the interaction will be invalid. </blockquote>
+<ul>
+  <li> <b><TT>BCalculator</TT></b>…this can be some arbitrary class that is either 
+    a sub class of '<tt>StaticField</tt>' or '<tt>DynamicField</tt>.' If it is 
+    not, then you will get a compilation error. The magnetic fields should be 
+    in Gauss. The BCalculator class also REQUIRES these functions </li>
+  <blockquote><tt> Offset_T Bfield(int i)<br>
+    Offset_T Bfield(double t, int i) </tt></blockquote>
+</ul>
+<blockquote> that returns the magnetic field at point i and at time t, EVEN IF 
+  the field is static. If the <tt>Offset_T=double</tt>, then the field is assumed 
+  to be along the z-axis (as in the <tt>NullBFcalc</tt> case). The offset at point 
+  i and at time t is assigned </blockquote>
+<ul>
+  <blockquote><tt> offset(i)=( BCalculator::Bfield(t, i) –Bo)*ListBlochPars&lt;…&gt;::gammaGauss(i); 
+    </tt></blockquote>
+</ul>
+<blockquote> where '<tt>Bo</tt>' is some global magnetic field (it is the same 
+  type as <tt>Offset_T</tt>). The default for Bo is 0. If <tt>Offset_T = double</tt> 
+  then the master function for the i'th spin returns </blockquote>
+<ul>
+  <blockquote><tt> wx= offset(i)*M[i].y()<br>
+    wy= -offset(i)*M[i].x()<br>
+    wz= 0 </tt></blockquote>
+</ul>
+<blockquote> If <tt>Offset_T =coord&lt;&gt;</tt> then the master function for 
+  the i'th spin returns </blockquote>
+<ul>
+  <blockquote><tt> wx= cross(offset(i),M[i]).y()<br>
+    wy= cross(offset(i),M[i]).x()<br>
+    wz= cross(offset(i),M[i]).z() </tt></blockquote>
+</ul>
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsOffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Offset()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+Offset&lt;NullBFcalc, double&gt;<br />
+Offset&lt;NullBFcalc, coord&lt;&gt; &gt;<br />
+<br />
+template&lt;class GridEngine_t, int BPops&gt;<br />
+Offset&lt;ListBlochParams&lt;GradientGrid&lt;GridEngine_t&gt;, double&gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class  Offset&lt;BCalculator,double &gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class  Offset&lt;BCalculator,coord&lt;&gt; &gt;<br />
+<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The empty constructor.<br />
+<br />
+sets the interation on, and all offsets to 0<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Offset&lt;&gt; myOff;<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsOffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class ...&gt;<br />
+Offset(ListBlochParams&lt; ... &gt; &bc, Offset_T offset=0.0):<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+Offset&lt;NullBFcalc, double&gt;<br />
+Offset&lt;NullBFcalc, coord&lt;&gt; &gt;<br />
+<br />
+template&lt;class GridEngine_t, int BPops&gt;<br />
+Offset&lt;ListBlochParams&lt;GradientGrid&lt;GridEngine_t&gt;, double&gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+bc--&gt; the ListBlochParams sets offset's size.<br />
+offset--&gt; the offset of type 'Offset_T' that will set the entire list to this number. If using a 'BCcalculator', then this variable it the global magnetic field (the rotating frame)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Uses the input ListBlochParams to both set the size of the offset data vector, and if nessesary, be used to calculate the offsets if using a magnetic field.  If using the BCcalculator, the 'offset' input is accutually the 'Bo' value (the global magnetic field, the rotating frame for the system).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<br />
+<font color='#006600'>//create a grid</font><br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+<br />
+<font color='#006600'>//create a shape</font><br />
+XYZshape&lt;XYZfull&gt; myShape(gg, XYZfull());<br />
+<br />
+<font color='#006600'>//create the gradient</font><br />
+GradientGrid&lt;XYZshape&lt;XYZfull&gt; &gt; myGrad(myShape);<br />
+<br />
+<font color='#006600'>//create the List BLoch Params with a gradient</font><br />
+typedef ListBlochParams&lt; GradientGrid&lt;XYZshape&lt;XYZfull&gt; &gt;,BPoptions::HighField | BPoptions::Particle, double&gt; myGradList;<br />
+<br />
+int numSpins=myGrad.size();<br />
+std::string spinType=&quot;1H&quot;;<br />
+MyPars myList(numSpins,spinType, myGrad);<br />
+<br />
+<font color='#006600'>//this is the basic SpinOffset for all the </font><br />
+<font color='#006600'>// spins in the list</font><br />
+<font color='#006600'>//IT IS IN RADS/SEC</font><br />
+double basicOff=200*PI*2;<br />
+<br />
+<font color='#006600'>//create an offset using the gradient</font><br />
+Offset&lt;MyPars&gt; myOff(myPars, basicOff);<br />
+<br />
+<font color='#006600'>//create a basic Offset where all offsets</font><br />
+<font color='#006600'>// is set to basicOff</font><br />
+Offset&lt;&gt; myOff2(myPars, basicOff);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsOffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Offset(int &len, Offset_T offset=0.0):<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+Offset&lt;NullBFcalc, double&gt;<br />
+Offset&lt;NullBFcalc, coord&lt;&gt; &gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+len --&gt; the number of spins in the offset object<br />
+offset --&gt; the offset value given to all the spins in RAD/SEC<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A constructor for the NullBFcalc object.  It sets the size of the object (should be the number of spins) and set their offsets to the same value, 'offset.'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//an offset double type with 50 spins</font><br />
+<font color='#006600'>// with an offset of 300 Hz</font><br />
+Offset&lt;&gt; myOff(50, 300.0*PI*2);<br />
+<br />
+<font color='#006600'>//an offset coord&lt;&gt; type with 50 spins</font><br />
+<font color='#006600'>// with an offset of (0,0,300 Hz)</font><br />
+Offset&lt;NullBFcalc, coord&lt;&gt; &gt; myOff2(50, coord&lt;&gt;(0,0,300*PI*2);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsOffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+template&lt;class GridEngine_t, int BPops&gt;<br />
+Offset(BCalculator &bc,<br />
+ ListBlochParams&lt;GridEngine_t, BPops, double&gt; &lp,<br />
+ Offset_T Bo=0):<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,double &gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,coord&lt;&gt; &gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+bc--&gt; a Magnetic Field class with valid functions (Offset_T Bfield(double t, int i) and Offset_T Bfield(int i). Ths object should be public of 'StaticField' or 'DynamicField' for the code to compile.<br />
+lp--&gt; the lis of Bloch Parameters.  This is nessesary to obtain the correct gamma factor for each spin.<br />
+Bo--&gt; the 'rotating frame' of the system (in Gauss)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This is the basic constructor for the BCalculator type of Offset. It maintains a pointer to the BCalculator object (thus if you destroy it before destroying the Offset, the Offset object will likely crash the program). It initializes all the magnetic fields of the ListBlochParams to the element in the list given by the BCalculator's functions Bfield(double t, int i) and Bfield(int i).  If Bo is present all the offsets will be calculated by subtracting this 'rotating frame' field from the fields given by the BCalculator's functions.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up a static field class</font><br />
+class myRandomField:<br />
+public StaticField<br />
+{<br />
+ Random&lt;&gt; rand; <br />
+ myRandomField():<br />
+   rand(0.0, 100.0)<br />
+ {};<br />
+  double Bfield(double t, int i)<br />
+  { return Bfield(i); }<br />
+<br />
+  double Bfield(int i)<br />
+  { <br />
+    return rand(); <font color='#006600'>//a random field from 0..100 Gauss</font><br />
+  }<br />
+};<br />
+<br />
+<font color='#006600'>//declare a BCalculator object</font><br />
+myRandomField myF;<br />
+<br />
+<font color='#006600'>//set up the grids</font><br />
+<br />
+<font color='#006600'>//create a grid</font><br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+<br />
+<font color='#006600'>//create a shape</font><br />
+XYZshape&lt;XYZfull&gt; myShape(gg, XYZfull());<br />
+<br />
+<font color='#006600'>//create the List BLoch Params with a gradient</font><br />
+typedef ListBlochParams&lt; XYZshape&lt;XYZfull&gt;, BPoptions::HighField | BPoptions::Particle, double&gt; myList;<br />
+<br />
+int numSpins=myGrad.size();<br />
+std::string spinType=&quot;1H&quot;;<br />
+MyPars myList(numSpins,spinType, myShape);<br />
+<br />
+<font color='#006600'>//declare the offset object</font><br />
+<font color='#006600'>//using the rotating frame of BO=50 Gauss </font><br />
+<font color='#006600'>// (half the random range in the above class)</font><br />
+Offset&lt;myRandomField, double&gt; myOffs(myF, myList, 50.0*PI2)<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsOffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Offset(const Vector&lt;Offset_T&gt; &offset):<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+Offset&lt;NullBFcalc, double&gt;<br />
+Offset&lt;NullBFcalc, coord&lt;&gt; &gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+offsets--&gt; a Vector of the Offset_T type that define each of the spins' offset in RAD/SEC.<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Constructor for a NullBFcalc offset type.  The offsets get set to the input data vector. The sizew of the object is also the size of the input vector.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up a offset vector</font><br />
+<font color='#006600'>// from 0..50Hz</font><br />
+Vector&lt;double&gt; offV(Spread&lt;double&gt;(0., 50*PI2, 2*PI2));<br />
+Offset&lt;&gt; myOffs(offV);<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element ExtractionBo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Offset_T &Bo()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,double &gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,coord&lt;&gt; &gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the 'rotating frame' magnetic field (in Gauss) for the BCalculator offset types.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up a static field class</font><br />
+class myRandomField:<br />
+public StaticField<br />
+{<br />
+Random&lt;&gt; rand; <br />
+myRandomField():<br />
+rand(0.0, 100.0)<br />
+{};<br />
+double Bfield(double t, int i)<br />
+{ return Bfield(i); }<br />
+<br />
+double Bfield(int i)<br />
+{ <br />
+return rand(); <font color='#006600'>//a random field from 0..100 Gauss</font><br />
+}<br />
+};<br />
+<br />
+<font color='#006600'>//declare a BCalculator object</font><br />
+myRandomField myF;<br />
+<br />
+<font color='#006600'>//set up the grids</font><br />
+<br />
+<font color='#006600'>//create a grid</font><br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+<br />
+<font color='#006600'>//create a shape</font><br />
+XYZshape&lt;XYZfull&gt; myShape(gg, XYZfull());<br />
+<br />
+<font color='#006600'>//create the List BLoch Params with a gradient</font><br />
+typedef ListBlochParams&lt; XYZshape&lt;XYZfull&gt;, BPoptions::HighField | BPoptions::Particle, double&gt; myGradList;<br />
+<br />
+int numSpins=myGrad.size();<br />
+std::string spinType=&quot;1H&quot;;<br />
+MyPars myList(numSpins,spinType, myShape);<br />
+<br />
+<font color='#006600'>//declare the offset object</font><br />
+<font color='#006600'>//using the rotating frame of BO=50 Gauss </font><br />
+<font color='#006600'>// (half the random range in the above class)</font><br />
+Offset&lt;myRandomField, double&gt; myOffs(myF, myList, 50.0*PI2)<br />
+<br />
+<font color='#006600'>//prints 50*PI2</font><br />
+cout&lt;&lt;myOffs.Bo()&lt;&lt;endl;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element Extractionoffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Offset_T offset(int i)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+Offset&lt;NullBFcalc, double&gt;<br />
+Offset&lt;NullBFcalc, coord&lt;&gt; &gt;<br />
+<br />
+template&lt;class GridEngine_t, int BPops&gt;<br />
+Offset&lt;ListBlochParams&lt;GradientGrid&lt;GridEngine_t&gt;, double&gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,double &gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,coord&lt;&gt; &gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the spin index in the list<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the offset at element i in Rad/sec.<br />
+<br />
+if the Offset type is with a Gradient Grid then this returns the FULL offset<br />
+<br />
+spinOffset(i)*dot(G,Point(i))*gammaGauss(i))<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//an offset double type with 50 spins</font><br />
+<font color='#006600'>// with an offset of 300 Hz</font><br />
+Offset&lt;&gt; myOff(50, 300.0*PI*2);<br />
+cout&lt;&lt;myOff.offset(3); <font color='#006600'>//will return 300*PI2</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractionspinOffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Offset_T spinOffset(int i)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+Offset&lt;NullBFcalc, double&gt;<br />
+Offset&lt;NullBFcalc, coord&lt;&gt; &gt;<br />
+<br />
+template&lt;class GridEngine_t, int BPops&gt;<br />
+Offset&lt;ListBlochParams&lt;GradientGrid&lt;GridEngine_t&gt;, double&gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,double &gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,coord&lt;&gt; &gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the spin index<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the spin offset for a given Gradient based Offset object.  It returns the spin ffset NOT inlcuidng the gradient.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//create a grid</font><br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+<br />
+<font color='#006600'>//create a shape</font><br />
+XYZshape&lt;XYZfull&gt; myShape(gg, XYZfull());<br />
+<br />
+<font color='#006600'>//create the gradient</font><br />
+GradientGrid&lt;XYZshape&lt;XYZfull&gt; &gt; myGrad(myShape);<br />
+<br />
+<font color='#006600'>//create the List BLoch Params with a gradient</font><br />
+typedef ListBlochParams&lt; GradientGrid&lt;XYZshape&lt;XYZfull&gt; &gt;,BPoptions::HighField | BPoptions::Particle, double&gt; myGradList;<br />
+<br />
+int numSpins=myGrad.size();<br />
+std::string spinType=&quot;1H&quot;;<br />
+MyPars myList(numSpins,spinType, myGrad);<br />
+<br />
+<font color='#006600'>//this is the basic SpinOffset for all the </font><br />
+<font color='#006600'>// spins in the list</font><br />
+<font color='#006600'>//IT IS IN RADS/SEC</font><br />
+double basicOff=200*PI*2;<br />
+<br />
+<font color='#006600'>//create an offset using the gradient</font><br />
+Offset&lt;MyPars&gt; myOff(myPars, basicOff);<br />
+<br />
+<font color='#006600'>//will print 300*PI2*dot(G, Point())</font><br />
+cout&lt;&lt;myOff.offset(5)&lt;&lt;endl; <br />
+<br />
+<font color='#006600'>//will print 300*PI2</font><br />
+cout&lt;&lt;myOff.spinOffset(5)&lt;&lt;endl; <br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentsBo'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Bo(Offset_T newBo)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,double &gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,coord&lt;&gt; &gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newBo--&gt; the new rotating fram magnetic field (in Gauss) of the Offset_T type<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the 'rotating frame' magnetic field (in Gauss) for the BCalculator offset types.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up a static field class</font><br />
+class myRandomField:<br />
+public StaticField<br />
+{<br />
+Random&lt;&gt; rand; <br />
+myRandomField():<br />
+rand(0.0, 100.0)<br />
+{};<br />
+double Bfield(double t, int i)<br />
+{ return Bfield(i); }<br />
+<br />
+double Bfield(int i)<br />
+{ <br />
+return rand(); <font color='#006600'>//a random field from 0..100 Gauss</font><br />
+}<br />
+};<br />
+<br />
+<font color='#006600'>//declare a BCalculator object</font><br />
+myRandomField myF;<br />
+<br />
+<font color='#006600'>//set up the grids</font><br />
+<br />
+<font color='#006600'>//create a grid</font><br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+<br />
+<font color='#006600'>//create a shape</font><br />
+XYZshape&lt;XYZfull&gt; myShape(gg, XYZfull());<br />
+<br />
+<font color='#006600'>//create the List BLoch Params with a gradient</font><br />
+typedef ListBlochParams&lt; XYZshape&lt;XYZfull&gt;, BPoptions::HighField | BPoptions::Particle, double&gt; myList;<br />
+<br />
+int numSpins=myGrad.size();<br />
+std::string spinType=&quot;1H&quot;;<br />
+MyPars myList(numSpins,spinType, myShape);<br />
+<br />
+<font color='#006600'>//declare the offset object</font><br />
+<font color='#006600'>//using the rotating frame of BO=50 Gauss </font><br />
+<font color='#006600'>// (half the random range in the above class)</font><br />
+Offset&lt;myRandomField, double&gt; myOffs(myF, myList, 50.0*PI2)<br />
+<br />
+<font color='#006600'>//set the new rotating field</font><br />
+myOff.Bo(60*PI2);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsoffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double &offset(int i)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+Offset&lt;NullBFcalc, double&gt;<br />
+Offset&lt;NullBFcalc, coord&lt;&gt; &gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,double &gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,coord&lt;&gt; &gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the spin index<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This sets the offset for the spin index i (in RAD/SEC). (Assignment will NOT work for gradient grid offset types). You can use this function for the BCalculator Offset types, but note that if the BCalculator is a subclass of 'DynamicField' then it will be calculated based on the field, not the value you specify.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up a offset vector</font><br />
+<font color='#006600'>// from 0..50Hz</font><br />
+Vector&lt;double&gt; offV(Spread&lt;double&gt;(0., 50*PI2, 2*PI2));<br />
+Offset&lt;&gt; myOffs(offV);<br />
+<br />
+<font color='#006600'>//set the offset for the 5'th spin</font><br />
+myOffs.offset(4)=500*PI2;<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentsspinOffset'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double &spinOffset(int i)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+Offset&lt;NullBFcalc, double&gt;<br />
+Offset&lt;NullBFcalc, coord&lt;&gt; &gt;<br />
+<br />
+template&lt;class GridEngine_t, int BPops&gt;<br />
+Offset&lt;ListBlochParams&lt;GradientGrid&lt;GridEngine_t&gt;, double&gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,double &gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,coord&lt;&gt; &gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+i--&gt; the spin index<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This sets the offset for the spin index i (in RAD/SEC). (Assignment will work for gradient grid offset types). You can use this function for the BCalculator Offset types, but note that if the BCalculator is a subclass of 'DynamicField' then it will be calculated based on the field, not the value you specify.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//set up a offset vector</font><br />
+<font color='#006600'>// from 0..50Hz</font><br />
+Vector&lt;double&gt; offV(Spread&lt;double&gt;(0., 50*PI2, 2*PI2));<br />
+Offset&lt;&gt; myOffs(offV);<br />
+<br />
+<font color='#006600'>//set the offset for the 5'th spin</font><br />
+myOffs.spinOffset(4)=500*PI2;<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other FunctionsgradOn, gradOff'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void gradOn();<br />
+void gradOff();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+template&lt;class GridEngine_t, int BPops&gt;<br />
+Offset&lt;ListBlochParams&lt;GradientGrid&lt;GridEngine_t&gt;, double&gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Will turn the gradient on (gradOn) or off (gradOff) IF the offset type is a Gradient type.  If the interaction is off, then the total offset is just the spinOffset (to turn everythin g off you must use the 'off()' function).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+<font color='#006600'>//create a grid</font><br />
+Grid&lt;UniformGrid&gt; gg(mins, maxs, dims);<br />
+<br />
+<font color='#006600'>//create a shape</font><br />
+XYZshape&lt;XYZfull&gt; myShape(gg, XYZfull());<br />
+<br />
+<font color='#006600'>//create the gradient</font><br />
+GradientGrid&lt;XYZshape&lt;XYZfull&gt; &gt; myGrad(myShape);<br />
+<br />
+<font color='#006600'>//create the List BLoch Params with a gradient</font><br />
+typedef ListBlochParams&lt; GradientGrid&lt;XYZshape&lt;XYZfull&gt; &gt;,BPoptions::HighField | BPoptions::Particle, double&gt; myGradList;<br />
+<br />
+int numSpins=myGrad.size();<br />
+std::string spinType=&quot;1H&quot;;<br />
+MyPars myList(numSpins,spinType, myGrad);<br />
+<br />
+<font color='#006600'>//this is the basic SpinOffset for all the </font><br />
+<font color='#006600'>// spins in the list</font><br />
+<font color='#006600'>//IT IS IN RADS/SEC</font><br />
+double basicOff=200*PI*2;<br />
+<br />
+<font color='#006600'>//create an offset using the gradient</font><br />
+Offset&lt;MyPars&gt; myOff(myPars, basicOff);<br />
+<br />
+<font color='#006600'>//turn the Gradient Off</font><br />
+myOff.gradOff();<br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other Functionsoff'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void off()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+Offset&lt;NullBFcalc, double&gt;<br />
+Offset&lt;NullBFcalc, coord&lt;&gt; &gt;<br />
+<br />
+template&lt;class GridEngine_t, int BPops&gt;<br />
+Offset&lt;ListBlochParams&lt;GradientGrid&lt;GridEngine_t&gt;, double&gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,double &gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,coord&lt;&gt; &gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This will turn the interaction off.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Offset&lt;&gt; myOff(4, 300*PI2);<br />
+<font color='#006600'>//turn off all the offsets</font><br />
+myOff.off();<br />
+<br />
+<font color='#006600'>//turn them back on</font><br />
+myOff.on();<br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionson'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void on()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+valid for ONLY these classes<br />
+<br />
+Offset&lt;NullBFcalc, double&gt;<br />
+Offset&lt;NullBFcalc, coord&lt;&gt; &gt;<br />
+<br />
+template&lt;class GridEngine_t, int BPops&gt;<br />
+Offset&lt;ListBlochParams&lt;GradientGrid&lt;GridEngine_t&gt;, double&gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,double &gt;<br />
+<br />
+template&lt;class BCalculator&gt;<br />
+class Offset&lt;BCalculator,coord&lt;&gt; &gt;<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+This will turn the interaction on (this is the default behavior). <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Offset&lt;&gt; myOff(4, 300*PI2);<br />
+<font color='#006600'>//turn off all the offsets</font><br />
+myOff.off();<br />
+<br />
+<font color='#006600'>//turn them back on</font><br />
+myOff.on();<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

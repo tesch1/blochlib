@@ -1,0 +1,46 @@
+	--It compiles quite well on any system with gcc 2.95.3 (or greater) strict 
+	ANSI compilence is followed at all times...simply follow these simple steps
+	
+		./configure --prefix=<your install dir> --with-blochlib=<dir of blochlib>
+		make
+		make install
+	
+	--TO compile with MPI you need to compile BlochLib with the '--with-mpi' option
+	AND you need to turn on this options as well
+		./configure --prefix=<your install dir> --with-blochlib=<dir of blochlib> --with-mpi=<mpi directory>
+		make
+		make install
+	
+	--Two things should now be made
+		 **************************************************************
+		 * Here is the basic way to get going.....................    *
+		 *                                                            *
+		 *   ./configure --prefix=<your install dir>                  *
+		 *               --with-blochlib=<path to bloch install dir>  *
+		 *               --with-blas=<path to static BLAS lib>        *
+		 *               --with-mpi=<path to MPI install dir>         *
+		 *               --with-fftw=<path to FFTW install dir>       *
+		 *   make                                                     *
+		 *   make install                                             *
+		 *                                                            *
+		 *  The Options::                                             *
+		 *     --with-blochlib--> nessesary to compile anything for   *
+		 *          this program                                      *
+		 *     --with-blas--> allows inclusion of archecture          *
+		 *          optimized BLAS libraries for speed sake           *
+		 *          MUST be the same one as used with BlochLib        *
+		 *     --with-fftw--> allows linking with the FFTW library    *
+		 *          for Fast Fourier Transforms                       *
+		 *     --with-mpi--> compile using MPI to parallelize         *
+		 *          powder loops                                      *
+		 *     --enable-pthread--> compile using pthreads             *
+		 *          ONLY nessesary if you are using a BLAS that       *
+		 *          requires pthreads (like Intel's MKL)              *
+		 *                                                            *
+		 *                                                            *
+		 * There will be this binaries installed in your install dir  *
+		 *                                                            *
+		 *          <your install dir>/bin/solid                      *
+		 *                                                            *
+		 *                                                            *
+		 **************************************************************

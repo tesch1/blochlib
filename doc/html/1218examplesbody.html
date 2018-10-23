@@ -1,0 +1,161 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+The Van-Der-Pole set of STIFF equations<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This set of equations are very stiff, meaning they have both large and small simultanious solutions.  This cause the non-stiff integrators to scream in pain becuase the interpolation of ODE steps become wildly varient.  To solve this problem, one can use the Jacobian of the system to obtain local deviations from the current solver point.  This does introduce several numerical extras that will make the integration of a non-stiff set of equations integrate much slower in comparison to the non-stiff solver.
+
+If you are unsure weather or not your equations are stiff, try integrating them with both solvers.  If the stiff method takes less time, you probably have a stiff set of equations.
+
+the 'bs' solver cannot handle stiff equations at all, but the 'stiffbs' solver treats them very well.
+
+The input classes for the stiff solver require both the function AND a jacobian of the forms
+<BR><BR>
+<B>void function(double t, Container &y, Container &dydt) </B><BR>
+this function evaluates this type expression 
+<BR><BR><B>dy/dt=f(y,t);</B> 
+<li><B>t</B>--> the current time step, or the idependant variable</li> 
+<li><B>y</B>--> the current state of the system </li>
+<li><B>dydt</B>--> a container that stores the results from the function evaluation.</li>
+<BR><BR>
+
+<B>
+void jacobian(double t, Container &y, matrixType &dfdy) 
+</B><BR>
+this function evaluates this type expression 
+<B>df/dy=d(f(y,t))/dy; </B><BR>
+<li><B>t</B>--> the current time step, or the idependant variable </li>
+<li><B>y</B>--> the current state of the system </li>
+<li><B>dfdy</B>-->the matrix type will be determined given what your Container is...for a Vector<double> the matrixType is a &quot;rmatrix&quot; for a Vector<coord<> > the matrixType is ALSO 'rmatrix' with 3*the size of the vector...</li>
+
+
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<font color='#990000'> !!NOTE!!</font></br><blockquote>
+The Van Der Pol...... plotter over all 5000 integrated points (on my CPU (a 700 MHz pentium 3)) that integration took ~1.33 seconds. 
+In contrast the same integration on Matlab using 'ode15s' it took well over 1 hour...because the algorithm used is much different (it uses a implicit backwards-difference-formula) 
+NOTE:: using the 'bs' integrator is SUICIDE...it takes WAY TO LONG (in fact i tried to let it run for a day, but it never finished...also peaking at the data showed that the solutions were numerically unstable!) 
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//need&nbsp;to&nbsp;use&nbsp;the&nbsp;proper&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+<font color='#006600'>//a&nbsp;simple&nbsp;class&nbsp;with&nbsp;just&nbsp;the&nbsp;'function'&nbsp;and&nbsp;a&nbsp;NULL&nbsp;constructor</font><br />
+class&nbsp;VanDerPol{<br />
+&nbsp;&nbsp;public:<br />
+&nbsp;&nbsp;&nbsp;VanDerPol(){}&nbsp;<font color='#006600'>//Null&nbsp;constructor</font><br />
+<br />
+<font color='#006600'>//the&nbsp;master&nbsp;function...</font><br />
+<font color='#006600'>//NOTE::&nbsp;eventhough&nbsp;'t'&nbsp;is&nbsp;not&nbsp;used&nbsp;in&nbsp;this&nbsp;function&nbsp;it&nbsp;is&nbsp;still&nbsp;nessesary&nbsp;</font><br />
+<font color='#006600'>//for&nbsp;generalities&nbsp;sake&nbsp;in&nbsp;the&nbsp;'diff&nbsp;eq'&nbsp;solver</font><br />
+&nbsp;&nbsp;&nbsp;void&nbsp;function(double&nbsp;t,&nbsp;Vector&lt;double&gt;&nbsp;&iny,&nbsp;Vector&lt;double&gt;&nbsp;&dydt){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dydt[0]=iny[1];<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dydt[1]=1000.0*(1.0-iny[0]*iny[0])*iny[1]-iny[0];<br />
+&nbsp;&nbsp;&nbsp;}<br />
+<br />
+<font color='#006600'>//the&nbsp;master&nbsp;jacobian...</font><br />
+<font color='#006600'>//NOTE::&nbsp;eventhough&nbsp;'t'&nbsp;is&nbsp;not&nbsp;used&nbsp;in&nbsp;this&nbsp;function&nbsp;it&nbsp;is&nbsp;still&nbsp;nessesary&nbsp;</font><br />
+<font color='#006600'>//for&nbsp;generalities&nbsp;sake&nbsp;in&nbsp;the&nbsp;'diff&nbsp;eq'&nbsp;solver</font><br />
+&nbsp;&nbsp;&nbsp;void&nbsp;jacobian(double&nbsp;t,&nbsp;Vector&lt;double&nbsp;&gt;&nbsp;&iny,&nbsp;rmatrix&nbsp;&dfdy){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dfdy.resize(2,2);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dfdy(0,0)=0.0;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dfdy(0,1)=1.0;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dfdy(1,0)=R*2.0*iny[0]*iny[1]-1.0;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dfdy(1,1)=R*(1.0-iny[0]*iny[0]);<br />
+&nbsp;&nbsp;&nbsp;}&nbsp;<br />
+};&nbsp;<br />
+<font color='#006600'>//The&nbsp;'main'&nbsp;program</font><br />
+int&nbsp;main(){<br />
+&nbsp;VanDerPol&nbsp;MyDiffs;&nbsp;<font color='#006600'>//declare&nbsp;a&nbsp;WillRoss</font><br />
+<br />
+<font color='#006600'>//these&nbsp;are&nbsp;all&nbsp;the&nbsp;nessesary&nbsp;parameters&nbsp;to&nbsp;acctually&nbsp;integrate&nbsp;something&nbsp;</font><br />
+&nbsp;Vector&lt;double&gt;&nbsp;IC(2);&nbsp;<br />
+<font color='#006600'>//The&nbsp;initial&nbsp;condition...here&nbsp;they&nbsp;are&nbsp;all&nbsp;(2,0)</font><br />
+IC[0]=2;&nbsp;IC[1]=5;&nbsp;<br />
+<font color='#006600'>//this&nbsp;is&nbsp;MY&nbsp;sampling&nbsp;steps&nbsp;size.&nbsp;At&nbsp;every&nbsp;dt=0.1&nbsp;i&nbsp;will&nbsp;write&nbsp;a&nbsp;point&nbsp;to&nbsp;a&nbsp;data&nbsp;file</font><br />
+&nbsp;double&nbsp;tstep=2.5;<br />
+<font color='#006600'>//the&nbsp;starting&nbsp;time&nbsp;(0)</font><br />
+&nbsp;double&nbsp;startT=0;<br />
+<font color='#006600'>//the&nbsp;ending&nbsp;time</font><br />
+&nbsp;double&nbsp;endT=10000;<br />
+<br />
+<font color='#006600'>//declare&nbsp;my&nbsp;'BS'&nbsp;solver</font><br />
+<font color='#006600'>//(Initial&nbsp;Condition,&nbsp;The&nbsp;FUNCTION&nbsp;class)</font><br />
+&nbsp;bs&lt;WillRos,&nbsp;double&nbsp;&gt;&nbsp;odes(IC,&nbsp;MyDiffs);<br />
+<br />
+<font color='#006600'>//open&nbsp;an&nbsp;datafile&nbsp;</font><br />
+&nbsp;ofstream&nbsp;oo(&quot;data&quot;);<br />
+<br />
+<font color='#006600'>//create&nbsp;a&nbsp;list&nbsp;of&nbsp;times&nbsp;to&nbsp;collect&nbsp;points</font><br />
+Vector&lt;double&gt;&nbsp;times=(Spread&lt;double&gt;(0.0,&nbsp;endT,&nbsp;tstep));<br />
+<font color='#006600'>//solve&nbsp;the&nbsp;system&nbsp;collecting&nbsp;all&nbsp;the&nbsp;data&nbsp;in&nbsp;the&nbsp;'times'&nbsp;vector</font><br />
+Vector&lt;Vector&lt;double&gt;&nbsp;&gt;&nbsp;data=odes.solve(times);<br />
+<br />
+<font color='#006600'>//dump&nbsp;out&nbsp;all&nbsp;the&nbsp;data&nbsp;to&nbsp;a&nbsp;file</font><br />
+for(int&nbsp;i=0;i&lt;data.size();i++)<br />
+&nbsp;&nbsp;&nbsp;oo&lt;&lt;data[i][0]&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;data[i][1]&lt;&lt;endl;<br />
+&nbsp;<br />
+}<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

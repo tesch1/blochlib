@@ -1,0 +1,105 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Using the Spin Tensors<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This is a simple demonstration on how to use the spin tensors.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+<br />
+SpinSys&nbsp;A(5);&nbsp;<font color='#006600'>//a&nbsp;5&nbsp;spin&nbsp;spin&nbsp;system</font><br />
+<font color='#006600'>//set&nbsp;the&nbsp;third&nbsp;spin&nbsp;to&nbsp;a&nbsp;Carbon&nbsp;13</font><br />
+A(2)=&quot;13C&quot;;&nbsp;<br />
+<font color='#006600'>//set&nbsp;the&nbsp;third&nbsp;spin&nbsp;to&nbsp;a&nbsp;Nitrogen&nbsp;14&nbsp;(a&nbsp;quadrupole)</font><br />
+A(3)=&quot;14N&quot;;&nbsp;<br />
+<font color='#006600'>//The&nbsp;T22=(Ip1*Ip2)/sqrt(2)&nbsp;second&nbsp;rank&nbsp;tensor&nbsp;</font><br />
+<font color='#006600'>//between&nbsp;spin&nbsp;1&nbsp;and&nbsp;spin&nbsp;2&nbsp;of&nbsp;system&nbsp;A</font><br />
+matrix&nbsp;m2=T2(A,1,2,2);&nbsp;<br />
+<font color='#006600'>//The&nbsp;T22=(Ip1*Ip2)/sqrt(2)&nbsp;second&nbsp;rank</font><br />
+<font color='#006600'>//&nbsp;tensor&nbsp;between&nbsp;spin&nbsp;1&nbsp;and&nbsp;spin&nbsp;2&nbsp;of&nbsp;system&nbsp;A</font><br />
+m2=T22(A,1,2);&nbsp;<br />
+<font color='#006600'>//The&nbsp;T22=(Ip1*Ip2)/sqrt(2)&nbsp;second&nbsp;rank&nbsp;tensor&nbsp;</font><br />
+<font color='#006600'>//For&nbsp;the&nbsp;Quadrupole&nbsp;of&nbsp;system&nbsp;A</font><br />
+m2=T22(A,3);&nbsp;<br />
+<br />
+<font color='#006600'>//The&nbsp;T22m=(Imi1*Imi2)/sqrt(2)&nbsp;second&nbsp;rank&nbsp;</font><br />
+<font color='#006600'>//tensor&nbsp;between&nbsp;spin&nbsp;1&nbsp;and&nbsp;spin&nbsp;2&nbsp;of&nbsp;system&nbsp;A</font><br />
+matrix&nbsp;m2m=T2(A,1,2,-2);&nbsp;<br />
+<font color='#006600'>//The&nbsp;T22m=(Imi1*Imi2)/sqrt(2)&nbsp;second&nbsp;rank&nbsp;</font><br />
+<font color='#006600'>//tensor&nbsp;between&nbsp;spin&nbsp;1&nbsp;and&nbsp;spin&nbsp;2&nbsp;of&nbsp;system&nbsp;A</font><br />
+m2m=T2m2(A,1,2);&nbsp;<br />
+<font color='#006600'>//The&nbsp;T22m=(Imi1*Imi2)/sqrt(2)&nbsp;second&nbsp;rank</font><br />
+<font color='#006600'>//&nbsp;tensor&nbsp;For&nbsp;the&nbsp;Quadrupole&nbsp;of&nbsp;system&nbsp;A</font><br />
+m2m=T2m2(A,3);&nbsp;<br />
+<font color='#006600'>//The&nbsp;T11=-Imi&nbsp;second&nbsp;rank&nbsp;tensor&nbsp;</font><br />
+<font color='#006600'>//between&nbsp;spin&nbsp;4&nbsp;of&nbsp;system&nbsp;A</font><br />
+matrix&nbsp;m1=T1(A,4,1);&nbsp;<br />
+<font color='#006600'>//The&nbsp;T11=-Imi&nbsp;second&nbsp;rank&nbsp;tensor&nbsp;between&nbsp;</font><br />
+<font color='#006600'>//spin&nbsp;4&nbsp;of&nbsp;system&nbsp;A</font><br />
+m1=T11(A,4);&nbsp;<br />
+<font color='#006600'>//The&nbsp;T10=Iz1&nbsp;second&nbsp;rank&nbsp;tensor&nbsp;between</font><br />
+<font color='#006600'>//&nbsp;spin&nbsp;1&nbsp;of&nbsp;system&nbsp;A</font><br />
+matrix&nbsp;m0=T1(A,1,0)<br />
+<font color='#006600'>//The&nbsp;T10=Iz1&nbsp;second&nbsp;rank&nbsp;tensor&nbsp;between&nbsp;</font><br />
+<font color='#006600'>//spin&nbsp;1&nbsp;of&nbsp;system&nbsp;A</font><br />
+m0=T10(A,1);<br />
+<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

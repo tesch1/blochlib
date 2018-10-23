@@ -1,0 +1,152 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Using the iterators for Looping through the grid<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<ul>
+Here is where the speed arises, and it is also here you need to be careful about which looping method you use. There are two basic types. One is meant for hyper Speed, but it has certain restrictions...the other is the more basic but is slower... 
+<ul>
+<li>There are TWO DIFFERENT ITERATORS... 
+<ul>
+<li>1)The Shape Iterator:: XYZshape<Shape_t>::iterator 
+this loops over ONLY those grid points that were 'validated' by your Shape_t 
+It behaves exactly like the iterator from the Grid class 
+</li>
+<li>
+2) The Entire Grid Iterator:: XYZshape<Shape_t>::Griditerator 
+This is just a renaming of the Grid<Engine_t>::iterator 
+This Behaves exactly like the iterator from the Grid class (becuase it IS exactly the same thing) 
+</li>
+</ul>
+</ul>
+
+<li>Below are some examples....(see the 'Grid' class for using the &quot;Griditerator&quot;, although you will notice there is almost no difference then this except the inital nameing) </li>
+<li>
+NOTE:: Dues to the nature of the 'Shape' Validation (and becuase shapes ARE NOT generaly uniform in any one direction there is NO DIRECTION ITERATORS for the Shape! Not even for 'method 2.' there is only One way...that is Down the list 
+</li>
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+<font color='#006600'>//the&nbsp;two&nbsp;corner&nbsp;points&nbsp;for&nbsp;a&nbsp;uniform&nbsp;rectangular&nbsp;grid</font><br />
+coord&lt;&gt;&nbsp;mins(-1,&nbsp;-1,&nbsp;-1),&nbsp;maxs(1,1,1);&nbsp;<br />
+<br />
+<font color='#006600'>//the&nbsp;number&nbsp;of&nbsp;steps&nbsp;between&nbsp;the&nbsp;min&nbsp;and&nbsp;max&nbsp;for&nbsp;each&nbsp;direction</font><br />
+coord&lt;int,3&gt;&nbsp;dims(10,10,10);&nbsp;<br />
+<br />
+<font color='#006600'>//a&nbsp;Uniform&nbsp;Rectangular&nbsp;Grid</font><br />
+Grid&lt;UnifromGrid&gt;&nbsp;myg(mins,&nbsp;maxs,&nbsp;dims);&nbsp;<br />
+<br />
+<font color='#006600'>//a&nbsp;Shape_t&nbsp;class&nbsp;that&nbsp;generates&nbsp;a&nbsp;cylinder</font><br />
+XYZcylinder&nbsp;myCyl(0,1,0,P2/,&nbsp;0,1);&nbsp;<br />
+<br />
+<font color='#006600'>//i&nbsp;have&nbsp;now&nbsp;created&nbsp;a&nbsp;Shape&nbsp;and&nbsp;a&nbsp;Grid&nbsp;bilayer</font><br />
+<font color='#006600'>//...all&nbsp;set&nbsp;up&nbsp;a&nbsp;ready&nbsp;to&nbsp;go</font><br />
+XYZshape&lt;XYZcylinder&gt;&nbsp;masterGrid(myCyl,&nbsp;myg);<br />
+<br />
+<font color='#006600'>//sets&nbsp;up&nbsp;an&nbsp;iterator&nbsp;to&nbsp;loop&nbsp;throught&nbsp;the&nbsp;SHAPE&nbsp;(NOT&nbsp;the&nbsp;UniformGrid&nbsp;Grid)</font><br />
+XYZshape&lt;XYZcylinder&gt;::iterator&nbsp;myIt(masterGrid);<br />
+<br />
+<font color='#006600'>//this&nbsp;will&nbsp;output&nbsp;just&nbsp;the&nbsp;Validated&nbsp;shape&nbsp;points</font><br />
+while(myIt){<br />
+<font color='#006600'>//the&nbsp;&quot;Point()&quot;&nbsp;is&nbsp;a&nbsp;&quot;coord&lt;double&gt;&quot;&nbsp;which&nbsp;prints&nbsp;like&nbsp;&quot;x&nbsp;y&nbsp;z&quot;</font><br />
+<font color='#006600'>//print&nbsp;the&nbsp;current&nbsp;point&nbsp;to&nbsp;the&nbsp;screen</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;myIt.Point()&lt;&lt;endl;&nbsp;<br />
+<font color='#006600'>//you&nbsp;can&nbsp;use&nbsp;&quot;myIt++&quot;&nbsp;but&nbsp;it&nbsp;is&nbsp;slower&nbsp;then&nbsp;the&nbsp;&quot;++myIt&quot;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;++myIt;&nbsp;<font color='#006600'>//advance&nbsp;the&nbsp;iterator</font><br />
+}&nbsp;<br />
+<font color='#006600'>//reset&nbsp;the&nbsp;iterator&nbsp;to&nbsp;loop&nbsp;again</font><br />
+myIt.reset();&nbsp;<br />
+while(myIt){<br />
+<font color='#006600'>//the&nbsp;&quot;Point()&quot;&nbsp;is&nbsp;a&nbsp;&quot;coord&lt;double&gt;&quot;&nbsp;which&nbsp;prints&nbsp;like&nbsp;&quot;x&nbsp;y&nbsp;z&quot;</font><br />
+<font color='#006600'>//print&nbsp;the&nbsp;current&nbsp;point&nbsp;to&nbsp;the&nbsp;screen</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;myIt.Point()&lt;&lt;&quot;&nbsp;moo&quot;&lt;&lt;endl;&nbsp;<br />
+<font color='#006600'>//you&nbsp;can&nbsp;use&nbsp;&quot;myIt++&quot;&nbsp;but&nbsp;it&nbsp;is&nbsp;slower&nbsp;then&nbsp;the&nbsp;&quot;++myIt&quot;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;++myIt;&nbsp;<font color='#006600'>//advance&nbsp;the&nbsp;iterator</font><br />
+}<br />
+<br />
+<font color='#006600'>//now&nbsp;we&nbsp;will&nbsp;use&nbsp;the&nbsp;'Griditerator'...which&nbsp;will&nbsp;output&nbsp;the&nbsp;entire&nbsp;&quot;UniformGrid&quot;</font><br />
+XYZshape&lt;XYZcylinder&gt;::Griditerator&nbsp;myGIt(masterGrid);&nbsp;<br />
+while(myGIt){<br />
+<font color='#006600'>//the&nbsp;&quot;Point()&quot;&nbsp;is&nbsp;a&nbsp;&quot;coord&lt;double&gt;&quot;&nbsp;which&nbsp;prints&nbsp;like&nbsp;&quot;x&nbsp;y&nbsp;z&quot;</font><br />
+<font color='#006600'>//print&nbsp;the&nbsp;current&nbsp;point&nbsp;to&nbsp;the&nbsp;screen</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;myGIt.Point()&lt;&lt;endl;&nbsp;<br />
+<font color='#006600'>//you&nbsp;can&nbsp;use&nbsp;&quot;myIt++&quot;&nbsp;but&nbsp;it&nbsp;is&nbsp;slower&nbsp;then&nbsp;the&nbsp;&quot;++myIt&quot;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;++myGIt;&nbsp;<font color='#006600'>//advance&nbsp;the&nbsp;iterator</font><br />
+}&nbsp;<br />
+<br />
+<font color='#006600'>//Using&nbsp;the&nbsp;direction&nbsp;iterators&nbsp;of&nbsp;the&nbsp;'Shape'&nbsp;iterator&nbsp;CANNOT&nbsp;HAPPEN</font><br />
+<font color='#006600'>//the&nbsp;code&nbsp;below&nbsp;WILL&nbsp;NOT&nbsp;COMPILE!</font><br />
+<font color='#006600'>//However&nbsp;the&nbsp;Directional&nbsp;iterations&nbsp;from&nbsp;the&nbsp;Griditerator&nbsp;still&nbsp;work&nbsp;as&nbsp;before!</font><br />
+/*<br />
+myIt.Xreset();&nbsp;<font color='#006600'>//reset&nbsp;the&nbsp;xdirection&nbsp;iterator</font><br />
+while(myIt.Xend())<br />
+{<br />
+&nbsp;&nbsp;&nbsp;cout&lt;&lt;myIt.x()&lt;&lt;endl;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;cout&lt;&lt;myIt.Point()&lt;&lt;endl;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;myIt.XadvanceGrid();&nbsp;<br />
+}<br />
+*/<br />
+<br />
+<font color='#006600'>//remember&nbsp;there&nbsp;is&nbsp;NO&nbsp;directional&nbsp;loops&nbsp;for&nbsp;the&nbsp;shapes!</font><br />
+<font color='#006600'>//This&nbsp;is&nbsp;the&nbsp;normal&nbsp;'for'&nbsp;looping&nbsp;sequence</font><br />
+for(int&nbsp;i=0;i&lt;masterGrid.size();++i){<br />
+&nbsp;&nbsp;cout&lt;&lt;myg(i)&lt;&lt;endl;&nbsp;<font color='#006600'>//again&nbsp;returns&nbsp;a&nbsp;coord&lt;&gt;</font><br />
+}<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

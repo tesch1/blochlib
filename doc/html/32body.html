@@ -1,0 +1,699 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("32menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("32menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("32menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("32title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("32");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Various Spin and Spacial Tenors to second rank<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+These are simple a series of funcitons that generate matrix representations of the SPIN SPHERICAL TENSORS up to second rank...these REQUIRE a 'SpinSys' to function properly<br />
+<br />
+	The Spacial tensors are simply 'numbers' and only require angles.<br />
+<br />
+<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Global Functions'></a>Global Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Global FunctionsA1'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double A1(double alpha, double beta, int m)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+[alpha, beta, gamma] --&gt; A euler angle rotation in RADIANS<br />
+m--&gt; the z projection (m= -1, 0,1)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The first rank m'=0 wigner rotations...this is a short hand for 'wigner1(a, b, 0, 0, m)'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double a=78*Pi/180, b=45*PI/180, g=67*Pi/180;<br />
+cout&lt;&lt;A1(a,b,1);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsA2'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double A2(double alpha, double beta, int m)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+[alpha, beta, gamma] --&gt; A euler angle rotation in RADIANS<br />
+m--&gt; the z projection (m= -2,-1, 0,1,2)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The second rank m'=0 wigner rotations...this is a short hand for 'wigner2(a, b, 0, 0, m)'<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double a=78*Pi/180, b=45*PI/180, g=67*Pi/180;<br />
+cout&lt;&lt;A2(a,b,2);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global FunctionsA_CSA_pas'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double A_CSA_pas(double iso, double del, double eta,int l, int m)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+IT IS NOT RECOMMENDED TO USE THESE.  USE THE INTERACTION SPECIFIC CLASSES. THEY HANDLE THE PERCULARITIES OF THE QUADRUPOLE MUCH BETTER AND CORRECTLY WITH ROTATIONS AND SPINNING INVOLVED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+iso--&gt; isotropicc shift (Hz)<br />
+del--&gt;anisotropy (Hz)<br />
+eta--&gt; the assymnetry parameter for a csa<br />
+l--&gt; the RANK desired<br />
+m--&gt; the z projection (m=-2,-1,0,1,2)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the proper coeif to be placed with 'T_CSA' to generate a hamiltonian.<br />
+<br />
+A_CSA_pas( iso, del, eta, 0,0)=-sqrt(3)*iso; <br />
+A_CSA_pas( iso, del, eta, 1, 1..0..-1.)=0<br />
+A_CSA_pas( iso, del, eta, 2,2)=1./2.*del*eta;<br />
+A_CSA_pas( iso, del, eta, 2,-2)=1./2.*del*eta;<br />
+A_CSA_pas( iso, del, eta, 2,1)=0<br />
+A_CSA_pas( iso, del, eta, 2,0)=del<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+cout&lt;&lt;A_CSA_pas(3000, 2000, 0, 2, 2);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsA_Dip_pas'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double A_Dip_pas(double del, int m)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+IT IS NOT RECOMMENDED TO USE THESE. USE THE INTERACTION SPECIFIC CLASSES. THEY HANDLE THE PERCULARITIES OF THE QUADRUPOLE MUCH BETTER AND CORRECTLY WITH ROTATIONS AND SPINNING INVOLVED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+del--&gt;anisotropy (Hz) (the dipolar coupling)<br />
+m--&gt; the z projection (m=-2,-1,0,1,2)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the proper coeif to be placed with 'T_Dip' to generate a hamiltonian.<br />
+<br />
+A_Dip_pas( del, (-2,-1,1,2))=0;<br />
+A_Dip_pas( del,0)= -sqrt(6)*dip; <br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+cout&lt;&lt;A_Dip_pas(3000, 0);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global FunctionsA_Q_pas'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double A_Q_pas(double eta, int m)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+IT IS NOT RECOMMENDED TO USE THESE. USE THE INTERACTION SPECIFIC CLASSES. THEY HANDLE THE PERCULARITIES OF THE QUADRUPOLE MUCH BETTER AND CORRECTLY  WITH ROTATIONS AND SPINNING INVOLVED.<br />
+<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+eta--&gt; the assymnetry parameter for a quadrupole<br />
+m--&gt; the z projection (m=-2,-1,0,1,2)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the proper coeif to be placed with 'T_Q' to generate a hamiltonian to only the 'first order.'<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+cout&lt;&lt;A_Q_pas(0.1,2);<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsT0'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rimatrix T0(SpinSys A, int on)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt;A valid spinsystem<br />
+on--&gt; the spin you wish to grab the Zeroth rank spin tensor<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns Identity matrix of size HsxHs (a real identity matrix) (the T0 is the indentitiy matrix).<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+cout&lt;&lt;T0(A,1); <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global FunctionsT1'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rmatrix T1(SpinSys A, int on, int m)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt;A valid spinsystem<br />
+on--&gt; the spin you wish to grab the first rank spin tensor<br />
+m--&gt; the projection along the rank axis..(m=-1, 0, or 1)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns a matrix (full complex) from the spin system given 'm.'<br />
+m=1--&gt; T1(A, on, 1)=Ip(a, on);<br />
+m=0--&gt; T(A, on, 0)=Iz(A, on);<br />
+m=-1--&gt; T(A, on, -1)=-Imi(A, on);<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+cout&lt;&lt;T1(A,2,0); <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsT11, T10, T1m1'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rmatrix T11(SpinSys A, int on);<br />
+rdmatrix T10(SpinSys A, int on);<br />
+rmatrix T1m1(SpinSys A, int on);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt;A valid spinsystem<br />
+on--&gt; the spin you wish to grab the first rank spin tensor<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns a matrix (full complex) from the spin system given 'm.'<br />
+T11--&gt; T1(A, on, 1)=Ip(a, on);<br />
+T10--&gt; T(A, on, 0)=Iz(A, on);<br />
+T1m1--&gt; T(A, on, -1)=-Imi(A, on);<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+cout&lt;&lt;T10(A,2);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global FunctionsT2'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+matrix T2(SpinSys A, int on,int m); --&gt;Quadrupolar type tensors<br />
+matrix T2(SpinSys A, int on1,int on2,int m); --&gt;Dipolar type tensors<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt;A valid spinsystem<br />
+on--&gt; The makes the assumption that on1=on2 (this will return a zero matrix IF the spin's momentum is NOT&gt;1/2 (i.e. a quadropole)<br />
+<br />
+on1--&gt; the FIRST spin you wish to grab the second rank spin tensor<br />
+on2--&gt; the SECOND spin you wish to grab the second rank tensor <br />
+<br />
+m--&gt; the projection along the rank axis..(m=-2,-1, 0, 1, or 2)<br />
+<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are 2 spin/second rank tensors and require two indexes....<br />
+--if the spin qn&gt;1/2 then on1==on2 will give the second rank quadrupole tensors<br />
+--Returns a matrix (full complex) from the spin system given 'm'<br />
+<br />
+m=2 --&gt; T2(A, on1, on2, 2)= 1/2(A.Ip(on1)*A.Ip(on2));<br />
+m=1--&gt; T2(A, on1,on2, 1)=-1./2.*(A.Ip(on1)*A.Iz(on2)+A.Iz(on1)*A.Ip(on2));<br />
+m=0--&gt; T2(A, on1,on2, 0)=1./sqrt(6.)*(2*A.Iz(on1)*A.Iz(on2)-(A.Ix(on1)*A.Ix(on2)+A.Iy(on1)*A.Iy(on2)));<br />
+m=-1--&gt; T2(A, on1,on2, -1)=1./2.*(A.Imi(on1)*A.Iz(on2)+A.Iz(on1)*A.Imi(on2));<br />
+m-=2--&gt;T2(A, on1, on2, -2)=1/2(A.Imi(on1)*A.Imi(on2));<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+cout&lt;&lt;T2(A,1,2,0); <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsT22, T21, T20,<br /> T2m1, T2m2'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rmatrix T22(SpinSys A, int on);--&gt; Quadrupolar type tensors<br />
+rmatrix T22(SpinSys A, int on1, int on2); --&gt; Dipolar type tensors <br />
+rmatrix T21(SpinSys A, int on); --&gt;Quadrupolar type tensors<br />
+rmatrix T21(SpinSys A, int on1, int on2); --&gt; Dipolar type tensors <br />
+matrix T20(SpinSys A, int on); --&gt;Quadrupolar type tensors<br />
+matrix T20(SpinSys A, int on1, int on2); --&gt; Dipolar type tensors <br />
+<br />
+rmatrix T2m1(SpinSys A, int on) ;--&gt;Quadrupolar type tensors<br />
+rmatrix T2m1(SpinSys A, int on1, int on2); --&gt;Dipolar type tensors <br />
+<br />
+rmatrix T2m2(SpinSys A, int on); --&gt;Quadrupolar type tensors<br />
+rmatrix T2m2(SpinSys A, int on1, int on2); --&gt; Dipolar type tensors <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt;A valid spinsystem<br />
+on--&gt; the spin you wish to grab the Second rank spin tensor<br />
+on1--&gt; the FIRST spin you wish to grab the second rank spin tensor<br />
+on2--&gt; the SECOND spin you wish to grab the second rank tensor <br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the Second rank spin tensors<br />
+<br />
+T22= 1/2(A.Ip(on1)*A.Ip(on2));<br />
+T21=-1./2.*(A.Ip(on1)*A.Iz(on2)+A.Iz(on1)*A.Ip(on2));<br />
+T20=1./sqrt(6.)*(2*A.Iz(on1)*A.Iz(on2)-(A.Ix(on1)*A.Ix(on2)+A.Iy(on1)*A.Iy(on2)));<br />
+T2m1=1./2.*(A.Imi(on1)*A.Iz(on2)+A.Iz(on1)*A.Imi(on2));<br />
+T2m2=1/2(A.Imi(on1)*A.Imi(on2));<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+cout&lt;&lt;T22(A,2,1);<br />
+A(2)=&quot;14N&quot;;<br />
+cout&lt;&lt;T22(A,2); <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global FunctionsT2_rot'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+matrix T2_rot(SpinSys A,int on, int m, double alpha, double beta, double gamma ); --&gt; Quadrupolar type tensors<br />
+<br />
+matrix T2_rot(SpinSys A,int on1, int on2, int m, double alpha, double beta, double gamma ); --&gt;Dipolar type tensors <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt;A valid spinsystem<br />
+on--&gt; the spin you wish to grab the Second rank spin tensor<br />
+<br />
+on1--&gt; the FIRST spin you wish to grab the second rank spin tensor<br />
+on2--&gt; the SECOND spin you wish to grab the second rank tensor <br />
+<br />
+[alpha, beta, gamma] --&gt; a EULER angle rotation Rz(alpha)Ry(beta)Rz(gamma) in RADIANS<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+Returns the rotated second rank spin tensor<br />
+<br />
+T2_rot=Sum_m' [ Am'm(alpha, beta, gamma)*T2m'] <br />
+<br />
+T2_rot= T22*A2m(a,b,g)+T21*A1m(a,b,g)+T20*A0m(a,b,g)+T2-1*A-1m(a,b,g)+T2-2*A-2m(a,b,g)<br />
+<br />
+Where the Am'm are the spacial tensors<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+double a=45*PI/180, b=65*PI/180, c=87*PI/180<br />
+cout&lt;&lt;T2_rot(A,0,1,2, a,b,c); <font color='#006600'>//returns the ROTATED T22 spintensor</font><br />
+A(2)=&quot;14N&quot;;<br />
+cout&lt;&lt;T2_rot(A,2,-1, a,b,c); <font color='#006600'>//returns the ROTATED T2m1 quadrupole tensor </font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsT_CSA'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rmatrix T_CSA(SpinSys A, int spin, int l, int m);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt; A SpinSystem<br />
+spin--&gt; the spin NUMBER you wish to obtain the operator for<br />
+l--&gt; the desired RANK (l=0,1,2)<br />
+m--&gt;the desired z projection (for l=0, m=0, for l=1, m=(-1,0,1), for l=2, m=(-2,-1,0,1,2)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns The Spherical tensors for a CSA (Chemical Shift Anisontropy) IN A HIGH MAGENTIC FIELD ALONG THE Z AXIS!! (a typical NMR experiment...we still have T2 components as the 'second spin' is considered to be the magnetic field)<br />
+<br />
+T_CSA(A, spin, 0,0)=1/sqrt(3)*A.Iz(spin); <font color='#006600'>//T00</font><br />
+<br />
+T_CSA(A, spin, 1,(-1,0,1))=0; <font color='#006600'>//T1m1, T10, T11</font><br />
+<br />
+T_CSA(A, spin, 2,2)=0; <font color='#006600'>//T22</font><br />
+T_CSA(A, spin, 2,-2)=0; <font color='#006600'>//T2m2</font><br />
+T_CSA(A, spin, 2,1)=-1./2.*(A.Ip(spin));; <font color='#006600'>//T21</font><br />
+T_CSA(A, spin, 2,-1)=-1./2.*(A.Imi(spin));; <font color='#006600'>//T2m1</font><br />
+T_CSA(A, spin, 2,0)=(A.Iz(spin));; <font color='#006600'>//T20</font><br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+cout&lt;&lt;T_CSA(A,2, 2,-1); <font color='#006600'>//prints out the T2m1 of the CSA for spin 2</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global FunctionsT_Dip'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+hmatrix T_Dip(SpinSys A, int spin1, int spin2, int m);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt; A SpinSystem<br />
+spin1--&gt; the spin NUMBER of the FRIST spin you wish to obtain the operator for<br />
+spin2--&gt; the spin NUMBER of the SECOND spin you wish to obtain the operator for <br />
+m--&gt;the desired z projection ( m=(-2,-1,0,1,2))<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns The Spherical tensors for a Dipole-Dipole Interaction IN A HIGH MAGENTIC FIELD ALONG THE Z AXIS!! (a typical NMR experiment...)<br />
+<br />
+There are NO T00, or T11 compents for a dipole.<br />
+<br />
+IF Spin1 == Spin2 then we get the HOMONUCLEAR version of the dipole tensors<br />
+IF Spin1 != Spin2 then we get the HETERONUCLEAR veriosn of the dipole tensors<br />
+<br />
+SpinSys A(3);<br />
+<br />
+T_Dip(A, spin1,spin2, 2)=0; <font color='#006600'>//T22</font><br />
+T_Dip(A, spin1,spin2, -2)=0; <font color='#006600'>//T2m2</font><br />
+T_Dip(A, spin1,spin2,1)=0; <font color='#006600'>//T21</font><br />
+T_Dip(A, spin1,spin2,-1)=0<font color='#006600'>//T2m1</font><br />
+T_Dip(A, spin1,spin2,0)=sqrt(1/6)*(2.*A.Iz(spin1)*A.Iz(spin2)-A.Ix( spin1)*A.Ix(spin2)-A.Iy(spin1)*A.Iy(spin2));<br />
+<font color='#006600'>//T20 --&gt; HOMONUCLEAR</font><br />
+=sqrt(2/3)*(A.Iz(spin1)*A.Iz(spin2)); <font color='#006600'>//T20 --&gt; HETERONUCLEAR </font><br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+cout&lt;&lt;T_Dip(A,1, 2,0); <font color='#006600'>//prints out the T20 of the Dipole for spin 2 and spin 1</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global FunctionsT_J'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+hmatrix T_J(SpinSys A, int spin1,int spin2, int m=0, int strong=0);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt; A SpinSystem<br />
+spin1--&gt; the spin NUMBER of the FRIST spin you wish to obtain the operator for<br />
+spin2--&gt; the spin NUMBER of the SECOND spin you wish to obtain the operator for <br />
+m--&gt;the desired z projection (only m=0 give a non zero answer)<br />
+strong--&gt;string J coupling==1, weak J coupling==0<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns The Spherical tensors for a J coupling IN A HIGH MAGENTIC FIELD ALON THE Z AXIS!! (a typical NMR experiment...<br />
+<br />
+For the scaler coupling we only have T00...but there are two extreams <br />
+<br />
+1) if the chemical shift between th two spins is much bigger then the J coupling we have the 'weak' coupling limit where the J interaction is truncated with respect to The Chemical shift resulting in an 'Iz1*Iz2' spin operator<br />
+2) if the chemical shift is small or comparable to J we must leave The J interaction as it originaly stands..I1 * I2 (Iz*Iz+Iy*Iy+Ix*Ix)<br />
+<br />
+SpinSys A(3);<br />
+<font color='#006600'>//weak coupling...</font><br />
+T_J(A, spin1, spin2,0)=1/sqrt(3)*A.Iz(spin1)*A.Iz(spin2); <font color='#006600'>//T00</font><br />
+<br />
+<font color='#006600'>//strong coupling...</font><br />
+T_J(A, spin1, spin2,0) =1/sqrt(3)*(A.Iz(spin1)*A.Iz(spin2)+A.Iy(spin1)*A.Iy(spin2)+A.Ix(spin1)*A.Ix(spin2)); <font color='#006600'>//T00</font><br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+cout&lt;&lt;T_J(A,1, 2); <font color='#006600'>//prints out the T00 of the J for spin 1 and 2--&gt;Iz(1)*Iz(2)/sqrt(3)</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global FunctionsT_Quad'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rmatrix T_Quad(SpinSys A, int spin, int m, int Order=1);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+A--&gt; A SpinSystem<br />
+spin1--&gt; the spin NUMBER of the FRIST spin you wish to obtain the operator for<br />
+Order--&gt; the ORDER of the tensors...<br />
+m--&gt;the desired z projection ( m=(-2,-1,0,1,2))<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Order=1--&gt; the 'first order' approximation of the rotating wave/high field perturbation...<br />
+ (only m=0 gives a non-0 compenent (i.e. T20)<br />
+<br />
+Order=2--&gt; the the terms from the second order perterbation theory<br />
+m=0 gives the First Order component...<br />
+m=11 give the 'rank 1' SECULAR commutators--&gt; [T2m1,T21]=[Iz*Imi+ Imi*Iz,Iz*Ip+Ip*Iz)]<br />
+m=22 gives the 'rank 2' SECULAR commutators--&gt;[T2m2, T22]=[Imi*Imi,Ip*Ip]<br />
+<br />
+Returns The Spherical tensors for a Quadrupole Interaction IN A HIGH MAGENTIC FIELD ALONG THE Z AXIS!! (a typical NMR experiment...)<br />
+<br />
+NOTE:: there are NO T00, or T1m compents for a quadrupole<br />
+<br />
+SpinSys A(3);<br />
+<br />
+<font color='#006600'>//order=1 </font><br />
+T_Quad(A, spin, 2)=0; <font color='#006600'>//T22</font><br />
+T_Quad(A, spin, -2)=0; <font color='#006600'>//T2m2</font><br />
+T_Quad(A, spin,1)=0; <font color='#006600'>//T21</font><br />
+T_Quad(A, spin,-1)=0<font color='#006600'>//T2m1</font><br />
+T_Quad(A, spin,0)=sqrt(1/6)*(3.*A.Iz(spin)*A.Iz(spin)-A.qn(spin)*(A.qn(spin)-1)*A.Ie(spin));<br />
+<br />
+<font color='#006600'>//order=2</font><br />
+T_Quad(A, spin, 2,2)=0; <font color='#006600'>//T22</font><br />
+T_Quad(A, spin, -2,2)=0; <font color='#006600'>//T2m2</font><br />
+T_Quad(A, spin,1,2)=0; <font color='#006600'>//T21</font><br />
+T_Quad(A, spin,-1,2)=0<font color='#006600'>//T2m1</font><br />
+T_Quad(A, spin,0,2)=3.*A.Iz(spin)*A.Iz(spin); <br />
+T_Quad(A, spin,11,2)=T2m1*T21-T21*T2m1<br />
+T_Quad(A, spin,22,2)=T2m2*T22-T22*T2m2<br />
+<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+A(2)=&quot;14N&quot;;<br />
+cout&lt;&lt;T_Quad(A,1, 2,0); <font color='#006600'>//prints out the T20 of the Quad for spin 2</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Global Functionswigner1'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+complex wigner1(double alpha, double beta, double gamma,int m, int mp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+[alpha, beta, gamma] --&gt; A euler angle rotation in RADIANS<br />
+m--&gt; the matrix element row(m= -1, 0,1)<br />
+mp--&gt; the matrix element colum (mp=-1,0,1)<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The first rank wigner matrix elements... (too long to write here...look to 'src/QMspins/space_ten.cc' for the values.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double a=78*Pi/180, b=45*PI/180, g=67*Pi/180;<br />
+cout&lt;&lt;wigner1(a,b,g,1,0);<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Global Functionswigner2'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+complex wigner2(double alpha, double beta, double gamma,int m, int mp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+[alpha, beta, gamma] --&gt; A euler angle rotation in RADIANS<br />
+m--&gt; the matrix element row(m= -2,-1, 0,1,2)<br />
+mp--&gt; the matrix element colum (mp=-2,-1,0,1,2)The <br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Second rank wigner matrix elements... (too many to write here...look to 'src/QMspins/space_ten.cc' for the values.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+double a=78*Pi/180, b=45*PI/180, g=67*Pi/180;<br />
+cout&lt;&lt;wigner2(a,b,g,2,1);<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

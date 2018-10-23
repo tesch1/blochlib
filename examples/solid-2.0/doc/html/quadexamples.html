@@ -1,0 +1,272 @@
+
+	<html>
+	<head>
+	
+	<title>Solid-2.0::Quadrupole Examples</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+	  <tr>
+		<td>&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	   <tr> 
+		
+    <td class="head" width="59%"> &nbsp;&nbsp;Solid-2.0 Documentation---Quadrupole 
+      Examples</td>
+	  </tr>
+	</table>
+
+
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+	  <tr>
+		<td>&nbsp;</td>
+	  </tr>
+	</table>
+		
+<br>
+<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		
+<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td halign='left' valign='top' width="22%"> 
+      <table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left class='normalText'>
+        <tr> 
+          <td bgcolor='#aaaaaa'>&nbsp; </td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><b> <a href='index.html'>home </a> </b></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><b> Sections</b></td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'> <a href="index.html#spins">-Spins</a> </td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'><a href="index.html#params">-Parameters</a></td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'><a href="index.html#pulses">-Pulses</a></td>
+        </tr>
+        <tr> 
+          <td class='sidemenu'><a href="index.html#funcs">---Function List---</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="index.html#ff">-file formats</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><b> Examples</b></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html">-Static</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#basic">---basic</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#d2">---2D</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#alter">---alterSys</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="staticexamples.html#dc">---decouple</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html">-Mas</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html#basic">---basic</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html#d2">---2D</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="masexamples.html#ptop">---ptop</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html">-C7s</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#basic">---basic</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#d2">---2D</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#explict">---explicit</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#rotor">---rotor</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="c7examples.html#transfer">---transfer</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td><a href="quadexamples.html">-Quadrupoles</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td>---<a href="quadexamples.html#centrans">central Trans</a></td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td>&nbsp;</td>
+        </tr>
+        <tr class='sidemenu'> 
+          <td>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td bgcolor='#aaaaaa'>&nbsp; </td>
+        </tr>
+        <tr> 
+          <td class='sidemenu' bgcolor='#cccccc'> </td>
+        </tr>
+      </table>
+    </td>
+    <td width="78%" valign='top' class='normalText'> 
+      <blockquote> 
+        <p><br>
+          Below are several examples of performing simulations on qudrupolars.</p>
+      </blockquote>
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td class="importantText2"> <a name="centrans"></a>Central Transistion</td>
+        </tr>
+        <tr> 
+          <td class="normalText"> 
+            <ul>
+              <li>Becuase quadrupoles have very large coupling and are &gt; spin 
+                1/2, they represent a different type of NMR system. There is both 
+                a first order effect and a second order effect. The second order 
+                comes around becuase the couplings are so large (comperable to 
+                the magnetic field). The central transistion for quadrupoles is 
+                devoid of any anisontropy due to the first order, however, it 
+                is still effected by the second order. Below is the basic input 
+                file for the below figures. Simply changing the detection and 
+                initial density matrices will produce the below spectra. The second 
+                order effect is field dependant, and a loop over the Bfield variable 
+                will produce the 2D plot below as well.</li>
+              <blockquote> <span class="codecomment"># a basic quadrupole central 
+                transistion observation...you can <br>
+                # simply change the spinning speed, detect, and ro to get the 
+                desired<br>
+                # spectra shown below</span><br>
+                <br>
+                spins{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#the global 
+                options</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;numspin 1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;T 23Na 0<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Q 3e6 0 0<br>
+                }<br>
+                <br>
+                parameters{&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;powder{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aveType 
+                zcw<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thetaStep 377<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phiStep 233<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                <span class="codecomment">#the intergrator step size&nbsp;&nbsp;&nbsp;</span>&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;maxtstep=1e-6<br>
+                <br>
+                <span class="codecomment">#number of 1D fid points&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;npts1D=512&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                <span class="codecomment">#sweepwidth</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;sw=1000000<br>
+                <span class="codecomment">#the magnetic field</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Bfield=400e6<br>
+                }<br>
+                <br>
+                <br>
+                pulses{<br>
+                <br>
+                <span class="codecomment"># a 2D to loop over field strengths</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;2D()<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;BFpts=20<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;BFstart=100e6<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;BFend=700e6<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;BFsteps=(BFend-BFstart)/BFpts<br>
+                <br>
+                <span class="codecomment">#set the spinning&nbsp;</span>&nbsp;&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;wr=0<br>
+                <span class="codecomment">#set the rotor</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;rotor=rad2deg*acos(1/sqrt(3))<br>
+                <span class="codecomment">#set the detection matrix</span><br>
+                <br>
+                <span class="codecomment"># the central transistion 'top' (+1)</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;detect(Ip*Ip*Ip)<br>
+                <br>
+                <span class="codecomment">#loop of over the field strengths</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;loop(i=0:BFpts-1)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bfield=BFstart<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;<span class="codecomment">&nbsp;#set the inital 
+                matrix<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# the central transistion 'bottom' (-1)</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ro(Im*Im*Im)<br>
+                <br>
+                <span class="codecomment">#no pulses nessesary&nbsp;&nbsp;</span>&nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="codecomment">#collect the 
+                fid </span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fid(i)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BFstart=BFstart+BFsteps<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;end<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;savefidmatlab(bofields) <span class="codecomment">#save 
+                as a matlab file</span><br>
+                }<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+              </blockquote>
+            </ul>
+            <blockquote> 
+              <p>Here is the generated spectra, simply changeing the detection, 
+                ro, and the spinning speeds from the above input file.<br>
+                <br>
+                <img src="quadbf.gif" width="481" height="410"> </p>
+            </blockquote>
+          </td>
+        </tr>
+      </table>
+      <p><br>
+      </p>
+    </td>
+  </tr>
+</table>
+<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

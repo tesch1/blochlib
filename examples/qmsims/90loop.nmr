@@ -1,0 +1,20 @@
+
+
+var wr=100
+var wrs=100
+
+var beta=acos(1/sqrt(3))*180/3.1456
+var ths=144
+var pht=89
+
+var cmd="./a.out 512 "
+
+var j=0
+
+for(wr=100; wr<2000; wr=wr+wrs){
+	var exe=cmd + wr + " "+beta+" "+ths+" "+pht+" "
+	print(exe+"\n")
+	system(exe)
+	system("mv fid fid"+j)
+	j=j+1
+}

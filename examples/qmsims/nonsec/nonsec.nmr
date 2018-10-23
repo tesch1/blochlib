@@ -1,0 +1,40 @@
+
+# a scripto input file for use with 'scripto' program
+# it simply runs the 'nonsec' program under 4 processors 
+# under 4 different initial input conditions (the 4 proc
+# is a cludge for an SMP)
+
+var wr=1000
+var wrs=5000
+var npts=128
+var samples=50000
+var theta=45
+var phi=45
+var wo=20
+var wq=2
+var J=100
+var eta=0
+var phio=0
+var dt=5e-9
+var fbase="fdj"
+
+var i=0
+var j=0
+var exe=""
+for(wr=1000;wr<55000;wr=wr+wrs){
+	var j=0
+	for(j=0;j<3;j=j+1){
+		exe="./a.out "+wr+" "+npts+" "+samples+" "+theta+" "+phi+" "+wq+" "+wo+" "+J+" 0 0 "+dt+" "+fbase+i+"&"
+		print(exe+"\n")
+		system(exe)
+		i=i+1
+		wr=wr+wrs
+	}
+	exe="./a.out "+wr+" "+npts+" "+samples+" "+theta+" "+phi+" "+wq+" "+wo+" "+J+" 0 0 "+dt+" "+fbase+i
+	print(exe+"\n")
+	system(exe)
+	i=i+1
+}
+	
+	
+	

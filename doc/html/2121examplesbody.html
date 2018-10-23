@@ -1,0 +1,161 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+An example on how to use the looping iterators<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+<ul>
+<li>Here is where the speed arises, and it is also here you need 
+to be careful about which looping method you use. There are two 
+basic types. One is meant for hyper Speed, but it has certain 
+restrictions...the other is the more basic but is slower...</li>
+<li><B>Iterator::</B>
+<TT>TimeTrain<Engine_t>::iterator 
+</TT> 
+<ul>
+  <li>this loops over time train such that it loops from the first 
+    time to the Last-1 time</li>
+  <li>Time acsess, step sizes, and 'dt' times are obtained using 
+    the below functions 
+    <ul>
+      <li><B>beginStepTime()</B>--> 
+	returns the current benging time</li>
+      <li><B>endStepTime()</B>-->return 
+	the time after the begining time </li>
+      <li><B>t()</B> --> same as beginStepTime()</li>
+      <li><B>step()</B> --> Number 
+	of ficticious steps between beginStepTime() and endStepTime()</li>
+      <li><B>stepsize()</B> --> this 
+	(endStepTime()-beingStepTime())/step()</li>
+    </ul>
+  </li>
+  <li>Iterations can occur backwards OR forwards 
+    <ul>
+      <li><B>operator++()</B>--> the 
+	foward iterator</li>
+      <li><B>operator--()</B>--> the 
+	backwards iterator</li>
+    </ul>
+  </li>
+  <li>If you wish to reuse the iterator AFTER you have gone foward 
+    all the way you can use the reset function 
+    <ul>
+      <li><B>reset() </B>--> resets 
+	the iterator back to the TOP most position </li>
+    </ul>
+  </li>
+  <li>There is an extra option that alows you loop the iterations 
+    before the they quit a loop 
+    <ul>
+      <li><B>setLoops(int loops)</B> 
+	--> sets the number of times to REPEAT the entire train 
+	before exiting a loop...the default is only 1...you can 
+	loop just once</li>
+    </ul>
+  </li>
+</ul>
+</li>
+<li>Below are some examples....</li></blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+<font color='#006600'>//a&nbsp;time&nbsp;train&nbsp;that&nbsp;is&nbsp;[0,0.1,0.2,0.3,0.4,0.5...1]&nbsp;with&nbsp;'sub&nbsp;step&nbsp;sizes'&nbsp;of&nbsp;100</font><br />
+TimeTrain&lt;UniformTimeEngine&gt;&nbsp;myT(0,&nbsp;1,&nbsp;10,&nbsp;100);<br />
+TimeTrain&lt;UniformTimeEngine&gt;::iterator&nbsp;myIt(myT);&nbsp;<font color='#006600'>//sets&nbsp;up&nbsp;an&nbsp;iterator&nbsp;to&nbsp;loop&nbsp;throught&nbsp;the&nbsp;time&nbsp;train</font><br />
+<br />
+<font color='#006600'>//this&nbsp;will&nbsp;output&nbsp;the&nbsp;list&nbsp;in&nbsp;foward&nbsp;order</font><br />
+<font color='#006600'>//&nbsp;0&nbsp;0.1&nbsp;100</font><br />
+<font color='#006600'>//&nbsp;0.1&nbsp;0.2&nbsp;100</font><br />
+<font color='#006600'>//...</font><br />
+<font color='#006600'>//&nbsp;0.9&nbsp;1&nbsp;100</font><br />
+while(myIt){<br />
+&nbsp;cout&lt;&lt;myIt.beginStepTime()&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;myIt.endStepTime()&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;myIt.step()&lt;&lt;endl;&nbsp;<br />
+&nbsp;++myIt;&nbsp;<font color='#006600'>//advance&nbsp;the&nbsp;iterator</font><br />
+}&nbsp;<br />
+<font color='#006600'>//There&nbsp;is&nbsp;a&nbsp;'--'&nbsp;operator&nbsp;that&nbsp;would&nbsp;take&nbsp;from&nbsp;the&nbsp;end&nbsp;to&nbsp;the&nbsp;begining</font><br />
+<font color='#006600'>//if&nbsp;you&nbsp;needed&nbsp;to...so&nbsp;IF&nbsp;i&nbsp;DO&nbsp;NOT&nbsp;reset&nbsp;the&nbsp;iterator,&nbsp;i&nbsp;can&nbsp;go&nbsp;backwards</font><br />
+<br />
+<font color='#006600'>//use&nbsp;this&nbsp;to&nbsp;reset&nbsp;the&nbsp;iterator&nbsp;if&nbsp;you&nbsp;want&nbsp;to&nbsp;reuse&nbsp;it&nbsp;in&nbsp;the&nbsp;forward&nbsp;direction&nbsp;again</font><br />
+<font color='#006600'>//&nbsp;myIt.reset();&nbsp;</font><br />
+<br />
+<font color='#006600'>//this&nbsp;loop&nbsp;will&nbsp;print&nbsp;out&nbsp;the&nbsp;list&nbsp;backwards</font><br />
+<font color='#006600'>//&nbsp;0.9&nbsp;1&nbsp;100</font><br />
+<font color='#006600'>//&nbsp;0.8&nbsp;0.9&nbsp;100</font><br />
+<font color='#006600'>//...</font><br />
+<font color='#006600'>//&nbsp;0&nbsp;0.1&nbsp;100</font><br />
+while(myIt){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;myIt.beginStepTime()&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;myIt.endStepTime()&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;myIt.step()&lt;&lt;endl;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;--myIt;&nbsp;<font color='#006600'>//decrement&nbsp;the&nbsp;iterator</font><br />
+}<br />
+<br />
+<font color='#006600'>//now&nbsp;that&nbsp;the&nbsp;iterator&nbsp;is&nbsp;back&nbsp;at&nbsp;the&nbsp;begining&nbsp;i&nbsp;will&nbsp;make&nbsp;it&nbsp;loop&nbsp;more&nbsp;then&nbsp;once</font><br />
+myIt.setLoops(3);<br />
+while(myIt){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;myIt.beginStepTime()&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;myIt.endStepTime()&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;myIt.step()&lt;&lt;endl;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;++myIt;&nbsp;<font color='#006600'>//decrement&nbsp;the&nbsp;iterator</font><br />
+}<br />
+<font color='#006600'>//this&nbsp;will&nbsp;print&nbsp;out&nbsp;the&nbsp;same&nbsp;thing&nbsp;3&nbsp;times.</font><br />
+<br />
+<br />
+<font color='#006600'>//prints&nbsp;the&nbsp;same&nbsp;output&nbsp;as&nbsp;the&nbsp;first&nbsp;iteration&nbsp;loop&nbsp;above</font><br />
+<font color='#006600'>//but&nbsp;it&nbsp;will&nbsp;be&nbsp;slower&nbsp;AND&nbsp;there&nbsp;is&nbsp;no&nbsp;Bounds&nbsp;checking</font><br />
+<font color='#006600'>//So&nbsp;you&nbsp;may&nbsp;Crash&nbsp;the&nbsp;program...</font><br />
+for(int&nbsp;i=0;i&lt;myT.size()-1;++i){<br />
+&nbsp;cout&lt;&lt;myT.beginStepTime(i)&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;myT.endStepTime(i)&lt;&lt;&quot;&nbsp;&quot;&lt;&lt;myT.step()&lt;&lt;endl;<br />
+}<br />
+<br />
+<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

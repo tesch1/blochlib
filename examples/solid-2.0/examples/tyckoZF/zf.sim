@@ -1,0 +1,99 @@
+
+#the multplit spin list
+# preforms a simple point-to-point C7 (a 1D FID)
+
+spins{
+	
+	#the global options
+	numspin 2
+	T 1H 0
+	T 1H 1
+	D 1500 0 1	
+}
+
+parameters{	
+
+	powder1{
+		aveType zcw
+		thetaStep 233
+		phiStep 144
+	}		
+
+#the intergrator step size	
+	maxtstep=5e-6
+
+#number of 1D fid points	
+	npts1D=512	
+
+
+#starting spinning speed
+	wr=1000
+	
+	roeq= Iz	
+	detect=Ip	
+	filesave=data	
+}
+
+
+pulses{
+
+#our Tycko Zero-Field pulse sequence
+	sub1{	
+	#set the rotor angle to the global var
+		rotor(rad2deg*acos(1/sqrt(3)))
+		t1=3/360/wr
+		t2=21/360/wr
+		t3=2/360/wr
+		t4=8/360/wr
+		t5=25/360/wr
+		t6=2/360/wr
+
+		amp= wr*18.2
+
+		phiStep=72
+		ph=0
+		DelPh=126
+		phiF=216
+		loop(i=0:4)
+				1H:pulse(t1, ph+DelPh, amp)
+				1H:delay(t2)
+				1H:pulse(t1,  ph+180+DelPh, amp)
+				1H:delay(t3)
+				1H:pulse(t4, ph+phiF, amp)
+				1H:delay(t5)
+				1H:pulse(t4, ph+phiF+180, amp)
+				1H:delay(t6)
+
+				1H:pulse(t1, ph+DelPh+180, amp)
+				1H:delay(t2)
+				1H:pulse(t1,  ph+180+DelPh+180, amp)
+				1H:delay(t3)
+				1H:pulse(t4, ph+phiF+180, amp)
+				1H:delay(t5)
+				1H:pulse(t4, ph+phiF+180+180, amp)
+				1H:delay(t6)
+				
+				ph=ph+360/5
+		end
+	}
+
+#a single fid is concidered point to point
+	ptop()
+	#show()
+
+#set the spinning	
+	wr=5000
+
+#set the detection matrix
+	detect(Iz)
+
+#can use 'reuse' as things parameters are set once 
+# in our subsection
+	reuse(sub1)
+
+#collect the fid 
+	fid()
+	savefidtext(tyzf) #save tas a text file
+}
+
+	

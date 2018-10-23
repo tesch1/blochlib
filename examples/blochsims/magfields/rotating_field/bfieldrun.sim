@@ -1,0 +1,336 @@
+
+
+section cField
+#section coilbasichelm
+
+cField{
+	type file
+	filename shape1.biot
+	#subcoil1{
+	#	type constant
+	#	constField 1.0,1.0,1.0
+	#}
+}
+
+splitsolonoid{
+	numsec 4
+	subcoil1{
+		type truehelmholtz
+		loops 1
+		amps 3
+		numpts 8000
+
+		# radius (cm)
+		R 0.3175
+
+		#distance b/w the two coils (cm)
+		length 1.09
+
+		#width between 2 helix layers
+		layerwidth 0.161
+		
+		#height between 2 turns in a heliz layer 
+		# if not present will default to layerwidth
+		layerheight 0.161
+
+		#number of helix turns
+		turns 3
+
+		#number of helix layers
+		numlayers 1
+		
+		axis z
+	}
+	
+	subcoil2{
+		type line
+		loops 1
+		amps 3
+		numpts 4000
+		
+		#being point
+		begin 0.3175, 0, -0.3841
+		end 0.3175,0, 0.2230		
+	}
+
+	subcoil3{
+		type line
+		loops 1
+		amps 3
+		numpts 4000
+		
+		#being point
+		begin 0.3175, 0, -0.8670
+		end 1.3375,0, -0.257		
+	}
+	subcoil4{
+		type line
+		loops 1
+		amps 3
+		numpts 4000
+
+		#being point
+		begin 0.3175, 0, 0.7059
+		end 1.3375,0, -0.0959		
+	}
+
+}	
+
+
+coilbasichelm{
+
+#amps set up to produce a magic angle at z-y and z-x
+	numsec 3
+	subcoil1{
+		type helmholtz
+		loops 25
+		#amps 38.434
+		#for 1MHz
+		#amps -36.618
+		#for 100kHz
+		amps -3.6595
+		numpts 4000
+		
+		#radius in cm
+		R 4
+		length 2.65
+		axis x
+	}
+	
+	subcoil2{
+		type helmholtz
+		loops 30
+		#amps 62.319
+		#for 100kHz
+		amps 6.2352
+		numpts 4000
+		
+		#radius in cm
+		R 9
+		length 3.65
+		axis y
+	}
+	
+	subcoil3{
+		type helmholtz
+		loops 100
+		#amps -22.7395
+		#for 100kHz
+		amps -2.2740
+		numpts 4000
+		
+		#radius in cm
+		R 11
+		length 5.8
+		
+		axis z
+	}
+}
+
+
+trihelmholtz{
+	numsec 3
+	subcoil1{
+		type truehelmholtz
+		loops 1
+		amps 64.75
+		#amps 0
+		numpts 4000
+
+		# radius (cm)
+		R 8.5
+
+		#distance b/w the two coils (cm)
+		length 3.65
+
+		#width between 2 helix layers
+		layerwidth 0.1
+		
+		#height between 2 turns in a heliz layer 
+		# if not present will default to layerwidth
+		layerheight 0.1
+
+		#number of helix turns
+		turns 6
+
+		#number of helix layers
+		numlayers 5
+		axis x
+	}
+	
+	subcoil2{
+		type truehelmholtz
+		loops 1
+		#amps -38.55
+		
+		#this current makes a ~54.7 angle with
+		# the zaxis if the x coil is off
+		amps -54.5067
+		#amps 0
+		numpts 4000
+
+		# radius (cm)
+		R 3.75
+
+		#distance b/w the two coils (cm)
+		length 2.65
+
+		#width between 2 helix layers
+		layerwidth 0.1
+
+		#height between 2 turns in a heliz layer 
+		# if not present will default to layerwidth
+		layerheight 0.1
+
+		#number of helix turns
+		turns 5
+
+		#number of helix layers
+		numlayers 5
+		
+		axis y
+	}
+	
+	subcoil3{
+		type truehelmholtz
+		loops 1
+		amps 25
+		numpts 4000
+
+		# radius (cm)
+		R 10.4
+
+		#distance b/w the two coils (cm)
+		length 5.8
+
+		#width between 2 helix layers
+		layerwidth 0.12
+
+		#height between 2 turns in a heliz layer 
+		# if not present will default to layerwidth
+		layerheight 0.12
+
+		#number of helix turns
+		turns 10
+
+		#number of helix layers
+		numlayers 10
+
+		#the center axis 
+		axis z
+	}
+}
+
+singlecoil{
+	numsec 1
+	subcoil2{
+		type helmholtz
+		loops 25
+		amps -10
+		numpts 4000
+
+		#radius in cm
+		R 4.55
+		length 4.55
+
+		axis z
+	}
+
+	subcoil1{
+		type helix
+		loops 1
+		amps 3
+		numpts 16000
+
+		# radius (cm)
+		R 0.3175
+
+		#distance b/w the two coils (cm)
+		Z 1.09
+		length 1.09
+
+		#width between 2 helix layers
+		layerwidth 0.161
+
+		#height between 2 turns in a heliz layer 
+		# if not present will default to layerwidth
+		layerheight 0.161
+
+		#number of helix turns
+		turns 6
+
+		#number of helix layers
+		numlayers 1
+
+		axis z	
+	}
+}
+
+grid{	
+	#good values for 'trihelmholtz'
+	min -0.125,-0.125,-0.125
+	max 0.125,0.125,0.125
+	dim 5,5,5
+}
+
+pulsefield{
+	
+	#repeat this until FID collection ends
+	
+	#the time = 0 value BUT NOT Equilibrium value
+	start 1 0 1
+	
+	#time 		xdir ydir zdir
+	0.0100		1 0 1
+	0.0150		0.5 0.5 1
+	0.0200		0 1 1
+	0.0250		-0.5 0.5 1
+	0.0300		-1 0 1
+	0.0350		-0.5 -0.5 1
+	0.0400		0 -1 1
+	0.0450		0.5 -0.5 1
+}
+
+fitting{
+	#target for z-field in Hz
+	ztarget 1.0e5
+	#the angle the x-z plane needs to make
+	xztarget 54.7356
+	yztarget 54.7356
+	
+	#<var #> <name> <start> <error> <lowerbound> <upperbound>
+	#set the 'error' to zero to fix the param as constant
+	xbounds 1 'X-amp' -3.6595,1, -4.0, 0
+	ybounds 2 'Y-amp' 6.2352,1, 6, 7.0
+	zbounds 3 'Z-amp'  -2.2740, 0, -4.0, 0
+	
+}
+
+#x=no, y=on, z=yes
+rotframe 1,1,1
+
+#field spinning rates for 'WrField' class
+# phi, theta, psi (euler angles)
+fieldwr 0,0,0
+
+npts 8192  
+offset 0
+T2 0
+T1 0
+spintype 1H
+moles 1
+initcond AllUp
+
+bulksus 0
+dipole_str 0
+raddamp 0
+tf 0.2
+
+pang 90
+amp 80000
+lyps 0
+
+fileout data
+magout mag
+logfile info.log
+trajectories traj

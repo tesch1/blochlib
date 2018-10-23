@@ -1,0 +1,229 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("55menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("55menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("55menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("55title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("55");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class BulkSus{...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Bulk susceptibility is a high field effect. Classically it is an objects 'reaction' 
+to an applied field. This reaction gives the object its own field that when combined 
+with the global field, produces a new field usually different from the global 
+field. If M is the magnetization of the sample, B the global field, the total 
+field in the sample, H, is 
+<blockquote>
+  <p><tt>H=B+D*M</tt></p>
+</blockquote>
+<p>where D is the susceptibility factor of the sample. D is a scalar number from 
+  0..1 that involves a complex integral over the spatial distribution of the sample. 
+  For completely symmetric samples, (i.e. a sphere) D=0, for a flat disk D=1/3, 
+  and for a long cylinder D=1. A liquid NMR tube can be thought of as a long cylinder. 
+  For highly magnetized NMR samples (like water), this bulk susceptibility is 
+  significant. </p>
+<p>In real practice, a more complex interaction is actually taking place. Local 
+  fields from each spin contribute to the observed magnetic fluctuation. This 
+  is the demagnetizing field, but the Bulk susceptibility is a good first approximation 
+  to general behavior of highly magnetized samples. It should be noted that the 
+  magnetization (~10e-5 Gauss or less) of a sample is very small when compared 
+  to the main Bo field (~10,000 Gauss). So the effects along the Bo direction 
+  are all that really enter into the equations of motion, as the other directions 
+  are truncated. Because the field is the only thing effected by this interaction, 
+  the offsets are susceptible to this effect. </p>
+<p>If our samples magnetization was static, then the bulk susceptibility would 
+  only add a small offset to the spins, and would not be noticeable (a simple 
+  rotating frame transformation would correct for this effect), however, in NMR 
+  we have the ability to manipulate the magnetization directly with RF pulses. 
+  Moving the magnetization away perpendicular to the Bo axis effectively removes 
+  bulk susceptibility effect in high fields, however, relaxation or dipole-dipole 
+  interactions will eventually replace some of magnetization along the Bo axis, 
+  and then the interaction will begin to appear. It typically appears in spectra 
+  as an offset 'chirping' where initially the offset starts at a small value an 
+  migrates to higher values as the sample relaxes (the Mz component gets larger 
+  and larger, thus H gets larger, and the offset increase). If we include pulse 
+  gradients or any other complex manipulations, then the effect of the bulk susceptibility 
+  becomes more difficult to describe leaving us to simulate 'what happens.'</p>
+<p>This interaction requires the total magnetization of the sample to be calculated 
+  correctly. If <tt>Mt</tt> is our total magnetization, and Bo is along the z-axis, 
+  then out interaction is calculated in the Bo rotating frame as</p>
+<blockquote>
+  <p><tt>H=D*Mt<sub>z</sub></tt></p>
+</blockquote>
+<p>thus adding, to our frequencies</p>
+<blockquote>
+  <p><tt>wx= D*gamma*Mt<sub>z</sub>*M<sub>y</sub><br>
+    wy= -D*gamma*Mt<sub>z</sub>*M<sub>x</sub><br>
+    wz= 0<br>
+    </tt></p>
+</blockquote>
+To calculate this interaction, the BlochParams must be of the density type, as the ‘real’ magnetization of the sample cell must be calculated.  Setting the Magnetization to 1 for the spin (the Particle case) would cause an abnormally large effect for this interaction.
+<BR><BR>
+Currently there is no off axis (Bo!=Bz) interaction as this is designed as an approximation to a liquid NMR experiment.</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsBulkSus'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BulkSus()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The empty constructor, sets D=0<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BulkSus myBs;<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsBulkSus'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+BulkSus(double D)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+D--&gt; a number from 0..1 representing the reaction of the sample to the applied B field<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The basic constructor, sets the D parameter to the inputted value.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BulkSus myBs(0.04);<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element ExtractionD'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double D()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+returns the current value of the susceptibility parameter<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BulkSus myBs(0.5);<br />
+cout&lt;&lt;myBd.D();<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='AssignmentsD'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void D(double newD);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+newD--&gt; a number from 0..1 representing the reaction of the sample to the applied B field<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the susceptibility parameter.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+BulkSus myBs;<br />
+myBs.D(0.05);<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

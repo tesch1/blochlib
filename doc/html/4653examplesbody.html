@@ -1,0 +1,106 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+A simple 'HOW-TO' Parser example.<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This example simply runs through the various functions and expression parsing available to you.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//the&nbsp;required&nbsp;2&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+int&nbsp;main(){<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//declare&nbsp;the&nbsp;object</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Parser&nbsp;myParse;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//add&nbsp;a&nbsp;global&nbsp;variable</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;myParse.addGlobalVar(&quot;m&quot;,&nbsp;98);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//add&nbsp;a&nbsp;local&nbsp;variable</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;myParse.addVar(&quot;g&quot;,&nbsp;3);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//the&nbsp;addVar&nbsp;command&nbsp;will&nbsp;replace&nbsp;a&nbsp;variables&nbsp;value&nbsp;if&nbsp;</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//it&nbsp;has&nbsp;been&nbsp;inserted&nbsp;already.&nbsp;&nbsp;It&nbsp;will&nbsp;first&nbsp;look&nbsp;to&nbsp;the&nbsp;local&nbsp;set</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//if&nbsp;it&nbsp;is&nbsp;not&nbsp;found&nbsp;there&nbsp;it&nbsp;will&nbsp;try&nbsp;the&nbsp;global&nbsp;set</font><br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//this&nbsp;will&nbsp;replace&nbsp;the&nbsp;global&nbsp;variable&nbsp;‘m’</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;myParse.addVar(&quot;m&quot;,&nbsp;2);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//now&nbsp;we&nbsp;can&nbsp;parse&nbsp;some&nbsp;expression</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;myParse.parse(&quot;m*6+pi+g&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//get&nbsp;the&nbsp;value&nbsp;from&nbsp;the&nbsp;expression</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//this&nbsp;should&nbsp;print&nbsp;'18.1456'</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;myParse()&lt;&lt;endl;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//we&nbsp;can&nbsp;declare&nbsp;another&nbsp;Parser&nbsp;object&nbsp;that&nbsp;will&nbsp;be&nbsp;able&nbsp;to&nbsp;see</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//&nbsp;the&nbsp;global&nbsp;‘m’&nbsp;variable</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Parser&nbsp;myParse2;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//parse&nbsp;an&nbsp;expression</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;myParse2.parse(&quot;m*(3+5)&quot;);<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//get&nbsp;the&nbsp;value</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font color='#006600'>//should&nbsp;print&nbsp;out&nbsp;'16'</font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;myParser2()&lt;&lt;endl;<br />
+}<br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

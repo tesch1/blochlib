@@ -1,0 +1,39 @@
+
+#-------------- The Input File ------------
+#parameter file for 2 pulse sequences
+
+dim 2,2,2
+min -0.5,-0.5,-0.5
+max 0.5, 0.5, 0.5
+
+#fid pieces
+npts 4096
+tf 1
+
+#the pulse bits
+pulseangle 0
+pulsephase 270
+pulseamp 100000
+pulsesteps  41
+pulsestepsize 4.5
+
+#basic spin parametesr
+Bo 11
+temperature 300
+offset 0
+T2 0
+T1 0
+spintype 1H
+moles .2
+
+#the extra interactions parts
+dipole_str 50
+
+#calculate lypuvnovs[1] or not[0]
+lyps 0
+lypout lyps
+
+#file output names for the data
+fidout data
+
+#------------end InputFile ---------------

@@ -1,0 +1,105 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+Using the ScriptParse class for simple print operations<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+This example is quite basic, and does not do much becuase this class is meant to be a superclass to other objects.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td>
+<blockquote><TT>
+------the&nbsp;input&nbsp;file------<br />
+myscript{<br />
+&nbsp;&nbsp;&nbsp;B=2<br />
+&nbsp;&nbsp;&nbsp;a=B<br />
+<br />
+&nbsp;&nbsp;&nbsp;loop(i=5:10)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;print(a*i)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;a=a+1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(a==4)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(77)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;end<br />
+&nbsp;&nbsp;&nbsp;end<br />
+<br />
+}<br />
+<br />
+-----end&nbsp;Input&nbsp;file----<br />
+#include&nbsp;&quot;blochlib.h&quot;<br />
+<br />
+<font color='#006600'>//the&nbsp;required&nbsp;2&nbsp;namespaces</font><br />
+using&nbsp;namespace&nbsp;BlochLib;<br />
+using&nbsp;namespace&nbsp;std;<br />
+<br />
+int&nbsp;main(int&nbsp;argc,&nbsp;char&nbsp;**argc){<br />
+&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;std::string&nbsp;fname;<br />
+&nbsp;&nbsp;&nbsp;query_parameter(argc,argv,1,&nbsp;&quot;Input&nbsp;File&nbsp;Name:&nbsp;&quot;,&nbsp;fname);<br />
+&nbsp;&nbsp;&nbsp;Parameters&nbsp;pset(fname);<br />
+<br />
+&nbsp;&nbsp;&nbsp;ScriptParse&nbsp;myP;<br />
+&nbsp;&nbsp;&nbsp;myP.parse(pset);<br />
+}<br />
+<br />
+<font color='#006600'>//-----This&nbsp;should&nbsp;print&nbsp;out-----</font><br />
+<font color='#006600'>//a*i=10</font><br />
+<font color='#006600'>//a*i=18</font><br />
+<font color='#006600'>//a*i=28</font><br />
+<font color='#006600'>//77=77</font><br />
+<font color='#006600'>//a*i=40</font><br />
+<font color='#006600'>//a*i=54</font><br />
+<font color='#006600'>//a*i=70</font><br />
+</TT></blockquote><HR height=1>
+</td></tr>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>

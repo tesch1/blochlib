@@ -1,0 +1,898 @@
+
+	<html>
+	<head>
+	
+	<title>BlochLib::Documentation</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="Author" content="Bo Blanton">
+	<link rel="stylesheet" href="bloch.css" type="text/css">
+	<script lanuage="javascript">function matchCont(contentsFile){
+  if ((parent.menuTarg) && (parent.menuTarg.location.pathname.indexOf("35menu.html")
+			== -1 )){
+				parent.menuTarg.location.replace("35menu.html");
+			  }
+  if ((parent.titleTarg) && (parent.titleTarg.location.pathname.indexOf("35menu.html")
+			== -1 )){
+				parent.titleTarg.location.replace("35title.html");  } 
+					}
+</script>
+<script lanuage="javascript">matchCont("35");</script>
+
+		</head>
+
+		<body bgcolor="#FFFFFF" text="#000000">
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center" class="borderTD">
+		  <tr>
+			<td>&nbsp;</td>
+		  </tr>
+		</table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" class="main">
+		  <tr>
+			<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=center class='normalText'>
+<tr><td class='subHeads'>
+class Qua {...<br />
+<HR height=1>
+</td></tr>
+<tr><td><blockquote>
+Quadrupoles <br />
+Holds all the relevent data for a quadrupole<br />
+Calulates the hamiltonian optimized for each rotation type. <br />
+Both first and second order quadrupoles are included in the Hamiltonian<br />
+To turn OFF the second order factors simply set the 'Bfield' parameter to 0.<br />
+</blockquote><HR height=1>
+</td></tr>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Global Functions'></a>Global Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Global Functionsread_qua'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Vector&lt;Qua&gt; read_qua(Vector&lt;std::string&gt; &in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; A vector of strings that typically comes from reading in a file (but not nessesarliy).<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Read the string<br />
+<br />
+Q {Q} {eta} {on} {si} {chi} {psi} {order}<br />
+<br />
+from an element in the Vector&lt;std::string&gt;.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+data.push_back(&quot;C 89 900 0.1 0&quot;);<br />
+data.push_back(&quot;C 4455 900 0.1 1&quot;);<br />
+data.push_back(&quot;D 500 0 1&quot;);<br />
+data.push_back(&quot;Q 500e5 0 1&quot;);<br />
+<br />
+Vector&lt;Qua&gt; myqua=rea_qua(data);<br />
+<font color='#006600'>// myqua has 1 qua in it... </font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Public Vars'></a>Public Vars</font>
+</td></tr></table>
+<tr><td>
+<a name='Public VarsT20, T21T2m1, <br />T22T2m2, c2, c4'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+rimatrix T00;<br />
+matrix T21T2m1;<br />
+matrix T22T2m2;<br />
+rdmatrix c2;<br />
+rdmatrix c4;<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+T20 --&gt; the second rank m=0 spin matrix <br />
+T21T2m1 --&gt; a second order spin matrix<br />
+T22T2m2 --&gt; a second order spin matrix<br />
+<br />
+c2--&gt; the rank 2 total second order spin matrix (combined space)<br />
+c4--&gt; the rank 4 total second order spin matrix (combined space)<br />
+<br />
+These are the spin tensors for that spin in the ENTIRE Hilbert Space of a spin system.  Therefore in order for this class to correctly function, you must perform a 'setSpinMats' functional call, before you can calculate hamiltonians.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+SpinSys A(3);<br />
+<font color='#006600'>//the qua is ready... to be used</font><br />
+Qua myc(Q, eta, spin);<br />
+myc.setSpinMats(sys); <br />
+cout&lt;&lt;myc.T20&lt;&lt;endl;<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Constructors'></a>Constructors</font>
+</td></tr></table>
+<tr><td>
+<a name='ConstructorsQua'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Qua()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+empty constructor<br />
+DEFAULTS:::<br />
+Q=0.;<br />
+eta=0.;<br />
+si=0.;<br />
+chi=0.;<br />
+psi=0.;<br />
+on1=0;<br />
+on2=0;<br />
+order=1;<br />
+Bfield=0;<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo;<br />
+cout&lt;&lt;moo.Q(); <font color='#006600'>//prints out '0'</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='ConstructorsQua'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Qua(double Q, double eta, int spin, double si=0, double chi=0, double psi=0, Bfield=0.0) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Q--&gt; anisotropic Quadrupolar coupling<br />
+eta--&gt; assymetry parameter (0..1)<br />
+spin--&gt; the spin number inside the 'SpinSys'<br />
+[si, chi, psi]--&gt; Euler angle for relative molecular orientation<br />
+Bfield--&gt; the Magnetic Field strength in Hz (nesseary for proper calculationg of the second order quadrupole.)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates a Qua data structure<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(50e6, .3, 2); <br />
+cout&lt;&lt;moo.Q()&lt;&lt;&quot; &quot;&lt;&lt;moo.eta(); <font color='#006600'>//prints 5e7 0.3'</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='ConstructorsQua'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Qua(const Qua &cp)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+cp--&gt; an exsisting SpinSys to copy..<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+creates a copy of the old Qua...COPIES SPIN-OPS ALSO<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 3000, 0, 1);<br />
+Qua loo(moo); <font color='#006600'>//moo is copied into loo</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Element Extraction'></a>Element Extraction</font>
+</td></tr></table>
+<tr><td>
+<a name='Element Extractionalpha, beta, gamma'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double alpha();<br />
+double beta();<br />
+double gamma();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These are the same as [si, psi, chi] for the Euler angles [alpha, beta, gamma].<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 3000, 0, 1);<br />
+cout&lt;&lt;moo.alpha(); <font color='#006600'>//prints '0' same as moo.si()</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionBfield'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double Bfield()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the Magnetic Field strength in Hz.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(3e6, 0, 1);<br />
+cout&lt;&lt;moo.Bfield(); <font color='#006600'>//prints '0'</font><br />
+moo.Bfield(35.e6); <font color='#006600'>//changes to 35 MHz</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element ExtractiongetParam'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double getParam(std::string which)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+which--&gt;The info flag you wish to get (which can be<br />
+&quot;Q&quot;, &quot;eta&quot;, &quot;si&quot;, &quot;chi&quot;, &quot;psi&quot;, &quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;, &quot;on&quot;, &quot;Bfield&quot;, &quot;order&quot;<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the parameter corresponding to the input string.<br />
+All 'int' types are converted to doubles.<br />
+<br />
+which can be<br />
+&quot;iso&quot;, &quot;del&quot;, &quot;eta&quot;, &quot;si&quot;, &quot;chi&quot;, &quot;psi&quot;, &quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;, &quot;on&quot;<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 0.1, 1);<br />
+cout&lt;&lt;moo.getParam(&quot;Q&quot;); <font color='#006600'>//prints '230'</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionQ, eta'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double Q();<br />
+double eta();<br />
+<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Units are in Hz and DEGREES.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the coupling strength (Q) and asymmetry (eta) parameters.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230e6, 0.3,  1);<br />
+cout&lt;&lt;moo.Q(); <font color='#006600'>//prints '2.3e8'</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Element Extractionsi, chi, psi'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+double si();<br />
+double psi();<br />
+double chi();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns the Euler angles [si, psi, chi].<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 3000, 0, 1);<br />
+cout&lt;&lt;moo.si(); <font color='#006600'>//prints '0'</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Element ExtractionspinON, on'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int spinOn();<br />
+int on();<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Returns spin number label.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 3000, 0, 1);<br />
+cout&lt;&lt;moo.on(); <font color='#006600'>//prints '1'</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Assignments'></a>Assignments</font>
+</td></tr></table>
+<tr><td>
+<a name='Assignmentsalpha, beta, gamma'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void alpha(double in);<br />
+void beta(double in);<br />
+void gamma(double in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+THE ANGLES ARE IN DEGREES.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; the new value for the [si, psi, chi] angle (DEGREES)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These functions set the Euler orientation angles [alpha, beta, gamma].  These are equivalent to the [si, psi, chi]versions of these functions.  Upon calling these functions, the crystal Orientation tensors components are recalculated.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 3000, 0, 1);<br />
+cout&lt;&lt;moo.beta(); <font color='#006600'>//prints '0'</font><br />
+moo.beta(35); <font color='#006600'>//changes to 35 degrees..</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentsBfield'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Bfield(double in) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; the new value for the Bfield in Hz<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the magnetic field strength (needed for second order quadrupole)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(3e6, 0, 1);<br />
+cout&lt;&lt;moo.Bfield(); <font color='#006600'>//prints '0'</font><br />
+moo.Bfield(35.e6); <font color='#006600'>//changes to 35 MHz</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Assignmentson'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+int on(int in) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; the new value for the spin index<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Allows the setting of spin number label.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 3000, 0, 1);<br />
+cout&lt;&lt;moo.on(); <font color='#006600'>//prints '1'</font><br />
+moo.on(2); <font color='#006600'>//changes to 2</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Assignmentsoperator='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+Qua &operator=(const Qua &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; the item you wish to copy<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Assigns one Qua from another.<br />
+This also copies all the Spin Operators if they have been already calculated.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 3000, 0, 1);<br />
+Qua koo;<br />
+koo=moo; <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='AssignmentsQ, eta'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void Q(double in);<br />
+void eta(double in)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Units are in Hz and DEGREES.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; the new value for the Q or eta<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the coupling strength (Q) and asymmetry (eta) parameters.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 3000, 0, 1);<br />
+cout&lt;&lt;moo.iso(); <font color='#006600'>//prints '230'</font><br />
+moo.iso(600); <font color='#006600'>//changes to 600</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='AssignmentssetParam'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setParam(std::string which, double val);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+which--&gt; the item you wish to set..<br />
+&quot;Q&quot;, &quot;eta&quot;, &quot;si&quot;, &quot;chi&quot;, &quot;psi&quot;, &quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;, &quot;on&quot;, &quot;Bfield&quot;, &quot;order&quot; <br />
+<br />
+val--&gt; that value you wish to set it to...<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets a value inside the structure (any 'int' will be converted properly.)<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 0, 1);<br />
+moo.setParam(&quot;Bfield&quot;, 560e6); <font color='#006600'>//cahnges Bfield to 560 MHz</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Assignmentssi, psi, chi'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void si(double in);<br />
+void psi(double in);<br />
+void chi(double in);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+THE ANGLES ARE IN DEGREES.<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+in--&gt; the new value for the [si, psi, chi] angle (DEGREES)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+These functions set the Euler orientation angles [si, psi, chi].  These are equivalent to the alpha, beta, gamma versions of these functions.  Upon calling these functions, the crystal Orientation tensors components are recalculated.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 3000, 0, 1);<br />
+cout&lt;&lt;moo.chi(); <font color='#006600'>//prints '0'</font><br />
+moo.chi(35); <font color='#006600'>//changes to 35 degrees..</font><br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='IO'></a>IO</font>
+</td></tr></table>
+<tr><td>
+<a name='IOdisplay'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void display()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes the string<br />
+<br />
+#-----------------------Quad--------------------------<br />
+# spin iso del eta alpha beta gamma<br />
+{on} {Q} {eta} {si} {chi} {psi} <br />
+<br />
+to the Console.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 3000, 0, 1);<br />
+moo.display(); <br />
+/*<br />
+will print out...<br />
+#-----------------------CSA---------------------------<br />
+# spin     iso    del    eta    alpha  beta  gamma  <br />
+   1       230   3000     0       0      0     0   <br />
+*/ <br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='IOoperator<<'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+ostream &operator&lt;&lt;(stream &oo, Qua &out)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+oo--&gt; an output string<br />
+out--&gt; a Qua object<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes the string....<br />
+#-----------------------Quad--------------------------<br />
+# spin del eta alpha beta gamma order<br />
+{on} {Q} {eta} {si} {chi} {psi} {order}<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 0.1, 0, 1);<br />
+cout&lt;&lt;moo; <br />
+/*<br />
+will print out...<br />
+#-----------------------QUAD--------------------------<br />
+# spin     Q    eta    alpha  beta  gamma  order<br />
+   1       230  0.1     0       0      0     1   <br />
+*/ <br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='IOwrite'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void write(ostream &out)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+out--&gt; file/output stream you wish to write a VALID, READABLE string for the 'read_qua' function<br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Writes the string....<br />
+<br />
+Q {Q} {eta} {on} {si} {chi} {psi} {order}<br />
+<br />
+to the ostream.<br />
+<br />
+This string is then readable by the 'read_qua' function below to produce a valid Qua object.<br />
+<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 0, 1);<br />
+ostream out(&quot;params&quot;);<br />
+moo.write(out); <br />
+<br />
+<font color='#006600'>// Q   230   0   1    0      0     0  1 </font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td><HR height=1>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align=left ><tr bgcolor='#ffffbb'><td>
+<font size='+2'><a name='Other Functions'></a>Other Functions</font>
+</td></tr></table>
+<tr><td>
+<a name='Other Functions==, !='></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool operator==(const Qua &rhs);<br />
+bool operator!=(const Qua &rhs);<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+rhs--&gt; another Qua <br />
+<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Determins weather or not the rhs is the not the same Qua as the lhs.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230,  0, 1), loo(500,  0, 1);<br />
+moo==loo; <font color='#006600'>//would be false</font><br />
+moo.Q(500);<br />
+moo==loo; <font color='#006600'>//true</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionsH, Hamiltonian'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+dmatrix H(SpinSys &sys, Rotations &rot)<br />
+dmatrix Hamiltonian(SpinSys &sys, Rotations &rot) <br />
+<br />
+dmatrix H(SpinSys &sys,double alpha=0, double beta=0, double theta=0, double phi=0)<br />
+dmatrix Hamiltonian(SpinSys &sys,double alpha=0, double beta=0, double theta=0, double phi=0) <br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+sys--&gt; the Master Spin System<br />
+rot--&gt; the 'Rotations' class structure (see 'spin/space tensor)<br />
+<br />
+alpha--&gt; the rotor Phase (usually wr*time*PI2) (RADIANS)<br />
+beta--&gt; the rotor angle (RADIANS)<br />
+theta--&gt; theta powder angle (RADIANS)<br />
+phi--&gt; phi powder angle (RADIANS)<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+The master Hamiltonian function returns the Hamiltonian in matrix form...at the proper angles<br />
+<br />
+The bottom two functions are typically meant for Liquid type sims. The one that explicitly include the 'Rotations' class are faster only in that they do not need to calculate a 'Rotations' each iteration.<br />
+<br />
+let Qp=Q/(4*qn()*(2*qn()-1));<br />
+<br />
+H1=Qp*(some rotation stuff)*T20<br />
+<br />
+H2=Qp*({some rotation stuff}*c4-{some rotation stuff}*c2)<br />
+<br />
+Htot=H1+H2<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 3000, 0, 1);<br />
+SpinSys sys(2);<br />
+moo.setSpinMats(sys);<br />
+Rotations rots(34*Pi/180, 56*Pi/180); <font color='#006600'>//[phi theta] powder angle</font><br />
+cout&lt;&lt;moo.H(sys, rots)&lt;&lt;end; <font color='#006600'>//valid hamiltonian</font><br />
+<br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other Functionsis_zero'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+bool is_zero()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Determins weather or not the interacting is 'zero'<br />
+i.e. if Q==0 then the interaction is usless.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230,  0, 1);<br />
+moo.is_zero(); <font color='#006600'>// false</font><br />
+</TT></td></tr>
+</table>
+<tr bgcolor='#ffffff'><td>
+<a name='Other FunctionssetCrystalAs'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setCrystalAs()<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+void<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the nessesary initial crystal A2m's from the [si, chi, psi] and [iso, del, eta] set of parameters.<br />
+<br />
+This is done automatically at initialization and when ever you change ANY parameter (except for 'on').<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 0, 1);<br />
+SpinSys sys(2);<br />
+moo.setSpinMats(sys);<br />
+Rotations rots(34*Pi/180, 56*Pi/180); <font color='#006600'>//[phi theta] powder angle</font><br />
+cout&lt;&lt;moo.H(sys, rots)&lt;&lt;end; <font color='#006600'>//valid hamiltonian</font><br />
+</TT></td></tr>
+</table>
+<tr><td>
+<a name='Other FunctionssetSpinMats'></a><table width="80%" border="0" cellspacing="0" cellpadding="2"  align=center class='normalText'>
+<tr bgcolor=''><td width='10%' valign=top><B><font color='#990000'> Function:</font></B> </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><B><TT>
+void setSpinMats(SpinSys &sys)<br />
+</TT></B></td></tr>
+<tr><td width='10%'  valign=top><font color='#990000'>  IMPORTANT: </font></td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+YOU MUST DO THIS in order to generate a correct Hamiltonian<br />
+</TT></td></tr>
+<tr><td width='10%'  valign=top> Input: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+sys--&gt; A vlid spin system<br />
+</td></tr>
+<tr bgcolor=''><td width='10%'  valign=top> Description: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td>
+Sets the T20, T21T2m1, T22T2m2, c2, and c4 spin matricies from the spin system.<br />
+</td></tr>
+<tr><td width='10%'  valign=top> Example Usage: </td>
+<td width=5  valign=top><HR width=5 size=5></td>
+<td><TT>
+Qua moo(230, 0, 1);<br />
+SpinSys sys(2);<br />
+moo.setSpinMats(sys);<br />
+cout&lt;&lt;moo.T20&lt;&lt;end;<br />
+</TT></td></tr>
+</table>
+</table>
+
+	</td>
+	  </tr>
+	</table>
+	<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD" >&nbsp;</td>
+	  </tr>
+	</table>
+
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+	  <tr> 
+		<td class="borderTD">&nbsp;</td>
+	  </tr>
+	</table>
+	<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" class="smalltext">
+	  <tr> 
+		<td > 
+		  <div align="left">all material copywrite &copy;2002 <a href="http://www.lbl.gov/" target="_new">LBL</a> 
+		  </div>
+		</td>
+		<td >
+		  <div align="center">Contact: <a href="mailto:magneto@dirac.cchem.berkeley.edu">Bo 
+			Blanton</a></div>
+		</td>
+
+	  </tr>
+	</table>
+	<br></body>
+	</html>
